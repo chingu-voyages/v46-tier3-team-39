@@ -1,0 +1,21 @@
+name: 'Check Branch'
+on:
+  push: 
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+
+jobs:
+  check_branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check branch
+        if: github.base_ref == 'main' && github.head_ref != 'development'
+        uses: actions/github-script@v3
+        with: 
+            script: | 
+                core.setFailed('You can only push to main from development branch')
