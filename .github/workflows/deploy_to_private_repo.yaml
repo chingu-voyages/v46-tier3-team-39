@@ -10,11 +10,14 @@ jobs:
       name: ci-cd-env
     steps:
     - uses: actions/checkout@v4
-    - name: "Build app and deploy to vercel" 
-      uses: aasmal97/RepoSync@v1.1
-      with: 
-        TARGET_REPO_URL: ${{secrets.STUDY_AI_REPO_URL}}
-        TARGET_REPO_BRANCH: main
-        TARGET_REPO_GITHUB_ACCESS_TOKEN: ${{ secrets.STUDY_AI_REPO_ACCESS_TOKEN }} 
-        BOT_NAME: testing-bot
-        BOT_EMAIL: arkyasmal@gmail.com
+    - name: Copy repo to personal
+      uses: andstor/copycat-action@v3
+      with:
+        personal_token: ${{ secrets.STUDY_AI_REPO_ACCESS_TOKEN }}
+        src_path: /.
+        dst_path: /.
+        dst_owner: ${{ secrets.STUDY_AI_PERSONAL_REPO_OWNER }}
+        dst_repo_name: ${{ secrets.STUDY_AI_PERSONAL_REPO_NAME }}
+        src_branch: main
+        dst_branch: main
+        clean: true
