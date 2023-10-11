@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: 
       name: ci-cd-env
+      url: https://study-cg9lo612u-aasmal97s-projects.vercel.app/
     steps:
     - uses: actions/checkout@v4
     - name: Copy repo to personal
