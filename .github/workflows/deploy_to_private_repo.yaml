@@ -14,7 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: "Build app and deploy to vercel" 
-      uses: aasmal97/RepoSync@v1.0.0
+      uses: aasmal97/RepoSync@v1.1
       with: 
         TARGET_REPO_URL: ${{secrets.STUDY_AI_REPO_URL}}
         TARGET_REPO_BRANCH: main
