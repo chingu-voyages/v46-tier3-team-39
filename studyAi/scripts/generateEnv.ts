@@ -67,4 +67,4 @@ const main = async () => {
   //logout for secruity
   runCommand("vlt logout");
 };
-main();
+if (require.main === module) main();
