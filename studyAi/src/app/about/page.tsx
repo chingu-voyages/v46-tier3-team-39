@@ -1,3 +1,13 @@
 export default function AboutPage() {
-    return (<></>)
+    return (
+    <>
+        {/* <Navbar/> */}
+            <Hero/>
+            <Video/>
+            <Team/>
+            <Process/>
+            <ExamPrep/>
+        {/* <Footer/> */}
+    </>
+    )
 }
