@@ -37,3 +37,4 @@ next-env.d.ts
 my.secrets*
 .env
 env*
+package-lock.json*
