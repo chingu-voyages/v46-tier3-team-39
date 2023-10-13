@@ -121,3 +121,7 @@ export const NavButtons = () => {
     </>
   );
 };
+
+export const NavbarDrawer = () => {
+  return<></>
+}
