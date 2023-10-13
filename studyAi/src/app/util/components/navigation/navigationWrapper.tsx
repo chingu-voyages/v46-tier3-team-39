@@ -1,5 +1,5 @@
-import { Footer } from "./footer";
-import Navbar from "./navbar";
+import { Footer } from "./server/footer";
+import Navbar from "./server/navbar";
 
 const NavigationWrapper = ({
   children,
