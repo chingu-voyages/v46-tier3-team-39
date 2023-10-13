@@ -8,6 +8,7 @@ import useRemToPixel from "@/app/util/hooks/useRemToPixel";
 import useElementPosition from "@/app/util/hooks/useElementSize";
 import { faWandMagicSparkles } from "@fortawesome/free-solid-svg-icons/faWandMagicSparkles";
 import { faFileLines } from "@fortawesome/free-regular-svg-icons";
+import useDropdown from "@/app/util/hooks/useDropdown";
 const links = [
   {
     href: "/about",
@@ -37,24 +38,11 @@ const menuItemLinks = [
 export const GenerateDropdown = () => {
   const currRemToPixelVal = useRemToPixel("1rem");
   const { setRef, position: dropdownButtonPos } = useElementPosition();
-  const [anchorEl, setAnchorEl] = useState<
-    (EventTarget & HTMLButtonElement) | null
-  >(null);
-
-  const handleClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
-    const target = event.currentTarget;
-    setAnchorEl(target);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  const {anchorEl, handleClick, handleClose} = useDropdown()
   return (
     <div className="relative flex items-center m-0 p-0">
       <Link
-        ref={(ref) => {
-          setRef(ref);
-        }}
+        ref={setRef}
         component="button"
         aria-controls="dropdown-menu"
         aria-haspopup="true"
@@ -98,7 +86,7 @@ export const GenerateDropdown = () => {
             }}
           >
             {link.icon && link.icon}
-            <span className="ml-1">{link.text}</span>
+            <span className="ml-3">{link.text}</span>
           </MenuItem>
         ))}
       </Menu>
