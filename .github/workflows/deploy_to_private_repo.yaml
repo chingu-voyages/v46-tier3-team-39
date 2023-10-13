@@ -1,0 +1,24 @@
+name: 'Deploy to Private Repo'
+on:
+  push: 
+    branches:
+      - main
+jobs:
+  Clone-to-Target-Repo:
+    runs-on: ubuntu-latest
+    environment: 
+      name: ci-cd-env
+      url: https://study-cg9lo612u-aasmal97s-projects.vercel.app/
+    steps:
+    - uses: actions/checkout@v4
+    - name: Copy repo to personal
+      uses: andstor/copycat-action@v3
+      with:
+        personal_token: ${{ secrets.STUDY_AI_REPO_ACCESS_TOKEN }}
+        src_path: /.
+        dst_path: /.
+        dst_owner: ${{ secrets.STUDY_AI_PERSONAL_REPO_OWNER }}
+        dst_repo_name: ${{ secrets.STUDY_AI_PERSONAL_REPO_NAME }}
+        src_branch: main
+        dst_branch: main
+        clean: true
