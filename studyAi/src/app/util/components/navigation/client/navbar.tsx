@@ -1,14 +1,17 @@
 "use client";
-import React, { useState } from "react";
-import { MenuItem, Menu, Link } from "@mui/material";
+import React from "react";
+import { MenuItem, Menu, Link, Button } from "@mui/material";
 import NextLink from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
+import { faCaretDown, faBars, faClose } from "@fortawesome/free-solid-svg-icons";
 import useRemToPixel from "@/app/util/hooks/useRemToPixel";
 import useElementPosition from "@/app/util/hooks/useElementSize";
 import { faWandMagicSparkles } from "@fortawesome/free-solid-svg-icons/faWandMagicSparkles";
 import { faFileLines } from "@fortawesome/free-regular-svg-icons";
 import useDropdown from "@/app/util/hooks/useDropdown";
+import useWindowWidth from "@/app/util/hooks/useWindowWidth";
+import dynamic from "next/dynamic";
+const Drawer = dynamic(() => import("../client/drawer"), { ssr: false });
 const links = [
   {
     href: "/about",
@@ -38,7 +41,7 @@ const menuItemLinks = [
 export const GenerateDropdown = () => {
   const currRemToPixelVal = useRemToPixel("1rem");
   const { setRef, position: dropdownButtonPos } = useElementPosition();
-  const {anchorEl, handleClick, handleClose} = useDropdown()
+  const { anchorEl, handleClick, handleClose } = useDropdown();
   return (
     <div className="relative flex items-center m-0 p-0">
       <Link
@@ -109,7 +112,69 @@ export const NavButtons = () => {
     </>
   );
 };
-
-export const NavbarDrawer = () => {
-  return<></>
-}
+export const NavDrawer = ({ children }: { children: React.ReactNode }) => {
+  const [open, setOpen] = React.useState(false);
+  const toggleDrawer =
+    (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+      if (
+        event.type === "keydown" &&
+        ((event as React.KeyboardEvent).key === "Tab" ||
+          (event as React.KeyboardEvent).key === "Shift")
+      ) {
+        return;
+      }
+      setOpen(open);
+    };
+  return (
+    <>
+      <Button
+        variant="text"
+        aria-label="open-drawer"
+        onClick={toggleDrawer(true)}
+      >
+        <FontAwesomeIcon icon={faBars} />
+      </Button>
+      <Drawer
+        anchor="right"
+        open={open}
+        onClose={(e) => toggleDrawer(false)(e)}
+      >
+        <Button
+          variant="text"
+          aria-label="close-drawer"
+          className="absolute top-0 right-0"
+          onClick={toggleDrawer(false)}
+        >
+          <FontAwesomeIcon icon={faClose} />
+        </Button>
+        {/* <Button
+          variant="text"
+          aria-label="close-drawer"
+          onClick={toggleDrawer(false)}
+          className=""
+        >
+          <FontAwesomeIcon icon={faBars} />
+        </Button> */}
+        {children}
+      </Drawer>
+    </>
+  );
+};
+export const NavbarLinks = ({
+  children,
+}: {
+  children: React.JSX.Element[];
+}) => {
+  const windowWidth = useWindowWidth();
+  const reversedChildren = React.Children.map(
+    children,
+    (child) => child
+  ).reverse();
+  const innerContainer = (
+    <div className="flex-col xs:flex-row flex w-full h-full items-center">
+      {windowWidth < 480 ? reversedChildren : children}
+    </div>
+  );
+  if (windowWidth > 480) return innerContainer;
+  return <NavDrawer>{innerContainer}</NavDrawer>;
+};

@@ -3,7 +3,7 @@ import AppBar from "@mui/material/AppBar";
 import Typography from "@mui/material/Typography";
 import SVGLogo from "../../../icons/logo";
 import Link from "next/link";
-import { NavButtons } from "../client/navbar";
+import { NavButtons, NavbarLinks } from "../client/navbar";
 import AuthenticationNav from "../client/authentication";
 
 const appName = "Study AI";
@@ -31,8 +31,10 @@ const Navbar = () => {
     >
       <div className="flex items-center justify-start flex-row h-full w-full max-w-screen-xl mx-auto">
         <Logo showLabel={false} />
-        <NavButtons />
-        <AuthenticationNav />
+        <NavbarLinks>
+          <NavButtons />
+          <AuthenticationNav />
+        </NavbarLinks>
       </div>
     </AppBar>
   );
