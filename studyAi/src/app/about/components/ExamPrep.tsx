@@ -1,5 +1,5 @@
 "use client"
-export function ExamPrep(){
+export default function ExamPrep(){
     return(
         <div>
             <div className="column"> 

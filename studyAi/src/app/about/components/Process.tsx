@@ -1,5 +1,5 @@
 "use client"
-export function Process(){
+export default function Process(){
     return(
         <div>
             <h4><center>Why use Ai?</center></h4>
