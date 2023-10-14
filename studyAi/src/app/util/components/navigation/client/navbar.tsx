@@ -3,7 +3,11 @@ import React from "react";
 import { MenuItem, Menu, Link, Button } from "@mui/material";
 import NextLink from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretDown, faBars, faClose } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCaretDown,
+  faBars,
+  faClose,
+} from "@fortawesome/free-solid-svg-icons";
 import useRemToPixel from "@/app/util/hooks/useRemToPixel";
 import useElementPosition from "@/app/util/hooks/useElementSize";
 import { faWandMagicSparkles } from "@fortawesome/free-solid-svg-icons/faWandMagicSparkles";
