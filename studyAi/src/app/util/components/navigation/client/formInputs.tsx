@@ -20,7 +20,13 @@ export const TextFieldInput = (
     containerClassNames: undefined,
     labelClassNames: undefined,
   };
-  const fieldProps = { ...props, ...nonFieldProps, label: undefined };
+  const fieldProps = { ...props, label: undefined };
+  //filter out key from dom
+  Object.entries(props).forEach(([key, value]) => {
+    const indexedKey = key as keyof (TextFieldProps &
+      TextFieldInputCustomProps);
+    if (indexedKey in nonFieldProps) delete fieldProps[indexedKey];
+  });
   const labelClassNames =
     "grow font-normal text-sm text-Black h-full " +
     (props.labelClassNames ? props.labelClassNames : "");
