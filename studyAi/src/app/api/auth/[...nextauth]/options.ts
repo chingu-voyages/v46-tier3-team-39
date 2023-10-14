@@ -24,9 +24,9 @@ export const options: NextAuthOptions = {
             },
             async authorize(credentials) {
                 const user = {
-                    id: process.env.ADMIN_ID as string,
-                    name: process.env.ADMIN_USERNAME as string,
-                    password: process.env.ADMIN_PASSWORD as string
+                    id: "1",
+                    name: "admin",
+                    password: "studyai"
                 }
 
                 if (credentials?.username === user.name && credentials?.password === user.password) {
