@@ -35,11 +35,7 @@ function generateEnvFile(envContent: string) {
   }
 }
 const getSecretNames = () => {
-<<<<<<< HEAD
-  const command = "vlt secrets list";
-=======
   const command = `vlt secrets${isWindows() ? "" : " list"}`;
->>>>>>> dc1f423af71942ed81dc5deb7030252526e6c364
   const output = runCommand(command);
   if (!output) return;
   const lines = output.split("\n");
