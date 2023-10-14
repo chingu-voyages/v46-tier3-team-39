@@ -1,5 +1,15 @@
 const { execSync } = require("child_process");
 const fs = require("fs");
+const os = require("os");
+
+/**
+ * Determine whether the Node.js process runs on Windows.
+ *
+ * @returns {Boolean}
+ */
+function isWindows() {
+  return os.platform() === "win32";
+}
 function delay(milliseconds: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }
@@ -25,7 +35,11 @@ function generateEnvFile(envContent: string) {
   }
 }
 const getSecretNames = () => {
+<<<<<<< HEAD
   const command = "vlt secrets list";
+=======
+  const command = `vlt secrets${isWindows() ? "" : " list"}`;
+>>>>>>> dc1f423af71942ed81dc5deb7030252526e6c364
   const output = runCommand(command);
   if (!output) return;
   const lines = output.split("\n");
