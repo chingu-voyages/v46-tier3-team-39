@@ -1,6 +1,6 @@
 import AppLogo from "./client/appLogo";
 import NextLink from "next/link";
-import { AuthForm } from "./client/appForm";
+import { AuthForm } from "./client/authForm";
 import AuthPageWrapper from "./client/authWrapper";
 export const AuthHeader = ({ type }: { type: "login" | "signup" }) => {
   const header = type === "login" ? "Sign In" : "Join us";
