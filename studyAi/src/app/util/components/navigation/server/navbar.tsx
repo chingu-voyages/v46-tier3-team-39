@@ -10,14 +10,11 @@ const appName = "Study AI";
 export const Logo = ({ showLabel = true }: { showLabel?: boolean }) => {
   return (
     <Link href="/" className="flex items-center justify-center relative h-full">
-      <SVGLogo className="h-full aspect-square [&>path]:fill-Black" />
+      <SVGLogo className="h-full aspect-square [&>path]:fill-Black " />
       {showLabel && (
-        <Typography
-          variant="h6"
-          className="text-Black font-semibold tracking-tight text-4xl m-2"
-        >
+        <h6 className="text-Black font-semibold tracking-tight text-4xl ml-2">
           {appName}
-        </Typography>
+        </h6>
       )}
     </Link>
   );
