@@ -3,7 +3,6 @@ import SVGLogo from "../../../icons/logo";
 import Link from "next/link";
 import NextLink from "next/link";
 import { GenerateDropdown } from "../client/desktopNavbar";
-import { AppBar } from "@mui/material";
 import AuthenticationNav, {
   RecursiveClassNames,
 } from "../client/authentication";
@@ -67,19 +66,11 @@ const authBtnClassNames: RecursiveClassNames = {
 };
 const DesktopNavbar = () => {
   return (
-    <AppBar
-      position="static"
-      className="bg-White rounded-none p-2 px-[2%] md:px-[5%] h-14"
-    >
-      <div className="flex items-center justify-start flex-row h-full w-full max-w-screen-xl mx-auto">
-        <Logo showLabel={false} />
-        <NavbarLinks>
-          <NavButtons />
-          <GenerateDropdown />
-          <AuthenticationNav authBtnClassNames={authBtnClassNames}/>
-        </NavbarLinks>
-      </div>
-    </AppBar>
+    <NavbarLinks>
+      <NavButtons />
+      <GenerateDropdown />
+      <AuthenticationNav authBtnClassNames={authBtnClassNames} />
+    </NavbarLinks>
   );
 };
 

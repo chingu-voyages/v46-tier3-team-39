@@ -10,7 +10,7 @@ import AuthenticationNav, {
 import { NavButtons } from "../server/desktopNavbar";
 const Drawer = dynamic(() => import("./drawer"), { ssr: false });
 export const NavDrawer = ({ children }: { children: React.ReactNode }) => {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const toggleDrawer =
     (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
       if (
@@ -61,12 +61,12 @@ const authBtnClassNames: RecursiveClassNames = {
     },
   },
 };
-const userProfClassNames = {
-  value: null,
-  container: {
-    value: "",
-  },
-};
+// const userProfClassNames = {
+//   value: null,
+//   container: {
+//     value: "",
+//   },
+// };
 const MobileNavbar = () => {
   const isLoggedIn = true;
   return (
