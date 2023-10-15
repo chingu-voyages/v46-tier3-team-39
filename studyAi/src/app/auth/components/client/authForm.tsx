@@ -1,5 +1,5 @@
 "use client";
-import { TextFieldInput } from "@/app/util/components/navigation/client/formInputs";
+import { TextFieldInput } from "@/app/auth/components/server/formInputs";
 import { Button } from "@mui/material";
 
 export const AuthFormBtns = () => {
