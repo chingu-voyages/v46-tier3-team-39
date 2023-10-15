@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { Transition } from "react-transition-group";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
@@ -11,8 +11,11 @@ const Drawer = ({
   onClose,
   open,
   anchor,
+  innerContainerClassNames,
   animationTime = 225,
+  backgroundColor = "rgba(0,0,0,0.5)",
 }: {
+  innerContainerClassNames?: string;
   className?: string;
   children: JSX.Element | JSX.Element[] | React.ReactNode;
   id?: string;
@@ -20,6 +23,7 @@ const Drawer = ({
   open: boolean;
   onClose: (e: React.MouseEvent) => void;
   animationTime?: number;
+  backgroundColor?: string;
 }) => {
   const { setRef, position: size } = useElementSize();
   const nodeRef = useRef(null);
@@ -49,7 +53,7 @@ const Drawer = ({
     top: "0",
     right: "0",
     zIndex: "1",
-    backgroundColor: "rgba(0,0,0,0.5)",
+    backgroundColor,
     transition: `opacity ${animationTime}ms cubic- bezier(0.4, 0, 0.2, 1) 0ms`,
   };
   const buttonContainerTransitionStyles: {
@@ -126,13 +130,7 @@ const Drawer = ({
     };
   }, [open, scrollbarWidth, animationTime]);
   return createPortal(
-    <Transition
-      nodeRef={nodeRef}
-      in={open}
-      timeout={animationTime}
-      //   mountOnEnter
-      //   unmountOnExit
-    >
+    <Transition nodeRef={nodeRef} in={open} timeout={animationTime}>
       {(state) => (
         <div
           ref={nodeRef}
@@ -166,7 +164,7 @@ const Drawer = ({
                 ...innerDrawerContainerStyles,
                 ...innerTransitionStyles[state],
               }}
-              className="drawer-content MuiPaper-root"
+              className={`drawer-content MuiPaper-root ${innerContainerClassNames}`}
             >
               {children}
             </div>
