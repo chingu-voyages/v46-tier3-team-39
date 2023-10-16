@@ -1,4 +1,4 @@
-import type {NextAuthOptions} from 'next-auth'
+import type { NextAuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import CredentialsProvider from 'next-auth/providers/credentials'
 
@@ -11,10 +11,10 @@ export const options: NextAuthOptions = {
         CredentialsProvider({
             name: 'Credentials',
             credentials: {
-                username: {
-                    label: 'Username:',
+                email: {
+                    label: 'Email:',
                     type: 'text',
-                    placeholder: 'username'
+                    placeholder: 'email'
                 },
                 password: {
                     label: 'Password:',
@@ -25,11 +25,12 @@ export const options: NextAuthOptions = {
             async authorize(credentials) {
                 const user = {
                     id: "1",
-                    name: "admin",
+                    email: "admin@studyai.com",
                     password: "studyai"
                 }
 
-                if (credentials?.username === user.name && credentials?.password === user.password) {
+                if (credentials?.email === user.email && credentials?.password === user.password) {
+                    console.log(user.email, user.password)
                     return user
                 } else {
                     return null
