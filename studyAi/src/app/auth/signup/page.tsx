@@ -1,3 +1,4 @@
+import AuthPage from "../components/authPageWrapper";
 export default function SignUpPage() {
-  return <></>;
+  return <AuthPage type="signup" />;
 }
