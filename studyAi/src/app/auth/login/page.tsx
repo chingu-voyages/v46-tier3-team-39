@@ -1,3 +1,5 @@
+import AuthPage from "../components/authPageWrapper";
+
 export default function LoginPage() {
-    return (<></>)
+  return <AuthPage type="login"/>;
 }
