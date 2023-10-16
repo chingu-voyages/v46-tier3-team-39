@@ -1,9 +1,11 @@
 "use client";
 import { TextFieldInput } from "@/app/auth/components/server/formInputs";
 import { Button } from "@mui/material";
+import { signIn } from "next-auth/react";
+import { useState } from "react";
 
 export const AuthFormBtns = () => {
-  const onGoogleSign = () => {};
+  const onGoogleSign = () => signIn('google')
   return (
     <div className="flex flex-col w-full">
       <Button
@@ -27,7 +29,24 @@ export const AuthFormBtns = () => {
 };
 
 export const AuthForm = () => {
-  const onSubmit = (e: React.FormEvent) => {};
+  const [data, setData] = useState({
+    email: "admin@studyai.com",
+    password: "studyai",
+  });
+
+  const onSubmit = async (e: any) => {
+    e.preventDefault();
+
+    signIn("credentials", { ...data, redirect: false }).then((callback) => {
+      if (callback?.error) {
+        console.error(callback.error);
+      }
+
+      if (callback?.ok && !callback?.error) {
+        console.log("Logged in successfully!");
+      }
+    });
+  };
   return (
     <form
       className="flex flex-col h-full w-full items-center lg:w-4/6 max-w-m"
