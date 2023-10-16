@@ -2,8 +2,6 @@
 import { TextFieldInput } from "@/app/auth/components/server/formInputs";
 import { Button } from "@mui/material";
 import { signIn } from "next-auth/react";
-import { useState } from "react";
-
 export const AuthFormBtns = () => {
   const onGoogleSign = () => signIn('google')
   return (
@@ -18,6 +16,7 @@ export const AuthFormBtns = () => {
         Log In
       </Button>
       <Button
+        type="button"
         className="w-full border border-Black bg-White  border-solid text-Black rounded-none my-2"
         style={{ textTransform: "none" }}
         onClick={onGoogleSign}
@@ -29,15 +28,17 @@ export const AuthFormBtns = () => {
 };
 
 export const AuthForm = () => {
-  const [data, setData] = useState({
-    email: "admin@studyai.com",
-    password: "studyai",
-  });
-
-  const onSubmit = async (e: any) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement> ) => {
     e.preventDefault();
-
-    signIn("credentials", { ...data, redirect: false }).then((callback) => {
+    //grab uncontrolled inputs here 
+    const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formData.entries());
+    const {email, password} = data 
+    const creds = {
+      email: email.toString(),
+      password: password.toString()
+    }
+    signIn("credentials", { ...creds, redirect: false }).then((callback) => {
       if (callback?.error) {
         console.error(callback.error);
       }
