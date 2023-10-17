@@ -16,7 +16,7 @@ const NavigationWrapper = ({
         <>
           {appBars.navbar && <Navbar />}
           <main
-            className="bg-White flex flex-col w-100"
+            className="bg-White flex flex-col w-100 text-Black"
             style={{
               minHeight: `calc(100vh - ${appBars.navbar ? "3.5rem" : "0px"}`,
             }}
