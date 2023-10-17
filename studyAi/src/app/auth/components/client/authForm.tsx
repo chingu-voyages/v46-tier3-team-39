@@ -27,7 +27,7 @@ export const AuthFormBtns = () => {
   );
 };
 
-export const AuthForm = () => {
+export const AuthForm = ({ type } : { type: "login" | "signup" }) => {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     //grab uncontrolled inputs here
@@ -38,15 +38,20 @@ export const AuthForm = () => {
       email: email.toString(),
       password: password.toString(),
     };
-    signIn("credentials", { ...creds, redirect: false }).then((callback) => {
-      if (callback?.error) {
-        console.error(callback.error);
-      }
+    if (type === 'login') {
+      signIn("credentials", { ...creds, redirect: false }).then((callback) => {
+        if (callback?.error) {
+          console.error(callback.error);
+        }
 
-      if (callback?.ok && !callback?.error) {
-        console.log("Logged in successfully!");
-      }
-    });
+        if (callback?.ok && !callback?.error) {
+          console.log("Logged in successfully!");
+        }
+      });
+    }
+    else {
+      console.log('signup form');
+    }
   };
   return (
     <form

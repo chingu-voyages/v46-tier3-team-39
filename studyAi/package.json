@@ -18,6 +18,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.4.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@mui/material": "^5.14.12",
+    "bcryptjs": "^2.4.3",
     "lodash": "^4.17.21",
     "mssql": "^10.0.1",
     "next": "13.5.4",
@@ -26,6 +27,7 @@
     "react-dom": "18"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.4",
     "@types/lodash": "^4.14.199",
     "@types/mssql": "^9.1.1",
     "@types/node": "20",
