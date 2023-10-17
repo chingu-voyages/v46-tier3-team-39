@@ -1,4 +1,4 @@
-import AppLogo from "./client/appLogo";
+import AppLogo from "../../util/components/logo/server/responsiveLogo";
 import NextLink from "next/link";
 import { AuthForm } from "./client/authForm";
 import AuthPageWrapper from "./client/authWrapper";

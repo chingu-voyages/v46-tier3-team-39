@@ -1,8 +1,9 @@
 "use client";
 import useWindowWidth from "@/app/util/hooks/useWindowWidth";
-import DesktopNavbar, { Logo } from "../server/desktopNavbar";
+import DesktopNavbar from "../server/desktopNavbar";
 import MobileNavbar from "../client/mobileNavbar";
 import { AppBar } from "@mui/material";
+import { Logo } from "../../logo/client/Logo";
 const Navbar = () => {
   const windowWidth = useWindowWidth();
   return (
