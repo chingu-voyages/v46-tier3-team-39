@@ -45,17 +45,17 @@ export const PrivacyPolicyWrapper = ({
 };
 export const FooterBody = () => {
   return (
-    <div className="flex flex-col w-full py-14 sm:flex-row justify-center sm:justify-between">
-      <div className="flex flex-col justify-center grow">
-        <div className="flex w-full h-12">
+    <div className="flex flex-col justify-center space-y-10 w-full py-14 sm:flex-row sm:justify-between sm:space-y-0">
+      <div className="flex flex-col justify-center grow space-y-10 sm:space-y-6">
+        <div className="flex w-full h-12 justify-center sm:justify-start">
           <Logo showLabel />
         </div>
-        <div className="text-Black tracking-tighter mt-4 flex flex-col sm:flex-row">
+        <div className="text-Black tracking-tighter flex flex-col items-center sm:items-start sm:flex-row space-y-4 sm:space-y-0">
           {footerContactLinks.map((link) => (
             <NextLink
               href={link.href}
               key={link.href}
-              className="mr-4 text-sm font-bold"
+              className="mr-0 sm:mr-4 text-sm font-semibold"
             >
               {link.name}
             </NextLink>
@@ -70,8 +70,8 @@ export const FooterBody = () => {
 };
 export const FooterBottom = () => {
   return (
-    <div className="flex flex-col py-6 text-Black sm:flex-row tracking-tighter text-xs">
-      <div className="grow flex flex-col sm:flex-row">
+    <div className="flex flex-col py-6 text-Black items-center sm:items-start sm:flex-row tracking-tighter text-xs space-y-3 sm:space-y-0">
+      <div className="grow flex flex-row">
         {footerServiceLinks.map((link) => (
           <NextLink href={link.href} key={link.href} className="mr-2 underline">
             {link.name}
@@ -84,7 +84,7 @@ export const FooterBottom = () => {
 };
 export const Footer = () => {
   return (
-    <footer className="bg-White flex flex-col px-[2%] sm:px-[5%]">
+    <footer className="bg-White flex flex-col px-[3%] sm:px-[5%] border-Black border-solid border-t">
       <FooterBody />
       <div
         style={{

@@ -2,7 +2,6 @@
 import { TextFieldInput } from "@/app/auth/components/server/formInputs";
 import useElementPosition from "@/app/util/hooks/useElementSize";
 import { Button } from "@mui/material";
-
 export const SubscribeAction = () => {
   const {
     setRef,
@@ -16,7 +15,10 @@ export const SubscribeAction = () => {
     const { email } = data;
   };
   return (
-    <form className="flex flex-row items-end" onSubmit={onSubmit}>
+    <form
+      className="flex flex-col space-y-3 items-end sm:flex-row sm:space-y-0"
+      onSubmit={onSubmit}
+    >
       <TextFieldInput
         ref={setRef}
         size={"medium"}
@@ -37,7 +39,7 @@ export const SubscribeAction = () => {
           height: inputHeight + "px",
         }}
         size="large"
-        className="rounded-none ml-4"
+        className="rounded-none w-full ml-0 sm:ml-4 sm:w-auto"
         variant={"contained"}
         aria-label={"subscribe"}
       >

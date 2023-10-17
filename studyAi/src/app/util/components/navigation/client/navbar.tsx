@@ -9,7 +9,7 @@ const Navbar = () => {
   return (
     <AppBar
       position="static"
-      className="bg-White rounded-none p-2 px-[2%] md:px-[5%] h-14"
+      className="bg-White rounded-none p-2 px-[3%] md:px-[5%] h-14 border-b border-Black border-solid"
     >
       <div className="flex items-center justify-between xs:justify-start flex-row h-full w-full max-w-screen-xl mx-auto">
         <Logo showLabel={false} />
