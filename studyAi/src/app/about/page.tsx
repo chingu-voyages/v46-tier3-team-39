@@ -7,7 +7,7 @@ import ExamPrep from "./components/ExamPrep";
 
 export default function AboutPage() {
     return (
-        <>
+        <div className="bg-White">
             <NavigationWrapper
                 appBars={{
                     navbar: true,
@@ -20,6 +20,6 @@ export default function AboutPage() {
                 <Process/>
                 <ExamPrep/>
             </NavigationWrapper>
-        </>
+        </div>
     )
 }

@@ -1,4 +1,3 @@
-"use client"
 export default function Process(){
     return(
         <div className="py-12 px-2">
