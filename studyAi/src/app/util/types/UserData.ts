@@ -1,6 +1,6 @@
 export interface UserInfo {
   id: string;
-  email: "arkyasmal@gmail.com";
+  email: string;
   first_name: string;
   last_name: string;
 }
