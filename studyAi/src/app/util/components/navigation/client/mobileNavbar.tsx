@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faClose } from "@fortawesome/free-solid-svg-icons";
 import dynamic from "next/dynamic";
 import AuthenticationNav, {
+  LogoutBtn,
   RecursiveClassNames,
 } from "../client/authentication";
 import { NavButtons } from "../server/desktopNavbar";
@@ -61,17 +62,11 @@ const authBtnClassNames: RecursiveClassNames = {
     },
   },
 };
-// const userProfClassNames = {
-//   value: null,
-//   container: {
-//     value: "",
-//   },
-// };
 const MobileNavbar = () => {
   const isLoggedIn = true;
   return (
     <NavDrawer>
-      <div className="flex flex-col w-full py-[10%] px-[10%]">
+      <div className="grow flex flex-col w-full py-[10%] px-[10%]">
         {isLoggedIn && (
           <AuthenticationNav
             classNames={"w-full mb-4 xs:mb-0"}
@@ -84,6 +79,11 @@ const MobileNavbar = () => {
             classNames={"w-full mb-4 xs:mb-0"}
             authBtnClassNames={authBtnClassNames}
           />
+        )}
+        {isLoggedIn && (
+          <div className="grow flex items-end">
+            <LogoutBtn size="large" icon={false} />
+          </div>
         )}
       </div>
     </NavDrawer>

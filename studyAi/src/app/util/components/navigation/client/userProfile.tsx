@@ -4,7 +4,7 @@ import { UserInfo } from "../../../types/UserData";
 import useElementPosition from "@/app/util/hooks/useElementSize";
 import useDropdown from "@/app/util/hooks/useDropdown";
 import useRemToPixel from "@/app/util/hooks/useRemToPixel";
-import { RecursiveClassNames } from "./authentication";
+import { LogoutBtn, RecursiveClassNames } from "./authentication";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown, faChartLine } from "@fortawesome/free-solid-svg-icons";
 import { faFileLines, faUserCircle } from "@fortawesome/free-regular-svg-icons";
@@ -126,6 +126,17 @@ export const ProfileDropdown = ({
           </NextLink>
         </MenuItem>
       ))}
+      <MenuItem
+        className="flex"
+        style={{
+          padding: 0,
+        }}
+      >
+        <LogoutBtn className="flex tracking-tight justify-start text-sm w-full" icon sx={{
+          paddingLeft:"16px",
+          paddingRight: "16px",
+        }}/>
+      </MenuItem>
     </Menu>
   );
 };
