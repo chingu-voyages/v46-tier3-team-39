@@ -2,10 +2,11 @@
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCube } from '@fortawesome/free-solid-svg-icons'
+import type { SizeProp } from '@fortawesome/fontawesome-svg-core'
 
-const CubeIcon = ({size}: {size: string}) => {
+const CubeIcon = ({size}: {size?: SizeProp | undefined}) => {
     return (
-        <FontAwesomeIcon className={`text-${size}`} icon={faCube}/>
+        <FontAwesomeIcon size={size} icon={faCube}/>
     )
 }
 
