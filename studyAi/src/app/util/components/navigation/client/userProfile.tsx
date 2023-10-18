@@ -61,15 +61,7 @@ const UserProfile = ({
     </div>
   );
 };
-const determineUserProfStyles = (userProfClassNames?: RecursiveClassNames) => {
-  if (!userProfClassNames)
-    return { authContainerClassName: null, authLinkName: null };
-  const userProf = userProfClassNames?.container as RecursiveClassNames;
-  const userProfClassName = userProf.value;
-  const authLink = userProf.links as RecursiveClassNames;
-  const authLinkName = authLink.value;
-  return { userProfClassName, authLinkName };
-};
+
 export const ProfileDropdown = ({
   anchorEl,
   userDropdownPos,
@@ -132,20 +124,33 @@ export const ProfileDropdown = ({
           padding: 0,
         }}
       >
-        <LogoutBtn className="flex tracking-tight justify-start text-sm w-full" icon sx={{
-          paddingLeft:"16px",
-          paddingRight: "16px",
-        }}/>
+        <LogoutBtn
+          className="flex tracking-tight justify-start text-sm w-full"
+          icon
+          sx={{
+            paddingLeft: "16px",
+            paddingRight: "16px",
+          }}
+        />
       </MenuItem>
     </Menu>
   );
 };
+// const determineUserProfStyles = (userProfClassNames?: RecursiveClassNames) => {
+//   if (!userProfClassNames)
+//     return { userProfClassName: null, userProfLinkClassName: null };
+//   const userProf = userProfClassNames?.container as RecursiveClassNames;
+//   const userProfClassName = userProf.value;
+//   const userLinks = userProf.links as RecursiveClassNames;
+//   const userProfLinkClassName = userLinks.value;
+//   return { userProfClassName, userProfLinkClassName };
+// };
 export const UserProfileNav = ({
-  userProfClassNames,
+  // userProfClassNames,
   dropdown = true,
 }: {
   dropdown?: boolean;
-  userProfClassNames?: RecursiveClassNames;
+  // userProfClassNames?: RecursiveClassNames;
 }) => {
   const { setRef, position: userDropdownPos } = useElementPosition();
   const { anchorEl, handleClick, handleClose } = useDropdown();
@@ -183,16 +188,19 @@ export const UserProfileNav = ({
         />
       )}
       {!dropdown && <UserProfile {...userProfileProps} showUserInfo />}
-      {!dropdown &&
-        userItemLinks(userProfileProps.id).map((link) => (
-          <NextLink
-            key={link.text}
-            href={link.href}
-            className="text-Black font-regular flex items-center tracking-tight text-sm"
-          >
-            <span className="xs:ml-3">{link.text}</span>
-          </NextLink>
-        ))}
+      {!dropdown && (
+        <div className="flex flex-col mt-10 space-y-4">
+          {userItemLinks(userProfileProps.id).map((link) => (
+            <NextLink
+              key={link.text}
+              href={link.href}
+              className="text-Black font-regular flex items-center tracking-tight text-sm"
+            >
+              <span className="xs:ml-3">{link.text}</span>
+            </NextLink>
+          ))}
+        </div>
+      )}
     </>
   );
 };

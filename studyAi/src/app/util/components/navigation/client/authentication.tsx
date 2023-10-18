@@ -88,16 +88,16 @@ export const LogoutBtn = (
 const AuthenticationNav = ({
   classNames,
   authBtnClassNames,
-  userProfClassNames,
+  // userProfClassNames,
 }: {
   classNames?: string;
   authBtnClassNames?: RecursiveClassNames;
-  userProfClassNames?: RecursiveClassNames;
+  // userProfClassNames?: RecursiveClassNames;
 }) => {
   const isLoggedIn: boolean = true;
   const windowWidth = useWindowWidth();
   const containerClassNames =
-    "flex flex-col space-y-4 xs:space-0 xs:items-center xs:justify-end xs:h-full xs:flex-row xs:grow" +
+    "flex flex-col xs:items-center xs:justify-end xs:h-full xs:flex-row xs:grow" +
     " " +
     (classNames ? classNames : "");
   return (
@@ -105,7 +105,7 @@ const AuthenticationNav = ({
       {isLoggedIn ? (
         <UserProfileNav
           dropdown={windowWidth > 480}
-          userProfClassNames={userProfClassNames}
+          // userProfClassNames={userProfClassNames}
         />
       ) : (
         <AuthenticationButtons authBtnClassNames={authBtnClassNames} />
