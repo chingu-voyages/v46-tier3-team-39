@@ -1,6 +1,5 @@
 import { Footer } from "./server/footer";
 import Navbar from "./client/navbar";
-
 const NavigationWrapper = ({
   children,
   appBars,
@@ -12,17 +11,24 @@ const NavigationWrapper = ({
   };
 }) => {
   return (
-    <div>
+    <>
       {appBars ? (
         <>
           {appBars.navbar && <Navbar />}
-          {children}
+          <main
+            className="bg-White flex flex-col w-100 text-Black"
+            style={{
+              minHeight: `calc(100vh - ${appBars.navbar ? "3.5rem" : "0px"}`,
+            }}
+          >
+            {children}
+          </main>
           {appBars.footer && <Footer />}
         </>
       ) : (
         children
       )}
-    </div>
+    </>
   );
 };
 export default NavigationWrapper;

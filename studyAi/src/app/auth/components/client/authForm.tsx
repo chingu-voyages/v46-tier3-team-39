@@ -63,7 +63,7 @@ export const AuthForm = ({ type } : { type: "login" | "signup" }) => {
           size="small"
           className="w-full"
           label="Email"
-          labelContainerClassNames="my-2"
+          labelContainerClassNames="my-2 font-normal text-sm text-Black"
           type="email"
           name="email"
           placeholder="abc@gmail.com"
@@ -79,7 +79,7 @@ export const AuthForm = ({ type } : { type: "login" | "signup" }) => {
           placeholder="vk2~#{3*£W37&R"
           autoComplete="current-password"
           required
-          labelContainerClassNames="my-2"
+          labelContainerClassNames="my-2 font-normal text-sm text-Black"
           headerLink={{
             text: "Forgot Password?",
             href: "/auth/forgot-password",

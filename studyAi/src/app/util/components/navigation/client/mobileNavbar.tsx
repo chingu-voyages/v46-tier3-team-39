@@ -5,9 +5,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faClose } from "@fortawesome/free-solid-svg-icons";
 import dynamic from "next/dynamic";
 import AuthenticationNav, {
+  LogoutBtn,
   RecursiveClassNames,
 } from "../client/authentication";
 import { NavButtons } from "../server/desktopNavbar";
+import { menuItemLinks } from "./desktopNavbar";
+import NextLink from "next/link";
 const Drawer = dynamic(() => import("./drawer"), { ssr: false });
 export const NavDrawer = ({ children }: { children: React.ReactNode }) => {
   const [open, setOpen] = React.useState(false);
@@ -42,7 +45,7 @@ export const NavDrawer = ({ children }: { children: React.ReactNode }) => {
         <Button
           variant="text"
           aria-label="close-drawer"
-          className="absolute top-0 right-0"
+          className="absolute top-0 right-0 aspect-square text-3xl"
           onClick={toggleDrawer(false)}
         >
           <FontAwesomeIcon icon={faClose} />
@@ -61,29 +64,47 @@ const authBtnClassNames: RecursiveClassNames = {
     },
   },
 };
-// const userProfClassNames = {
-//   value: null,
-//   container: {
-//     value: "",
-//   },
-// };
+const userProfClassNames: RecursiveClassNames = {
+  value: null,
+  container: {
+    value: "mb-4",
+    links: {
+      value: null,
+    },
+  },
+};
 const MobileNavbar = () => {
   const isLoggedIn = true;
   return (
     <NavDrawer>
-      <div className="flex flex-col w-full py-[10%] px-[10%]">
+      <div className="grow flex flex-col w-full py-[10%] px-[10%]">
         {isLoggedIn && (
           <AuthenticationNav
             classNames={"w-full mb-4 xs:mb-0"}
+            // userProfClassNames={userProfClassNames}
             authBtnClassNames={authBtnClassNames}
           />
         )}
         <NavButtons />
+        {menuItemLinks.map((link) => (
+          <NextLink
+            key={link.text}
+            href={link.href}
+            className="text-Black font-regular flex items-center tracking-tight text-sm mb-4"
+          >
+            <span>{link.text}</span>
+          </NextLink>
+        ))}
         {!isLoggedIn && (
           <AuthenticationNav
             classNames={"w-full mb-4 xs:mb-0"}
             authBtnClassNames={authBtnClassNames}
           />
+        )}
+        {isLoggedIn && (
+          <div className="grow flex items-end">
+            <LogoutBtn size="large" icon={false} />
+          </div>
         )}
       </div>
     </NavDrawer>
