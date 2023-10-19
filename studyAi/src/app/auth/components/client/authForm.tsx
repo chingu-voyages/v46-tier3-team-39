@@ -2,8 +2,15 @@
 import { TextFieldInput } from "@/app/auth/components/server/formInputs";
 import { Button } from "@mui/material";
 import { signIn } from "next-auth/react";
-const onGoogleSign = () => signIn("google");
-export const AuthFormBtns = () => {
+import axios from "axios";
+import { useRouter } from "next/router";
+const onGoogleSign = async () => await signIn("google");
+const onEmailSign = async (creds: { email: string; password: string }) => {
+  const signInData = await signIn("credentials", { ...creds, redirect: false });
+  return signInData;
+};
+export const AuthFormBtns = ({ type }: { type: "login" | "signup" }) => {
+  const router = useRouter();
   return (
     <div className="flex flex-col w-full">
       <Button
@@ -13,40 +20,61 @@ export const AuthFormBtns = () => {
         className="w-full border border-Black bg-Black border-solid text-White rounded-none my-2 hover:text-Black"
         style={{ textTransform: "none" }}
       >
-        Log In
+        {type === "login" ? "Login" : "Sign up"}
       </Button>
       <Button
         type="button"
         className="w-full border border-Black bg-White  border-solid text-Black rounded-none my-2"
         style={{ textTransform: "none" }}
-        onClick={onGoogleSign}
+        onClick={async () => {
+          const signInData = await onGoogleSign();
+          if (!signInData) return;
+          if (signInData.error) return console.error(signInData.error);
+          router.push("/dashboard");
+        }}
       >
-        Login With Google
+        {type === "login" ? "Login" : "Sign up"} With Google
       </Button>
     </div>
   );
 };
 
-export const AuthForm = () => {
+export const AuthForm = ({ type }: { type: "login" | "signup" }) => {
+  const router = useRouter();
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     //grab uncontrolled inputs here
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData.entries());
-    const { email, password } = data;
+    const { email, password, name } = data;
     const creds = {
+      name: name.toString(),
       email: email.toString(),
       password: password.toString(),
     };
-    signIn("credentials", { ...creds, redirect: false }).then((callback) => {
-      if (callback?.error) {
-        console.error(callback.error);
-      }
-
-      if (callback?.ok && !callback?.error) {
-        console.log("Logged in successfully!");
-      }
-    });
+    switch (type) {
+      case "login":
+        const loginRes = await onEmailSign(creds);
+        if (loginRes?.error) {
+          console.error(loginRes.error);
+        }
+        if (loginRes?.ok && !loginRes?.error) {
+          console.log("Logged in successfully!");
+          router.push("/dashboard");
+        }
+        return;
+      case "signup":
+        const res = await axios({
+          method: "POST",
+          url: "/api/user",
+          data: {
+            ...creds,
+          },
+        });
+        if (res.status === 201) router.push("/auth/login");
+        else console.error("Registration Failed");
+        break;
+    }
   };
   return (
     <form
@@ -54,6 +82,17 @@ export const AuthForm = () => {
       onSubmit={onSubmit}
     >
       <div className="flex flex-col w-full items-end space-y-4">
+        <TextFieldInput
+          size="small"
+          className="w-full"
+          label="Name"
+          labelContainerClassNames="my-2 font-normal text-sm text-Black"
+          type="name"
+          name="name"
+          placeholder="John Doe"
+          autoComplete="name"
+          required
+        />
         <TextFieldInput
           size="small"
           className="w-full"
@@ -81,7 +120,7 @@ export const AuthForm = () => {
             className: "text-Black text-sm tracking-tight underline",
           }}
         />
-        <AuthFormBtns />
+        <AuthFormBtns type={type} />
       </div>
     </form>
   );
