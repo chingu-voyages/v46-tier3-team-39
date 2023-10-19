@@ -3,7 +3,7 @@ import { TextFieldInput } from "@/app/auth/components/server/formInputs";
 import { Button } from "@mui/material";
 import { signIn } from "next-auth/react";
 import axios from "axios";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 const onGoogleSign = async () => await signIn("google");
 const onEmailSign = async (creds: { email: string; password: string }) => {
   const signInData = await signIn("credentials", { ...creds, redirect: false });
