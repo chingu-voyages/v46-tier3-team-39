@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown, faChartLine } from "@fortawesome/free-solid-svg-icons";
 import { faFileLines, faUserCircle } from "@fortawesome/free-regular-svg-icons";
 import NextLink from "next/link";
+import { useSession } from "next-auth/react";
 const userItemLinks = (userId?: string) => [
   {
     href: `/dashboard`,
@@ -151,16 +152,11 @@ export const UserProfileNav = ({
   dropdown?: boolean;
   // userProfClassNames?: RecursiveClassNames;
 }) => {
+  const session = useSession();
   const { setRef, position: userDropdownPos } = useElementPosition();
   const { anchorEl, handleClick, handleClose } = useDropdown();
-  const userProfileProps: Partial<UserInfo> & {
-    showUserInfo: boolean;
-  } = {
-    showUserInfo: false,
-    email: "arkyasmal@gmail.com",
-    name: "Arky Asmal",
-    id: "XXXXXXXXXXXXXXXXXXX",
-  };
+  const userProfileProps = session.data?.user;
+  if (!userProfileProps) return <></>;
   return (
     <>
       {dropdown && (
