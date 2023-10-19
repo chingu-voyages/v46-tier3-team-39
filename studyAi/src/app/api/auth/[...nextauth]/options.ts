@@ -68,6 +68,17 @@ export const options: NextAuthOptions = {
     newUser: "/../../../auth/signup/page",
   },
   callbacks: {
+    async session({ session }) {
+      const sessionCreds = await findUniqueByEmail(
+        session.user.email,
+        "userCredentials"
+      );
+      if (!sessionCreds) return session;
+      const sessionUser = await findUniqueById(sessionCreds.userId, "user");
+      if (!sessionUser) return session;
+      session.user = sessionUser;
+      return session;
+    },
     //create a user document on oauth sign in
     async signIn({ profile }) {
       if (!profile) return true;
