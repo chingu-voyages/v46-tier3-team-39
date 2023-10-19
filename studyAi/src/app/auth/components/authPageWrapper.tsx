@@ -26,7 +26,7 @@ export const AuthPage = ({ type }: { type: "login" | "signup" }) => {
       <div className="flex flex-col justify-center items-center w-full h-full px-5 pt-10 pb-12 md:w-3/6 md:p-10">
         <AppLogo />
         <AuthHeader type={type} />
-        <AuthForm type={type}/>
+        <AuthForm type={type} />
         <span className="text-Black text-sm flex justify-center items-center tracking-tight mt-4">
           {bottomText}
           <NextLink
