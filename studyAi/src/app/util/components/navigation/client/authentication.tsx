@@ -1,5 +1,6 @@
 "use client";
 import NextLink from "next/link";
+import { signOut, useSession } from "next-auth/react";
 import { UserProfileNav } from "@/app/util/components/navigation/client/userProfile";
 import useWindowWidth from "@/app/util/hooks/useWindowWidth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -59,12 +60,14 @@ export const LogoutBtn = (
   const className = props.className;
   const classStyles =
     (className ? className : "") + "flex w-full [&>*]:rounded-none";
+  const domProps = { ...props }
+  delete domProps.icon;
   const newProps: ButtonProps = {
-    ...props,
+    ...domProps,
     className: classStyles,
     sx: props.sx ? props.sx : {},
   };
-  const onLogout = () => {};
+  const onLogout = () => signOut();
   return (
     <Button
       {...newProps}
@@ -93,8 +96,9 @@ const AuthenticationNav = ({
   classNames?: string;
   authBtnClassNames?: RecursiveClassNames;
   // userProfClassNames?: RecursiveClassNames;
-}) => {
-  const isLoggedIn: boolean = true;
+  }) => {
+  const session = useSession()
+  const isLoggedIn = session.status === 'authenticated';
   const windowWidth = useWindowWidth();
   const containerClassNames =
     "flex flex-col xs:items-center xs:justify-end xs:h-full xs:flex-row xs:grow" +

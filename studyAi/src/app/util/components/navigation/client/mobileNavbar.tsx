@@ -11,6 +11,7 @@ import AuthenticationNav, {
 import { NavButtons } from "../server/desktopNavbar";
 import { menuItemLinks } from "./desktopNavbar";
 import NextLink from "next/link";
+import { useSession } from "next-auth/react";
 const Drawer = dynamic(() => import("./drawer"), { ssr: false });
 export const NavDrawer = ({ children }: { children: React.ReactNode }) => {
   const [open, setOpen] = React.useState(false);
@@ -74,7 +75,8 @@ const userProfClassNames: RecursiveClassNames = {
   },
 };
 const MobileNavbar = () => {
-  const isLoggedIn = true;
+    const session = useSession();
+    const isLoggedIn = session.status === "authenticated";
   return (
     <NavDrawer>
       <div className="grow flex flex-col w-full py-[10%] px-[10%]">
