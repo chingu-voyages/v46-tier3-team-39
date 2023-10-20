@@ -1,6 +1,5 @@
 import Link from "next/link";
 import NavigationWrapper from "./util/components/navigation/navigationWrapper";
-
 export default function Home() {
   return (
     <NavigationWrapper

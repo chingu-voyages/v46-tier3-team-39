@@ -21,15 +21,20 @@ export const SubscribeAction = () => {
     >
       <TextFieldInput
         ref={setRef}
-        size={"medium"}
+        size={"small"}
         labelContainerClassNames="mb-3 font-bold text-md text-Black tracking-tight"
         label="Join us"
         id="email"
         name="email"
         type="email"
         placeholder="Enter your email"
-        className="w-full h-full rounded-none [&>*]:rounded-none"
+        className=" w-full h-full rounded-none [&>*]:rounded-none"
         autoComplete="email"
+        InputProps={{
+          classes: {
+            input: "text-sm"
+          }
+        }}
       />
       <Button
         component={"button"}
