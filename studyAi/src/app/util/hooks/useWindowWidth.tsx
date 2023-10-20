@@ -4,7 +4,7 @@ import { debounce } from "lodash";
 const useWindowWidth = () => {
   const [windowWidth, setWindowWidth] = useState(0);
   useEffect(() => {
-    if(windowWidth === 0 ) setWindowWidth(window.innerWidth);
+    setWindowWidth(window.innerWidth);
     const handleResize = debounce(() => {
       setWindowWidth(window.innerWidth);
     }, 500);
