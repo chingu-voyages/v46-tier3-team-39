@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+type QuestionData{
+  title String 
+  description String 
+}
+type AnswerData{
+  answer String
+}
+type LikeCounter {
+  likes Int
+  dislikes Int
+}
+model Question {
+  id String @id @default(auto()) @map("_id") @db.ObjectId 
+  creatorId String
+  type String
+  tags String[]
+  question QuestionData
+  answer AnswerData
+  dateCreated   DateTime @default(now())
+  likeCounter LikeCounter
+}
+
+model QuestionLikes {
+    id            String  @id @default(auto()) @map("_id") @db.ObjectId
+    dateCreated   DateTime @default(now())
+    userId String
+    questionId String
+}
+model Quiz {
+  id    String                           @id @default(auto()) @map("_id") @db.ObjectId
+  name  String
+  tags   String
+  likes Int
+  creatorId String
+  questionIds String[]
+  dateCreated   DateTime @default(now())
+}
+model QuizLikes {
+    id            String  @id @default(auto()) @map("_id") @db.ObjectId
+    dateCreated   DateTime @default(now())
+    userId String
+    questionId String
+}
+model UserCredentials{
+  id            String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @unique
+  email String  @unique
+  password String?
+  provider String
+}
+model User {
+  id            String  @id @default(auto()) @map("_id") @db.ObjectId 
+  name          String
+  email String  @unique
+  usersReached Int
+  dateCreated   DateTime @default(now())
+}
+
+model Submissions {
+   id            String  @id @default(auto()) @map("_id") @db.ObjectId
+   time          DateTime @default(now())
+   score         Int
+   dateCreated   DateTime @default(now())
+   userId String
+   quizId String
+}

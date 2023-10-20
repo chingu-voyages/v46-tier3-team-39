@@ -64,7 +64,7 @@ const main = async () => {
     await delay(500);
     const value = runCommand(`vlt secrets get --plaintext ${str}`);
     if (!value) return null;
-    return str + "=" + value;
+    return str + "=" + `"${value.replace("\n", "")}"\n`;
   });
   const contentArr = await Promise.all(contentArrPromise);
   //log all errors from secrets
