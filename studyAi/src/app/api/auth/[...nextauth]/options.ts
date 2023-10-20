@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import {
+  connectToDb,
   findUniqueByEmail,
   findUniqueById,
   prismaDb,
@@ -36,30 +37,35 @@ export const options: NextAuthOptions = {
           placeholder: "password",
         },
       },
-      async authorize(credentials) {
-        // check to see if email and password is there
-        if (!credentials?.email || !credentials.password) {
-          throw new Error("Please enter an email and password");
+      async authorize(credentials, req) {
+        try {
+          // check to see if email and password is there
+          if (!credentials?.email || !credentials.password) {
+            throw new Error("Please enter an email and password");
+          }
+          await connectToDb();
+          const user = await findUniqueByEmail(
+            credentials.email,
+            "userCredentials"
+          );
+          //if no user was found
+          if (!user || !user?.password) throw new Error("No user found");
+          // // check to see if password matches
+          const passwordMatch = await bcrypt.compare(
+            credentials.password,
+            user.password
+          );
+          // if password does not match
+          if (!passwordMatch) throw new Error("Incorrect password");
+          const userId = user.userId;
+          const userInfo = await findUniqueById(userId, "user");
+          return userInfo
+        } catch (err) {
+          console.error(err);
+          return null;
+        } finally {
+          prismaDb.$disconnect();
         }
-        const user = await findUniqueByEmail(
-          credentials.email,
-          "userCredentials"
-        );
-        // if no user was found
-        if (!user || !user?.password) {
-          throw new Error("No user found");
-        }
-        // check to see if password matches
-        const passwordMatch = await bcrypt.compare(
-          credentials.password,
-          user.password
-        );
-        // if password does not match
-        if (!passwordMatch) {
-          throw new Error("Incorrect password");
-        }
-        const userId = user.id;
-        return await findUniqueById(userId, "user");
       },
     }),
   ],
@@ -69,15 +75,23 @@ export const options: NextAuthOptions = {
   },
   callbacks: {
     async session({ session }) {
-      const sessionCreds = await findUniqueByEmail(
-        session.user.email,
-        "userCredentials"
-      );
-      if (!sessionCreds) return session;
-      const sessionUser = await findUniqueById(sessionCreds.userId, "user");
-      if (!sessionUser) return session;
-      session.user = sessionUser;
-      return session;
+      try {
+        await connectToDb();
+        const sessionCreds = await findUniqueByEmail(
+          session.user.email,
+          "userCredentials"
+        );
+        if (!sessionCreds) return session;
+        const sessionUser = await findUniqueById(sessionCreds.userId, "user");
+        if (!sessionUser) return session;
+        session.user = sessionUser;
+        return session;
+      } catch (err) {
+        console.error(err);
+        return session;
+      } finally {
+        prismaDb.$disconnect();
+      }
     },
     //create a user document on oauth sign in
     async signIn({ profile }) {
@@ -86,6 +100,7 @@ export const options: NextAuthOptions = {
       try {
         const { email, name } = profile;
         if (!email || !name) return false;
+        await connectToDb();
         const user = await findUniqueByEmail(email, "userCredentials");
         //user data and account exists in our db, so we can sign in
         if (user) return true;
@@ -106,6 +121,8 @@ export const options: NextAuthOptions = {
       } catch (err) {
         console.error(err);
         return false;
+      } finally {
+        prismaDb.$disconnect();
       }
     },
   },

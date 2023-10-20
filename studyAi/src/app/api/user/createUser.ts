@@ -1,5 +1,9 @@
 import { hash } from "bcryptjs";
-import { prismaDb, findUniqueByEmail } from "@/app/util/prisma/helpers";
+import {
+  prismaDb,
+  findUniqueByEmail,
+  connectToDb,
+} from "@/app/util/prisma/helpers";
 import { NextResponse } from "next/server";
 import * as z from "zod";
 //schema for validating user inputs
@@ -11,7 +15,8 @@ const userSchema = z.object({
 });
 export async function createUser(req: Request) {
   try {
-    const body = await req.json();
+    const bodyPromise = req.json();
+    const [body, _] = await Promise.all([bodyPromise, connectToDb()]);
     const { email, password, name, provider } = userSchema.parse(body);
     const user = await findUniqueByEmail(email, "userCredentials");
     if (user)
@@ -51,5 +56,7 @@ export async function createUser(req: Request) {
       status: 500,
       message: "Something went wrong",
     });
+  } finally {
+    prismaDb.$disconnect();
   }
 }
