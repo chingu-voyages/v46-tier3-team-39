@@ -51,6 +51,7 @@ export const AuthForm = ({ type }: { type: "login" | "signup" }) => {
       name: name.toString(),
       email: email.toString(),
       password: password.toString(),
+      provider: "email",
     };
     switch (type) {
       case "login":
@@ -71,6 +72,7 @@ export const AuthForm = ({ type }: { type: "login" | "signup" }) => {
             ...creds,
           },
         });
+        console.log(res.data)
         if (res.status === 201) router.push("/auth/login");
         else console.error("Registration Failed");
         break;
