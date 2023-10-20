@@ -66,10 +66,10 @@ model User {
 }
 
 model Submissions {
-   id            String  @id @default(auto()) @map("_id") @db.ObjectId
-   time          DateTime @default(now())
-   score         Int
-   dateCreated   DateTime @default(now())
-   userId String
-   quizId String
+    id            String  @id @default(auto()) @map("_id") @db.ObjectId
+    time          DateTime @default(now())
+    score         Int
+    dateCreated   DateTime @default(now())
+    userId String
+    quizId String
 }
