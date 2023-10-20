@@ -1,8 +1,9 @@
-import { prismaDb } from "@/app/util/prisma/helpers";
+import { connectToDb, prismaDb } from "@/app/util/prisma/helpers";
 import { NextResponse } from "next/server";
 export async function deleteUser(req: Request) {
   try {
-    const body = await req.json();
+    const bodyPromise = req.json();
+    const [body, _] = await Promise.all([bodyPromise, connectToDb()]);
     const { userId } = body;
     //add verify token here
     const userCred = prismaDb.userCredentials.delete({
@@ -25,5 +26,7 @@ export async function deleteUser(req: Request) {
       status: 500,
       message: "Something went wrong",
     });
+  } finally {
+    prismaDb.$disconnect();
   }
 }

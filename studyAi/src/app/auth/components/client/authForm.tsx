@@ -48,7 +48,7 @@ export const AuthForm = ({ type }: { type: "login" | "signup" }) => {
     const data = Object.fromEntries(formData.entries());
     const { email, password, name } = data;
     const creds = {
-      name: name.toString(),
+      name: name?.toString(),
       email: email.toString(),
       password: password.toString(),
       provider: "email",
@@ -72,8 +72,7 @@ export const AuthForm = ({ type }: { type: "login" | "signup" }) => {
             ...creds,
           },
         });
-        console.log(res.data)
-        if (res.status === 201) router.push("/auth/login");
+        if (res.data.status === 201) return router.push("/auth/login");
         else console.error("Registration Failed");
         break;
     }
@@ -84,17 +83,20 @@ export const AuthForm = ({ type }: { type: "login" | "signup" }) => {
       onSubmit={onSubmit}
     >
       <div className="flex flex-col w-full items-end space-y-4">
-        <TextFieldInput
-          size="small"
-          className="w-full"
-          label="Name"
-          labelContainerClassNames="my-2 font-normal text-sm text-Black"
-          type="name"
-          name="name"
-          placeholder="John Doe"
-          autoComplete="name"
-          required
-        />
+        {type === "signup" && (
+          <TextFieldInput
+            size="small"
+            className="w-full"
+            label="Name"
+            labelContainerClassNames="my-2 font-normal text-sm text-Black"
+            type="name"
+            name="name"
+            placeholder="John Doe"
+            autoComplete="name"
+            required
+          />
+        )}
+
         <TextFieldInput
           size="small"
           className="w-full"
