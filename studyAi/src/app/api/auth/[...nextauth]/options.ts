@@ -71,6 +71,7 @@ export const options: NextAuthOptions = {
   ],
   pages: {
     signIn: "/../../../auth/login/page",
+    error: "/../../../auth/login/page",
   },
   callbacks: {
     async session({ session }) {

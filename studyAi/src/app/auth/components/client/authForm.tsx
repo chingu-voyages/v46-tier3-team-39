@@ -5,10 +5,20 @@ import { signIn } from "next-auth/react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useRef } from "react";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 const onGoogleSign = async () => await signIn("google");
-const onEmailSign = async (creds: { email: string; password: string }) => {
+const onEmailSign = async (
+  creds: { email: string; password: string },
+  router: AppRouterInstance
+) => {
   const signInData = await signIn("credentials", { ...creds, redirect: false });
-  return signInData;
+  if (signInData?.error) {
+    console.error(signInData.error);
+  }
+  if (signInData?.ok && !signInData?.error) {
+    console.log("Logged in successfully!");
+    router.push("/dashboard");
+  }
 };
 export const AuthFormBtns = ({ type }: { type: "login" | "signup" }) => {
   const router = useRouter();
@@ -59,14 +69,13 @@ export const AuthForm = ({ type }: { type: "login" | "signup" }) => {
       };
       switch (type) {
         case "login":
-          const loginRes = await onEmailSign(creds);
-          if (loginRes?.error) {
-            console.error(loginRes.error);
-          }
-          if (loginRes?.ok && !loginRes?.error) {
-            console.log("Logged in successfully!");
-            router.push("/dashboard");
-          }
+          await onEmailSign(
+            {
+              email: creds.email,
+              password: creds.password,
+            },
+            router
+          );
           return;
         case "signup":
           const res = await axios({
@@ -76,8 +85,16 @@ export const AuthForm = ({ type }: { type: "login" | "signup" }) => {
               ...creds,
             },
           });
-          if (res.data.status === 201) return router.push("/auth/login");
-          else console.error("Registration Failed");
+          //immeaditely sign in user
+          if (res.data.status === 201) {
+            await onEmailSign(
+              {
+                email: creds.email,
+                password: creds.password,
+              },
+              router
+            );
+          } else console.error("Registration Failed");
           break;
       }
     } catch (err) {

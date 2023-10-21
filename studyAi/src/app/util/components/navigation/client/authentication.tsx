@@ -69,7 +69,7 @@ export const LogoutBtn = (
   };
   const onLogout = () =>
     signOut({
-      callbackUrl: "/",
+      callbackUrl: "/auth/login",
     });
   return (
     <Button
