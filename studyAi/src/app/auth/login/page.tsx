@@ -1,5 +1,3 @@
-"use client";
-
 import { redirectIfLoggedIn } from "@/app/api/utils/sessionFuncs";
 import AuthPage from "../components/authPageWrapper";
 
