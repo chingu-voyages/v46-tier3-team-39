@@ -16,7 +16,6 @@ const onEmailSign = async (
     console.error(signInData.error);
   }
   if (signInData?.ok && !signInData?.error) {
-    console.log("Logged in successfully!");
     router.push("/dashboard");
   }
 };
@@ -109,7 +108,6 @@ export const AuthForm = ({
       submitted.current = false;
     }
   };
-  console.log(errMessageArr);
   return (
     <form
       className="flex flex-col h-full w-full items-center lg:w-4/6 max-w-m"
