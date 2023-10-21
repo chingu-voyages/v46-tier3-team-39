@@ -1,6 +1,6 @@
 "use client";
 import { TextFieldInput } from "@/app/auth/components/server/formInputs";
-import { Button } from "@mui/material";
+import { Alert, Button } from "@mui/material";
 import { signIn } from "next-auth/react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -49,7 +49,13 @@ export const AuthFormBtns = ({ type }: { type: "login" | "signup" }) => {
     </div>
   );
 };
-export const AuthForm = ({ type }: { type: "login" | "signup" }) => {
+export const AuthForm = ({
+  type,
+  errMessageArr,
+}: {
+  type: "login" | "signup";
+  errMessageArr?: { code: string; message: string }[];
+}) => {
   const router = useRouter();
   //for debounce user inputs
   const submitted = useRef(false);
@@ -103,11 +109,18 @@ export const AuthForm = ({ type }: { type: "login" | "signup" }) => {
       submitted.current = false;
     }
   };
+  console.log(errMessageArr);
   return (
     <form
       className="flex flex-col h-full w-full items-center lg:w-4/6 max-w-m"
       onSubmit={onSubmit}
     >
+      {errMessageArr &&
+        errMessageArr.map((err) => (
+          <Alert key={err.code} severity="error" className="w-full">
+            {err.message}
+          </Alert>
+        ))}
       <div className="flex flex-col w-full items-end space-y-4">
         {type === "signup" && (
           <TextFieldInput
