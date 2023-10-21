@@ -25,13 +25,16 @@ export async function createUser(req: Request) {
         user: null,
         message: "User with this email, already exists",
       });
-    const newUserPromise = prismaDb.user.create({
-      data: {
-        name,
-        email,
-        usersReached: 0,
-      },
-    });
+    const doesUserDocExist = await findUniqueByEmail(email, "user");
+    const newUserPromise = doesUserDocExist
+      ? doesUserDocExist
+      : prismaDb.user.create({
+          data: {
+            name,
+            email,
+            usersReached: 0,
+          },
+        });
     let hashPasswordPromise = null;
     if (password) hashPasswordPromise = hash(password, 10);
     const [newUser, hashedPassword] = await Promise.all([

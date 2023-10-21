@@ -9,7 +9,6 @@ import {
   prismaDb,
 } from "@/app/util/prisma/helpers";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import axios from "axios";
 export const options: NextAuthOptions = {
   adapter: PrismaAdapter(prismaDb),
   session: {
@@ -59,7 +58,7 @@ export const options: NextAuthOptions = {
           if (!passwordMatch) throw new Error("Incorrect password");
           const userId = user.userId;
           const userInfo = await findUniqueById(userId, "user");
-          return userInfo
+          return userInfo;
         } catch (err) {
           console.error(err);
           return null;
@@ -94,29 +93,36 @@ export const options: NextAuthOptions = {
       }
     },
     //create a user document on oauth sign in
-    async signIn({ profile }) {
+    async signIn({ profile, account }) {
       if (!profile) return true;
       //for Oauth provider mapping to db
       try {
         const { email, name } = profile;
         if (!email || !name) return false;
         await connectToDb();
-        const user = await findUniqueByEmail(email, "userCredentials");
-        //user data and account exists in our db, so we can sign in
-        if (user) return true;
-        const req = await axios({
-          url: "/api/user",
-          method: "POST",
-          data: {
-            email,
-            name,
-            provider: "oauth",
-            password: null,
-          },
-        });
-        if (req.status !== 201) {
-          throw Error(req.data);
-        }
+        const [user, userDoc] = await Promise.all([
+          findUniqueByEmail(email, "userCredentials"),
+          findUniqueByEmail(email, "user"),
+        ]);
+        if (account && account.userId && !user)
+          await prismaDb.userCredentials.create({
+            data: {
+              userId: account.userId,
+              email,
+              provider: "oauth",
+            },
+          });
+        //this only occurs when oauth is typically used,
+        //since sign with email and pw already
+        //has the cred file created
+        if (userDoc && !user)
+          await prismaDb.userCredentials.create({
+            data: {
+              userId: userDoc.id,
+              email,
+              provider: "oauth",
+            },
+          });
         return true;
       } catch (err) {
         console.error(err);

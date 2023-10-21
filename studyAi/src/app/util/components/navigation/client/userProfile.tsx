@@ -4,7 +4,7 @@ import { UserInfo } from "../../../types/UserData";
 import useElementPosition from "@/app/util/hooks/useElementSize";
 import useDropdown from "@/app/util/hooks/useDropdown";
 import useRemToPixel from "@/app/util/hooks/useRemToPixel";
-import { LogoutBtn, RecursiveClassNames } from "./authentication";
+import { LogoutBtn } from "./authentication";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown, faChartLine } from "@fortawesome/free-solid-svg-icons";
 import { faFileLines, faUserCircle } from "@fortawesome/free-regular-svg-icons";

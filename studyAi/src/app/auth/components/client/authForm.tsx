@@ -4,6 +4,7 @@ import { Button } from "@mui/material";
 import { signIn } from "next-auth/react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { useRef } from "react";
 const onGoogleSign = async () => await signIn("google");
 const onEmailSign = async (creds: { email: string; password: string }) => {
   const signInData = await signIn("credentials", { ...creds, redirect: false });
@@ -38,43 +39,51 @@ export const AuthFormBtns = ({ type }: { type: "login" | "signup" }) => {
     </div>
   );
 };
-
 export const AuthForm = ({ type }: { type: "login" | "signup" }) => {
   const router = useRouter();
+  //for debounce user inputs
+  const submitted = useRef(false);
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    //grab uncontrolled inputs here
-    const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData.entries());
-    const { email, password, name } = data;
-    const creds = {
-      name: name?.toString(),
-      email: email.toString(),
-      password: password.toString(),
-      provider: "email",
-    };
-    switch (type) {
-      case "login":
-        const loginRes = await onEmailSign(creds);
-        if (loginRes?.error) {
-          console.error(loginRes.error);
-        }
-        if (loginRes?.ok && !loginRes?.error) {
-          console.log("Logged in successfully!");
-          router.push("/dashboard");
-        }
-        return;
-      case "signup":
-        const res = await axios({
-          method: "POST",
-          url: "/api/user",
-          data: {
-            ...creds,
-          },
-        });
-        if (res.data.status === 201) return router.push("/auth/login");
-        else console.error("Registration Failed");
-        break;
+    if (submitted.current) return;
+    submitted.current = true;
+    try {
+      const formData = new FormData(e.currentTarget);
+      const data = Object.fromEntries(formData.entries());
+      const { email, password, name } = data;
+      const creds = {
+        name: name?.toString(),
+        email: email.toString(),
+        password: password.toString(),
+        provider: "email",
+      };
+      switch (type) {
+        case "login":
+          const loginRes = await onEmailSign(creds);
+          if (loginRes?.error) {
+            console.error(loginRes.error);
+          }
+          if (loginRes?.ok && !loginRes?.error) {
+            console.log("Logged in successfully!");
+            router.push("/dashboard");
+          }
+          return;
+        case "signup":
+          const res = await axios({
+            method: "POST",
+            url: "/api/user",
+            data: {
+              ...creds,
+            },
+          });
+          if (res.data.status === 201) return router.push("/auth/login");
+          else console.error("Registration Failed");
+          break;
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      submitted.current = false;
     }
   };
   return (
