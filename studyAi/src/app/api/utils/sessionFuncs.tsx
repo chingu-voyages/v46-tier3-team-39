@@ -31,3 +31,18 @@ export const protectRouteSSR = async (
     },
   };
 };
+export const redirectIfLoggedIn = async (
+  url: string,
+  ...context:
+    | [GetServerSidePropsContext["req"], GetServerSidePropsContext["res"]]
+    | [NextApiRequest, NextApiResponse]
+    | []
+) => {
+  const session = await getSessionData(...context);
+  if (session) return redirect(url);
+  return {
+    props: {
+      session,
+    },
+  };
+};

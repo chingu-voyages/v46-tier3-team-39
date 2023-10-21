@@ -1,8 +1,16 @@
-import { protectRouteSSR } from "../api/utils/protectRoute";
-
+import { protectRouteSSR } from "../api/utils/sessionFuncs";
+import NavigationWrapper from "../util/components/navigation/navigationWrapper";
 export default async function DashboardPage() {
-  const canAccess = await protectRouteSSR("/auth/login");
-  return <>Hello</>;
+  const sessionData = await protectRouteSSR("/auth/login");
+  return (
+    <NavigationWrapper
+      appBars={{
+        navbar: true,
+        footer: true,
+      }}
+    >
+      {" "}
+      Hello
+    </NavigationWrapper>
+  );
 }
-
-// export { getSessionServerSideProps as getServerSideProps };
