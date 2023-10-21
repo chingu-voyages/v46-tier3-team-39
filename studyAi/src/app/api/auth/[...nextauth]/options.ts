@@ -9,13 +9,14 @@ import {
   prismaDb,
 } from "@/app/util/prisma/helpers";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { addCredDoc } from "./funcs";
 export const options: NextAuthOptions = {
   adapter: PrismaAdapter(prismaDb),
   session: {
     strategy: "jwt",
   },
   jwt: {
-    secret: process.env.NEXT_AUTH_SECRET as string,
+    secret: process.env.NEXTAUTH_SECRET as string,
   },
   providers: [
     GoogleProvider({
@@ -70,7 +71,6 @@ export const options: NextAuthOptions = {
   ],
   pages: {
     signIn: "/../../../auth/login/page",
-    newUser: "/../../../auth/signup/page",
   },
   callbacks: {
     async session({ session }) {
@@ -92,44 +92,11 @@ export const options: NextAuthOptions = {
         prismaDb.$disconnect();
       }
     },
+  },
+  events: {
     //create a user document on oauth sign in
-    async signIn({ profile, account }) {
-      if (!profile) return true;
-      //for Oauth provider mapping to db
-      try {
-        const { email, name } = profile;
-        if (!email || !name) return false;
-        await connectToDb();
-        const [user, userDoc] = await Promise.all([
-          findUniqueByEmail(email, "userCredentials"),
-          findUniqueByEmail(email, "user"),
-        ]);
-        if (account && account.userId && !user)
-          await prismaDb.userCredentials.create({
-            data: {
-              userId: account.userId,
-              email,
-              provider: "oauth",
-            },
-          });
-        //this only occurs when oauth is typically used,
-        //since sign with email and pw already
-        //has the cred file created
-        if (userDoc && !user)
-          await prismaDb.userCredentials.create({
-            data: {
-              userId: userDoc.id,
-              email,
-              provider: "oauth",
-            },
-          });
-        return true;
-      } catch (err) {
-        console.error(err);
-        return false;
-      } finally {
-        prismaDb.$disconnect();
-      }
+    signIn: async ({ profile, account, isNewUser }) => {
+      await addCredDoc({ profile, account, isNewUser });
     },
   },
 };
