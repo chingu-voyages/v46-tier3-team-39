@@ -31,6 +31,7 @@ const UserProfile = ({
   showUserInfo = false,
   name,
   email,
+  image
 }: {
   showUserInfo?: boolean;
 } & Partial<UserInfo>) => {
@@ -40,6 +41,7 @@ const UserProfile = ({
       <Avatar
         ref={setRef}
         className="bg-Black h-full aspect-square w-auto"
+        src={image ? image : undefined}
         style={
           avatarPos?.width && avatarPos.width > 0
             ? { width: avatarPos?.width }
