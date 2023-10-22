@@ -70,7 +70,12 @@ const Timer = ({
         resetTimer={resetTimer}
         paused={paused}
       >
-        <span>{formatMilliseconds(time)}</span>
+        <div
+          className="flex justify-center items-center leading-none"
+          style={{ lineHeight: 0 }}
+        >
+          {formatMilliseconds(time)}
+        </div>
       </TimeControlsWrapper>
     </div>
   );
