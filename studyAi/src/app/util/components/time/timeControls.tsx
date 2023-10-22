@@ -1,7 +1,8 @@
 "use client";
 import { Button } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowsRotate, faPause } from "@fortawesome/free-solid-svg-icons";
+import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons";
+import { faCirclePause } from "@fortawesome/free-regular-svg-icons";
 import TimerIcon from "../../icons/timerIcon";
 const TimeControlsWrapper = ({
   children,
@@ -32,7 +33,9 @@ const TimeControlsWrapper = ({
             width={"1em"}
           />
         )}
-        {!paused && <FontAwesomeIcon icon={faPause} />}
+        {!paused && (
+          <FontAwesomeIcon icon={faCirclePause} className="aspect-square text-lg" />
+        )}
         {children}
       </Button>
       <Button

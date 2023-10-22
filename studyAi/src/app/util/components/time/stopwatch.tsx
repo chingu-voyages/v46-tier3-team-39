@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import formatMilliseconds from "../../parsers/formatMilliseconds";
 import useTimeHook from "./hooks/useTimeHook";
 import TimeControlsWrapper from "./timeControls";
@@ -43,6 +43,7 @@ const StopWatch = ({
     }, 5000);
   };
   const resetTimer = () => {
+    setPause(true);
     if (intervalRef.current) clearInterval(intervalRef.current);
     if (updateTimeActionIntervalRef.current)
       clearInterval(updateTimeActionIntervalRef.current);

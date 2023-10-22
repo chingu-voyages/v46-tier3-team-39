@@ -1,5 +1,6 @@
 "use client";
 
+import StopWatch from "@/app/util/components/time/stopwatch";
 import Timer from "@/app/util/components/time/timer";
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -18,7 +19,8 @@ export default function NavigationBtns() {
 
         <span>Back</span>
       </Button>
-      <Timer initialTimeLeft={10000} totalTimeGiven={10000} />
+      {/* <Timer initialTimeLeft={10000} totalTimeGiven={10000} /> */}
+      <StopWatch initialTimeUsed={0} />
       <Button
         size={"medium"}
         variant="outlined"
