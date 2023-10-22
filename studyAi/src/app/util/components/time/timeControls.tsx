@@ -18,23 +18,26 @@ const TimeControlsWrapper = ({
   paused: boolean;
 }) => {
   return (
-    <div className="flex items-center justify-center h-full space-x-1">
+    <div className="flex items-center justify-center h-full">
       <Button
         size="medium"
-        variant="outlined"
-        className="flex justify-center items-center space-x-2 px-3 text-Black h-full"
+        variant="text"
+        className="flex justify-center items-center px-2 text-Black h-full"
         onClick={paused ? startTimer : stopTimer}
         sx={{ minWidth: "unset" }}
       >
         {paused && (
           <TimerIcon
-            className="fill-Black aspect-square text-lg svg-inline--fa"
+            className="fill-Black aspect-square text-lg svg-inline--fa mr-1"
             height={"1em"}
             width={"1em"}
           />
         )}
         {!paused && (
-          <FontAwesomeIcon icon={faCirclePause} className="aspect-square text-lg" />
+          <FontAwesomeIcon
+            icon={faCirclePause}
+            className="aspect-square text-lg mr-1"
+          />
         )}
         {children}
       </Button>
