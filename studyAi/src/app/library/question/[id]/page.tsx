@@ -5,6 +5,7 @@ import AnswerContainer from "../components/server/answerContainer";
 export default function QuestionPage() {
   return (
     <NavigationWrapper
+      usePadding
       appBars={{
         footer: true,
         navbar: true,
