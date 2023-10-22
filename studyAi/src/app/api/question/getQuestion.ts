@@ -11,15 +11,8 @@ const questionSchema = z.object({
 export async function getQuestion(req: Request) {
   try {
     const bodyPromise = req.json();
-
-    
-    console.log(bodyPromise)
     const [body, _] = await Promise.all([bodyPromise, connectToDb()]);
-
-
-    const { id, creatorId } = questionSchema.parse(body);
-    
-    
+    const { id, creatorId } = questionSchema.parse(body);  
     const question = prismaDb.question.findFirst({
       where: (id) ? {id} : {creatorId}
     });

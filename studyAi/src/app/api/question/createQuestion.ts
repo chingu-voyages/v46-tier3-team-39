@@ -25,10 +25,6 @@ export async function createQuestion(req: Request) {
     const bodyPromise = req.json();
     const [body, _] = await Promise.all([bodyPromise, connectToDb()]);
     const { creatorId, type, tags, question, answer, likeCounter } = questionSchema.parse(body);
-    console.log("28: HERERERERERERERERERERERERERERERE");
-
-    console.log(creatorId, type, tags, question, answer, likeCounter)
-
     const newQuestionPromise = prismaDb.question.create({
       data: {
         creatorId,
@@ -40,9 +36,7 @@ export async function createQuestion(req: Request) {
       },
     });
     
-    const newQuestion = await Promise.all([
-      newQuestionPromise
-    ]);
+    const newQuestion = await Promise.all([newQuestionPromise]);
 
     return NextResponse.json({
       newQuestion,
