@@ -12,26 +12,34 @@ export default function NavigationBtns() {
   return (
     <div className="flex justify-between items-center w-full h-10">
       <Button
-        size={"medium"}
+        size={"large"}
         variant={"outlined"}
-        className="flex space-x-2 justify-center items-center h-full"
+        className="flex space-x-3 justify-center items-center h-full font-semibold rounded-none"
         sx={{ textTransform: "none", minWidth: "unset" }}
         aria-label="Go to previous question"
       >
-        <FontAwesomeIcon icon={faArrowLeft} />
-        {windowWidth > 480 && <span>Back</span>}
+        <FontAwesomeIcon icon={faArrowLeft} className="text-lg" />
+        {windowWidth > 480 && (
+          <span className="flex items-center justify-center leading-none">
+            Back
+          </span>
+        )}
       </Button>
       {/* <Timer initialTimeLeft={10000} totalTimeGiven={10000} /> */}
       <StopWatch initialTimeUsed={0} />
       <Button
-        size={"medium"}
+        size={"large"}
         variant="outlined"
-        className="flex space-x-2 justify-center items-center h-full"
+        className="flex space-x-3 justify-center items-center h-full font-semibold rounded-none"
         sx={{ textTransform: "none", minWidth: "unset" }}
         aria-label="Go to next question"
       >
-        {windowWidth > 480 && <span>Next</span>}
-        <FontAwesomeIcon icon={faArrowRight} />
+        {windowWidth > 480 && (
+          <span className="flex items-center justify-center leading-none">
+            Next
+          </span>
+        )}
+        <FontAwesomeIcon icon={faArrowRight} className="text-lg" />
       </Button>
     </div>
   );
