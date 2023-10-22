@@ -1,13 +1,23 @@
 "use client";
 import { TextFieldInput } from "@/app/auth/components/server/formInputs";
-import { Button } from "@mui/material";
+import { Alert, Button } from "@mui/material";
 import { signIn } from "next-auth/react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { useRef } from "react";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 const onGoogleSign = async () => await signIn("google");
-const onEmailSign = async (creds: { email: string; password: string }) => {
+const onEmailSign = async (
+  creds: { email: string; password: string },
+  router: AppRouterInstance
+) => {
   const signInData = await signIn("credentials", { ...creds, redirect: false });
-  return signInData;
+  if (signInData?.error) {
+    console.error(signInData.error);
+  }
+  if (signInData?.ok && !signInData?.error) {
+    router.push("/dashboard");
+  }
 };
 export const AuthFormBtns = ({ type }: { type: "login" | "signup" }) => {
   const router = useRouter();
@@ -38,43 +48,64 @@ export const AuthFormBtns = ({ type }: { type: "login" | "signup" }) => {
     </div>
   );
 };
-
-export const AuthForm = ({ type }: { type: "login" | "signup" }) => {
+export const AuthForm = ({
+  type,
+  errMessageArr,
+}: {
+  type: "login" | "signup";
+  errMessageArr?: { code: string; message: string }[];
+}) => {
   const router = useRouter();
+  //for debounce user inputs
+  const submitted = useRef(false);
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    //grab uncontrolled inputs here
-    const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData.entries());
-    const { email, password, name } = data;
-    const creds = {
-      name: name?.toString(),
-      email: email.toString(),
-      password: password.toString(),
-      provider: "email",
-    };
-    switch (type) {
-      case "login":
-        const loginRes = await onEmailSign(creds);
-        if (loginRes?.error) {
-          console.error(loginRes.error);
-        }
-        if (loginRes?.ok && !loginRes?.error) {
-          console.log("Logged in successfully!");
-          router.push("/dashboard");
-        }
-        return;
-      case "signup":
-        const res = await axios({
-          method: "POST",
-          url: "/api/user",
-          data: {
-            ...creds,
-          },
-        });
-        if (res.data.status === 201) return router.push("/auth/login");
-        else console.error("Registration Failed");
-        break;
+    if (submitted.current) return;
+    submitted.current = true;
+    try {
+      const formData = new FormData(e.currentTarget);
+      const data = Object.fromEntries(formData.entries());
+      const { email, password, name } = data;
+      const creds = {
+        name: name?.toString(),
+        email: email.toString(),
+        password: password.toString(),
+        provider: "email",
+      };
+      switch (type) {
+        case "login":
+          await onEmailSign(
+            {
+              email: creds.email,
+              password: creds.password,
+            },
+            router
+          );
+          return;
+        case "signup":
+          const res = await axios({
+            method: "POST",
+            url: "/api/user",
+            data: {
+              ...creds,
+            },
+          });
+          //immeaditely sign in user
+          if (res.data.status === 201) {
+            await onEmailSign(
+              {
+                email: creds.email,
+                password: creds.password,
+              },
+              router
+            );
+          } else console.error("Registration Failed");
+          break;
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      submitted.current = false;
     }
   };
   return (
@@ -82,6 +113,12 @@ export const AuthForm = ({ type }: { type: "login" | "signup" }) => {
       className="flex flex-col h-full w-full items-center lg:w-4/6 max-w-m"
       onSubmit={onSubmit}
     >
+      {errMessageArr &&
+        errMessageArr.map((err) => (
+          <Alert key={err.code} severity="error" className="w-full">
+            {err.message}
+          </Alert>
+        ))}
       <div className="flex flex-col w-full items-end space-y-4">
         {type === "signup" && (
           <TextFieldInput

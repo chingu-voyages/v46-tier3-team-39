@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prisma": "npx prisma generate"
+    "prisma": "npx prisma generate "
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -26,6 +26,7 @@
     "dotenv": "^16.3.1",
     "lodash": "^4.17.21",
     "mongodb": "^6.1.0",
+    "moongoose": "^0.0.5",
     "mssql": "^10.0.1",
     "next": "13.5.4",
     "next-auth": "^4.23.2",
@@ -37,6 +38,7 @@
   "devDependencies": {
     "@types/bcryptjs": "^2.4.5",
     "@types/lodash": "^4.14.199",
+    "@types/mongoose": "^5.11.97",
     "@types/mssql": "^9.1.1",
     "@types/node": "20",
     "@types/react": "18",
