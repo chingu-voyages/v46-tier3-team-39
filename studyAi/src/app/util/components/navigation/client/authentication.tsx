@@ -60,14 +60,17 @@ export const LogoutBtn = (
   const className = props.className;
   const classStyles =
     (className ? className : "") + "flex w-full [&>*]:rounded-none";
-  const domProps = { ...props }
+  const domProps = { ...props };
   delete domProps.icon;
   const newProps: ButtonProps = {
     ...domProps,
     className: classStyles,
     sx: props.sx ? props.sx : {},
   };
-  const onLogout = () => signOut();
+  const onLogout = () =>
+    signOut({
+      callbackUrl: "/auth/login",
+    });
   return (
     <Button
       {...newProps}
@@ -91,14 +94,14 @@ export const LogoutBtn = (
 const AuthenticationNav = ({
   classNames,
   authBtnClassNames,
-  // userProfClassNames,
-}: {
+}: // userProfClassNames,
+{
   classNames?: string;
   authBtnClassNames?: RecursiveClassNames;
   // userProfClassNames?: RecursiveClassNames;
-  }) => {
-  const session = useSession()
-  const isLoggedIn = session.status === 'authenticated';
+}) => {
+  const session = useSession();
+  const isLoggedIn = session.status === "authenticated";
   const windowWidth = useWindowWidth();
   const containerClassNames =
     "flex flex-col xs:items-center xs:justify-end xs:h-full xs:flex-row xs:grow" +

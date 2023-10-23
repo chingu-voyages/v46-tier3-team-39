@@ -4,7 +4,7 @@ import { UserInfo } from "../../../types/UserData";
 import useElementPosition from "@/app/util/hooks/useElementSize";
 import useDropdown from "@/app/util/hooks/useDropdown";
 import useRemToPixel from "@/app/util/hooks/useRemToPixel";
-import { LogoutBtn, RecursiveClassNames } from "./authentication";
+import { LogoutBtn } from "./authentication";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown, faChartLine } from "@fortawesome/free-solid-svg-icons";
 import { faFileLines, faUserCircle } from "@fortawesome/free-regular-svg-icons";
@@ -31,25 +31,27 @@ const UserProfile = ({
   showUserInfo = false,
   name,
   email,
+  image,
 }: {
   showUserInfo?: boolean;
 } & Partial<UserInfo>) => {
-  const { setRef, position: avatarPos } = useElementPosition();
+  const { setRef, position: infoPos } = useElementPosition();
   return (
     <div className="flex items-center h-full">
       <Avatar
         ref={setRef}
         className="bg-Black h-full aspect-square w-auto"
+        src={image ? image : undefined}
         style={
-          avatarPos?.width && avatarPos.width > 0
-            ? { width: avatarPos?.width }
+          showUserInfo && infoPos?.height && infoPos.height > 0
+            ? { height: infoPos.height }
             : undefined
         }
       >
         {name?.[0].toUpperCase()}
       </Avatar>
       {showUserInfo && (
-        <div className="flex flex-col w-full ml-4 py-1 space-y-0">
+        <div ref={setRef} className="flex flex-col w-full ml-4 py-1 space-y-0">
           <span className="text-Black font-bold tracking-tight text-lg">
             {name && name}
           </span>

@@ -9,14 +9,14 @@ import {
   prismaDb,
 } from "@/app/util/prisma/helpers";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import axios from "axios";
+import { addCredDoc } from "./funcs";
 export const options: NextAuthOptions = {
   adapter: PrismaAdapter(prismaDb),
   session: {
     strategy: "jwt",
   },
   jwt: {
-    secret: process.env.NEXT_AUTH_SECRET as string,
+    secret: process.env.NEXTAUTH_SECRET as string,
   },
   providers: [
     GoogleProvider({
@@ -59,7 +59,7 @@ export const options: NextAuthOptions = {
           if (!passwordMatch) throw new Error("Incorrect password");
           const userId = user.userId;
           const userInfo = await findUniqueById(userId, "user");
-          return userInfo
+          return userInfo;
         } catch (err) {
           console.error(err);
           return null;
@@ -71,7 +71,7 @@ export const options: NextAuthOptions = {
   ],
   pages: {
     signIn: "/../../../auth/login/page",
-    newUser: "/../../../auth/signup/page",
+    error: "/../../../auth/login/page",
   },
   callbacks: {
     async session({ session }) {
@@ -93,37 +93,11 @@ export const options: NextAuthOptions = {
         prismaDb.$disconnect();
       }
     },
+  },
+  events: {
     //create a user document on oauth sign in
-    async signIn({ profile }) {
-      if (!profile) return true;
-      //for Oauth provider mapping to db
-      try {
-        const { email, name } = profile;
-        if (!email || !name) return false;
-        await connectToDb();
-        const user = await findUniqueByEmail(email, "userCredentials");
-        //user data and account exists in our db, so we can sign in
-        if (user) return true;
-        const req = await axios({
-          url: "/api/user",
-          method: "POST",
-          data: {
-            email,
-            name,
-            provider: "oauth",
-            password: null,
-          },
-        });
-        if (req.status !== 201) {
-          throw Error(req.data);
-        }
-        return true;
-      } catch (err) {
-        console.error(err);
-        return false;
-      } finally {
-        prismaDb.$disconnect();
-      }
+    signIn: async ({ profile, account, isNewUser }) => {
+      await addCredDoc({ profile, account, isNewUser });
     },
   },
 };
