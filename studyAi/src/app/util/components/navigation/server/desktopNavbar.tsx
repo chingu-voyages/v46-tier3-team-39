@@ -15,7 +15,6 @@ const links = [
   },
 ];
 
-
 export const NavbarLinks = ({
   children,
 }: {
@@ -41,6 +40,7 @@ export const NavButtons = () => {
     </>
   );
 };
+
 const authBtnClassNames: RecursiveClassNames = {
   value: null,
   container: {

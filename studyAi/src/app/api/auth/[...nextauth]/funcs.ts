@@ -1,0 +1,52 @@
+import {
+  connectToDb,
+  findUniqueByEmail,
+  prismaDb,
+} from "@/app/util/prisma/helpers";
+import { Profile, Account } from "next-auth";
+export const addCredDoc = async ({
+  profile,
+  account,
+  isNewUser,
+}: {
+  account: Account | null;
+  profile?: Profile | undefined;
+  isNewUser?: boolean | undefined;
+}) => {
+  if (!isNewUser) return;
+  //procced only if new user
+  if (!profile) return;
+  //for Oauth provider mapping to db
+  try {
+    const { email, name } = profile;
+    if (!email || !name) return;
+    await connectToDb();
+    const [user, userDoc] = await Promise.all([
+      findUniqueByEmail(email, "userCredentials"),
+      findUniqueByEmail(email, "user"),
+    ]);
+    if (account && account.userId && !user)
+      return await prismaDb.userCredentials.create({
+        data: {
+          userId: account.userId,
+          email,
+          provider: "oauth",
+        },
+      });
+    //this only occurs when oauth is typically used,
+    //since sign with email and pw already
+    //has the cred file created
+    if (userDoc && !user)
+      return await prismaDb.userCredentials.create({
+        data: {
+          userId: userDoc.id,
+          email,
+          provider: "oauth",
+        },
+      });
+  } catch (err) {
+    console.error(err);
+  } finally {
+    prismaDb.$disconnect();
+  }
+};

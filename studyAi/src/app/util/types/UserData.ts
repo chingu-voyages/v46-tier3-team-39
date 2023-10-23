@@ -1,6 +1,3 @@
-export interface UserInfo {
-  id: string;
-  email: string;
-  first_name: string;
-  last_name: string;
-}
+import { User } from "@prisma/client";
+
+export type UserInfo = User

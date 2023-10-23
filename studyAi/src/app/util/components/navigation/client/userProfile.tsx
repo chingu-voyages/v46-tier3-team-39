@@ -4,11 +4,12 @@ import { UserInfo } from "../../../types/UserData";
 import useElementPosition from "@/app/util/hooks/useElementSize";
 import useDropdown from "@/app/util/hooks/useDropdown";
 import useRemToPixel from "@/app/util/hooks/useRemToPixel";
-import { RecursiveClassNames } from "./authentication";
+import { LogoutBtn } from "./authentication";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown, faChartLine } from "@fortawesome/free-solid-svg-icons";
 import { faFileLines, faUserCircle } from "@fortawesome/free-regular-svg-icons";
 import NextLink from "next/link";
+import { useSession } from "next-auth/react";
 const userItemLinks = (userId?: string) => [
   {
     href: `/dashboard`,
@@ -28,30 +29,31 @@ const userItemLinks = (userId?: string) => [
 ];
 const UserProfile = ({
   showUserInfo = false,
-  first_name,
-  last_name,
+  name,
   email,
+  image,
 }: {
   showUserInfo?: boolean;
 } & Partial<UserInfo>) => {
-  const { setRef, position: avatarPos } = useElementPosition();
+  const { setRef, position: infoPos } = useElementPosition();
   return (
     <div className="flex items-center h-full">
       <Avatar
         ref={setRef}
         className="bg-Black h-full aspect-square w-auto"
+        src={image ? image : undefined}
         style={
-          avatarPos?.width && avatarPos.width > 0
-            ? { width: avatarPos?.width }
+          showUserInfo && infoPos?.height && infoPos.height > 0
+            ? { height: infoPos.height }
             : undefined
         }
       >
-        {first_name?.[0].toUpperCase()}
+        {name?.[0].toUpperCase()}
       </Avatar>
       {showUserInfo && (
-        <div className="flex flex-col w-full ml-4 py-1 space-y-0">
+        <div ref={setRef} className="flex flex-col w-full ml-4 py-1 space-y-0">
           <span className="text-Black font-bold tracking-tight text-lg">
-            {first_name && last_name && first_name + " " + last_name}
+            {name && name}
           </span>
           <span className="text-Black font-regular tracking-tight text-xs">
             {email}
@@ -61,15 +63,7 @@ const UserProfile = ({
     </div>
   );
 };
-const determineUserProfStyles = (userProfClassNames?: RecursiveClassNames) => {
-  if (!userProfClassNames)
-    return { authContainerClassName: null, authLinkName: null };
-  const userProf = userProfClassNames?.container as RecursiveClassNames;
-  const userProfClassName = userProf.value;
-  const authLink = userProf.links as RecursiveClassNames;
-  const authLinkName = authLink.value;
-  return { userProfClassName, authLinkName };
-};
+
 export const ProfileDropdown = ({
   anchorEl,
   userDropdownPos,
@@ -126,27 +120,45 @@ export const ProfileDropdown = ({
           </NextLink>
         </MenuItem>
       ))}
+      <MenuItem
+        className="flex"
+        style={{
+          padding: 0,
+        }}
+      >
+        <LogoutBtn
+          className="flex tracking-tight justify-start text-sm w-full"
+          icon
+          sx={{
+            paddingLeft: "16px",
+            paddingRight: "16px",
+          }}
+        />
+      </MenuItem>
     </Menu>
   );
 };
+// const determineUserProfStyles = (userProfClassNames?: RecursiveClassNames) => {
+//   if (!userProfClassNames)
+//     return { userProfClassName: null, userProfLinkClassName: null };
+//   const userProf = userProfClassNames?.container as RecursiveClassNames;
+//   const userProfClassName = userProf.value;
+//   const userLinks = userProf.links as RecursiveClassNames;
+//   const userProfLinkClassName = userLinks.value;
+//   return { userProfClassName, userProfLinkClassName };
+// };
 export const UserProfileNav = ({
-  userProfClassNames,
+  // userProfClassNames,
   dropdown = true,
 }: {
   dropdown?: boolean;
-  userProfClassNames?: RecursiveClassNames;
+  // userProfClassNames?: RecursiveClassNames;
 }) => {
+  const session = useSession();
   const { setRef, position: userDropdownPos } = useElementPosition();
   const { anchorEl, handleClick, handleClose } = useDropdown();
-  const userProfileProps: Partial<UserInfo> & {
-    showUserInfo: boolean;
-  } = {
-    showUserInfo: false,
-    email: "arkyasmal@gmail.com",
-    first_name: "Arky",
-    last_name: "Asmal",
-    id: "XXXXXXXXXXXXXXXXXXX",
-  };
+  const userProfileProps = session.data?.user;
+  if (!userProfileProps) return <></>;
   return (
     <>
       {dropdown && (
@@ -172,16 +184,19 @@ export const UserProfileNav = ({
         />
       )}
       {!dropdown && <UserProfile {...userProfileProps} showUserInfo />}
-      {!dropdown &&
-        userItemLinks(userProfileProps.id).map((link) => (
-          <NextLink
-            key={link.text}
-            href={link.href}
-            className="text-Black font-regular flex items-center tracking-tight text-sm"
-          >
-            <span className="xs:ml-3">{link.text}</span>
-          </NextLink>
-        ))}
+      {!dropdown && (
+        <div className="flex flex-col mt-10 space-y-4">
+          {userItemLinks(userProfileProps.id).map((link) => (
+            <NextLink
+              key={link.text}
+              href={link.href}
+              className="text-Black font-regular flex items-center tracking-tight text-sm"
+            >
+              <span className="xs:ml-3">{link.text}</span>
+            </NextLink>
+          ))}
+        </div>
+      )}
     </>
   );
 };
