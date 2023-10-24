@@ -10,6 +10,7 @@
     "lint": "next lint",
     "prisma": "npx prisma generate "
   },
+  "type": "module",
   "dependencies": {
     "@apollo/client": "^3.8.6",
     "@apollo/server": "^4.9.4",
@@ -46,6 +47,8 @@
     "react-dom": "18",
     "reflect-metadata": "^0.1.13",
     "tslib": "^2.6.2",
+    "type-graphql": "^2.0.0-beta.3",
+    "typegraphql-prisma": "^0.27.1",
     "zod": "^3.22.4"
   },
   "devDependencies": {
