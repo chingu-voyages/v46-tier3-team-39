@@ -3,9 +3,7 @@ import { ApolloServer } from "@apollo/server";
 import { startServerAndCreateNextHandler } from '@as-integrations/next';
 import { typeDefs } from '../../../../graphql/schema'
 import { resolvers } from '../../../../graphql/resolvers'
-
 import { createContext } from "../../../../graphql/context"
-import { connectToDb, prismaDb } from "@/app/util/prisma/helpers";
 
 const apolloServer = new ApolloServer({
   typeDefs,

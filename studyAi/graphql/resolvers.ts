@@ -1,6 +1,7 @@
 export const resolvers = {
   Query: {
-    user(parent, args, contextValue, info) {
+    user(parent, args, context, info) {
+      console.log("HERERERERERERE", context.prismaDb);
       return users.find((user) => user.userId === args.userId);
     },
   },
