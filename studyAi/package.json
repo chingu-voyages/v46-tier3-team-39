@@ -10,7 +10,6 @@
     "lint": "next lint",
     "prisma": "npx prisma generate "
   },
-  "type": "module",
   "dependencies": {
     "@apollo/client": "^3.8.6",
     "@apollo/server": "^4.9.4",

@@ -1,2 +1,2 @@
-import startServerAndCreateNextHandler from './graphql'
-export { startServerAndCreateNextHandler as POST }
+import { main } from './graphql'
+export { main as POST }

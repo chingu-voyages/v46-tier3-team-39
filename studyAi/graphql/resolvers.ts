@@ -1,26 +1,24 @@
-export const resolvers = {
-  Query: {
-    user(parent, args, context, info) {
-      console.log("HERERERERERERE", context.prismaDb);
-      return users.find((user) => user.userId === args.userId);
-    },
-  },
-  User: {
-    orders(parent){
-      return orders.filter((order)=>order.userId === parent.userId )
-    }
-  },
-  Order: {
-      items(parent){
-        return parent.items.map((itemId) => {
-        return items.find((item)=>item.itemId === itemId)
-        })
-      },
-      orderPrice(parent){
-        return parent.items.map((itemId) => {
-        return items.find((item)=>item.itemId === itemId)
-        }).reduce((sum,item) => sum+item.itemPrice, 0)
-      }
+import { Question, FindFirstQuestionOrThrowResolver } from "../prisma/generated/type-graphql";
+import {
+  Resolver,
+  Query,
+  buildSchema,
+  FieldResolver,
+  Ctx,
+  Root,
+} from "type-graphql";
+import { PrismaClient } from "@prisma/client";
 
+interface Context {
+  prisma: PrismaClient;
+}
+
+@Resolver(of => Question)
+class CustomQuestionResolver {
+  @Query(returns => Question, { nullable: true })
+  async firstQuestion(@Ctx() { prisma }: Context): Promise<Question | null> {
+    return await prisma.question.findFirst({
+      where: { id: "653316b5f175c9c57765a500" },
+    });
   }
-};
+}
