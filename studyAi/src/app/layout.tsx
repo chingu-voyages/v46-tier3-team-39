@@ -1,7 +1,8 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import Provider from "./auth/context/AuthContext";
-import GraphQLProvider from "./api/utils/apolloClient";
+import GraphQLProvider from "./api/utils/apolloProvider";
+import { IsClientCtxProvider } from "./api/utils/isClientProvider";
 
 export const metadata: Metadata = {
   title: 'StudyAI',
@@ -15,11 +16,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <GraphQLProvider>
-        <Provider>
-          <body>{children}</body>
-        </Provider>
-      </GraphQLProvider>
+      <IsClientCtxProvider>
+        <GraphQLProvider>
+          <Provider>
+            <body>{children}</body>
+          </Provider>
+        </GraphQLProvider>
+      </IsClientCtxProvider>
     </html>
   );
 }
