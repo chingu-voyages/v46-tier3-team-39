@@ -1,5 +1,4 @@
 "use client";
-
 import StopWatch from "@/app/util/components/time/stopwatch";
 import Timer from "@/app/util/components/time/timer";
 import useWindowWidth from "@/app/util/hooks/useWindowWidth";
