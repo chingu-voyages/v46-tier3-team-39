@@ -12,6 +12,17 @@ import { PrismaClient } from "@prisma/client";
 interface Context {
   prisma: PrismaClient;
 }
+/*
+Custom Resolvers Needed:
+- Generate a single question, with category and tag context
+- Generate a single question, using another question as a template + category + tag context (use OpenAI API)
+- Upload/create a question's data into db !
+- Create a route that adds, deletes, and updates a set, or a single question to a quiz
+- Update and delete question routes
+- (GraphQL ? REST API) Create the Exam/Quizzes Routes
+- Create Question Routes
+- Create User Info Routes
+*/
 
 @Resolver(of => Question)
 class CustomQuestionResolver {
