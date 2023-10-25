@@ -1,23 +1,35 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
+//remember to use npm run prisma
+// npx prisma generate
 generator client {
   provider = "prisma-client-js"
 }
+
+generator typegraphql {
+  provider = "typegraphql-prisma"
+  output   = "../prisma/generated/type-graphql"
+}
+
 datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")  
 }
+
 type QuestionData{
   title String 
   description String 
 }
+
 type AnswerData{
   answer String
 }
+
 type LikeCounter {
   likes Int
   dislikes Int
 }
+
 model Question {
   id String @id @default(auto()) @map("_id") @db.ObjectId 
   creatorId String
@@ -35,6 +47,7 @@ model QuestionLikes {
     userId String @unique @db.ObjectId
     questionId String @unique @db.ObjectId
 }
+
 model Quiz {
   id    String                           @id @default(auto()) @map("_id") @db.ObjectId
   name  String
@@ -44,12 +57,14 @@ model Quiz {
   questionIds String[]
   dateCreated   DateTime @default(now())
 }
+
 model QuizLikes {
     id            String  @id @default(auto()) @map("_id") @db.ObjectId
     dateCreated   DateTime @default(now())
     userId String @unique @db.ObjectId
     questionId String @unique @db.ObjectId
 }
+
 model Submissions {
    id            String  @id @default(auto()) @map("_id") @db.ObjectId
    time          DateTime @default(now())
@@ -66,6 +81,7 @@ model UserCredentials{
   password String?
   provider String
 }
+
 model Account {
   id                 String  @id @default(auto()) @map("_id") @db.ObjectId 
   userId             String  @unique @db.ObjectId
@@ -83,6 +99,7 @@ model Account {
 
   @@unique([provider, providerAccountId])
 }
+
 model Session {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
   sessionToken String   @unique
@@ -90,6 +107,7 @@ model Session {
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
+
 model User {
   id            String  @id @default(auto()) @map("_id") @db.ObjectId 
   name          String
@@ -101,6 +119,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
 }
+
 model VerificationToken {
   id String @id @default(auto()) @map("_id") @db.ObjectId 
   identifier String
