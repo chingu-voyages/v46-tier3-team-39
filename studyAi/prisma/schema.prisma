@@ -33,7 +33,7 @@ type LikeCounter {
 model Question {
   id String @id @default(auto()) @map("_id") @db.ObjectId 
   creatorId String
-  type String
+  questionType String
   tags String[]
   question QuestionData
   answer AnswerData
@@ -85,6 +85,7 @@ model UserCredentials{
 model Account {
   id                 String  @id @default(auto()) @map("_id") @db.ObjectId 
   userId             String  @unique @db.ObjectId
+  /// @TypeGraphQL.omit(output: true)
   type               String
   provider           String
   providerAccountId  String

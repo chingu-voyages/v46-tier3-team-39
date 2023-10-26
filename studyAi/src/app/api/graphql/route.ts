@@ -1,2 +1,2 @@
-import { main } from './graphql'
-export { main as POST }
+import main from "./graphql";
+export {main as POST };
