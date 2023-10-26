@@ -74,7 +74,7 @@ model Submissions {
    quizId String @unique @db.ObjectId
 }
 
-model UserCredentials{
+model UserCredentials {
   id            String  @id @default(auto()) @map("_id") @db.ObjectId
   userId String @unique @db.ObjectId
   email String  @unique
