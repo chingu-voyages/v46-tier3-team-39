@@ -1,32 +1,32 @@
 import { Question } from "@prisma/client";
 import { createStore, createHook, createContainer } from "react-sweet-state";
+import { addOrUpdateFunc, deleteItems } from "./helpers";
 type QuestionsData = {
-  data: { [key: string]: Partial<Question> };
-  status: "loading" | "success" | "failed";
+  data: { [key: string]: Partial<Question> & { id: string } };
 };
 const initialState: QuestionsData = {
   data: {},
-  status: "success",
 };
 const Store = createStore({
   // value of the store on initialisation
   initialState,
   // actions that trigger store mutation
   actions: {
-    addItems:
+    addOrUpdateItems:
       () =>
-        async ({ setState, getState }, api: {
-          url: string;
-          body: string; 
-        }) => {
-        
-      },
+      async (
+        { setState, getState },
+        items: (Partial<Question> & { id: string })[]
+      ) =>
+        addOrUpdateFunc({
+          items,
+          setState,
+          getState,
+        }),
     deleteItems:
       () =>
-      async ({ setState, getState }) => {},
-    updateItems:
-      () =>
-      async ({ setState, getState }) => {},
+      async ({ setState, getState }, items: Question["id"][]) =>
+        deleteItems({ items, setState, getState }),
   },
   // optional, unique, mostly used for easy debugging
   name: "questions",
