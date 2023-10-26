@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import { ApolloServer } from "@apollo/server";
-import { resolvers } from "../../../../prisma/generated/type-graphql";
+import { resolvers } from "../../../../graphql/index";
 import { startServerAndCreateNextHandler } from "@as-integrations/next";
 import { prismaDb } from "@/app/util/prisma/connection";
 import { buildSchema } from "type-graphql";
