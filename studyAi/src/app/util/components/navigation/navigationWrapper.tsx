@@ -3,8 +3,10 @@ import Navbar from "./client/navbar";
 const NavigationWrapper = ({
   children,
   appBars,
+  usePadding = false,
 }: {
   children: React.ReactNode;
+  usePadding?: boolean;
   appBars?: {
     navbar: boolean;
     footer: boolean;
@@ -16,12 +18,19 @@ const NavigationWrapper = ({
         <>
           {appBars.navbar && <Navbar />}
           <main
-            className="bg-White flex flex-col w-100 text-Black"
+            className={`bg-White flex flex-col w-full text-Black ${
+              usePadding ? "px-[3%] md:px-[5%] items-center" : ""
+            }`}
             style={{
               minHeight: `calc(100vh - ${appBars.navbar ? "3.5rem" : "0px"}`,
             }}
           >
-            {children}
+            {usePadding && (
+              <div className="flex flex-col w-full max-w-screen-xl pt-8">
+                {children}
+              </div>
+            )}
+            {!usePadding && children}
           </main>
           {appBars.footer && <Footer />}
         </>

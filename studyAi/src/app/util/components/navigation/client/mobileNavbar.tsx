@@ -32,6 +32,8 @@ export const NavDrawer = ({ children }: { children: React.ReactNode }) => {
         variant="text"
         aria-label="open-drawer"
         onClick={toggleDrawer(true)}
+        className="aspect-square text-2xl"
+        sx={{ minWidth: 'unset'}}
       >
         <FontAwesomeIcon icon={faBars} />
       </Button>
