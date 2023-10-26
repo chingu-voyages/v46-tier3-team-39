@@ -1,24 +1,22 @@
 import { connectToDb, prismaDb } from "@/app/util/prisma/connection";
 import { NextResponse } from "next/server";
-export async function deleteUser(req: Request) {
+import * as z from "zod";
+
+//schema for validating user inputs NEED TO BE COMPLETED
+const questionSchema = z.object({
+  id: z.string(),
+});
+
+export async function deleteQuestion(req: Request) {
   try {
     const bodyPromise = req.json();
     const [body, _] = await Promise.all([bodyPromise, connectToDb()]);
-    const { userId } = body;
-    //add verify token here
-    const userCred = prismaDb.userCredentials.delete({
-      where: {
-        userId,
-      },
-    });
-    const user = prismaDb.user.delete({
-      where: {
-        id: userId,
-      },
-    });
-    await Promise.all([userCred, user]);
+    const { id } = questionSchema.parse(body);
+    const question = prismaDb.question.delete({ where: { id } });
+
+    await Promise.all([question]);
     return NextResponse.json({
-      message: "User deleted successfully",
+      message: "Question deleted successfully",
       status: 201,
     });
   } catch (err) {
