@@ -23,7 +23,8 @@ type QuestionData {
 }
 
 type AnswerData {
-  answer String
+  correctAnswer String[]
+  incorrectAnswer String[]
 }
 
 type LikeCounter {
