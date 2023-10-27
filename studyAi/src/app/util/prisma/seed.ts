@@ -1,6 +1,5 @@
-import { PrismaClient, PrismaPromise, QuestionLikes, Quiz, QuizLikes, Submissions } from '@prisma/client'
-import { allData } from './seedData'
-const prismaDb = new PrismaClient()
+import { PrismaClient, PrismaPromise, Question, QuestionLikes, Quiz, QuizLikes, Submissions } from '@prisma/client'
+import { prismaDb, allQuestions } from './seedData'
 
 async function main() {  
   await prismaDb.question.deleteMany({});
@@ -8,34 +7,37 @@ async function main() {
   await prismaDb.quiz.deleteMany({});
   await prismaDb.quizLikes.deleteMany({});
   await prismaDb.submissions.deleteMany({});
-
+  
   // Question
-  const questionPromise = allData.allQuestions.map(item => prismaDb.question.create({data: item}));
-  const questionInfo = await prismaDb.$transaction(questionPromise);
+  const allUserQuestions = await allQuestions();
+  const questionPromise: Promise<Question>[] = [];
+  for (let i = 0; i < allUserQuestions.length; i++) {
+    questionPromise.push(prismaDb.question.create({data: allUserQuestions[i]}));
+  }
+  const questionInfo = await Promise.all(questionPromise);
   
   // QuestionLikes and Quiz
   const questionLikePromise: Promise<QuestionLikes>[] = [];
-  // const quizPromise: Promise<Quiz>[] = [];
+  const quizPromise: Promise<Quiz>[] = [];
   for (const question of questionInfo) {
     const questionLikeItem = { userId: question.creatorId, questionId: question.id };
+    const quizItem = { name: "Chemistry Quiz", tags: question.tags, likes: 1, creatorId: question.creatorId, questionIds: [ question.id ] };
     questionLikePromise.push(prismaDb.questionLikes.create({ data: questionLikeItem }));
-    
-    // const quizItem = { name: "Chemistry Quiz", tags: question.tags, likes: 1, creatorId: question.creatorId, questionIds: [ question.id ] };
-    // quizPromise.push(prismaDb.quiz.create({ data: quizItem }));
+    quizPromise.push(prismaDb.quiz.create({ data: quizItem }));
   }
-  await prismaDb.$transaction(questionLikePromise);
-  // const quizInfo = await prismaDb.$transaction(quizPromise);
+  await Promise.all(questionLikePromise);
+  const quizInfo = await Promise.all(quizPromise);
 
   // QuizLikes and Submissions
-//   const quizLikePromise: Promise<QuizLikes>[] = [];
-//   const submissionPromise: Promise<Submissions>[] = [];
-//   for (const quiz of quizInfo) {
-//     const item = { userId: quiz.creatorId, quizId: quiz.id };
-//     quizLikePromise.push(prismaDb.quizLikes.create({ data: item }));
-//     submissionPromise.push(prismaDb.submissions.create({ data: item }));
-//   }
-//   await prismaDb.$transaction(quizLikePromise);
-//   await prismaDb.$transaction(submissionPromise);
+  const quizLikePromise: Promise<QuizLikes>[] = [];
+  const submissionPromise: Promise<Submissions>[] = [];
+  for (const quiz of quizInfo) {
+    const item = { userId: quiz.creatorId, quizId: quiz.id };
+    quizLikePromise.push(prismaDb.quizLikes.create({ data: item }));
+    submissionPromise.push(prismaDb.submissions.create({ data: {...item, score: 1 }}));
+  }
+  // await Promise.all(quizLikePromise);
+  await Promise.all(submissionPromise);
 }
 
 main()
