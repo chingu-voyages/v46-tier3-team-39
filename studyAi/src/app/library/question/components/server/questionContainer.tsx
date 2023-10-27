@@ -5,18 +5,19 @@ import EditIcon from "@mui/icons-material/Edit";
 import { Button, Tab, Tabs } from "@mui/material";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
-import { useParams } from "next/navigation";
+import { Question } from "@prisma/client";
+import { useQuestions } from "@/app/stores/questionStore";
 const containerTabs = ["description", "solution", "attempts"] as const;
-export const QuestionContainer = () => {
+export const QuestionContainer = ({ data }: { data?: Partial<Question> }) => {
   const session = useSession();
-  const params = useParams();
+  const [state, actions] = useQuestions()
   const [value, setValue] =
     useState<(typeof containerTabs)[number]>("description");
   const handleChange = (
     event: React.SyntheticEvent,
     newValue: (typeof containerTabs)[number]
   ) => setValue(newValue);
-  // const 
+  // const
   return (
     <ContainerBar>
       <Tabs
