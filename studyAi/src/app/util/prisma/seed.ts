@@ -1,4 +1,4 @@
-import { PrismaClient, PrismaPromise, Question, QuestionLikes, Quiz, QuizLikes, Submissions } from '@prisma/client'
+import { Question, QuestionLikes, Quiz, QuizLikes, Submissions } from '@prisma/client'
 import { prismaDb, allQuestions } from './seedData'
 
 async function main() {  
@@ -34,7 +34,7 @@ async function main() {
   for (const quiz of quizInfo) {
     const item = { userId: quiz.creatorId, quizId: quiz.id };
     quizLikePromise.push(prismaDb.quizLikes.create({ data: item }));
-    submissionPromise.push(prismaDb.submissions.create({ data: {...item, score: 1 }}));
+    submissionPromise.push(prismaDb.submissions.create({ data: { ...item, score: 1 }}));
   }
   // await Promise.all(quizLikePromise);
   await Promise.all(submissionPromise);
