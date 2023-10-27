@@ -2,6 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 //remember to use npm run prisma
 // npx prisma generate
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -16,53 +17,53 @@ datasource db {
   url      = env("DATABASE_URL")  
 }
 
-type QuestionData{
-  title String 
+type QuestionData {
+  title       String 
   description String 
 }
 
-type AnswerData{
+type AnswerData {
   answer String
 }
 
 type LikeCounter {
-  likes Int
+  likes    Int
   dislikes Int
 }
 
 model Question {
-  id String @id @default(auto()) @map("_id") @db.ObjectId 
-  creatorId String
+  id           String @id @default(auto()) @map("_id") @db.ObjectId 
+  creatorId    String
   questionType String
-  tags String[]
-  question QuestionData
-  answer AnswerData
-  dateCreated   DateTime @default(now())
-  likeCounter LikeCounter
+  tags         String[]
+  question     QuestionData
+  answer       AnswerData
+  dateCreated  DateTime @default(now())
+  likeCounter  LikeCounter
 }
 
 model QuestionLikes {
-    id            String  @id @default(auto()) @map("_id") @db.ObjectId
-    dateCreated   DateTime @default(now())
-    userId String @unique @db.ObjectId
-    questionId String @unique @db.ObjectId
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  dateCreated DateTime @default(now())
+  userId      String @unique @db.ObjectId
+  questionId  String @unique @db.ObjectId
 }
 
 model Quiz {
-  id    String                           @id @default(auto()) @map("_id") @db.ObjectId
-  name  String
-  tags   String
-  likes Int
-  creatorId String @unique @db.ObjectId
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  tags        String[]
+  likes       Int
+  creatorId   String @unique @db.ObjectId
   questionIds String[]
-  dateCreated   DateTime @default(now())
+  dateCreated DateTime @default(now())
 }
 
 model QuizLikes {
     id            String  @id @default(auto()) @map("_id") @db.ObjectId
     dateCreated   DateTime @default(now())
     userId String @unique @db.ObjectId
-    questionId String @unique @db.ObjectId
+    quizId String @unique @db.ObjectId
 }
 
 model Submissions {
@@ -78,8 +79,8 @@ model UserCredentials {
   id            String  @id @default(auto()) @map("_id") @db.ObjectId
   userId String @unique @db.ObjectId
   email String  @unique
-  password String?
-  provider String
+  password      String?
+  provider      String
 }
 
 model Account {
@@ -96,7 +97,7 @@ model Account {
   scope              String?
   id_token           String?  
   session_state      String?
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user               User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -112,17 +113,17 @@ model Session {
 model User {
   id            String  @id @default(auto()) @map("_id") @db.ObjectId 
   name          String
-  email String  @unique
-  usersReached Int @default(0)
+  email         String  @unique
+  usersReached  Int @default(0)
   dateCreated   DateTime @default(now())
   emailVerified DateTime?
-  image String?
+  image         String?
   accounts      Account[]
   sessions      Session[]
 }
 
 model VerificationToken {
-  id String @id @default(auto()) @map("_id") @db.ObjectId 
+  id String  @id @default(auto()) @map("_id") @db.ObjectId 
   identifier String
   token      String   @unique
   expires    DateTime

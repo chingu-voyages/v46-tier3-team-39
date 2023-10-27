@@ -11,7 +11,7 @@
     "prisma": "npx prisma generate"
   },
   "prisma": {
-    "seed": "ts-node prisma/seed.ts"
+    "seed": "ts-node ./src/app/util/prisma/seed.ts"
   },
   "dependencies": {
     "@apollo/client": "^3.8.6",
