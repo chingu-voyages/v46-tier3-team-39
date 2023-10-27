@@ -1,6 +1,6 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import Provider from "./auth/context/AuthContext";
+import AuthProvider from "./auth/context/AuthContext";
 import GraphQLProvider from "./api/graphql/apolloProvider";
 import { IsClientCtxProvider } from "./api/graphql/isClientProvider";
 
@@ -16,13 +16,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <IsClientCtxProvider>
-        <GraphQLProvider>
-          <Provider>
+      <GraphQLProvider>
+        <IsClientCtxProvider>
+          <AuthProvider>
             <body>{children}</body>
-          </Provider>
-        </GraphQLProvider>
-      </IsClientCtxProvider>
+          </AuthProvider>
+        </IsClientCtxProvider>
+      </GraphQLProvider>
     </html>
   );
 }
