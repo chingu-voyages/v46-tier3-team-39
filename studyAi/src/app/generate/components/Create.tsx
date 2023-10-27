@@ -23,6 +23,11 @@ export default function Create() {
                     Submit
                 </button>
             </div>
+            <div>
+                <button type="submit" className="bg-blue-500 text-white font-semibold px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-700">
+                    Generate Question
+                </button>
+            </div>
         </form>
     </div>
     )
