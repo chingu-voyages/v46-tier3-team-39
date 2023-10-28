@@ -1,14 +1,18 @@
 import NavigationWrapper from "@/app/util/components/navigation/navigationWrapper";
 import NavigationBtns from "../components/client/navigationBtns";
-
 import ServerGraphQLClient from "@/app/api/graphql/apolloClient";
 import { gql } from "@apollo/client";
 import { Question } from "../../../../../prisma/generated/type-graphql";
 import { QuestionsContainer } from "@/app/stores/questionStore";
-import { QuestionView } from "../components/client/QuestionView";
-const question: Partial<Question> & { id: string } = {
+import { QuestionTypes } from "@/app/util/types/UserData";
+import { QuestionWrapper } from "../components/client/questionWrapper";
+const question: Partial<Question> & {
+  id: string;
+  questionType: (typeof QuestionTypes)[number];
+} = {
   id: "653ad11c215e46561c12e643",
   creatorId: "6533f4c7489ef223ffc31a99",
+  questionType: "multipleChoice",
   tags: [
     "science",
     "science",
@@ -43,10 +47,6 @@ const QuestionQueryById = gql`
         title
         description
       }
-      # answer {
-      #   answer
-      # }
-      # dateCreated
       likeCounter {
         likes
         dislikes
@@ -66,7 +66,7 @@ export default async function QuestionPage({
   };
   const { data: result } = await ServerGraphQLClient.query(query);
   // const data = result.question as (Partial<Question> & { id: string }) | null;
-  const data = question; 
+  const data = question;
   return (
     <NavigationWrapper
       usePadding
@@ -77,7 +77,7 @@ export default async function QuestionPage({
     >
       <QuestionsContainer initialItems={data ? [data] : []}>
         <NavigationBtns />
-        <QuestionView />
+        <QuestionWrapper />
       </QuestionsContainer>
     </NavigationWrapper>
   );

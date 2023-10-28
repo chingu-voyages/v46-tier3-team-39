@@ -1,9 +1,9 @@
 "use client";
-import QuestionComponent from "../../components/server/questionComponent";
-import AnswerComponent from "../../components/server/answerComponent";
+import QuestionComponent from "./questionComponents";
+import AnswerComponent from "../server/answerComponent";
 import useElementPosition from "@/app/util/hooks/useElementSize";
 import useWindowWidth from "@/app/util/hooks/useWindowWidth";
-export const QuestionView = () => {
+export const QuestionWrapper = () => {
   const {
     setRef,
     position: { height },
