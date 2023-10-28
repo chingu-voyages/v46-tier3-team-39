@@ -13,11 +13,7 @@ import { useParams } from "next/navigation";
 //     }
 //   }
 // `;
-const AnswerContainer = ({
-  data,
-}: {
-  data?: Partial<Question>;
-}) => {
+const AnswerContainer = ({ height }: { height?: string | number }) => {
   // const params = useParams()
   // const questionId = params?.id
   // const {

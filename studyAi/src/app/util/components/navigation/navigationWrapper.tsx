@@ -18,15 +18,15 @@ const NavigationWrapper = ({
         <>
           {appBars.navbar && <Navbar />}
           <main
-            className={`bg-White flex flex-col w-full text-Black ${
+            className={`bg-White flex flex-col h-full w-full text-Black ${
               usePadding ? "px-[3%] md:px-[5%] items-center" : ""
             }`}
             style={{
-              minHeight: `calc(100vh - ${appBars.navbar ? "3.5rem" : "0px"}`,
+              minHeight: `calc(100vh - ${appBars.navbar ? "3.5rem" : "0px"})`,
             }}
           >
             {usePadding && (
-              <div className="flex flex-col w-full max-w-screen-xl pt-8">
+              <div className="flex flex-col grow w-full max-w-screen-xl pt-8 h-full">
                 {children}
               </div>
             )}
