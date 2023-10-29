@@ -37,7 +37,7 @@ const questions: Omit<Question, "id" | "creatorId" | "dateCreated">[] = [
 ];
 
 export const allQuestions = async () => {
-  const allUserIds = await prismaDb.user.findMany({});
+  const allUserIds = await prismaDb.user.findMany();
   // const allUserIds = [
   //   "6532640d3000a88180ba69e9",
   //   "6533f4c7489ef223ffc31a99",
