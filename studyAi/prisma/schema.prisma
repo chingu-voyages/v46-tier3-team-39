@@ -2,6 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 //remember to use npm run prisma
 // npx prisma generate
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -17,23 +18,24 @@ datasource db {
 }
 type QuestionData{
   title String 
-  description String?
+  description String
   //for mc and select multiple. short answer will contain empty arr
   options String[]
 }
 
-type AnswerData{
-  answer String
+type AnswerData {
+  correctAnswer String[]
+  incorrectAnswer String[]
 }
 
 type LikeCounter {
-  likes Int
+  likes    Int
   dislikes Int
 }
 
 model Question {
-  id String @id @default(auto()) @map("_id") @db.ObjectId 
-  creatorId String
+  id           String       @id @default(auto()) @map("_id") @db.ObjectId 
+  creatorId    String       @db.ObjectId
   questionType String
   tags String[]
   question QuestionData
@@ -46,7 +48,7 @@ model Question {
 model QuestionLikes {
     id            String  @id @default(auto()) @map("_id") @db.ObjectId
     dateCreated   DateTime @default(now())
-    userId String @unique @db.ObjectId
+    userId String @db.ObjectId
     questionId String @db.ObjectId
     @@index([userId, questionId])
 }
@@ -54,18 +56,21 @@ model QuestionLikes {
 model Quiz {
   id    String                           @id @default(auto()) @map("_id") @db.ObjectId
   name  String
-  tags   String
+  tags   String[]
   likes Int
   creatorId String @db.ObjectId
   questionIds String[]
   dateCreated   DateTime @default(now())
+  question     QuestionData
+  answer       AnswerData
+  likeCounter  LikeCounter
   @@index([creatorId])
 }
 
 model QuizLikes {
-    id            String  @id @default(auto()) @map("_id") @db.ObjectId
+    id            String   @id @default(auto()) @map("_id") @db.ObjectId
     dateCreated   DateTime @default(now())
-    userId String @unique @db.ObjectId
+    userId String @db.ObjectId
     quizId String @db.ObjectId
     @@index([userId, quizId])
 }
@@ -82,12 +87,12 @@ model Submissions {
    @@index([userId, quizId])
 }
 
-model UserCredentials{
-  id            String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId String @unique @db.ObjectId
-  email String  @unique
-  password String?
-  provider String
+model UserCredentials {
+  id            String @id     @default(auto()) @map("_id") @db.ObjectId
+  userId        String @unique @db.ObjectId
+  email         String @unique
+  password      String?
+  provider      String
 }
 
 model Account {
@@ -104,7 +109,7 @@ model Account {
   scope              String?
   id_token           String?  
   session_state      String?
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -118,19 +123,19 @@ model Session {
 }
 
 model User {
-  id            String  @id @default(auto()) @map("_id") @db.ObjectId 
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId 
   name          String
-  email String  @unique
-  usersReached Int @default(0)
+  email         String   @unique
+  usersReached  Int      @default(0)
   dateCreated   DateTime @default(now())
   emailVerified DateTime?
-  image String?
+  image         String?
   accounts      Account[]
   sessions      Session[]
 }
 
 model VerificationToken {
-  id String @id @default(auto()) @map("_id") @db.ObjectId 
+  id String  @id      @default(auto()) @map("_id") @db.ObjectId 
   identifier String
   token      String   @unique
   expires    DateTime

@@ -1,6 +1,7 @@
 import "reflect-metadata";
 import { ApolloServer } from "@apollo/server";
-import { resolvers } from "../../../../prisma/generated/type-graphql";
+// import { allResolvers } from "../../../../graphql/index"; // Custom resolvers
+import { resolvers } from "../../../../prisma/generated/type-graphql"; // Auto-generated resolvers
 import { startServerAndCreateNextHandler } from "@as-integrations/next";
 import { prismaDb } from "@/app/util/prisma/connection";
 import { buildSchema } from "type-graphql";
@@ -9,7 +10,8 @@ import { options } from "../auth/[...nextauth]/options";
 import { Session } from "next-auth";
 export async function createSchema() {
   const schema = await buildSchema({
-    resolvers,
+    // resolvers: allResolvers, // Custom resolvers
+    resolvers, // Auto-generated resolvers
     emitSchemaFile: true,
   });
   return schema;
@@ -31,7 +33,7 @@ const main = startServerAndCreateNextHandler(server, {
       req,
       res,
       prisma: prismaDb,
-      session,
+      session
     };
     return contextData;
   },

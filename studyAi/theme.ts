@@ -1,4 +1,7 @@
 const theme = {
+  height: {
+    "192": "48rem"
+  },
   colors: {
     Black: "#000000",
     White: "#ffffff",
