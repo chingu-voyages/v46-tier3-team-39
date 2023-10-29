@@ -24,7 +24,7 @@ export const addOrUpdateFunc = <T>({
   });
   const data = {
     ...currState.data,
-    ...Object.assign({}, Object.fromEntries({ ...arr })),
+    ...Object.assign({}, Object.fromEntries(arr)),
   };
   setState({
     data,

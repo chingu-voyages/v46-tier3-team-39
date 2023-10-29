@@ -10,6 +10,9 @@
     "lint": "next lint",
     "prisma": "npx prisma generate"
   },
+  "prisma": {
+    "seed": "ts-node ./src/app/util/prisma/seed.ts"
+  },
   "dependencies": {
     "@apollo/client": "^3.8.6",
     "@apollo/server": "^4.9.4",
@@ -57,7 +60,7 @@
     "@types/micro-cors": "^0.1.4",
     "@types/mongoose": "^5.11.97",
     "@types/mssql": "^9.1.1",
-    "@types/node": "20",
+    "@types/node": "^20.8.9",
     "@types/react": "18",
     "@types/react-dom": "18",
     "autoprefixer": "10",
@@ -68,6 +71,6 @@
     "prisma": "^5.4.2",
     "tailwindcss": "3",
     "ts-node": "^10.9.1",
-    "typescript": "5"
+    "typescript": "^5.2.2"
   }
 }

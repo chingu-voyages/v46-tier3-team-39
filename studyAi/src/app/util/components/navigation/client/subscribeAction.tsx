@@ -22,7 +22,7 @@ export const SubscribeAction = () => {
       <TextFieldInput
         ref={setRef}
         size={"small"}
-        labelContainerClassNames="mb-3 font-bold text-md text-Black tracking-tight"
+        labelContainerClassNames="mb-3 font-semibold text-md text-Black tracking-tight"
         label="Join us"
         id="email"
         name="email"
