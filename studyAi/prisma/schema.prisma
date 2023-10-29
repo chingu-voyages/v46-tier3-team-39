@@ -25,7 +25,6 @@ type QuestionData{
 
 type AnswerData {
   correctAnswer String[]
-  incorrectAnswer String[]
 }
 
 type LikeCounter {
@@ -57,12 +56,9 @@ model Quiz {
   id    String                           @id @default(auto()) @map("_id") @db.ObjectId
   name  String
   tags   String[]
-  likes Int
   creatorId String @db.ObjectId
   questionIds String[]
   dateCreated   DateTime @default(now())
-  question     QuestionData
-  answer       AnswerData
   likeCounter  LikeCounter
   @@index([creatorId])
 }
