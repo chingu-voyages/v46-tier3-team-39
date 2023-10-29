@@ -39,13 +39,15 @@ model Question {
   answer AnswerData
   dateCreated   DateTime @default(now())
   likeCounter LikeCounter
+  @@index([creatorId])
 }
 
 model QuestionLikes {
     id            String  @id @default(auto()) @map("_id") @db.ObjectId
     dateCreated   DateTime @default(now())
     userId String @unique @db.ObjectId
-    questionId String @unique @db.ObjectId
+    questionId String @db.ObjectId
+    @@index([userId, questionId])
 }
 
 model Quiz {
@@ -53,16 +55,18 @@ model Quiz {
   name  String
   tags   String
   likes Int
-  creatorId String @unique @db.ObjectId
+  creatorId String @db.ObjectId
   questionIds String[]
   dateCreated   DateTime @default(now())
+  @@index([creatorId])
 }
 
 model QuizLikes {
     id            String  @id @default(auto()) @map("_id") @db.ObjectId
     dateCreated   DateTime @default(now())
     userId String @unique @db.ObjectId
-    questionId String @unique @db.ObjectId
+    quizId String @db.ObjectId
+    @@index([userId, quizId])
 }
 
 model Submissions {
@@ -73,6 +77,8 @@ model Submissions {
    userId String  @db.ObjectId
    quizId String? @db.ObjectId
    questionId String? @db.ObjectId
+   @@index([userId, questionId])
+   @@index([userId, quizId])
 }
 
 model UserCredentials{
