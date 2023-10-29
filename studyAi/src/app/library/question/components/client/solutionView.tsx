@@ -4,7 +4,7 @@ import { Question } from "../../../../../../prisma/generated/type-graphql";
 import { gql } from "@apollo/client";
 import { useParams } from "next/navigation";
 import { useQuestions } from "@/app/stores/questionStore";
-import ContainerBar, { Container } from "../server/containerBar";
+import { Container } from "../server/containerBar";
 const getAnswerById = gql`
   query Question($id: String) {
     question(where: { id: $id }) {
@@ -30,8 +30,8 @@ const SolutionView = () => {
   const answerData = queryData as
     | undefined
     | { question: Partial<Question> | null };
-    const question = questions[questionId];
-  console.log(loading, question, answerData);
+  const question = questions[questionId];
+  console.log(loading, answerData);
   return <Container overflow>{question?.answer?.answer}</Container>;
 };
 export default SolutionView;

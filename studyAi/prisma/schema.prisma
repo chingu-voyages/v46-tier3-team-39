@@ -67,11 +67,12 @@ model QuizLikes {
 
 model Submissions {
    id            String  @id @default(auto()) @map("_id") @db.ObjectId
-   time          DateTime @default(now())
+   time          DateTime? @default(now())
    score         Int
    dateCreated   DateTime @default(now())
-   userId String @unique @db.ObjectId
-   quizId String @unique @db.ObjectId
+   userId String  @db.ObjectId
+   quizId String? @db.ObjectId
+   questionId String? @db.ObjectId
 }
 
 model UserCredentials{
