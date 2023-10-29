@@ -1162,6 +1162,7 @@ input QuestionCreatetagsInput {
 
 type QuestionData {
   description: String!
+  options: [String!]!
   title: String!
 }
 
@@ -1177,16 +1178,23 @@ input QuestionDataCreateEnvelopeInput {
 
 input QuestionDataCreateInput {
   description: String!
+  options: QuestionDataCreateoptionsInput
   title: String!
+}
+
+input QuestionDataCreateoptionsInput {
+  set: [String!]!
 }
 
 input QuestionDataObjectEqualityInput {
   description: String!
+  options: [String!]
   title: String!
 }
 
 input QuestionDataOrderByInput {
   description: SortOrder
+  options: SortOrder
   title: SortOrder
 }
 
@@ -1197,7 +1205,13 @@ input QuestionDataUpdateEnvelopeInput {
 
 input QuestionDataUpdateInput {
   description: StringFieldUpdateOperationsInput
+  options: QuestionDataUpdateoptionsInput
   title: StringFieldUpdateOperationsInput
+}
+
+input QuestionDataUpdateoptionsInput {
+  push: [String!]
+  set: [String!]
 }
 
 input QuestionDataWhereInput {
@@ -1205,6 +1219,7 @@ input QuestionDataWhereInput {
   NOT: [QuestionDataWhereInput!]
   OR: [QuestionDataWhereInput!]
   description: StringFilter
+  options: StringNullableListFilter
   title: StringFilter
 }
 
@@ -1355,8 +1370,8 @@ input QuestionLikesWhereUniqueInput {
   OR: [QuestionLikesWhereInput!]
   dateCreated: DateTimeFilter
   id: String
-  questionId: String
-  userId: String
+  questionId: StringFilter
+  userId: StringFilter
 }
 
 type QuestionMaxAggregate {
@@ -1482,11 +1497,14 @@ input QuestionWhereUniqueInput {
 }
 
 type Quiz {
+  answer: AnswerData!
   creatorId: String!
   dateCreated: DateTimeISO!
   id: String!
+  likeCounter: LikeCounter!
   likes: Int!
   name: String!
+  question: QuestionData!
   questionIds: [String!]!
   tags: [String!]!
 }
@@ -1521,21 +1539,27 @@ input QuizCountOrderByAggregateInput {
 }
 
 input QuizCreateInput {
+  answer: AnswerDataCreateEnvelopeInput!
   creatorId: String!
   dateCreated: DateTimeISO
   id: String
+  likeCounter: LikeCounterCreateEnvelopeInput!
   likes: Int!
   name: String!
+  question: QuestionDataCreateEnvelopeInput!
   questionIds: QuizCreatequestionIdsInput
   tags: QuizCreatetagsInput
 }
 
 input QuizCreateManyInput {
+  answer: AnswerDataCreateEnvelopeInput!
   creatorId: String!
   dateCreated: DateTimeISO
   id: String
+  likeCounter: LikeCounterCreateEnvelopeInput!
   likes: Int!
   name: String!
+  question: QuestionDataCreateEnvelopeInput!
   questionIds: QuizCreatequestionIdsInput
   tags: QuizCreatetagsInput
 }
@@ -1699,8 +1723,8 @@ input QuizLikesWhereUniqueInput {
   OR: [QuizLikesWhereInput!]
   dateCreated: DateTimeFilter
   id: String
-  quizId: String
-  userId: String
+  quizId: StringFilter
+  userId: StringFilter
 }
 
 type QuizMaxAggregate {
@@ -1751,11 +1775,14 @@ input QuizOrderByWithAggregationInput {
 }
 
 input QuizOrderByWithRelationInput {
+  answer: AnswerDataOrderByInput
   creatorId: SortOrder
   dateCreated: SortOrder
   id: SortOrder
+  likeCounter: LikeCounterOrderByInput
   likes: SortOrder
   name: SortOrder
+  question: QuestionDataOrderByInput
   questionIds: SortOrder
   tags: SortOrder
 }
@@ -1792,19 +1819,25 @@ input QuizSumOrderByAggregateInput {
 }
 
 input QuizUpdateInput {
+  answer: AnswerDataUpdateEnvelopeInput
   creatorId: StringFieldUpdateOperationsInput
   dateCreated: DateTimeFieldUpdateOperationsInput
+  likeCounter: LikeCounterUpdateEnvelopeInput
   likes: IntFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
+  question: QuestionDataUpdateEnvelopeInput
   questionIds: QuizUpdatequestionIdsInput
   tags: QuizUpdatetagsInput
 }
 
 input QuizUpdateManyMutationInput {
+  answer: AnswerDataUpdateEnvelopeInput
   creatorId: StringFieldUpdateOperationsInput
   dateCreated: DateTimeFieldUpdateOperationsInput
+  likeCounter: LikeCounterUpdateEnvelopeInput
   likes: IntFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
+  question: QuestionDataUpdateEnvelopeInput
   questionIds: QuizUpdatequestionIdsInput
   tags: QuizUpdatetagsInput
 }
@@ -1823,11 +1856,14 @@ input QuizWhereInput {
   AND: [QuizWhereInput!]
   NOT: [QuizWhereInput!]
   OR: [QuizWhereInput!]
+  answer: AnswerDataCompositeFilter
   creatorId: StringFilter
   dateCreated: DateTimeFilter
   id: StringFilter
+  likeCounter: LikeCounterCompositeFilter
   likes: IntFilter
   name: StringFilter
+  question: QuestionDataCompositeFilter
   questionIds: StringNullableListFilter
   tags: StringNullableListFilter
 }
@@ -1836,11 +1872,14 @@ input QuizWhereUniqueInput {
   AND: [QuizWhereInput!]
   NOT: [QuizWhereInput!]
   OR: [QuizWhereInput!]
-  creatorId: String
+  answer: AnswerDataCompositeFilter
+  creatorId: StringFilter
   dateCreated: DateTimeFilter
   id: String
+  likeCounter: LikeCounterCompositeFilter
   likes: IntFilter
   name: StringFilter
+  question: QuestionDataCompositeFilter
   questionIds: StringNullableListFilter
   tags: StringNullableListFilter
 }
@@ -2159,9 +2198,10 @@ input StringWithAggregatesFilter {
 type Submissions {
   dateCreated: DateTimeISO!
   id: String!
-  quizId: String!
+  questionId: String
+  quizId: String
   score: Int!
-  time: DateTimeISO!
+  time: DateTimeISO
   userId: String!
 }
 
@@ -2177,6 +2217,7 @@ type SubmissionsCountAggregate {
   _all: Int!
   dateCreated: Int!
   id: Int!
+  questionId: Int!
   quizId: Int!
   score: Int!
   time: Int!
@@ -2186,6 +2227,7 @@ type SubmissionsCountAggregate {
 input SubmissionsCountOrderByAggregateInput {
   dateCreated: SortOrder
   id: SortOrder
+  questionId: SortOrder
   quizId: SortOrder
   score: SortOrder
   time: SortOrder
@@ -2195,7 +2237,8 @@ input SubmissionsCountOrderByAggregateInput {
 input SubmissionsCreateInput {
   dateCreated: DateTimeISO
   id: String
-  quizId: String!
+  questionId: String
+  quizId: String
   score: Int!
   time: DateTimeISO
   userId: String!
@@ -2204,7 +2247,8 @@ input SubmissionsCreateInput {
 input SubmissionsCreateManyInput {
   dateCreated: DateTimeISO
   id: String
-  quizId: String!
+  questionId: String
+  quizId: String
   score: Int!
   time: DateTimeISO
   userId: String!
@@ -2218,15 +2262,17 @@ type SubmissionsGroupBy {
   _sum: SubmissionsSumAggregate
   dateCreated: DateTimeISO!
   id: String!
-  quizId: String!
+  questionId: String
+  quizId: String
   score: Int!
-  time: DateTimeISO!
+  time: DateTimeISO
   userId: String!
 }
 
 type SubmissionsMaxAggregate {
   dateCreated: DateTimeISO
   id: String
+  questionId: String
   quizId: String
   score: Int
   time: DateTimeISO
@@ -2236,6 +2282,7 @@ type SubmissionsMaxAggregate {
 input SubmissionsMaxOrderByAggregateInput {
   dateCreated: SortOrder
   id: SortOrder
+  questionId: SortOrder
   quizId: SortOrder
   score: SortOrder
   time: SortOrder
@@ -2245,6 +2292,7 @@ input SubmissionsMaxOrderByAggregateInput {
 type SubmissionsMinAggregate {
   dateCreated: DateTimeISO
   id: String
+  questionId: String
   quizId: String
   score: Int
   time: DateTimeISO
@@ -2254,6 +2302,7 @@ type SubmissionsMinAggregate {
 input SubmissionsMinOrderByAggregateInput {
   dateCreated: SortOrder
   id: SortOrder
+  questionId: SortOrder
   quizId: SortOrder
   score: SortOrder
   time: SortOrder
@@ -2268,6 +2317,7 @@ input SubmissionsOrderByWithAggregationInput {
   _sum: SubmissionsSumOrderByAggregateInput
   dateCreated: SortOrder
   id: SortOrder
+  questionId: SortOrder
   quizId: SortOrder
   score: SortOrder
   time: SortOrder
@@ -2277,6 +2327,7 @@ input SubmissionsOrderByWithAggregationInput {
 input SubmissionsOrderByWithRelationInput {
   dateCreated: SortOrder
   id: SortOrder
+  questionId: SortOrder
   quizId: SortOrder
   score: SortOrder
   time: SortOrder
@@ -2286,6 +2337,7 @@ input SubmissionsOrderByWithRelationInput {
 enum SubmissionsScalarFieldEnum {
   dateCreated
   id
+  questionId
   quizId
   score
   time
@@ -2298,9 +2350,10 @@ input SubmissionsScalarWhereWithAggregatesInput {
   OR: [SubmissionsScalarWhereWithAggregatesInput!]
   dateCreated: DateTimeWithAggregatesFilter
   id: StringWithAggregatesFilter
-  quizId: StringWithAggregatesFilter
+  questionId: StringNullableWithAggregatesFilter
+  quizId: StringNullableWithAggregatesFilter
   score: IntWithAggregatesFilter
-  time: DateTimeWithAggregatesFilter
+  time: DateTimeNullableWithAggregatesFilter
   userId: StringWithAggregatesFilter
 }
 
@@ -2314,17 +2367,19 @@ input SubmissionsSumOrderByAggregateInput {
 
 input SubmissionsUpdateInput {
   dateCreated: DateTimeFieldUpdateOperationsInput
-  quizId: StringFieldUpdateOperationsInput
+  questionId: NullableStringFieldUpdateOperationsInput
+  quizId: NullableStringFieldUpdateOperationsInput
   score: IntFieldUpdateOperationsInput
-  time: DateTimeFieldUpdateOperationsInput
+  time: NullableDateTimeFieldUpdateOperationsInput
   userId: StringFieldUpdateOperationsInput
 }
 
 input SubmissionsUpdateManyMutationInput {
   dateCreated: DateTimeFieldUpdateOperationsInput
-  quizId: StringFieldUpdateOperationsInput
+  questionId: NullableStringFieldUpdateOperationsInput
+  quizId: NullableStringFieldUpdateOperationsInput
   score: IntFieldUpdateOperationsInput
-  time: DateTimeFieldUpdateOperationsInput
+  time: NullableDateTimeFieldUpdateOperationsInput
   userId: StringFieldUpdateOperationsInput
 }
 
@@ -2334,9 +2389,10 @@ input SubmissionsWhereInput {
   OR: [SubmissionsWhereInput!]
   dateCreated: DateTimeFilter
   id: StringFilter
-  quizId: StringFilter
+  questionId: StringNullableFilter
+  quizId: StringNullableFilter
   score: IntFilter
-  time: DateTimeFilter
+  time: DateTimeNullableFilter
   userId: StringFilter
 }
 
@@ -2346,10 +2402,11 @@ input SubmissionsWhereUniqueInput {
   OR: [SubmissionsWhereInput!]
   dateCreated: DateTimeFilter
   id: String
-  quizId: String
+  questionId: StringNullableFilter
+  quizId: StringNullableFilter
   score: IntFilter
-  time: DateTimeFilter
-  userId: String
+  time: DateTimeNullableFilter
+  userId: StringFilter
 }
 
 type User {

@@ -32,6 +32,6 @@ const SolutionView = () => {
     | { question: Partial<Question> | null };
   const question = questions[questionId];
   console.log(loading, answerData);
-  return <Container overflow>{question?.answer?.answer}</Container>;
+  return <Container overflow>{question?.answer?.correctAnswer}</Container>;
 };
 export default SolutionView;

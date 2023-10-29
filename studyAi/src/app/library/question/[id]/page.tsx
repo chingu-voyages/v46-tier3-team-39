@@ -34,6 +34,7 @@ const question: Partial<Question> & {
   question: {
     title: "Question 1",
     description: "Question 2 is the world",
+    options: []
   },
 };
 const QuestionQueryById = gql`
