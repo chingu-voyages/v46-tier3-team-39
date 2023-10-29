@@ -2,12 +2,8 @@ import type { NextAuthOptions } from "next-auth";
 import bcrypt from "bcryptjs";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import {
-  connectToDb,
-  findUniqueByEmail,
-  findUniqueById,
-  prismaDb,
-} from "@/app/util/prisma/helpers";
+import { findUniqueByEmail, findUniqueById } from "@/app/util/prisma/helpers";
+import { connectToDb, prismaDb } from "@/app/util/prisma/connection";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { addCredDoc } from "./funcs";
 export const options: NextAuthOptions = {

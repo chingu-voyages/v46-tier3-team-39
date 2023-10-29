@@ -1,4 +1,4 @@
-import { connectToDb, prismaDb } from "@/app/util/prisma/helpers";
+import { connectToDb, prismaDb } from "@/app/util/prisma/connection";
 import { NextResponse } from "next/server";
 export async function deleteUser(req: Request) {
   try {
