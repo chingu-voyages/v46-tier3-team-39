@@ -15,10 +15,11 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")  
 }
-
 type QuestionData{
   title String 
-  description String 
+  description String?
+  //for mc and select multiple. short answer will contain empty arr
+  options String[]
 }
 
 type AnswerData{
