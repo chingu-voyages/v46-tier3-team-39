@@ -17,7 +17,7 @@ export async function generateQuestion(req: Request) {
     const { type, tags, question, answer } = questionSchema.parse(body);
     const questionType = (type === "mcq") ?  "multiple choice with four different potential answers" : ("checkbox") ? "with four different potential answers some correct and some incorrect" : "short answer";
     
-    const prompt = `Ask me a question, ${questionType}, similar to this question: ${question} and from the following categories: ${tags}. Indicate which is the correct response, and Return your response in a JSON object, with the following format: {"Question": "", "Correct": "", "Incorrect": ["", "", ""]}`;
+    const prompt = `Ask me a question, ${questionType}, similar to this question: ${question} and from the following subjects: ${tags}. Indicate which is the correct response, and Return your response in a JSON object, with the following format: {"Question": "", "Correct": "", "Incorrect": ["", "", ""]}`;
     const model = "gpt-3.5-turbo";
 
     const newQuestion = await Promise.all([generatePrompts(model, prompt)]);
