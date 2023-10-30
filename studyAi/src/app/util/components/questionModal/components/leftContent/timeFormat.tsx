@@ -1,7 +1,7 @@
-import * as React from 'react';
+import { useState } from "react";
 
 export default function TimeFormatDropdown() {
-  const [timeFormat, setTimeFormat] = React.useState('seconds');
+  const [timeFormat, setTimeFormat] = useState('seconds');
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setTimeFormat(event.target.value);

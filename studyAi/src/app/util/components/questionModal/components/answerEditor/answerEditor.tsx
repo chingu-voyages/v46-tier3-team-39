@@ -22,7 +22,7 @@ function CustomTabPanel(props: TabPanelProps) {
       {...other}
     >
       {value === index && (
-        <Box className="bg-White h-[365px] p-3">
+        <Box className="bg-White sm:h-[365px] p-3">
           {children}
         </Box>
       )}
@@ -45,8 +45,8 @@ export default function AnswerEditor() {
   };
 
   return (
-    <Box className="w-[425px]">
-      <h2 className="text-5xl text-center font-semibold mb-2">Answer</h2>
+    <Box className="sm:w-[425px]">
+      <h2 className="sm:text-5xl text-3xl text-center font-semibold mb-2">Answer</h2>
       <div className="bg-White">
         <Tabs 
           value={value} 
