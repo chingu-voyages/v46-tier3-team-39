@@ -24,7 +24,7 @@ export const Container = (
 };
 const ContainerBar = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="flex justify-between bg-White border-solid border  w-full">
+    <div className="flex justify-between bg-White border-solid border h-12 w-full">
       {children}
     </div>
   );

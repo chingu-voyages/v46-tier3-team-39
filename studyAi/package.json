@@ -8,10 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prisma": "npx prisma generate"
-  },
-  "prisma": {
-    "seed": "ts-node ./src/app/util/prisma/seed.ts"
+    "prisma": "npx prisma generate",
+    "seed": "npx ts-node ./src/app/util/prisma/seed.ts"
   },
   "dependencies": {
     "@apollo/client": "^3.8.6",
