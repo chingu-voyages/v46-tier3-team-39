@@ -1,7 +1,9 @@
+import Input from "../input"
+
 export const MultipleChoice = () => {
     return (
         <>
-            Multiple Choice
+            <Input id="" label="" placeholder=""/>
         </>
     )
 }

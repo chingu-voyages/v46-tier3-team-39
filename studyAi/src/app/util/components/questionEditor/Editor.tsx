@@ -5,8 +5,9 @@ import { Box } from '@mui/material'
 import { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
-import LeftContent from './components/leftContent'
-import AnswerEditor from './components/answerEditor'
+import LeftContent from './components/leftContent/leftContent'
+import AnswerEditor from './components/answerEditor/answerEditor'
+import Controls from './components/controls'
 
 const QuestionEditor = () => {
 
@@ -23,13 +24,13 @@ const QuestionEditor = () => {
             open={open}
         >
             <Box className={modalStyle}>
-                <FontAwesomeIcon icon={faXmark} className="absolute top-8 right-8" onClick={() => setOpen(false)} />
-                <h1 className="text-7xl text-center mb-8">Question Editor</h1>
+                <FontAwesomeIcon icon={faXmark} className="absolute top-8 right-8 hover:cursor-pointer" onClick={() => setOpen(false)} />
+                <h1 className="text-7xl text-center font-bold mb-8">Question Editor</h1>
                 <Box className="flex justify-center">
                     <LeftContent />
                     <AnswerEditor />
                 </Box>
-                {/* Controls here */}
+                <Controls />
             </Box>
         </Modal>
     )
