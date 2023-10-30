@@ -10,7 +10,7 @@ const getAnswerById = gql`
     question(where: { id: $id }) {
       id
       answer {
-        answer
+        correctAnswer
       }
     }
   }

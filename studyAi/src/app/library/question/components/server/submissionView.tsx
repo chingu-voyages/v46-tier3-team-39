@@ -1,16 +1,16 @@
 import ServerGraphQLClient from "@/app/api/graphql/apolloClient";
 import { getSessionData } from "@/app/api/utils/sessionFuncs";
+import { Submission } from "../../../../../../prisma/generated/type-graphql";
 import { gql, useQuery } from "@apollo/client";
-import { Submissions } from "../../../../../../prisma/generated/type-graphql";
 import { Container } from "./containerBar";
 import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 const getSubmissionByQuestionId = gql`
-  query Submissions($questionId: String, $userId: String) {
-    submission(
+  query Submission($questionId: String, $userId: String) {
+    submissions(
       where: {
-        userId: $userId 
-        questionId: $questionId
+        userId: { equals: $userId }
+        questionId: { equals: $questionId }
       }
     ) {
       id
@@ -33,14 +33,15 @@ export const SubmissionView = () => {
   };
   const { data: result } = useQuery(getSubmissionByQuestionId, queryOptions);
   // const { data: result } = await ServerGraphQLClient.query(query);
-  const data = result as { submission: Partial<Submissions>[] | null };
+  const data = result as {
+    submission: Partial<Submission>[] | Partial<Submission> | null;
+  };
   console.log(data);
   if (!data?.submission) return <></>;
   return (
     <Container overflow>
-      {data.submission.map((doc) => (
-        <div key={doc.id}></div>
-      ))}
+      {Array.isArray(data.submission) &&
+        data.submission.map((doc) => <div key={doc.id}></div>)}
     </Container>
   );
 };

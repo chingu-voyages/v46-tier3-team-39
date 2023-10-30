@@ -4,7 +4,7 @@ import { ApolloServer } from "@apollo/server";
 import { resolvers } from "../../../../prisma/generated/type-graphql"; // Auto-generated resolvers
 import { startServerAndCreateNextHandler } from "@as-integrations/next";
 import { prismaDb } from "@/app/util/prisma/connection";
-import { buildSchema, emitSchemaDefinitionFile } from "type-graphql";
+import { buildSchema } from "type-graphql";
 import { getServerSession } from "next-auth";
 import { options } from "../auth/[...nextauth]/options";
 import { Session } from "next-auth";
