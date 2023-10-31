@@ -9,6 +9,7 @@ import {
   faUpRightAndDownLeftFromCenter,
 } from "@fortawesome/free-solid-svg-icons";
 import { QuestionTypes } from "@/app/util/types/UserData";
+import { AnswerType } from "./answerInputs";
 const determineAnswerTitle = (str?: string) => {
   const matchStr = str as (typeof QuestionTypes)[number];
   switch (matchStr) {
@@ -27,15 +28,27 @@ const TopBar = () => {
   const questions = useQuestions()[0].data;
   const question =
     params.id && typeof params.id === "string" ? questions[params.id] : null;
+  const btnClassNames = "flex items-center justify-center h-[70%]";
+  const btnStyle = {
+    minHeight: "unset",
+    padding: 0,
+    aspectRatio: 1,
+  };
+
   return (
     <ContainerBar>
-      <h3>{determineAnswerTitle(question?.questionType)}</h3>
-      <div className="flex items-center h-full">
-        <IconButton>
-          <FontAwesomeIcon icon={faRefresh} />
+      <h3 className="flex items-center h-full">
+        {determineAnswerTitle(question?.questionType)}
+      </h3>
+      <div className="flex items-center h-full grow justify-end">
+        <IconButton size="small" sx={btnStyle} className={btnClassNames}>
+          <FontAwesomeIcon icon={faRefresh} className="text-base" />
         </IconButton>
-        <IconButton>
-          <FontAwesomeIcon icon={faUpRightAndDownLeftFromCenter} />
+        <IconButton size="small" sx={btnStyle} className={btnClassNames}>
+          <FontAwesomeIcon
+            icon={faUpRightAndDownLeftFromCenter}
+            className="text-base"
+           />
         </IconButton>
       </div>
     </ContainerBar>
@@ -43,8 +56,16 @@ const TopBar = () => {
 };
 const AnswerContainer = ({ height }: { height?: string | number }) => {
   return (
-    <Container style={{ height: height ? height : undefined }}>
+    <Container
+      border
+      overflow
+      className="max-h-[30rem]"
+      style={{ height: height ? height + "px" : undefined }}
+    >
       <TopBar />
+      <Container overflow className="px-[5%] py-5 grow">
+        <AnswerType />
+      </Container>
     </Container>
   );
 };

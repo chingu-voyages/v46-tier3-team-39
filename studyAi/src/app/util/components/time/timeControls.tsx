@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "@mui/material";
+import { Button, IconButton } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons";
 import { faCirclePause } from "@fortawesome/free-regular-svg-icons";
@@ -41,15 +41,15 @@ const TimeControlsWrapper = ({
         )}
         {children}
       </Button>
-      <Button
+      <IconButton
         size="large"
-        variant="text"
+        // variant="text"
         onClick={resetTimer}
-        className="flex justify-center items-center p-0 aspect-square h-full"
+        className="flex justify-center items-center p-0 aspect-square h-[80%]"
         sx={{ minWidth: "unset" }}
       >
         <FontAwesomeIcon icon={faArrowsRotate} className="text-xl" />
-      </Button>
+      </IconButton>
     </div>
   );
 };

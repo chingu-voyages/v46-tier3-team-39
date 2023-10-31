@@ -1,5 +1,4 @@
-import ServerGraphQLClient from "@/app/api/graphql/apolloClient";
-import { getSessionData } from "@/app/api/utils/sessionFuncs";
+"use client";
 import { Submission } from "../../../../../../prisma/generated/type-graphql";
 import { gql, useQuery } from "@apollo/client";
 import { Container } from "./containerBar";
@@ -32,16 +31,21 @@ export const SubmissionView = () => {
     },
   };
   const { data: result } = useQuery(getSubmissionByQuestionId, queryOptions);
-  // const { data: result } = await ServerGraphQLClient.query(query);
   const data = result as {
     submission: Partial<Submission>[] | Partial<Submission> | null;
   };
-  console.log(data);
-  if (!data?.submission) return <></>;
+  const noDataPlaceholder = (
+    <label className="text-Black flex h-full w-full items-center justify-center">
+      No submissions found
+    </label>
+  );
+  if (!data) return noDataPlaceholder;
   return (
-    <Container overflow>
+    <Container overflow className="px-[5%] py-5 grow">
       {Array.isArray(data.submission) &&
-        data.submission.map((doc) => <div key={doc.id}></div>)}
+        data.submission.map((doc) => <div key={doc.id}>{}</div>)}
+      {(!Array.isArray(data.submission) || data.submission.length <= 0) &&
+        noDataPlaceholder}
     </Container>
   );
 };

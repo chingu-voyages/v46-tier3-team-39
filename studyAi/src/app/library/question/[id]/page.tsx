@@ -47,6 +47,7 @@ const QuestionQueryById = gql`
       question {
         title
         description
+        options
       }
       likeCounter {
         likes

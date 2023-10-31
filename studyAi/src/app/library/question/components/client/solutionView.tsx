@@ -31,7 +31,10 @@ const SolutionView = () => {
     | undefined
     | { question: Partial<Question> | null };
   const question = questions[questionId];
-  console.log(loading, answerData);
-  return <Container overflow>{question?.answer?.correctAnswer}</Container>;
+  return (
+    <Container overflow className="px-[5%] py-5 grow">
+      {question?.answer?.correctAnswer}
+    </Container>
+  );
 };
 export default SolutionView;
