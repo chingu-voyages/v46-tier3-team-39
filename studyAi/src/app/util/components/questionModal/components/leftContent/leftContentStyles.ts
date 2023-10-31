@@ -4,7 +4,7 @@ const styles = {
         "w-full",
         "relative",
         "text-center",
-        "sm:mr-8"
+        "lg:mr-8"
     ].join(" "),
     label: [
         "block",
@@ -12,7 +12,8 @@ const styles = {
         "text-3xl",
         "font-semibold",
         "text-Black",
-        "sm:text-5xl"
+        "sm:text-5xl",
+        "sm:text-left"
     ].join(" "),
     input: ({isTime = false, isTextArea = false}) => [
         "bg-White",
@@ -33,9 +34,9 @@ const styles = {
     estTimeLayout: [
         "flex",
         "justify-center",
-        "sm:absolute",
-        "sm:top-0",
-        "sm:right-0",
+        "xl:absolute",
+        "xl:top-0",
+        "xl:right-0",
     ].join(" "),
 
 }
