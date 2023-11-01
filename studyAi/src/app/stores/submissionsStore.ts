@@ -3,7 +3,7 @@ import { Question } from "@prisma/client";
 import { createStore, createHook } from "react-sweet-state";
 import { addOrUpdateFunc, deleteItems } from "./helpers";
 import { QuestionSubmission } from "../../../prisma/generated/type-graphql";
-type SubmissionsData = {
+type QuestionSubmissionsData = {
   submittedData: {
     //mapped to question ids
     [key: string]: {
@@ -18,7 +18,7 @@ type SubmissionsData = {
     [key: string]: Partial<QuestionSubmission> & { questionId: string; id: string };
   };
 };
-const initialState: SubmissionsData = {
+const initialState: QuestionSubmissionsData = {
   submittedData: {},
   ongoingData: {},
 };
@@ -44,7 +44,7 @@ const Store = createStore({
         deleteItems({ items, setState, getState }),
   },
   // optional, unique, mostly used for easy debugging
-  name: "submissions",
+  name: "questionSubmissions",
 });
 
-export const useQuestions = createHook(Store);
+export const useQuestionSubmissions = createHook(Store);

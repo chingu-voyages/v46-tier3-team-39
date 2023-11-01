@@ -29,7 +29,7 @@ export const SubmissionView = () => {
       questionId: params.id,
       userId: session?.user.id,
     },
-  };
+  }; 
   const { data: result } = useQuery(getSubmissionByQuestionId, queryOptions);
   const data = result as {
     questionSubmissions: Partial<QuestionSubmission>[] | Partial<QuestionSubmission> | null;
