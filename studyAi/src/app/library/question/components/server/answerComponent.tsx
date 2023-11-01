@@ -37,7 +37,7 @@ const TopBar = () => {
 
   return (
     <ContainerBar>
-      <h3 className="flex items-center h-full">
+      <h3 className="flex items-center h-full text-sm">
         {determineAnswerTitle(question?.questionType)}
       </h3>
       <div className="flex items-center h-full grow justify-end">
@@ -59,7 +59,7 @@ const AnswerContainer = ({ height }: { height?: string | number }) => {
     <Container
       border
       overflow
-      className="max-h-[30rem]"
+      className="max-h-[30rem] md:max-h-none"
       style={{ height: height ? height + "px" : undefined }}
     >
       <TopBar />

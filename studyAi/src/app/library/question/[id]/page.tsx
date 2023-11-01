@@ -74,7 +74,7 @@ export default async function QuestionPage({
     <NavigationWrapper
       usePadding
       appBars={{
-        footer: true,
+        footer: false,
         navbar: true,
       }}
     >

@@ -73,7 +73,7 @@ export const QuestionContainer = ({ height }: { height?: string | number }) => {
     newValue: (typeof containerTabs)[number]
   ) => setView(newValue);
   return (
-    <Container style={{ height: height ? height + "px" : undefined }} className="max-h-[30rem]"border>
+    <Container style={{ height: height ? height + "px" : undefined }} className="max-h-[30rem] md:max-h-none"border>
       <TopBar view={view} handleChange={handleChange} />
       <InnerContainer view={view} />
     </Container>
