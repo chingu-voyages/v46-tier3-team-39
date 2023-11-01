@@ -62,7 +62,6 @@ export default async function DashboardPage() {
     >
       {" "}
       Hello
-      <QuestionModal />
     </NavigationWrapper>
   );
 }
