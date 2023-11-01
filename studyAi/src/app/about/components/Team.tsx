@@ -1,6 +1,6 @@
+"use client"
 import TeamMember from "./TeamMember"
 import { Grid } from "@mui/material"
-
 export default function Team() {
     return (
         <div className="py-16 px-5 sm:py-28 sm:px-16 text-center">

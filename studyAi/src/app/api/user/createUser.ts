@@ -1,9 +1,9 @@
 import { hash } from "bcryptjs";
 import {
-  prismaDb,
   findUniqueByEmail,
-  connectToDb,
 } from "@/app/util/prisma/helpers";
+import { connectToDb, prismaDb } from "@/app/util/prisma/connection";
+
 import { NextResponse } from "next/server";
 import * as z from "zod";
 //schema for validating user inputs

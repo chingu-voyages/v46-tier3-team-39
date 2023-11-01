@@ -1,17 +1,10 @@
-import { PrismaClient } from "@prisma/client";
+import { prismaDb } from "./connection";
 import {
   PrismaTypeMap,
   PrismaTypeMapAsGeneric,
   assertPrismaModel,
 } from "@/app/util/prisma/typeGuards";
-export const prismaDb = new PrismaClient();
-export const connectToDb = async () => {
-  try {
-    await prismaDb.$connect();
-  } catch (e) {
-    throw new Error("Unable to connect to database");
-  }
-};
+
 export async function findUniqueByEmail<K extends keyof PrismaTypeMap>(
   email: string,
   collection: K
