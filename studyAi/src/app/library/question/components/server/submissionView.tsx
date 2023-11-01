@@ -1,12 +1,12 @@
 "use client";
-import { Submission } from "../../../../../../prisma/generated/type-graphql";
+import { QuestionSubmission } from "../../../../../../prisma/generated/type-graphql";
 import { gql, useQuery } from "@apollo/client";
 import { Container } from "./containerBar";
 import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 const getSubmissionByQuestionId = gql`
   query Submission($questionId: String, $userId: String) {
-    submissions(
+    questionSubmissions(
       where: {
         userId: { equals: $userId }
         questionId: { equals: $questionId }
@@ -32,7 +32,7 @@ export const SubmissionView = () => {
   };
   const { data: result } = useQuery(getSubmissionByQuestionId, queryOptions);
   const data = result as {
-    submission: Partial<Submission>[] | Partial<Submission> | null;
+    questionSubmissions: Partial<QuestionSubmission>[] | Partial<QuestionSubmission> | null;
   };
   const noDataPlaceholder = (
     <label className="text-Black flex h-full w-full items-center justify-center">
@@ -42,9 +42,9 @@ export const SubmissionView = () => {
   if (!data) return noDataPlaceholder;
   return (
     <Container overflow className="px-[5%] py-5 grow">
-      {Array.isArray(data.submission) &&
-        data.submission.map((doc) => <div key={doc.id}>{}</div>)}
-      {(!Array.isArray(data.submission) || data.submission.length <= 0) &&
+      {Array.isArray(data.questionSubmissions) &&
+        data.questionSubmissions.map((doc) => <div key={doc.id}>{}</div>)}
+      {(!Array.isArray(data.questionSubmissions) || data.questionSubmissions.length <= 0) &&
         noDataPlaceholder}
     </Container>
   );
