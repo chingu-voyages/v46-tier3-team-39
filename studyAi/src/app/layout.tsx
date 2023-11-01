@@ -1,8 +1,8 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import AuthProvider from "./auth/context/AuthContext";
-import GraphQLProvider from "./api/graphql/apolloProvider";
-import { IsClientCtxProvider } from "./api/graphql/isClientProvider";
+import AuthProvider from "./util/providers/AuthContext";
+import GraphQLProvider from "./util/providers/apolloProvider";
+import { IsClientCtxProvider } from "./util/providers/isClientProvider";
 
 export const metadata: Metadata = {
   title: "StudyAI",

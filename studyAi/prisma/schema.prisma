@@ -1,7 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 //remember to use npm run prisma
-// npx prisma generate
 
 generator client {
   provider = "prisma-client-js"
@@ -25,7 +24,6 @@ type QuestionData{
 
 type AnswerData {
   correctAnswer String[]
-  incorrectAnswer String[]
 }
 
 type LikeCounter {
@@ -45,9 +43,10 @@ model Question {
   @@index([creatorId])
 }
 
-model QuestionLikes {
+model QuestionLike {
     id            String  @id @default(auto()) @map("_id") @db.ObjectId
     dateCreated   DateTime @default(now())
+    dislike Boolean
     userId String @db.ObjectId
     questionId String @db.ObjectId
     @@index([userId, questionId])
@@ -57,25 +56,23 @@ model Quiz {
   id    String                           @id @default(auto()) @map("_id") @db.ObjectId
   name  String
   tags   String[]
-  likes Int
   creatorId String @db.ObjectId
   questionIds String[]
   dateCreated   DateTime @default(now())
-  question     QuestionData
-  answer       AnswerData
   likeCounter  LikeCounter
   @@index([creatorId])
 }
 
-model QuizLikes {
+model QuizLike {
     id            String   @id @default(auto()) @map("_id") @db.ObjectId
     dateCreated   DateTime @default(now())
+    dislike Boolean
     userId String @db.ObjectId
     quizId String @db.ObjectId
     @@index([userId, quizId])
 }
 
-model Submissions {
+model Submission {
    id            String  @id @default(auto()) @map("_id") @db.ObjectId
    time          DateTime? @default(now())
    score         Int
