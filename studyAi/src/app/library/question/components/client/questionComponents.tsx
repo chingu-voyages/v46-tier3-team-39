@@ -31,7 +31,7 @@ const TopBar = ({
   };
   const btnClassNames = "flex items-center justify-center";
   return (
-    <ContainerBar>
+    <ContainerBar border>
       <Tabs
         value={view}
         onChange={handleChange}

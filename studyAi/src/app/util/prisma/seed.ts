@@ -1,19 +1,16 @@
-import {
-  Question,
-  QuestionLike,
-  Quiz,
-  QuizLike,
-  Submission,
-} from "@prisma/client";
+import { Question, QuizLike, QuizSubmission } from "@prisma/client";
 import { prismaDb, allQuestions } from "./seedData";
 
 async function main() {
-  await prismaDb.question.deleteMany({});
-  await prismaDb.questionLike.deleteMany({});
-  await prismaDb.quiz.deleteMany({});
-  await prismaDb.quizLike.deleteMany({});
-  await prismaDb.submission.deleteMany({});
-
+  const deleteArrPromise = [
+    prismaDb.question.deleteMany({}),
+    prismaDb.questionLike.deleteMany({}),
+    prismaDb.quiz.deleteMany({}),
+    prismaDb.quizLike.deleteMany({}),
+    prismaDb.questionSubmission.deleteMany({}),
+    prismaDb.quizSubmission.deleteMany({}),
+  ];
+  await Promise.all(deleteArrPromise);
   // Question
   const allUserQuestions = await allQuestions();
   const questionPromise: Promise<Question>[] = [];
@@ -23,33 +20,44 @@ async function main() {
     );
   }
   const questionInfo = await Promise.all(questionPromise);
-
-  // QuestionLikes and Quiz
-  const questionLikePromise: Promise<QuestionLike>[] = [];
-  const quizPromise: Promise<Quiz>[] = [];
-  for (const question of questionInfo) {
-    const questionLikeItem = {
-      userId: question.creatorId,
-      questionId: question.id,
-      dislike: false,
-    };
-    const quizItem: Omit<Quiz, "id" | "dateCreated"> = {
-      name: "Chemistry Quiz",
-      tags: question.tags,
-      likeCounter: {
-        likes: 1,
-        dislikes: 0,
+  // QuestionLikes, Quiz, and Question Submissions
+  const questionSubmissionsData = questionInfo.map((question) => ({
+    userId: question.creatorId,
+    questionId: question.id,
+    score: {
+      maxScore: 1,
+      actualScore: 1,
+    },
+    time: null,
+  }));
+  const questionLikesData = questionInfo.map((question) => ({
+    userId: question.creatorId,
+    questionId: question.id,
+    dislike: false,
+  }));
+  //we do one by one since we need this data
+  const quizItemsData = questionInfo.map((question) =>
+    prismaDb.quiz.create({
+      data: {
+        name: "Chemistry Quiz",
+        tags: question.tags,
+        likeCounter: {
+          likes: 1,
+          dislikes: 0,
+        },
+        creatorId: question.creatorId,
+        questionIds: [question.id],
       },
-      creatorId: question.creatorId,
-      questionIds: [question.id],
-    };
-    questionLikePromise.push(
-      prismaDb.questionLike.create({ data: questionLikeItem })
-    );
-    quizPromise.push(prismaDb.quiz.create({ data: quizItem }));
-  }
-  await Promise.all(questionLikePromise);
-  const quizInfo = await Promise.all(quizPromise);
+    })
+  );
+  const quizInfoPromise = Promise.all(quizItemsData);
+  const [quizInfo, questionLikes, questionSubmissions] = await Promise.all([
+    quizInfoPromise,
+    prismaDb.questionLike.createMany({ data: questionLikesData }),
+    prismaDb.questionSubmission.createMany({ data: questionSubmissionsData }),
+  ]);
+  // await Promise.all(questionLikePromise);
+  // const quizInfo = await Promise.all(quizPromise);
   // QuizLikes and Submissions
   const quizLike: Omit<QuizLike, "id" | "dateCreated">[] = quizInfo.map(
     (quiz) => {
@@ -57,20 +65,24 @@ async function main() {
       return item;
     }
   );
-  const submission: Omit<Submission, "id" | "dateCreated">[] = quizInfo.map(
+  const submission: Omit<QuizSubmission, "id" | "dateCreated">[] = quizInfo.map(
     (quiz) => {
       const item = {
         userId: quiz.creatorId,
         quizId: quiz.id,
-        score: 1,
-        questionId: null,
+        score: {
+          maxScore: 1,
+          actualScore: 0,
+        },
         time: null,
       };
       return item;
     }
   );
-  const quizLikePromise = prismaDb.quizLike.createMany({data: quizLike})
-  const submissionPromise = prismaDb.submission.createMany({data: submission})
+  const quizLikePromise = prismaDb.quizLike.createMany({ data: quizLike });
+  const submissionPromise = prismaDb.quizSubmission.createMany({
+    data: submission,
+  });
   await Promise.all([quizLikePromise, submissionPromise]);
 }
 

@@ -27,14 +27,21 @@ export const Container = (
     </div>
   );
 };
-// const InnerContainerWrapper = () => {
-//   return (
-//     <Co
-//   )
-// }
-const ContainerBar = ({ children }: { children: React.ReactNode }) => {
+const ContainerBar = ({
+  children,
+  border,
+}: {
+  children: React.ReactNode;
+  border?: boolean;
+}) => {
+  const borderClasses = border ? " border-solid border-b" : "";
   return (
-    <div className="flex justify-between items-center bg-White border-solid border h-14 w-full px-3">
+    <div
+      className={
+        "flex justify-between items-center bg-White h-14 w-full px-3" +
+        borderClasses
+      }
+    >
       {children}
     </div>
   );
