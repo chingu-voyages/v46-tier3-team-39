@@ -49,6 +49,7 @@ const StopWatch = ({
       clearInterval(updateTimeActionIntervalRef.current);
     setTime(0);
   };
+  const timeArr = formatMilliseconds(time, true);
   return (
     <TimeControlsWrapper
       stopTimer={stopTimer}
@@ -56,10 +57,18 @@ const StopWatch = ({
       resetTimer={resetTimer}
       paused={paused}
     >
-      <div className="flex justify-center items-center leading-none"
-        style={{lineHeight: 0}}
+      <div
+        className="flex justify-center items-center leading-none tracking-wider"
+        style={{ lineHeight: 0 }}
+        aria-label={formatMilliseconds(time) + " elapsed"}
       >
-        {formatMilliseconds(time)}
+        {typeof timeArr === "string"
+          ? timeArr
+          : timeArr.map((e, idx) => (
+              <div key={e + idx} className="mx-[0.03em]">
+                {e}
+              </div>
+            ))}
       </div>
     </TimeControlsWrapper>
   );

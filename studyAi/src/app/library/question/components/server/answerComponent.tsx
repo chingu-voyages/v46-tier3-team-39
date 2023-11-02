@@ -36,7 +36,7 @@ const TopBar = () => {
   };
 
   return (
-    <ContainerBar>
+    <ContainerBar border>
       <h3 className="flex items-center h-full text-sm">
         {determineAnswerTitle(question?.questionType)}
       </h3>
@@ -68,7 +68,7 @@ const AnswerContainer = ({ height }: { height?: string | number }) => {
           <div className="grow flex flex-col w-full">
             <AnswerType />
           </div>
-          <div className="sticky left-0 bottom-0 p-5 flex justify-center items-center border border-solid border-Black">
+          <div className="sticky left-0 bottom-0 p-5 flex justify-center items-center border-t border-solid border-Black">
             <Button
               type="submit"
               sx={{ textTransform: "none" }}
