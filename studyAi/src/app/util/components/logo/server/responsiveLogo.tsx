@@ -1,5 +1,5 @@
 "use client";
-import { Logo } from "@/app/util/components/navigation/server/desktopNavbar";
+import { Logo } from "@/app/util/components/logo/client/Logo";
 import useWindowWidth from "@/app/util/hooks/useWindowWidth";
 const AppLogo = () => {
   const windowWidth = useWindowWidth();

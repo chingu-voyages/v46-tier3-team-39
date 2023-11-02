@@ -1,4 +1,4 @@
-import AppLogo from "./client/appLogo";
+import AppLogo from "../../util/components/logo/server/responsiveLogo";
 import NextLink from "next/link";
 import { AuthForm } from "./client/authForm";
 import AuthPageWrapper from "./client/authWrapper";
@@ -18,7 +18,13 @@ export const AuthHeader = ({ type }: { type: "login" | "signup" }) => {
   );
 };
 
-export const AuthPage = ({ type }: { type: "login" | "signup" }) => {
+export const AuthPage = ({
+  type,
+  errMessageArr,
+}: {
+  type: "login" | "signup";
+  errMessageArr?: { code: string; message: string }[];
+}) => {
   const bottomText =
     type === "login" ? "Don't have an account?" : "Already have an account?";
   return (
@@ -26,7 +32,7 @@ export const AuthPage = ({ type }: { type: "login" | "signup" }) => {
       <div className="flex flex-col justify-center items-center w-full h-full px-5 pt-10 pb-12 md:w-3/6 md:p-10">
         <AppLogo />
         <AuthHeader type={type} />
-        <AuthForm />
+        <AuthForm type={type} errMessageArr={errMessageArr} />
         <span className="text-Black text-sm flex justify-center items-center tracking-tight mt-4">
           {bottomText}
           <NextLink

@@ -1,15 +1,5 @@
 const { execSync } = require("child_process");
 const fs = require("fs");
-const os = require("os");
-
-/**
- * Determine whether the Node.js process runs on Windows.
- *
- * @returns {Boolean}
- */
-function isWindows() {
-  return os.platform() === "win32";
-}
 function delay(milliseconds: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }
@@ -35,9 +25,14 @@ function generateEnvFile(envContent: string) {
   }
 }
 const getSecretNames = () => {
-  const command = `vlt secrets${isWindows() ? "" : " list"}`;
-  const output = runCommand(command);
-  if (!output) return;
+  //two versions of this command
+  const command = `vlt secrets`;
+  let output = runCommand(command);
+  if (!output) {
+    const command = `vlt secrets list`;
+    output = runCommand(command);
+    if (!output) return null;
+  }
   const lines = output.split("\n");
   const secretNames = lines.slice(1, lines.length).map((line) => {
     const trimmedLine = line.trim();
@@ -64,7 +59,7 @@ const main = async () => {
     await delay(500);
     const value = runCommand(`vlt secrets get --plaintext ${str}`);
     if (!value) return null;
-    return str + "=" + value;
+    return str + "=" + `"${value.replace("\n", "")}"\n`;
   });
   const contentArr = await Promise.all(contentArrPromise);
   //log all errors from secrets

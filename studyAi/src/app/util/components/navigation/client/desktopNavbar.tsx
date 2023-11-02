@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { MenuItem, Menu, Link, Button } from "@mui/material";
+import { MenuItem, Menu, Link } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCaretDown,
@@ -10,9 +10,7 @@ import useElementPosition from "@/app/util/hooks/useElementSize";
 import { faWandMagicSparkles } from "@fortawesome/free-solid-svg-icons/faWandMagicSparkles";
 import { faFileLines } from "@fortawesome/free-regular-svg-icons";
 import useDropdown from "@/app/util/hooks/useDropdown";
-import dynamic from "next/dynamic";
-
-const menuItemLinks = [
+export const menuItemLinks = [
   {
     href: "/",
     text: "Create Question",

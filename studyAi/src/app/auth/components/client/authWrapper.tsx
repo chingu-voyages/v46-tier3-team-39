@@ -14,7 +14,7 @@ const AuthPageWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
     <div
       ref={setRef}
-      className="bg-White w-full min-h-screen flex flex-col justify-center items-center md:flex-row "
+      className="bg-White w-full min-h-screen flex flex-col items-center md:justify-center md:flex-row"
     >
       <AuthImg
         containerClassNames="flex h-60 md:hidden"
