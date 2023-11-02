@@ -15,9 +15,7 @@ const QuestionEditor = ({Question} : {Question?: Partial<Question> | undefined})
     const [open, setOpen] = useState(true);
 
     return (
-        <Modal
-            open={open}
-        >
+        <Modal open={open}>
             <div className={styles.modal}>
                 <FontAwesomeIcon icon={faXmark} className={styles.closeIcon} onClick={() => setOpen(false)} />
                 <h1 className={styles.h1}>Question Editor</h1>
