@@ -1,7 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 //remember to use npm run prisma
-// npx prisma generate
 
 generator client {
   provider = "prisma-client-js"
@@ -16,15 +15,15 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")  
 }
-
-type QuestionData {
-  title       String 
-  description String 
+type QuestionData{
+  title String 
+  description String
+  //for mc and select multiple. short answer will contain empty arr
+  options String[]
 }
 
 type AnswerData {
   correctAnswer String[]
-  incorrectAnswer String[]
 }
 
 type LikeCounter {
@@ -36,44 +35,51 @@ model Question {
   id           String       @id @default(auto()) @map("_id") @db.ObjectId 
   creatorId    String       @db.ObjectId
   questionType String
-  tags         String[]
-  question     QuestionData
-  answer       AnswerData
-  dateCreated  DateTime     @default(now())
-  likeCounter  LikeCounter
+  tags String[]
+  question QuestionData
+  answer AnswerData
+  dateCreated   DateTime @default(now())
+  likeCounter LikeCounter
+  @@index([creatorId])
 }
 
 model QuestionLikes {
-  id          String   @id             @default(auto()) @map("_id") @db.ObjectId
-  dateCreated DateTime @default(now())
-  userId      String   @unique         @db.ObjectId
-  questionId  String   @unique         @db.ObjectId
+    id            String  @id @default(auto()) @map("_id") @db.ObjectId
+    dateCreated   DateTime @default(now())
+    userId String @db.ObjectId
+    questionId String @db.ObjectId
+    @@index([userId, questionId])
 }
 
 model Quiz {
-  id          String   @id     @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  tags        String[]
-  likes       Int
-  creatorId   String   @unique @db.ObjectId
-  questionIds String[] @db.ObjectId
-  dateCreated DateTime @default(now())
+  id    String                           @id @default(auto()) @map("_id") @db.ObjectId
+  name  String
+  tags   String[]
+  creatorId String @db.ObjectId
+  questionIds String[]
+  dateCreated   DateTime @default(now())
+  likeCounter  LikeCounter
+  @@index([creatorId])
 }
 
 model QuizLikes {
     id            String   @id @default(auto()) @map("_id") @db.ObjectId
     dateCreated   DateTime @default(now())
-    userId String @unique  @db.ObjectId
-    quizId String @unique  @db.ObjectId
+    userId String @db.ObjectId
+    quizId String @db.ObjectId
+    @@index([userId, quizId])
 }
 
 model Submissions {
-   id            String   @id @default(auto()) @map("_id") @db.ObjectId
-   time          DateTime @default(now())
+   id            String  @id @default(auto()) @map("_id") @db.ObjectId
+   time          DateTime? @default(now())
    score         Int
    dateCreated   DateTime @default(now())
-   userId String @unique  @db.ObjectId
-   quizId String @unique  @db.ObjectId
+   userId String  @db.ObjectId
+   quizId String? @db.ObjectId
+   questionId String? @db.ObjectId
+   @@index([userId, questionId])
+   @@index([userId, quizId])
 }
 
 model UserCredentials {

@@ -1,4 +1,4 @@
-import { resolvers } from "../prisma/generated/type-graphql";
+// import { resolvers } from "../prisma/generated/type-graphql";
 import { Resolver, Arg, Args, Ctx, Query, Mutation, Info} from "type-graphql";
 import type { GraphQLResolveInfo } from "graphql";
 import { FindUniqueQuestionArgs } from "/Users/tiff/Desktop/react/v46-tier3-team-39/studyAi/prisma/generated/type-graphql/resolvers/crud/Question/args/FindUniqueQuestionArgs";
@@ -54,11 +54,10 @@ export class FindUniqueQuestionResolver {
   async readQuestion(@Arg('id') id: string, @Ctx() {req, res, prisma, session}: any)
     : Promise<Question | null> {
       const question = await prisma.question.findUnique({
-        where: { id: id }});
+        where: { id: id }}) || null;
       if (!session || session.userId !== question.creatorId) {
         throw new Error("You are not authorized to perform this action");
       }
-      prisma.$disconnect();
       return question;
   }
 
@@ -68,20 +67,20 @@ export class FindUniqueQuestionResolver {
   async addQuestion(@Arg('questionType') questionType: string,
     @Arg('tags') tags: string[], @Arg('questionTitle') questionTitle: string,
     @Arg('questionDesc') questionDesc: string,
+    @Arg('options') options: string[],
     @Arg('correctAnswer') correctAnswer: string[],
-    @Arg('incorrectAnswer') incorrectAnswer: string[],
     @Ctx() {req, res, prisma, session}: any)
     : Promise<Question | null> {
       const questionData = await prisma.questionData.create({
         data: {
           questionTitle: questionTitle,
           questionDesc: questionDesc,
+          options: options
         }
       })
       const answer = await prisma.answer.create({
         data: {
           correctAnswer: correctAnswer,
-          incorrectAnswer: incorrectAnswer,
         }
       })
       const creator = await prisma.user.findUnique({
@@ -91,17 +90,14 @@ export class FindUniqueQuestionResolver {
         likes: 0,
         dislikes: 0
       })
-      const question = await prisma.question.create({
-        data: {
-          creatorId: creator.id,
-          questionType: questionType,
-          tags: tags,
-          question: questionData,
-          answer: answer,
-          likeCounter: likeCounter
-        }
-      });
-      prisma.$disconnect();
+      const question = new Question()
+      question.creatorId = creator.id
+      question.questionType = questionType
+      question.tags = tags
+      question.question = questionData
+      question.answer = answer
+      question.likeCounter = likeCounter
+      await prisma.question.create({ data: question });
       return question;
     }
 }

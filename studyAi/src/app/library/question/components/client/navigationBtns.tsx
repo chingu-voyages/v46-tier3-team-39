@@ -9,17 +9,17 @@ import { Button } from "@mui/material";
 export default function NavigationBtns() {
   const windowWidth = useWindowWidth();
   return (
-    <div className="flex justify-between items-center w-full h-10">
+    <div className="flex justify-between items-center w-full h-10 mt-2">
       <Button
         size={"large"}
         variant={"outlined"}
-        className="flex space-x-3 justify-center items-center h-full font-semibold rounded-none"
+        className="flex justify-center items-center h-full font-semibold rounded-none"
         sx={{ textTransform: "none", minWidth: "unset" }}
         aria-label="Go to previous question"
       >
         <FontAwesomeIcon icon={faArrowLeft} className="text-lg" />
         {windowWidth > 480 && (
-          <span className="flex items-center justify-center leading-none">
+          <span className="flex items-center justify-center leading-none text-sm tracking-normal ml-3">
             Back
           </span>
         )}
@@ -29,16 +29,16 @@ export default function NavigationBtns() {
       <Button
         size={"large"}
         variant="outlined"
-        className="flex space-x-3 justify-center items-center h-full font-semibold rounded-none"
+        className="flex justify-center items-center h-full font-semibold rounded-none"
         sx={{ textTransform: "none", minWidth: "unset" }}
         aria-label="Go to next question"
       >
         {windowWidth > 480 && (
-          <span className="flex items-center justify-center leading-none">
+          <span className="flex items-center justify-center leading-none text-sm tracking-normal">
             Next
           </span>
         )}
-        <FontAwesomeIcon icon={faArrowRight} className="text-lg" />
+        <FontAwesomeIcon icon={faArrowRight} className="text-lg ml-3" />
       </Button>
     </div>
   );

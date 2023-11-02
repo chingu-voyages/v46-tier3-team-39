@@ -1,3 +1,4 @@
+"use client";
 import { Question } from "@prisma/client";
 import { createStore, createHook, createContainer } from "react-sweet-state";
 import { addOrUpdateFunc, deleteItems } from "./helpers";
@@ -7,7 +8,12 @@ type QuestionsData = {
 const initialState: QuestionsData = {
   data: {},
 };
+export const QuestionsContainer = createContainer<{
+  initialItems: (Partial<Question> & { id: string })[];
+  children: React.ReactNode;
+}>();
 const Store = createStore({
+  containedBy: QuestionsContainer,
   // value of the store on initialisation
   initialState,
   // actions that trigger store mutation
@@ -28,15 +34,18 @@ const Store = createStore({
       async ({ setState, getState }, items: Question["id"][]) =>
         deleteItems({ items, setState, getState }),
   },
+  handlers: {
+    onInit:
+      () =>
+      ({ setState, getState }, { initialItems, children }) =>
+        addOrUpdateFunc({
+          items: initialItems,
+          setState,
+          getState,
+        }),
+  },
   // optional, unique, mostly used for easy debugging
   name: "questions",
 });
-const QuestionsContainer = createContainer(Store, {
-  onInit:
-    () =>
-    ({ setState }, initialState: QuestionsData) =>
-      setState(initialState),
-});
 
-const useQuestions = createHook(Store);
-export { QuestionsContainer, useQuestions };
+export const useQuestions = createHook(Store);

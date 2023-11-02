@@ -35,5 +35,1836 @@ type Question {
 
 type QuestionData {
   description: String!
+  options: [String!]!
   title: String!
+}
+
+input QuestionDataCompositeFilter {
+  equals: QuestionDataObjectEqualityInput
+  is: QuestionDataWhereInput
+  isNot: QuestionDataWhereInput
+}
+
+input QuestionDataCreateEnvelopeInput {
+  set: QuestionDataCreateInput
+}
+
+input QuestionDataCreateInput {
+  description: String!
+  title: String!
+}
+
+input QuestionDataObjectEqualityInput {
+  description: String!
+  title: String!
+}
+
+input QuestionDataOrderByInput {
+  description: SortOrder
+  title: SortOrder
+}
+
+input QuestionDataUpdateEnvelopeInput {
+  set: QuestionDataCreateInput
+  update: QuestionDataUpdateInput
+}
+
+input QuestionDataUpdateInput {
+  description: StringFieldUpdateOperationsInput
+  title: StringFieldUpdateOperationsInput
+}
+
+input QuestionDataWhereInput {
+  AND: [QuestionDataWhereInput!]
+  NOT: [QuestionDataWhereInput!]
+  OR: [QuestionDataWhereInput!]
+  description: StringFilter
+  title: StringFilter
+}
+
+type QuestionGroupBy {
+  _count: QuestionCountAggregate
+  _max: QuestionMaxAggregate
+  _min: QuestionMinAggregate
+  creatorId: String!
+  dateCreated: DateTimeISO!
+  id: String!
+  questionType: String!
+  tags: [String!]
+}
+
+type QuestionLikes {
+  dateCreated: DateTimeISO!
+  id: String!
+  questionId: String!
+  userId: String!
+}
+
+type QuestionLikesCountAggregate {
+  _all: Int!
+  dateCreated: Int!
+  id: Int!
+  questionId: Int!
+  userId: Int!
+}
+
+input QuestionLikesCountOrderByAggregateInput {
+  dateCreated: SortOrder
+  id: SortOrder
+  questionId: SortOrder
+  userId: SortOrder
+}
+
+input QuestionLikesCreateInput {
+  dateCreated: DateTimeISO
+  id: String
+  questionId: String!
+  userId: String!
+}
+
+input QuestionLikesCreateManyInput {
+  dateCreated: DateTimeISO
+  id: String
+  questionId: String!
+  userId: String!
+}
+
+type QuestionLikesGroupBy {
+  _count: QuestionLikesCountAggregate
+  _max: QuestionLikesMaxAggregate
+  _min: QuestionLikesMinAggregate
+  dateCreated: DateTimeISO!
+  id: String!
+  questionId: String!
+  userId: String!
+}
+
+type QuestionLikesMaxAggregate {
+  dateCreated: DateTimeISO
+  id: String
+  questionId: String
+  userId: String
+}
+
+input QuestionLikesMaxOrderByAggregateInput {
+  dateCreated: SortOrder
+  id: SortOrder
+  questionId: SortOrder
+  userId: SortOrder
+}
+
+type QuestionLikesMinAggregate {
+  dateCreated: DateTimeISO
+  id: String
+  questionId: String
+  userId: String
+}
+
+input QuestionLikesMinOrderByAggregateInput {
+  dateCreated: SortOrder
+  id: SortOrder
+  questionId: SortOrder
+  userId: SortOrder
+}
+
+input QuestionLikesOrderByWithAggregationInput {
+  _count: QuestionLikesCountOrderByAggregateInput
+  _max: QuestionLikesMaxOrderByAggregateInput
+  _min: QuestionLikesMinOrderByAggregateInput
+  dateCreated: SortOrder
+  id: SortOrder
+  questionId: SortOrder
+  userId: SortOrder
+}
+
+input QuestionLikesOrderByWithRelationInput {
+  dateCreated: SortOrder
+  id: SortOrder
+  questionId: SortOrder
+  userId: SortOrder
+}
+
+enum QuestionLikesScalarFieldEnum {
+  dateCreated
+  id
+  questionId
+  userId
+}
+
+input QuestionLikesScalarWhereWithAggregatesInput {
+  AND: [QuestionLikesScalarWhereWithAggregatesInput!]
+  NOT: [QuestionLikesScalarWhereWithAggregatesInput!]
+  OR: [QuestionLikesScalarWhereWithAggregatesInput!]
+  dateCreated: DateTimeWithAggregatesFilter
+  id: StringWithAggregatesFilter
+  questionId: StringWithAggregatesFilter
+  userId: StringWithAggregatesFilter
+}
+
+input QuestionLikesUpdateInput {
+  dateCreated: DateTimeFieldUpdateOperationsInput
+  questionId: StringFieldUpdateOperationsInput
+  userId: StringFieldUpdateOperationsInput
+}
+
+input QuestionLikesUpdateManyMutationInput {
+  dateCreated: DateTimeFieldUpdateOperationsInput
+  questionId: StringFieldUpdateOperationsInput
+  userId: StringFieldUpdateOperationsInput
+}
+
+input QuestionLikesWhereInput {
+  AND: [QuestionLikesWhereInput!]
+  NOT: [QuestionLikesWhereInput!]
+  OR: [QuestionLikesWhereInput!]
+  dateCreated: DateTimeFilter
+  id: StringFilter
+  questionId: StringFilter
+  userId: StringFilter
+}
+
+input QuestionLikesWhereUniqueInput {
+  AND: [QuestionLikesWhereInput!]
+  NOT: [QuestionLikesWhereInput!]
+  OR: [QuestionLikesWhereInput!]
+  dateCreated: DateTimeFilter
+  id: String
+  questionId: String
+  userId: String
+}
+
+type QuestionMaxAggregate {
+  creatorId: String
+  dateCreated: DateTimeISO
+  id: String
+  questionType: String
+}
+
+input QuestionMaxOrderByAggregateInput {
+  creatorId: SortOrder
+  dateCreated: SortOrder
+  id: SortOrder
+  questionType: SortOrder
+}
+
+type QuestionMinAggregate {
+  creatorId: String
+  dateCreated: DateTimeISO
+  id: String
+  questionType: String
+}
+
+input QuestionMinOrderByAggregateInput {
+  creatorId: SortOrder
+  dateCreated: SortOrder
+  id: SortOrder
+  questionType: SortOrder
+}
+
+input QuestionOrderByWithAggregationInput {
+  _count: QuestionCountOrderByAggregateInput
+  _max: QuestionMaxOrderByAggregateInput
+  _min: QuestionMinOrderByAggregateInput
+  creatorId: SortOrder
+  dateCreated: SortOrder
+  id: SortOrder
+  questionType: SortOrder
+  tags: SortOrder
+}
+
+input QuestionOrderByWithRelationInput {
+  answer: AnswerDataOrderByInput
+  creatorId: SortOrder
+  dateCreated: SortOrder
+  id: SortOrder
+  likeCounter: LikeCounterOrderByInput
+  question: QuestionDataOrderByInput
+  questionType: SortOrder
+  tags: SortOrder
+}
+
+enum QuestionScalarFieldEnum {
+  creatorId
+  dateCreated
+  id
+  questionType
+  tags
+}
+
+input QuestionScalarWhereWithAggregatesInput {
+  AND: [QuestionScalarWhereWithAggregatesInput!]
+  NOT: [QuestionScalarWhereWithAggregatesInput!]
+  OR: [QuestionScalarWhereWithAggregatesInput!]
+  creatorId: StringWithAggregatesFilter
+  dateCreated: DateTimeWithAggregatesFilter
+  id: StringWithAggregatesFilter
+  questionType: StringWithAggregatesFilter
+  tags: StringNullableListFilter
+}
+
+input QuestionUpdateInput {
+  answer: AnswerDataUpdateEnvelopeInput
+  creatorId: StringFieldUpdateOperationsInput
+  dateCreated: DateTimeFieldUpdateOperationsInput
+  likeCounter: LikeCounterUpdateEnvelopeInput
+  question: QuestionDataUpdateEnvelopeInput
+  questionType: StringFieldUpdateOperationsInput
+  tags: QuestionUpdatetagsInput
+}
+
+input QuestionUpdateManyMutationInput {
+  answer: AnswerDataUpdateEnvelopeInput
+  creatorId: StringFieldUpdateOperationsInput
+  dateCreated: DateTimeFieldUpdateOperationsInput
+  likeCounter: LikeCounterUpdateEnvelopeInput
+  question: QuestionDataUpdateEnvelopeInput
+  questionType: StringFieldUpdateOperationsInput
+  tags: QuestionUpdatetagsInput
+}
+
+input QuestionUpdatetagsInput {
+  push: [String!]
+  set: [String!]
+}
+
+input QuestionWhereInput {
+  AND: [QuestionWhereInput!]
+  NOT: [QuestionWhereInput!]
+  OR: [QuestionWhereInput!]
+  answer: AnswerDataCompositeFilter
+  creatorId: StringFilter
+  dateCreated: DateTimeFilter
+  id: StringFilter
+  likeCounter: LikeCounterCompositeFilter
+  question: QuestionDataCompositeFilter
+  questionType: StringFilter
+  tags: StringNullableListFilter
+}
+
+input QuestionWhereUniqueInput {
+  AND: [QuestionWhereInput!]
+  NOT: [QuestionWhereInput!]
+  OR: [QuestionWhereInput!]
+  answer: AnswerDataCompositeFilter
+  creatorId: StringFilter
+  dateCreated: DateTimeFilter
+  id: String
+  likeCounter: LikeCounterCompositeFilter
+  question: QuestionDataCompositeFilter
+  questionType: StringFilter
+  tags: StringNullableListFilter
+}
+
+type Quiz {
+  creatorId: String!
+  dateCreated: DateTimeISO!
+  id: String!
+  likes: Int!
+  name: String!
+  questionIds: [String!]!
+  tags: [String!]!
+}
+
+type QuizAvgAggregate {
+  likes: Float
+}
+
+input QuizAvgOrderByAggregateInput {
+  likes: SortOrder
+}
+
+type QuizCountAggregate {
+  _all: Int!
+  creatorId: Int!
+  dateCreated: Int!
+  id: Int!
+  likes: Int!
+  name: Int!
+  questionIds: Int!
+  tags: Int!
+}
+
+input QuizCountOrderByAggregateInput {
+  creatorId: SortOrder
+  dateCreated: SortOrder
+  id: SortOrder
+  likes: SortOrder
+  name: SortOrder
+  questionIds: SortOrder
+  tags: SortOrder
+}
+
+input QuizCreateInput {
+  creatorId: String!
+  dateCreated: DateTimeISO
+  id: String
+  likes: Int!
+  name: String!
+  questionIds: QuizCreatequestionIdsInput
+  tags: QuizCreatetagsInput
+}
+
+input QuizCreateManyInput {
+  creatorId: String!
+  dateCreated: DateTimeISO
+  id: String
+  likes: Int!
+  name: String!
+  questionIds: QuizCreatequestionIdsInput
+  tags: QuizCreatetagsInput
+}
+
+input QuizCreatequestionIdsInput {
+  set: [String!]!
+}
+
+input QuizCreatetagsInput {
+  set: [String!]!
+}
+
+type QuizGroupBy {
+  _avg: QuizAvgAggregate
+  _count: QuizCountAggregate
+  _max: QuizMaxAggregate
+  _min: QuizMinAggregate
+  _sum: QuizSumAggregate
+  creatorId: String!
+  dateCreated: DateTimeISO!
+  id: String!
+  likes: Int!
+  name: String!
+  questionIds: [String!]
+  tags: [String!]
+}
+
+type QuizLikes {
+  dateCreated: DateTimeISO!
+  id: String!
+  quizId: String!
+  userId: String!
+}
+
+type QuizLikesCountAggregate {
+  _all: Int!
+  dateCreated: Int!
+  id: Int!
+  quizId: Int!
+  userId: Int!
+}
+
+input QuizLikesCountOrderByAggregateInput {
+  dateCreated: SortOrder
+  id: SortOrder
+  quizId: SortOrder
+  userId: SortOrder
+}
+
+input QuizLikesCreateInput {
+  dateCreated: DateTimeISO
+  id: String
+  quizId: String!
+  userId: String!
+}
+
+input QuizLikesCreateManyInput {
+  dateCreated: DateTimeISO
+  id: String
+  quizId: String!
+  userId: String!
+}
+
+type QuizLikesGroupBy {
+  _count: QuizLikesCountAggregate
+  _max: QuizLikesMaxAggregate
+  _min: QuizLikesMinAggregate
+  dateCreated: DateTimeISO!
+  id: String!
+  quizId: String!
+  userId: String!
+}
+
+type QuizLikesMaxAggregate {
+  dateCreated: DateTimeISO
+  id: String
+  quizId: String
+  userId: String
+}
+
+input QuizLikesMaxOrderByAggregateInput {
+  dateCreated: SortOrder
+  id: SortOrder
+  quizId: SortOrder
+  userId: SortOrder
+}
+
+type QuizLikesMinAggregate {
+  dateCreated: DateTimeISO
+  id: String
+  quizId: String
+  userId: String
+}
+
+input QuizLikesMinOrderByAggregateInput {
+  dateCreated: SortOrder
+  id: SortOrder
+  quizId: SortOrder
+  userId: SortOrder
+}
+
+input QuizLikesOrderByWithAggregationInput {
+  _count: QuizLikesCountOrderByAggregateInput
+  _max: QuizLikesMaxOrderByAggregateInput
+  _min: QuizLikesMinOrderByAggregateInput
+  dateCreated: SortOrder
+  id: SortOrder
+  quizId: SortOrder
+  userId: SortOrder
+}
+
+input QuizLikesOrderByWithRelationInput {
+  dateCreated: SortOrder
+  id: SortOrder
+  quizId: SortOrder
+  userId: SortOrder
+}
+
+enum QuizLikesScalarFieldEnum {
+  dateCreated
+  id
+  quizId
+  userId
+}
+
+input QuizLikesScalarWhereWithAggregatesInput {
+  AND: [QuizLikesScalarWhereWithAggregatesInput!]
+  NOT: [QuizLikesScalarWhereWithAggregatesInput!]
+  OR: [QuizLikesScalarWhereWithAggregatesInput!]
+  dateCreated: DateTimeWithAggregatesFilter
+  id: StringWithAggregatesFilter
+  quizId: StringWithAggregatesFilter
+  userId: StringWithAggregatesFilter
+}
+
+input QuizLikesUpdateInput {
+  dateCreated: DateTimeFieldUpdateOperationsInput
+  quizId: StringFieldUpdateOperationsInput
+  userId: StringFieldUpdateOperationsInput
+}
+
+input QuizLikesUpdateManyMutationInput {
+  dateCreated: DateTimeFieldUpdateOperationsInput
+  quizId: StringFieldUpdateOperationsInput
+  userId: StringFieldUpdateOperationsInput
+}
+
+input QuizLikesWhereInput {
+  AND: [QuizLikesWhereInput!]
+  NOT: [QuizLikesWhereInput!]
+  OR: [QuizLikesWhereInput!]
+  dateCreated: DateTimeFilter
+  id: StringFilter
+  quizId: StringFilter
+  userId: StringFilter
+}
+
+input QuizLikesWhereUniqueInput {
+  AND: [QuizLikesWhereInput!]
+  NOT: [QuizLikesWhereInput!]
+  OR: [QuizLikesWhereInput!]
+  dateCreated: DateTimeFilter
+  id: String
+  quizId: String
+  userId: String
+}
+
+type QuizMaxAggregate {
+  creatorId: String
+  dateCreated: DateTimeISO
+  id: String
+  likes: Int
+  name: String
+}
+
+input QuizMaxOrderByAggregateInput {
+  creatorId: SortOrder
+  dateCreated: SortOrder
+  id: SortOrder
+  likes: SortOrder
+  name: SortOrder
+}
+
+type QuizMinAggregate {
+  creatorId: String
+  dateCreated: DateTimeISO
+  id: String
+  likes: Int
+  name: String
+}
+
+input QuizMinOrderByAggregateInput {
+  creatorId: SortOrder
+  dateCreated: SortOrder
+  id: SortOrder
+  likes: SortOrder
+  name: SortOrder
+}
+
+input QuizOrderByWithAggregationInput {
+  _avg: QuizAvgOrderByAggregateInput
+  _count: QuizCountOrderByAggregateInput
+  _max: QuizMaxOrderByAggregateInput
+  _min: QuizMinOrderByAggregateInput
+  _sum: QuizSumOrderByAggregateInput
+  creatorId: SortOrder
+  dateCreated: SortOrder
+  id: SortOrder
+  likes: SortOrder
+  name: SortOrder
+  questionIds: SortOrder
+  tags: SortOrder
+}
+
+input QuizOrderByWithRelationInput {
+  creatorId: SortOrder
+  dateCreated: SortOrder
+  id: SortOrder
+  likes: SortOrder
+  name: SortOrder
+  questionIds: SortOrder
+  tags: SortOrder
+}
+
+enum QuizScalarFieldEnum {
+  creatorId
+  dateCreated
+  id
+  likes
+  name
+  questionIds
+  tags
+}
+
+input QuizScalarWhereWithAggregatesInput {
+  AND: [QuizScalarWhereWithAggregatesInput!]
+  NOT: [QuizScalarWhereWithAggregatesInput!]
+  OR: [QuizScalarWhereWithAggregatesInput!]
+  creatorId: StringWithAggregatesFilter
+  dateCreated: DateTimeWithAggregatesFilter
+  id: StringWithAggregatesFilter
+  likes: IntWithAggregatesFilter
+  name: StringWithAggregatesFilter
+  questionIds: StringNullableListFilter
+  tags: StringNullableListFilter
+}
+
+type QuizSumAggregate {
+  likes: Int
+}
+
+input QuizSumOrderByAggregateInput {
+  likes: SortOrder
+}
+
+input QuizUpdateInput {
+  creatorId: StringFieldUpdateOperationsInput
+  dateCreated: DateTimeFieldUpdateOperationsInput
+  likes: IntFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
+  questionIds: QuizUpdatequestionIdsInput
+  tags: QuizUpdatetagsInput
+}
+
+input QuizUpdateManyMutationInput {
+  creatorId: StringFieldUpdateOperationsInput
+  dateCreated: DateTimeFieldUpdateOperationsInput
+  likes: IntFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
+  questionIds: QuizUpdatequestionIdsInput
+  tags: QuizUpdatetagsInput
+}
+
+input QuizUpdatequestionIdsInput {
+  push: [String!]
+  set: [String!]
+}
+
+input QuizUpdatetagsInput {
+  push: [String!]
+  set: [String!]
+}
+
+input QuizWhereInput {
+  AND: [QuizWhereInput!]
+  NOT: [QuizWhereInput!]
+  OR: [QuizWhereInput!]
+  creatorId: StringFilter
+  dateCreated: DateTimeFilter
+  id: StringFilter
+  likes: IntFilter
+  name: StringFilter
+  questionIds: StringNullableListFilter
+  tags: StringNullableListFilter
+}
+
+input QuizWhereUniqueInput {
+  AND: [QuizWhereInput!]
+  NOT: [QuizWhereInput!]
+  OR: [QuizWhereInput!]
+  creatorId: String
+  dateCreated: DateTimeFilter
+  id: String
+  likes: IntFilter
+  name: StringFilter
+  questionIds: StringNullableListFilter
+  tags: StringNullableListFilter
+}
+
+type Session {
+  expires: DateTimeISO!
+  id: String!
+  sessionToken: String!
+  user: User!
+  userId: String!
+}
+
+type SessionCountAggregate {
+  _all: Int!
+  expires: Int!
+  id: Int!
+  sessionToken: Int!
+  userId: Int!
+}
+
+input SessionCountOrderByAggregateInput {
+  expires: SortOrder
+  id: SortOrder
+  sessionToken: SortOrder
+  userId: SortOrder
+}
+
+input SessionCreateInput {
+  expires: DateTimeISO!
+  id: String
+  sessionToken: String!
+  user: UserCreateNestedOneWithoutSessionsInput!
+}
+
+input SessionCreateManyInput {
+  expires: DateTimeISO!
+  id: String
+  sessionToken: String!
+  userId: String!
+}
+
+input SessionCreateManyUserInput {
+  expires: DateTimeISO!
+  id: String
+  sessionToken: String!
+}
+
+input SessionCreateManyUserInputEnvelope {
+  data: [SessionCreateManyUserInput!]!
+}
+
+input SessionCreateNestedManyWithoutUserInput {
+  connect: [SessionWhereUniqueInput!]
+  connectOrCreate: [SessionCreateOrConnectWithoutUserInput!]
+  create: [SessionCreateWithoutUserInput!]
+  createMany: SessionCreateManyUserInputEnvelope
+}
+
+input SessionCreateOrConnectWithoutUserInput {
+  create: SessionCreateWithoutUserInput!
+  where: SessionWhereUniqueInput!
+}
+
+input SessionCreateWithoutUserInput {
+  expires: DateTimeISO!
+  id: String
+  sessionToken: String!
+}
+
+type SessionGroupBy {
+  _count: SessionCountAggregate
+  _max: SessionMaxAggregate
+  _min: SessionMinAggregate
+  expires: DateTimeISO!
+  id: String!
+  sessionToken: String!
+  userId: String!
+}
+
+input SessionListRelationFilter {
+  every: SessionWhereInput
+  none: SessionWhereInput
+  some: SessionWhereInput
+}
+
+type SessionMaxAggregate {
+  expires: DateTimeISO
+  id: String
+  sessionToken: String
+  userId: String
+}
+
+input SessionMaxOrderByAggregateInput {
+  expires: SortOrder
+  id: SortOrder
+  sessionToken: SortOrder
+  userId: SortOrder
+}
+
+type SessionMinAggregate {
+  expires: DateTimeISO
+  id: String
+  sessionToken: String
+  userId: String
+}
+
+input SessionMinOrderByAggregateInput {
+  expires: SortOrder
+  id: SortOrder
+  sessionToken: SortOrder
+  userId: SortOrder
+}
+
+input SessionOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input SessionOrderByWithAggregationInput {
+  _count: SessionCountOrderByAggregateInput
+  _max: SessionMaxOrderByAggregateInput
+  _min: SessionMinOrderByAggregateInput
+  expires: SortOrder
+  id: SortOrder
+  sessionToken: SortOrder
+  userId: SortOrder
+}
+
+input SessionOrderByWithRelationInput {
+  expires: SortOrder
+  id: SortOrder
+  sessionToken: SortOrder
+  user: UserOrderByWithRelationInput
+  userId: SortOrder
+}
+
+enum SessionScalarFieldEnum {
+  expires
+  id
+  sessionToken
+  userId
+}
+
+input SessionScalarWhereInput {
+  AND: [SessionScalarWhereInput!]
+  NOT: [SessionScalarWhereInput!]
+  OR: [SessionScalarWhereInput!]
+  expires: DateTimeFilter
+  id: StringFilter
+  sessionToken: StringFilter
+  userId: StringFilter
+}
+
+input SessionScalarWhereWithAggregatesInput {
+  AND: [SessionScalarWhereWithAggregatesInput!]
+  NOT: [SessionScalarWhereWithAggregatesInput!]
+  OR: [SessionScalarWhereWithAggregatesInput!]
+  expires: DateTimeWithAggregatesFilter
+  id: StringWithAggregatesFilter
+  sessionToken: StringWithAggregatesFilter
+  userId: StringWithAggregatesFilter
+}
+
+input SessionUpdateInput {
+  expires: DateTimeFieldUpdateOperationsInput
+  sessionToken: StringFieldUpdateOperationsInput
+  user: UserUpdateOneRequiredWithoutSessionsNestedInput
+}
+
+input SessionUpdateManyMutationInput {
+  expires: DateTimeFieldUpdateOperationsInput
+  sessionToken: StringFieldUpdateOperationsInput
+}
+
+input SessionUpdateManyWithWhereWithoutUserInput {
+  data: SessionUpdateManyMutationInput!
+  where: SessionScalarWhereInput!
+}
+
+input SessionUpdateManyWithoutUserNestedInput {
+  connect: [SessionWhereUniqueInput!]
+  connectOrCreate: [SessionCreateOrConnectWithoutUserInput!]
+  create: [SessionCreateWithoutUserInput!]
+  createMany: SessionCreateManyUserInputEnvelope
+  delete: [SessionWhereUniqueInput!]
+  deleteMany: [SessionScalarWhereInput!]
+  disconnect: [SessionWhereUniqueInput!]
+  set: [SessionWhereUniqueInput!]
+  update: [SessionUpdateWithWhereUniqueWithoutUserInput!]
+  updateMany: [SessionUpdateManyWithWhereWithoutUserInput!]
+  upsert: [SessionUpsertWithWhereUniqueWithoutUserInput!]
+}
+
+input SessionUpdateWithWhereUniqueWithoutUserInput {
+  data: SessionUpdateWithoutUserInput!
+  where: SessionWhereUniqueInput!
+}
+
+input SessionUpdateWithoutUserInput {
+  expires: DateTimeFieldUpdateOperationsInput
+  sessionToken: StringFieldUpdateOperationsInput
+}
+
+input SessionUpsertWithWhereUniqueWithoutUserInput {
+  create: SessionCreateWithoutUserInput!
+  update: SessionUpdateWithoutUserInput!
+  where: SessionWhereUniqueInput!
+}
+
+input SessionWhereInput {
+  AND: [SessionWhereInput!]
+  NOT: [SessionWhereInput!]
+  OR: [SessionWhereInput!]
+  expires: DateTimeFilter
+  id: StringFilter
+  sessionToken: StringFilter
+  user: UserRelationFilter
+  userId: StringFilter
+}
+
+input SessionWhereUniqueInput {
+  AND: [SessionWhereInput!]
+  NOT: [SessionWhereInput!]
+  OR: [SessionWhereInput!]
+  expires: DateTimeFilter
+  id: String
+  sessionToken: String
+  user: UserRelationFilter
+  userId: StringFilter
+}
+
+enum SortOrder {
+  asc
+  desc
+}
+
+input StringFieldUpdateOperationsInput {
+  set: String
+}
+
+input StringFilter {
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  mode: QueryMode
+  not: NestedStringFilter
+  notIn: [String!]
+  startsWith: String
+}
+
+input StringNullableFilter {
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  isSet: Boolean
+  lt: String
+  lte: String
+  mode: QueryMode
+  not: NestedStringNullableFilter
+  notIn: [String!]
+  startsWith: String
+}
+
+input StringNullableListFilter {
+  equals: [String!]
+  has: String
+  hasEvery: [String!]
+  hasSome: [String!]
+  isEmpty: Boolean
+}
+
+input StringNullableWithAggregatesFilter {
+  _count: NestedIntNullableFilter
+  _max: NestedStringNullableFilter
+  _min: NestedStringNullableFilter
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  isSet: Boolean
+  lt: String
+  lte: String
+  mode: QueryMode
+  not: NestedStringNullableWithAggregatesFilter
+  notIn: [String!]
+  startsWith: String
+}
+
+input StringWithAggregatesFilter {
+  _count: NestedIntFilter
+  _max: NestedStringFilter
+  _min: NestedStringFilter
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  mode: QueryMode
+  not: NestedStringWithAggregatesFilter
+  notIn: [String!]
+  startsWith: String
+}
+
+type Submissions {
+  dateCreated: DateTimeISO!
+  id: String!
+  quizId: String!
+  score: Int!
+  time: DateTimeISO!
+  userId: String!
+}
+
+type SubmissionsAvgAggregate {
+  score: Float
+}
+
+input SubmissionsAvgOrderByAggregateInput {
+  score: SortOrder
+}
+
+type SubmissionsCountAggregate {
+  _all: Int!
+  dateCreated: Int!
+  id: Int!
+  quizId: Int!
+  score: Int!
+  time: Int!
+  userId: Int!
+}
+
+input SubmissionsCountOrderByAggregateInput {
+  dateCreated: SortOrder
+  id: SortOrder
+  quizId: SortOrder
+  score: SortOrder
+  time: SortOrder
+  userId: SortOrder
+}
+
+input SubmissionsCreateInput {
+  dateCreated: DateTimeISO
+  id: String
+  quizId: String!
+  score: Int!
+  time: DateTimeISO
+  userId: String!
+}
+
+input SubmissionsCreateManyInput {
+  dateCreated: DateTimeISO
+  id: String
+  quizId: String!
+  score: Int!
+  time: DateTimeISO
+  userId: String!
+}
+
+type SubmissionsGroupBy {
+  _avg: SubmissionsAvgAggregate
+  _count: SubmissionsCountAggregate
+  _max: SubmissionsMaxAggregate
+  _min: SubmissionsMinAggregate
+  _sum: SubmissionsSumAggregate
+  dateCreated: DateTimeISO!
+  id: String!
+  quizId: String!
+  score: Int!
+  time: DateTimeISO!
+  userId: String!
+}
+
+type SubmissionsMaxAggregate {
+  dateCreated: DateTimeISO
+  id: String
+  quizId: String
+  score: Int
+  time: DateTimeISO
+  userId: String
+}
+
+input SubmissionsMaxOrderByAggregateInput {
+  dateCreated: SortOrder
+  id: SortOrder
+  quizId: SortOrder
+  score: SortOrder
+  time: SortOrder
+  userId: SortOrder
+}
+
+type SubmissionsMinAggregate {
+  dateCreated: DateTimeISO
+  id: String
+  quizId: String
+  score: Int
+  time: DateTimeISO
+  userId: String
+}
+
+input SubmissionsMinOrderByAggregateInput {
+  dateCreated: SortOrder
+  id: SortOrder
+  quizId: SortOrder
+  score: SortOrder
+  time: SortOrder
+  userId: SortOrder
+}
+
+input SubmissionsOrderByWithAggregationInput {
+  _avg: SubmissionsAvgOrderByAggregateInput
+  _count: SubmissionsCountOrderByAggregateInput
+  _max: SubmissionsMaxOrderByAggregateInput
+  _min: SubmissionsMinOrderByAggregateInput
+  _sum: SubmissionsSumOrderByAggregateInput
+  dateCreated: SortOrder
+  id: SortOrder
+  quizId: SortOrder
+  score: SortOrder
+  time: SortOrder
+  userId: SortOrder
+}
+
+input SubmissionsOrderByWithRelationInput {
+  dateCreated: SortOrder
+  id: SortOrder
+  quizId: SortOrder
+  score: SortOrder
+  time: SortOrder
+  userId: SortOrder
+}
+
+enum SubmissionsScalarFieldEnum {
+  dateCreated
+  id
+  quizId
+  score
+  time
+  userId
+}
+
+input SubmissionsScalarWhereWithAggregatesInput {
+  AND: [SubmissionsScalarWhereWithAggregatesInput!]
+  NOT: [SubmissionsScalarWhereWithAggregatesInput!]
+  OR: [SubmissionsScalarWhereWithAggregatesInput!]
+  dateCreated: DateTimeWithAggregatesFilter
+  id: StringWithAggregatesFilter
+  quizId: StringWithAggregatesFilter
+  score: IntWithAggregatesFilter
+  time: DateTimeWithAggregatesFilter
+  userId: StringWithAggregatesFilter
+}
+
+type SubmissionsSumAggregate {
+  score: Int
+}
+
+input SubmissionsSumOrderByAggregateInput {
+  score: SortOrder
+}
+
+input SubmissionsUpdateInput {
+  dateCreated: DateTimeFieldUpdateOperationsInput
+  quizId: StringFieldUpdateOperationsInput
+  score: IntFieldUpdateOperationsInput
+  time: DateTimeFieldUpdateOperationsInput
+  userId: StringFieldUpdateOperationsInput
+}
+
+input SubmissionsUpdateManyMutationInput {
+  dateCreated: DateTimeFieldUpdateOperationsInput
+  quizId: StringFieldUpdateOperationsInput
+  score: IntFieldUpdateOperationsInput
+  time: DateTimeFieldUpdateOperationsInput
+  userId: StringFieldUpdateOperationsInput
+}
+
+input SubmissionsWhereInput {
+  AND: [SubmissionsWhereInput!]
+  NOT: [SubmissionsWhereInput!]
+  OR: [SubmissionsWhereInput!]
+  dateCreated: DateTimeFilter
+  id: StringFilter
+  quizId: StringFilter
+  score: IntFilter
+  time: DateTimeFilter
+  userId: StringFilter
+}
+
+input SubmissionsWhereUniqueInput {
+  AND: [SubmissionsWhereInput!]
+  NOT: [SubmissionsWhereInput!]
+  OR: [SubmissionsWhereInput!]
+  dateCreated: DateTimeFilter
+  id: String
+  quizId: String
+  score: IntFilter
+  time: DateTimeFilter
+  userId: String
+}
+
+type User {
+  _count: UserCount
+  accounts(cursor: AccountWhereUniqueInput, distinct: [AccountScalarFieldEnum!], orderBy: [AccountOrderByWithRelationInput!], skip: Int, take: Int, where: AccountWhereInput): [Account!]!
+  dateCreated: DateTimeISO!
+  email: String!
+  emailVerified: DateTimeISO
+  id: String!
+  image: String
+  name: String!
+  sessions(cursor: SessionWhereUniqueInput, distinct: [SessionScalarFieldEnum!], orderBy: [SessionOrderByWithRelationInput!], skip: Int, take: Int, where: SessionWhereInput): [Session!]!
+  usersReached: Int!
+}
+
+type UserAvgAggregate {
+  usersReached: Float
+}
+
+input UserAvgOrderByAggregateInput {
+  usersReached: SortOrder
+}
+
+type UserCount {
+  accounts(where: AccountWhereInput): Int!
+  sessions(where: SessionWhereInput): Int!
+}
+
+type UserCountAggregate {
+  _all: Int!
+  dateCreated: Int!
+  email: Int!
+  emailVerified: Int!
+  id: Int!
+  image: Int!
+  name: Int!
+  usersReached: Int!
+}
+
+input UserCountOrderByAggregateInput {
+  dateCreated: SortOrder
+  email: SortOrder
+  emailVerified: SortOrder
+  id: SortOrder
+  image: SortOrder
+  name: SortOrder
+  usersReached: SortOrder
+}
+
+input UserCreateInput {
+  accounts: AccountCreateNestedManyWithoutUserInput
+  dateCreated: DateTimeISO
+  email: String!
+  emailVerified: DateTimeISO
+  id: String
+  image: String
+  name: String!
+  sessions: SessionCreateNestedManyWithoutUserInput
+  usersReached: Int
+}
+
+input UserCreateManyInput {
+  dateCreated: DateTimeISO
+  email: String!
+  emailVerified: DateTimeISO
+  id: String
+  image: String
+  name: String!
+  usersReached: Int
+}
+
+input UserCreateNestedOneWithoutAccountsInput {
+  connect: UserWhereUniqueInput
+  connectOrCreate: UserCreateOrConnectWithoutAccountsInput
+  create: UserCreateWithoutAccountsInput
+}
+
+input UserCreateNestedOneWithoutSessionsInput {
+  connect: UserWhereUniqueInput
+  connectOrCreate: UserCreateOrConnectWithoutSessionsInput
+  create: UserCreateWithoutSessionsInput
+}
+
+input UserCreateOrConnectWithoutAccountsInput {
+  create: UserCreateWithoutAccountsInput!
+  where: UserWhereUniqueInput!
+}
+
+input UserCreateOrConnectWithoutSessionsInput {
+  create: UserCreateWithoutSessionsInput!
+  where: UserWhereUniqueInput!
+}
+
+input UserCreateWithoutAccountsInput {
+  dateCreated: DateTimeISO
+  email: String!
+  emailVerified: DateTimeISO
+  id: String
+  image: String
+  name: String!
+  sessions: SessionCreateNestedManyWithoutUserInput
+  usersReached: Int
+}
+
+input UserCreateWithoutSessionsInput {
+  accounts: AccountCreateNestedManyWithoutUserInput
+  dateCreated: DateTimeISO
+  email: String!
+  emailVerified: DateTimeISO
+  id: String
+  image: String
+  name: String!
+  usersReached: Int
+}
+
+type UserCredentials {
+  email: String!
+  id: String!
+  password: String
+  provider: String!
+  userId: String!
+}
+
+type UserCredentialsCountAggregate {
+  _all: Int!
+  email: Int!
+  id: Int!
+  password: Int!
+  provider: Int!
+  userId: Int!
+}
+
+input UserCredentialsCountOrderByAggregateInput {
+  email: SortOrder
+  id: SortOrder
+  password: SortOrder
+  provider: SortOrder
+  userId: SortOrder
+}
+
+input UserCredentialsCreateInput {
+  email: String!
+  id: String
+  password: String
+  provider: String!
+  userId: String!
+}
+
+input UserCredentialsCreateManyInput {
+  email: String!
+  id: String
+  password: String
+  provider: String!
+  userId: String!
+}
+
+type UserCredentialsGroupBy {
+  _count: UserCredentialsCountAggregate
+  _max: UserCredentialsMaxAggregate
+  _min: UserCredentialsMinAggregate
+  email: String!
+  id: String!
+  password: String
+  provider: String!
+  userId: String!
+}
+
+type UserCredentialsMaxAggregate {
+  email: String
+  id: String
+  password: String
+  provider: String
+  userId: String
+}
+
+input UserCredentialsMaxOrderByAggregateInput {
+  email: SortOrder
+  id: SortOrder
+  password: SortOrder
+  provider: SortOrder
+  userId: SortOrder
+}
+
+type UserCredentialsMinAggregate {
+  email: String
+  id: String
+  password: String
+  provider: String
+  userId: String
+}
+
+input UserCredentialsMinOrderByAggregateInput {
+  email: SortOrder
+  id: SortOrder
+  password: SortOrder
+  provider: SortOrder
+  userId: SortOrder
+}
+
+input UserCredentialsOrderByWithAggregationInput {
+  _count: UserCredentialsCountOrderByAggregateInput
+  _max: UserCredentialsMaxOrderByAggregateInput
+  _min: UserCredentialsMinOrderByAggregateInput
+  email: SortOrder
+  id: SortOrder
+  password: SortOrder
+  provider: SortOrder
+  userId: SortOrder
+}
+
+input UserCredentialsOrderByWithRelationInput {
+  email: SortOrder
+  id: SortOrder
+  password: SortOrder
+  provider: SortOrder
+  userId: SortOrder
+}
+
+enum UserCredentialsScalarFieldEnum {
+  email
+  id
+  password
+  provider
+  userId
+}
+
+input UserCredentialsScalarWhereWithAggregatesInput {
+  AND: [UserCredentialsScalarWhereWithAggregatesInput!]
+  NOT: [UserCredentialsScalarWhereWithAggregatesInput!]
+  OR: [UserCredentialsScalarWhereWithAggregatesInput!]
+  email: StringWithAggregatesFilter
+  id: StringWithAggregatesFilter
+  password: StringNullableWithAggregatesFilter
+  provider: StringWithAggregatesFilter
+  userId: StringWithAggregatesFilter
+}
+
+input UserCredentialsUpdateInput {
+  email: StringFieldUpdateOperationsInput
+  password: NullableStringFieldUpdateOperationsInput
+  provider: StringFieldUpdateOperationsInput
+  userId: StringFieldUpdateOperationsInput
+}
+
+input UserCredentialsUpdateManyMutationInput {
+  email: StringFieldUpdateOperationsInput
+  password: NullableStringFieldUpdateOperationsInput
+  provider: StringFieldUpdateOperationsInput
+  userId: StringFieldUpdateOperationsInput
+}
+
+input UserCredentialsWhereInput {
+  AND: [UserCredentialsWhereInput!]
+  NOT: [UserCredentialsWhereInput!]
+  OR: [UserCredentialsWhereInput!]
+  email: StringFilter
+  id: StringFilter
+  password: StringNullableFilter
+  provider: StringFilter
+  userId: StringFilter
+}
+
+input UserCredentialsWhereUniqueInput {
+  AND: [UserCredentialsWhereInput!]
+  NOT: [UserCredentialsWhereInput!]
+  OR: [UserCredentialsWhereInput!]
+  email: String
+  id: String
+  password: StringNullableFilter
+  provider: StringFilter
+  userId: String
+}
+
+type UserGroupBy {
+  _avg: UserAvgAggregate
+  _count: UserCountAggregate
+  _max: UserMaxAggregate
+  _min: UserMinAggregate
+  _sum: UserSumAggregate
+  dateCreated: DateTimeISO!
+  email: String!
+  emailVerified: DateTimeISO
+  id: String!
+  image: String
+  name: String!
+  usersReached: Int!
+}
+
+type UserMaxAggregate {
+  dateCreated: DateTimeISO
+  email: String
+  emailVerified: DateTimeISO
+  id: String
+  image: String
+  name: String
+  usersReached: Int
+}
+
+input UserMaxOrderByAggregateInput {
+  dateCreated: SortOrder
+  email: SortOrder
+  emailVerified: SortOrder
+  id: SortOrder
+  image: SortOrder
+  name: SortOrder
+  usersReached: SortOrder
+}
+
+type UserMinAggregate {
+  dateCreated: DateTimeISO
+  email: String
+  emailVerified: DateTimeISO
+  id: String
+  image: String
+  name: String
+  usersReached: Int
+}
+
+input UserMinOrderByAggregateInput {
+  dateCreated: SortOrder
+  email: SortOrder
+  emailVerified: SortOrder
+  id: SortOrder
+  image: SortOrder
+  name: SortOrder
+  usersReached: SortOrder
+}
+
+input UserOrderByWithAggregationInput {
+  _avg: UserAvgOrderByAggregateInput
+  _count: UserCountOrderByAggregateInput
+  _max: UserMaxOrderByAggregateInput
+  _min: UserMinOrderByAggregateInput
+  _sum: UserSumOrderByAggregateInput
+  dateCreated: SortOrder
+  email: SortOrder
+  emailVerified: SortOrder
+  id: SortOrder
+  image: SortOrder
+  name: SortOrder
+  usersReached: SortOrder
+}
+
+input UserOrderByWithRelationInput {
+  accounts: AccountOrderByRelationAggregateInput
+  dateCreated: SortOrder
+  email: SortOrder
+  emailVerified: SortOrder
+  id: SortOrder
+  image: SortOrder
+  name: SortOrder
+  sessions: SessionOrderByRelationAggregateInput
+  usersReached: SortOrder
+}
+
+input UserRelationFilter {
+  is: UserWhereInput
+  isNot: UserWhereInput
+}
+
+enum UserScalarFieldEnum {
+  dateCreated
+  email
+  emailVerified
+  id
+  image
+  name
+  usersReached
+}
+
+input UserScalarWhereWithAggregatesInput {
+  AND: [UserScalarWhereWithAggregatesInput!]
+  NOT: [UserScalarWhereWithAggregatesInput!]
+  OR: [UserScalarWhereWithAggregatesInput!]
+  dateCreated: DateTimeWithAggregatesFilter
+  email: StringWithAggregatesFilter
+  emailVerified: DateTimeNullableWithAggregatesFilter
+  id: StringWithAggregatesFilter
+  image: StringNullableWithAggregatesFilter
+  name: StringWithAggregatesFilter
+  usersReached: IntWithAggregatesFilter
+}
+
+type UserSumAggregate {
+  usersReached: Int
+}
+
+input UserSumOrderByAggregateInput {
+  usersReached: SortOrder
+}
+
+input UserUpdateInput {
+  accounts: AccountUpdateManyWithoutUserNestedInput
+  dateCreated: DateTimeFieldUpdateOperationsInput
+  email: StringFieldUpdateOperationsInput
+  emailVerified: NullableDateTimeFieldUpdateOperationsInput
+  image: NullableStringFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
+  sessions: SessionUpdateManyWithoutUserNestedInput
+  usersReached: IntFieldUpdateOperationsInput
+}
+
+input UserUpdateManyMutationInput {
+  dateCreated: DateTimeFieldUpdateOperationsInput
+  email: StringFieldUpdateOperationsInput
+  emailVerified: NullableDateTimeFieldUpdateOperationsInput
+  image: NullableStringFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
+  usersReached: IntFieldUpdateOperationsInput
+}
+
+input UserUpdateOneRequiredWithoutAccountsNestedInput {
+  connect: UserWhereUniqueInput
+  connectOrCreate: UserCreateOrConnectWithoutAccountsInput
+  create: UserCreateWithoutAccountsInput
+  update: UserUpdateToOneWithWhereWithoutAccountsInput
+  upsert: UserUpsertWithoutAccountsInput
+}
+
+input UserUpdateOneRequiredWithoutSessionsNestedInput {
+  connect: UserWhereUniqueInput
+  connectOrCreate: UserCreateOrConnectWithoutSessionsInput
+  create: UserCreateWithoutSessionsInput
+  update: UserUpdateToOneWithWhereWithoutSessionsInput
+  upsert: UserUpsertWithoutSessionsInput
+}
+
+input UserUpdateToOneWithWhereWithoutAccountsInput {
+  data: UserUpdateWithoutAccountsInput!
+  where: UserWhereInput
+}
+
+input UserUpdateToOneWithWhereWithoutSessionsInput {
+  data: UserUpdateWithoutSessionsInput!
+  where: UserWhereInput
+}
+
+input UserUpdateWithoutAccountsInput {
+  dateCreated: DateTimeFieldUpdateOperationsInput
+  email: StringFieldUpdateOperationsInput
+  emailVerified: NullableDateTimeFieldUpdateOperationsInput
+  image: NullableStringFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
+  sessions: SessionUpdateManyWithoutUserNestedInput
+  usersReached: IntFieldUpdateOperationsInput
+}
+
+input UserUpdateWithoutSessionsInput {
+  accounts: AccountUpdateManyWithoutUserNestedInput
+  dateCreated: DateTimeFieldUpdateOperationsInput
+  email: StringFieldUpdateOperationsInput
+  emailVerified: NullableDateTimeFieldUpdateOperationsInput
+  image: NullableStringFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
+  usersReached: IntFieldUpdateOperationsInput
+}
+
+input UserUpsertWithoutAccountsInput {
+  create: UserCreateWithoutAccountsInput!
+  update: UserUpdateWithoutAccountsInput!
+  where: UserWhereInput
+}
+
+input UserUpsertWithoutSessionsInput {
+  create: UserCreateWithoutSessionsInput!
+  update: UserUpdateWithoutSessionsInput!
+  where: UserWhereInput
+}
+
+input UserWhereInput {
+  AND: [UserWhereInput!]
+  NOT: [UserWhereInput!]
+  OR: [UserWhereInput!]
+  accounts: AccountListRelationFilter
+  dateCreated: DateTimeFilter
+  email: StringFilter
+  emailVerified: DateTimeNullableFilter
+  id: StringFilter
+  image: StringNullableFilter
+  name: StringFilter
+  sessions: SessionListRelationFilter
+  usersReached: IntFilter
+}
+
+input UserWhereUniqueInput {
+  AND: [UserWhereInput!]
+  NOT: [UserWhereInput!]
+  OR: [UserWhereInput!]
+  accounts: AccountListRelationFilter
+  dateCreated: DateTimeFilter
+  email: String
+  emailVerified: DateTimeNullableFilter
+  id: String
+  image: StringNullableFilter
+  name: StringFilter
+  sessions: SessionListRelationFilter
+  usersReached: IntFilter
+}
+
+type VerificationToken {
+  expires: DateTimeISO!
+  id: String!
+  identifier: String!
+  token: String!
+}
+
+type VerificationTokenCountAggregate {
+  _all: Int!
+  expires: Int!
+  id: Int!
+  identifier: Int!
+  token: Int!
+}
+
+input VerificationTokenCountOrderByAggregateInput {
+  expires: SortOrder
+  id: SortOrder
+  identifier: SortOrder
+  token: SortOrder
+}
+
+input VerificationTokenCreateInput {
+  expires: DateTimeISO!
+  id: String
+  identifier: String!
+  token: String!
+}
+
+input VerificationTokenCreateManyInput {
+  expires: DateTimeISO!
+  id: String
+  identifier: String!
+  token: String!
+}
+
+type VerificationTokenGroupBy {
+  _count: VerificationTokenCountAggregate
+  _max: VerificationTokenMaxAggregate
+  _min: VerificationTokenMinAggregate
+  expires: DateTimeISO!
+  id: String!
+  identifier: String!
+  token: String!
+}
+
+input VerificationTokenIdentifierTokenCompoundUniqueInput {
+  identifier: String!
+  token: String!
+}
+
+type VerificationTokenMaxAggregate {
+  expires: DateTimeISO
+  id: String
+  identifier: String
+  token: String
+}
+
+input VerificationTokenMaxOrderByAggregateInput {
+  expires: SortOrder
+  id: SortOrder
+  identifier: SortOrder
+  token: SortOrder
+}
+
+type VerificationTokenMinAggregate {
+  expires: DateTimeISO
+  id: String
+  identifier: String
+  token: String
+}
+
+input VerificationTokenMinOrderByAggregateInput {
+  expires: SortOrder
+  id: SortOrder
+  identifier: SortOrder
+  token: SortOrder
+}
+
+input VerificationTokenOrderByWithAggregationInput {
+  _count: VerificationTokenCountOrderByAggregateInput
+  _max: VerificationTokenMaxOrderByAggregateInput
+  _min: VerificationTokenMinOrderByAggregateInput
+  expires: SortOrder
+  id: SortOrder
+  identifier: SortOrder
+  token: SortOrder
+}
+
+input VerificationTokenOrderByWithRelationInput {
+  expires: SortOrder
+  id: SortOrder
+  identifier: SortOrder
+  token: SortOrder
+}
+
+enum VerificationTokenScalarFieldEnum {
+  expires
+  id
+  identifier
+  token
+}
+
+input VerificationTokenScalarWhereWithAggregatesInput {
+  AND: [VerificationTokenScalarWhereWithAggregatesInput!]
+  NOT: [VerificationTokenScalarWhereWithAggregatesInput!]
+  OR: [VerificationTokenScalarWhereWithAggregatesInput!]
+  expires: DateTimeWithAggregatesFilter
+  id: StringWithAggregatesFilter
+  identifier: StringWithAggregatesFilter
+  token: StringWithAggregatesFilter
+}
+
+input VerificationTokenUpdateInput {
+  expires: DateTimeFieldUpdateOperationsInput
+  identifier: StringFieldUpdateOperationsInput
+  token: StringFieldUpdateOperationsInput
+}
+
+input VerificationTokenUpdateManyMutationInput {
+  expires: DateTimeFieldUpdateOperationsInput
+  identifier: StringFieldUpdateOperationsInput
+  token: StringFieldUpdateOperationsInput
+}
+
+input VerificationTokenWhereInput {
+  AND: [VerificationTokenWhereInput!]
+  NOT: [VerificationTokenWhereInput!]
+  OR: [VerificationTokenWhereInput!]
+  expires: DateTimeFilter
+  id: StringFilter
+  identifier: StringFilter
+  token: StringFilter
+}
+
+input VerificationTokenWhereUniqueInput {
+  AND: [VerificationTokenWhereInput!]
+  NOT: [VerificationTokenWhereInput!]
+  OR: [VerificationTokenWhereInput!]
+  expires: DateTimeFilter
+  id: String
+  identifier: StringFilter
+  identifier_token: VerificationTokenIdentifierTokenCompoundUniqueInput
+  token: String
 }
