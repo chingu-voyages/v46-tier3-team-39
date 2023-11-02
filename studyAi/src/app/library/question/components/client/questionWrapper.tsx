@@ -12,7 +12,7 @@ export const QuestionWrapper = () => {
   return (
     <div
       ref={setRef}
-      className="flex w-full justify-between flex-col mt-5 mb-7 h-full grow space-y-12 md:space-x-[2%] md:flex-row md:space-y-0"
+      className="flex w-full justify-between flex-col mt-5 mb-7 h-full grow space-y-12 md:flex-row md:space-y-0"
     >
       <QuestionComponent height={windowWidth < 768 ? undefined : height} />
       <AnswerComponent height={windowWidth < 768 ? undefined : height} />

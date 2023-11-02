@@ -10,9 +10,9 @@ const question: Partial<Question> & {
   id: string;
   questionType: (typeof QuestionTypes)[number];
 } = {
-  id: "653ad11c215e46561c12e643",
+  id: "65429fd993f2d4403eac75ec",
   creatorId: "6533f4c7489ef223ffc31a99",
-  questionType: "shortAnswer",
+  questionType: "Short Answer",
   tags: [
     "science",
     "science",
@@ -69,7 +69,7 @@ export default async function QuestionPage({
   const { data: result } = await ServerGraphQLClient.query(query);
   // const data = result.question as (Partial<Question> & { id: string }) | null;
   const data = question;
-  
+
   return (
     <NavigationWrapper
       usePadding

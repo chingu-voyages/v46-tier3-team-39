@@ -5,8 +5,22 @@ import useWindowWidth from "@/app/util/hooks/useWindowWidth";
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "@mui/material";
-
-export default function NavigationBtns() {
+type TimeOptions = {
+  type: "stopwatch" | "timer";
+  //in milliseconds
+  initialTime: number;
+  totalTimeGiven?: number;
+};
+export default function NavigationBtns({
+  time,
+  paginationQuestionIds,
+}: {
+  paginationQuestionIds?: {
+    prev: string;
+    next: string;
+  };
+  time?: TimeOptions;
+}) {
   const windowWidth = useWindowWidth();
   const btnClassNames =
     "flex justify-center items-center h-full font-semibold rounded-none";
@@ -16,7 +30,7 @@ export default function NavigationBtns() {
   };
   return (
     <div className="flex justify-between items-center w-full h-10 mt-2">
-      <Button
+      {/* <Button
         size={"large"}
         variant={"outlined"}
         className={btnClassNames}
@@ -29,10 +43,10 @@ export default function NavigationBtns() {
             Back
           </span>
         )}
-      </Button>
+      </Button> */}
       {/* <Timer initialTimeLeft={10000} totalTimeGiven={10000} /> */}
       <StopWatch initialTimeUsed={0} />
-      <Button
+      {/* <Button
         size={"large"}
         variant="outlined"
         className={btnClassNames}
@@ -45,7 +59,7 @@ export default function NavigationBtns() {
           </span>
         )}
         <FontAwesomeIcon icon={faArrowRight} className="text-sm ml-2" />
-      </Button>
+      </Button> */}
     </div>
   );
 }

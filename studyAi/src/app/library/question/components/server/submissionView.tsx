@@ -14,7 +14,10 @@ const getSubmissionByQuestionId = gql`
     ) {
       id
       time
-      score
+      score {
+        maxScore
+        actualScore
+      }
       questionId
       userId
     }
@@ -29,13 +32,16 @@ export const SubmissionView = () => {
       questionId: params.id,
       userId: session?.user.id,
     },
-  }; 
+  };
   const { data: result } = useQuery(getSubmissionByQuestionId, queryOptions);
   const data = result as {
-    questionSubmissions: Partial<QuestionSubmission>[] | Partial<QuestionSubmission> | null;
+    questionSubmissions:
+      | Partial<QuestionSubmission>[]
+      | Partial<QuestionSubmission>
+      | null;
   };
   const noDataPlaceholder = (
-    <label className="text-Black flex h-full w-full items-center justify-center">
+    <label className="text-Black flex h-full w-full items-center justify-center grow py-5">
       No submissions found
     </label>
   );
@@ -44,7 +50,8 @@ export const SubmissionView = () => {
     <Container overflow className="px-[5%] py-5 grow">
       {Array.isArray(data.questionSubmissions) &&
         data.questionSubmissions.map((doc) => <div key={doc.id}>{}</div>)}
-      {(!Array.isArray(data.questionSubmissions) || data.questionSubmissions.length <= 0) &&
+      {(!Array.isArray(data.questionSubmissions) ||
+        data.questionSubmissions.length <= 0) &&
         noDataPlaceholder}
     </Container>
   );

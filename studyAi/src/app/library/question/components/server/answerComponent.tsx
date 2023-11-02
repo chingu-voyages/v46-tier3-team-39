@@ -17,7 +17,7 @@ const determineAnswerTitle = (str?: string) => {
       return "Select the best answer";
     case "selectMultiple":
       return "Select all that apply";
-    case "shortAnswer":
+    case "Short Answer":
       return "Add your answer below";
     default:
       return str;
@@ -59,7 +59,7 @@ const AnswerContainer = ({ height }: { height?: string | number }) => {
     <Container
       border
       overflow
-      className="max-h-[30rem] md:max-h-none"
+      className="max-h-[30rem] md:max-h-none md:w-3/6 md:ml-2"
       style={{ height: height ? height + "px" : undefined }}
     >
       <TopBar />

@@ -51,8 +51,7 @@ const Store = createStore({
       async (
         { setState, getState },
         items: (Partial<QuestionSubmission> & {
-          questionId?: string;
-          quizId?: string;
+          questionId: string;
           id: string;
         })[]
       ) =>
@@ -67,8 +66,7 @@ const Store = createStore({
         { setState, getState },
         items: Partial<QuestionSubmission> &
           {
-            questionId?: string;
-            quizId?: string;
+            questionId: string;
             id: string;
           }[]
       ) =>
