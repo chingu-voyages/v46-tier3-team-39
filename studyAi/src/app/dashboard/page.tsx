@@ -6,7 +6,7 @@ import { Question } from "../../../prisma/generated/type-graphql";
 
 export default async function DashboardPage() {
   const sessionData = await protectRouteSSR("/auth/login");
-  console.log('user', sessionData.props);
+  console.log("user", sessionData.props);
 
   // const QuestionQueryById = gql`
   //   query Question($id: String) {
@@ -16,41 +16,44 @@ export default async function DashboardPage() {
   //     }
   //   }`
 
-    const QuestionQueryById = gql`
+  const QuestionQueryById = gql`
     query Question {
-      readQuestion(id:  "653ea9b0f24a705e95df3170") {
+      readQuestion(id: "${sessionData.props.session.user.id}") {
         id
       }
-    }`
+    }
+  `;
 
-    // const AddQuestionQuery = gql`
-    // mutation AddQuestion {
-    //   addQuestion(
-    //     questionType: "MCQ",
-    //     tags: ["Geography", "History"],
-    //     questionTitle: "What is the capital of Malaysia?",
-    //     questionDesc: "",
-    //     correctAnswer: ["Kuala Lumpur"],
-    //     incorrectAnswer: ["Penang", "Johor", "Sabah"],
-    //     ) {
-    //       id
-    //       questionType
-    //     }
-    //   }`
+  console.log("QuestionQueryById: " + JSON.stringify(QuestionQueryById , null, 1));
 
-    // const questionId = "653c05793171c264d005c0b4";
-    // const query = {
-    //   query: QuestionQueryById,
-    //   variables: { id: questionId },
-    // };
+  // const AddQuestionQuery = gql`
+  // mutation AddQuestion {
+  //   addQuestion(
+  //     questionType: "MCQ",
+  //     tags: ["Geography", "History"],
+  //     questionTitle: "What is the capital of Malaysia?",
+  //     questionDesc: "",
+  //     correctAnswer: ["Kuala Lumpur"],
+  //     incorrectAnswer: ["Penang", "Johor", "Sabah"],
+  //     ) {
+  //       id
+  //       questionType
+  //     }
+  //   }`
 
-    const query1 = {
-      query: QuestionQueryById,
-    };
+  // const questionId = "653c05793171c264d005c0b4";
+  // const query = {
+  //   query: QuestionQueryById,
+  //   variables: { id: questionId },
+  // };
 
-    const {data: result} = await ServerGraphQLClient.query(query1);
-    const data = result as Partial<Question> | null;
-    console.log('question', data)
+  const query1 = {
+    query: QuestionQueryById,
+  };
+
+  const { data: result } = await ServerGraphQLClient.query(query1);
+  const data = result as Partial<Question> | null;
+  console.log("question", data);
 
   return (
     <NavigationWrapper
