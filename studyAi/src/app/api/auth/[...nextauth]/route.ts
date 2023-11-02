@@ -9,7 +9,7 @@ import { findUniqueByEmail, findUniqueById } from "@/app/util/prisma/helpers";
 import { connectToDb, prismaDb } from "@/app/util/prisma/connection";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { addCredDoc } from "./funcs";
-export const options: NextAuthOptions = {
+export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prismaDb),
   session: {
     strategy: "jwt",
@@ -108,6 +108,6 @@ if (env === "development")
   process.env.NEXTAUTH_URL = process.env.NEXT_AUTH_URL_DEV;
 //for prod
 else process.env.NEXTAUTH_URL = process.env.NEXTAUTH_URL;
-const handler = NextAuth(options);
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };

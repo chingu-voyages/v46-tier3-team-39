@@ -6,7 +6,7 @@ import { startServerAndCreateNextHandler } from "@as-integrations/next";
 import { prismaDb } from "@/app/util/prisma/connection";
 import { buildSchema } from "type-graphql";
 import { getServerSession } from "next-auth";
-import { options } from "../auth/[...nextauth]/route";
+import { authOptions } from "../auth/[...nextauth]/route";
 import { Session } from "next-auth";
 
 export async function createSchema() {
@@ -27,8 +27,8 @@ const main = startServerAndCreateNextHandler(server, {
     // let session: Session | null = null;
     let contextData;
     try {
-      console.log(JSON.stringify(options , null, 1))
-      const session = await getServerSession(options);
+      console.log(JSON.stringify(authOptions , null, 1))
+      const session = await getServerSession(authOptions);
       console.log("------------SUCCESS------------- ");
       console.log("session: " + session);
     } catch (e) {

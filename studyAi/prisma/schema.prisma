@@ -14,12 +14,12 @@ generator typegraphql {
 
 datasource db {
   provider = "mongodb"
-  url      = env("DATABASE_URL")  
+  url      = env("DATABASE_URL")
 }
 
 type QuestionData {
-  title       String 
-  description String 
+  title       String
+  description String
 }
 
 type AnswerData {
@@ -33,7 +33,7 @@ type LikeCounter {
 }
 
 model Question {
-  id           String       @id @default(auto()) @map("_id") @db.ObjectId 
+  id           String       @id @default(auto()) @map("_id") @db.ObjectId
   creatorId    String       @db.ObjectId
   questionType String
   tags         String[]
@@ -85,18 +85,18 @@ model UserCredentials {
 }
 
 model Account {
-  id                 String  @id @default(auto()) @map("_id") @db.ObjectId 
+  id                 String  @id @default(auto()) @map("_id") @db.ObjectId
   userId             String  @unique @db.ObjectId
   /// @TypeGraphQL.omit(output: true)
   type               String
   provider           String
   providerAccountId  String
-  refresh_token      String?  
-  access_token       String?  
+  refresh_token      String?
+  access_token       String?
   expires_at         Int?
   token_type         String?
   scope              String?
-  id_token           String?  
+  id_token           String?
   session_state      String?
   user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -112,7 +112,7 @@ model Session {
 }
 
 model User {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId 
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
   name          String
   email         String   @unique
   usersReached  Int      @default(0)
@@ -124,7 +124,7 @@ model User {
 }
 
 model VerificationToken {
-  id String  @id      @default(auto()) @map("_id") @db.ObjectId 
+  id String  @id      @default(auto()) @map("_id") @db.ObjectId
   identifier String
   token      String   @unique
   expires    DateTime

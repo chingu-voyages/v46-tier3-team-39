@@ -19,7 +19,7 @@ export default async function DashboardPage() {
   const QuestionQueryById = gql`
     query Question {
       readQuestion(id: "${sessionData.props.session.user.id}") {
-        id
+        questionType
       }
     }
   `;

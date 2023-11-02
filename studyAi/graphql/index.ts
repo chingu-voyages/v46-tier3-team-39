@@ -56,20 +56,22 @@ export class FindUniqueQuestionResolver {
     console.log(" HEREEEEEEEEEEEEEEEEE ");
     // console.log(prisma);
     console.log("id: " + id);
-    const question = await prisma.question.findMany({
+    const questions = await prisma.question.findFirst({
       where: { creatorId: id },
     });
-    console.log(question);
+    console.log(questions);
     console.log(" question ");
 
-    if (!session || session.userId !== question.creatorId) {
-      console.log("session: " + session);
-      console.log("session.userId: " + session.userId);
-      console.log("question.creatorId: " + question.creatorId);
-      throw new Error("You are not authorized to perform this action");
-    }
-    prisma.$disconnect();
-    return question;
+    // questions.map((each) => each.id);
+
+    // if (!session || session.userId !== question.creatorId) {
+    //   console.log("session: " + session);
+    //   console.log("session.userId: " + session.userId);
+    //   console.log("question.creatorId: " + question.creatorId);
+    //   throw new Error("You are not authorized to perform this action");
+    // }
+    // prisma.$disconnect();
+    return questions;
   }
 
   // @Mutation(_returns => Question, {
