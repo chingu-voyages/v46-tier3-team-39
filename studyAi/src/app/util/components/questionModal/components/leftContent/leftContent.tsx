@@ -1,16 +1,27 @@
-import Input from "../input"
+import TimeFormatDropdown from "./timeFormat"
+import styles from "./leftContentStyles"
 
 const LeftContent = () => {
 
     return (
-        <div className="mr-8 w-[500px] relative">
+        <div className={styles.layout}>
             <form>
-                <Input label="Est. Time" id="time" placeholder="" variant="time"/>
-                <Input label="Question Title" id="title" placeholder=""/>
-                <Input label="Tags" id="tags" placeholder=""/>
                 <div>
-                    <label htmlFor="first_name" className="block mb-2 text-5xl font-semibold text-Black">Question Description</label>
-                    <textarea id="description" className="bg-gray-50 border border-light-on-secondary-container text-Black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 h-[215px] max-h-[215px]" placeholder="" />
+                    <label htmlFor="title" className={styles.label}>Question Title</label>
+                    <input id="title" className={styles.input({})} />
+                </div>
+                <div className={styles.estTimeLayout}>
+                    <label htmlFor="time" className={styles.label}>Est. Time</label>
+                    <input id="time" className={styles.input({isTime: true})} />
+                    <TimeFormatDropdown />
+                </div>
+                <div>
+                    <label htmlFor="tags" className={styles.label}>Tags</label>
+                    <input id="tags" className={styles.input({})} />
+                </div>
+                <div>
+                    <label htmlFor="description" className={styles.label}>Question Description</label>
+                    <textarea id="description" className={styles.input({isTextArea: true})} />
                 </div>
             </form>
         </div>
