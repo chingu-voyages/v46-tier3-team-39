@@ -1,25 +1,42 @@
 "use client";
-import { Question } from "@prisma/client";
 import { createStore, createHook } from "react-sweet-state";
 import { addOrUpdateFunc, deleteItems } from "./helpers";
 import { QuestionSubmission } from "../../../prisma/generated/type-graphql";
 type QuestionSubmissionsData = {
   submittedData: {
-    //mapped to question ids
-    [key: string]: {
-      //mapped to submission ids
-      [key: string]: Partial<QuestionSubmission> & { questionId: string; id: string };
+    map: {
+      //mapped to question ids but stored as key-data store (useful for rendering individual submissions)
+      [key: string]: {
+        //mapped to submission ids
+        [key: string]: Partial<QuestionSubmission> & {
+          questionId: string;
+          id: string;
+        };
+      };
+    };
+    arr: {
+      //mapped to question ids, but stored as an array (useful for rendering lists)
+      [key: string]: (Partial<QuestionSubmission> & {
+        questionId: string;
+        id: string;
+      })[];
     };
   };
-  //user is currently working 
+  //user is currently working
   //on item, but has not submitted yet
   ongoingData: {
     //mapped to question ids
-    [key: string]: Partial<QuestionSubmission> & { questionId: string; id: string };
+    [key: string]: Partial<QuestionSubmission> & {
+      questionId: string;
+      id: string;
+    };
   };
 };
 const initialState: QuestionSubmissionsData = {
-  submittedData: {},
+  submittedData: {
+    map: {},
+    arr: {},
+  },
   ongoingData: {},
 };
 const Store = createStore({
@@ -27,21 +44,21 @@ const Store = createStore({
   initialState,
   // actions that trigger store mutation
   actions: {
-    addOrUpdateItems:
-      () =>
-      async (
-        { setState, getState },
-        items: (Partial<Question> & { id: string })[]
-      ) =>
-        addOrUpdateFunc({
-          items,
-          setState,
-          getState,
-        }),
-    deleteItems:
-      () =>
-      async ({ setState, getState }, items: Question["id"][]) =>
-        deleteItems({ items, setState, getState }),
+    // addOrUpdateItems:
+    //   () =>
+    //   async (
+    //     { setState, getState },
+    //     items: (Partial<QuestionSubmission> & { id: string })[]
+    //   ) =>
+    //     addOrUpdateFunc({
+    //       items,
+    //       setState,
+    //       getState,
+    //     }),
+    // deleteItems:
+    //   () =>
+    //   async ({ setState, getState }, items: QuestionSubmission["id"][]) =>
+    //     deleteItems({ items, setState, getState }),
   },
   // optional, unique, mostly used for easy debugging
   name: "questionSubmissions",
