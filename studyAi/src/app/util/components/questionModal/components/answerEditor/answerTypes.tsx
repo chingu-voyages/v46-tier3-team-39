@@ -23,7 +23,6 @@ export const SelectAll = () => {
             <CheckboxInput id="2" />
             <CheckboxInput id="3" />
             <CheckboxInput id="4" />
-            <NewAnswer answerType="answerType" />
         </>
     )
 }
@@ -32,7 +31,7 @@ export const SelectAll = () => {
 export const ShortAnswer = () => {
     return (
         <>
-            <textarea className={styles.input({isTextArea: true})}/>
+            <textarea className="mt-4 bg-gray-50 border border-light-on-secondary-container text-Black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 h-[215px] max-h-[215px]"/>
         </>
     )
 }
@@ -53,15 +52,6 @@ const CheckboxInput = ({id}:{id: string}) => {
             <Checkbox value={id} />
             <input type="text" id={id} className={styles.input({})} />
             <FontAwesomeIcon icon={faTrash} className="ml-2"/>
-        </div>
-    )
-}
-
-const NewAnswer = ({answerType}: {answerType: string}) => {
-    return (
-        <div className="ml-4 my-2 px-4 items-center">
-            <FontAwesomeIcon icon={faPlus} />
-            <span className="ml-3 text-md font-semibold">New Answer</span>
         </div>
     )
 }
