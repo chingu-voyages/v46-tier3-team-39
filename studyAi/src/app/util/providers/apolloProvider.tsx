@@ -1,6 +1,6 @@
 "use client";
 import { loadErrorMessages, loadDevMessages } from "@apollo/client/dev";
-import ServerGraphQLClient from "./apolloClient";
+import ServerGraphQLClient from "../../api/graphql/apolloClient";
 import { ApolloProvider } from "@apollo/client";
 const env = process.env.NODE_ENV;
 export const ApolloProviderWrapper = ({

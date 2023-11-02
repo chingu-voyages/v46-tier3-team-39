@@ -26,7 +26,7 @@ const NavigationWrapper = ({
             }}
           >
             {usePadding && (
-              <div className="flex flex-col grow w-full max-w-screen-xl pt-8 h-full">
+              <div className="flex flex-col grow w-full max-w-screen-xl pt-2 h-full">
                 {children}
               </div>
             )}

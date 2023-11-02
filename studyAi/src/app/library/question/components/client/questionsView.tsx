@@ -1,6 +1,6 @@
 "use client";
 import { Container } from "../server/containerBar";
-import { Chip, IconButton } from "@mui/material";
+import { Button, Chip, IconButton } from "@mui/material";
 import { useQuestions } from "@/app/stores/questionStore";
 import { useParams } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,11 +12,11 @@ import { parseInteger } from "@/app/util/parsers/parseInt";
 const QuestionActionBtns = () => {
   return (
     <div className="flex items-center space-x-2">
-      <IconButton>
-        <FontAwesomeIcon icon={faPlus} />
+      <IconButton className="h-[70%]">
+        <FontAwesomeIcon icon={faPlus} className="text-base" />
       </IconButton>
-      <IconButton>
-        <Share />
+      <IconButton className="h-[70%]">
+        <Share className="text-base" />
       </IconButton>
     </div>
   );
@@ -28,13 +28,13 @@ const LikeCounterBtns = () => {
     params.id && typeof params.id === "string" ? questions[params.id] : null;
   return (
     <div className="flex items-center mr-2">
-      <IconButton className="space-x-1">
+      <Button className="space-x-1" variant="text">
         <FontAwesomeIcon icon={faThumbsUp} />
         <span className="text-sm">
           {parseInteger(question?.likeCounter?.likes)}
         </span>
-      </IconButton>
-      <IconButton className="space-x-1">
+      </Button>
+      <Button className="space-x-1" variant="text">
         <FontAwesomeIcon
           icon={faThumbsDown}
           style={{ transform: "scale(-1, 1)" }}
@@ -42,7 +42,7 @@ const LikeCounterBtns = () => {
         <span className="text-sm">
           {parseInteger(question?.likeCounter?.dislikes)}
         </span>
-      </IconButton>
+      </Button>
     </div>
   );
 };

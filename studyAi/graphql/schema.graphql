@@ -448,24 +448,22 @@ type AggregateQuestion {
   _min: QuestionMinAggregate
 }
 
-type AggregateQuestionLikes {
-  _count: QuestionLikesCountAggregate
-  _max: QuestionLikesMaxAggregate
-  _min: QuestionLikesMinAggregate
+type AggregateQuestionLike {
+  _count: QuestionLikeCountAggregate
+  _max: QuestionLikeMaxAggregate
+  _min: QuestionLikeMinAggregate
 }
 
 type AggregateQuiz {
-  _avg: QuizAvgAggregate
   _count: QuizCountAggregate
   _max: QuizMaxAggregate
   _min: QuizMinAggregate
-  _sum: QuizSumAggregate
 }
 
-type AggregateQuizLikes {
-  _count: QuizLikesCountAggregate
-  _max: QuizLikesMaxAggregate
-  _min: QuizLikesMinAggregate
+type AggregateQuizLike {
+  _count: QuizLikeCountAggregate
+  _max: QuizLikeMaxAggregate
+  _min: QuizLikeMinAggregate
 }
 
 type AggregateSession {
@@ -474,12 +472,12 @@ type AggregateSession {
   _min: SessionMinAggregate
 }
 
-type AggregateSubmissions {
-  _avg: SubmissionsAvgAggregate
-  _count: SubmissionsCountAggregate
-  _max: SubmissionsMaxAggregate
-  _min: SubmissionsMinAggregate
-  _sum: SubmissionsSumAggregate
+type AggregateSubmission {
+  _avg: SubmissionAvgAggregate
+  _count: SubmissionCountAggregate
+  _max: SubmissionMaxAggregate
+  _min: SubmissionMinAggregate
+  _sum: SubmissionSumAggregate
 }
 
 type AggregateUser {
@@ -504,7 +502,6 @@ type AggregateVerificationToken {
 
 type AnswerData {
   correctAnswer: [String!]!
-  incorrectAnswer: [String!]!
 }
 
 input AnswerDataCompositeFilter {
@@ -519,25 +516,18 @@ input AnswerDataCreateEnvelopeInput {
 
 input AnswerDataCreateInput {
   correctAnswer: AnswerDataCreatecorrectAnswerInput
-  incorrectAnswer: AnswerDataCreateincorrectAnswerInput
 }
 
 input AnswerDataCreatecorrectAnswerInput {
   set: [String!]!
 }
 
-input AnswerDataCreateincorrectAnswerInput {
-  set: [String!]!
-}
-
 input AnswerDataObjectEqualityInput {
   correctAnswer: [String!]
-  incorrectAnswer: [String!]
 }
 
 input AnswerDataOrderByInput {
   correctAnswer: SortOrder
-  incorrectAnswer: SortOrder
 }
 
 input AnswerDataUpdateEnvelopeInput {
@@ -547,15 +537,9 @@ input AnswerDataUpdateEnvelopeInput {
 
 input AnswerDataUpdateInput {
   correctAnswer: AnswerDataUpdatecorrectAnswerInput
-  incorrectAnswer: AnswerDataUpdateincorrectAnswerInput
 }
 
 input AnswerDataUpdatecorrectAnswerInput {
-  push: [String!]
-  set: [String!]
-}
-
-input AnswerDataUpdateincorrectAnswerInput {
   push: [String!]
   set: [String!]
 }
@@ -565,7 +549,23 @@ input AnswerDataWhereInput {
   NOT: [AnswerDataWhereInput!]
   OR: [AnswerDataWhereInput!]
   correctAnswer: StringNullableListFilter
-  incorrectAnswer: StringNullableListFilter
+}
+
+input BoolFieldUpdateOperationsInput {
+  set: Boolean
+}
+
+input BoolFilter {
+  equals: Boolean
+  not: NestedBoolFilter
+}
+
+input BoolWithAggregatesFilter {
+  _count: NestedIntFilter
+  _max: NestedBoolFilter
+  _min: NestedBoolFilter
+  equals: Boolean
+  not: NestedBoolWithAggregatesFilter
 }
 
 input DateTimeFieldUpdateOperationsInput {
@@ -744,74 +744,87 @@ input LikeCounterWhereInput {
 type Mutation {
   createManyAccount(data: [AccountCreateManyInput!]!): AffectedRowsOutput!
   createManyQuestion(data: [QuestionCreateManyInput!]!): AffectedRowsOutput!
-  createManyQuestionLikes(data: [QuestionLikesCreateManyInput!]!): AffectedRowsOutput!
+  createManyQuestionLike(data: [QuestionLikeCreateManyInput!]!): AffectedRowsOutput!
   createManyQuiz(data: [QuizCreateManyInput!]!): AffectedRowsOutput!
-  createManyQuizLikes(data: [QuizLikesCreateManyInput!]!): AffectedRowsOutput!
+  createManyQuizLike(data: [QuizLikeCreateManyInput!]!): AffectedRowsOutput!
   createManySession(data: [SessionCreateManyInput!]!): AffectedRowsOutput!
-  createManySubmissions(data: [SubmissionsCreateManyInput!]!): AffectedRowsOutput!
+  createManySubmission(data: [SubmissionCreateManyInput!]!): AffectedRowsOutput!
   createManyUser(data: [UserCreateManyInput!]!): AffectedRowsOutput!
   createManyUserCredentials(data: [UserCredentialsCreateManyInput!]!): AffectedRowsOutput!
   createManyVerificationToken(data: [VerificationTokenCreateManyInput!]!): AffectedRowsOutput!
   createOneAccount(data: AccountCreateInput!): Account!
   createOneQuestion(data: QuestionCreateInput!): Question!
-  createOneQuestionLikes(data: QuestionLikesCreateInput!): QuestionLikes!
+  createOneQuestionLike(data: QuestionLikeCreateInput!): QuestionLike!
   createOneQuiz(data: QuizCreateInput!): Quiz!
-  createOneQuizLikes(data: QuizLikesCreateInput!): QuizLikes!
+  createOneQuizLike(data: QuizLikeCreateInput!): QuizLike!
   createOneSession(data: SessionCreateInput!): Session!
-  createOneSubmissions(data: SubmissionsCreateInput!): Submissions!
+  createOneSubmission(data: SubmissionCreateInput!): Submission!
   createOneUser(data: UserCreateInput!): User!
   createOneUserCredentials(data: UserCredentialsCreateInput!): UserCredentials!
   createOneVerificationToken(data: VerificationTokenCreateInput!): VerificationToken!
   deleteManyAccount(where: AccountWhereInput): AffectedRowsOutput!
   deleteManyQuestion(where: QuestionWhereInput): AffectedRowsOutput!
-  deleteManyQuestionLikes(where: QuestionLikesWhereInput): AffectedRowsOutput!
+  deleteManyQuestionLike(where: QuestionLikeWhereInput): AffectedRowsOutput!
   deleteManyQuiz(where: QuizWhereInput): AffectedRowsOutput!
-  deleteManyQuizLikes(where: QuizLikesWhereInput): AffectedRowsOutput!
+  deleteManyQuizLike(where: QuizLikeWhereInput): AffectedRowsOutput!
   deleteManySession(where: SessionWhereInput): AffectedRowsOutput!
-  deleteManySubmissions(where: SubmissionsWhereInput): AffectedRowsOutput!
+  deleteManySubmission(where: SubmissionWhereInput): AffectedRowsOutput!
   deleteManyUser(where: UserWhereInput): AffectedRowsOutput!
   deleteManyUserCredentials(where: UserCredentialsWhereInput): AffectedRowsOutput!
   deleteManyVerificationToken(where: VerificationTokenWhereInput): AffectedRowsOutput!
   deleteOneAccount(where: AccountWhereUniqueInput!): Account
   deleteOneQuestion(where: QuestionWhereUniqueInput!): Question
-  deleteOneQuestionLikes(where: QuestionLikesWhereUniqueInput!): QuestionLikes
+  deleteOneQuestionLike(where: QuestionLikeWhereUniqueInput!): QuestionLike
   deleteOneQuiz(where: QuizWhereUniqueInput!): Quiz
-  deleteOneQuizLikes(where: QuizLikesWhereUniqueInput!): QuizLikes
+  deleteOneQuizLike(where: QuizLikeWhereUniqueInput!): QuizLike
   deleteOneSession(where: SessionWhereUniqueInput!): Session
-  deleteOneSubmissions(where: SubmissionsWhereUniqueInput!): Submissions
+  deleteOneSubmission(where: SubmissionWhereUniqueInput!): Submission
   deleteOneUser(where: UserWhereUniqueInput!): User
   deleteOneUserCredentials(where: UserCredentialsWhereUniqueInput!): UserCredentials
   deleteOneVerificationToken(where: VerificationTokenWhereUniqueInput!): VerificationToken
   updateManyAccount(data: AccountUpdateManyMutationInput!, where: AccountWhereInput): AffectedRowsOutput!
   updateManyQuestion(data: QuestionUpdateManyMutationInput!, where: QuestionWhereInput): AffectedRowsOutput!
-  updateManyQuestionLikes(data: QuestionLikesUpdateManyMutationInput!, where: QuestionLikesWhereInput): AffectedRowsOutput!
+  updateManyQuestionLike(data: QuestionLikeUpdateManyMutationInput!, where: QuestionLikeWhereInput): AffectedRowsOutput!
   updateManyQuiz(data: QuizUpdateManyMutationInput!, where: QuizWhereInput): AffectedRowsOutput!
-  updateManyQuizLikes(data: QuizLikesUpdateManyMutationInput!, where: QuizLikesWhereInput): AffectedRowsOutput!
+  updateManyQuizLike(data: QuizLikeUpdateManyMutationInput!, where: QuizLikeWhereInput): AffectedRowsOutput!
   updateManySession(data: SessionUpdateManyMutationInput!, where: SessionWhereInput): AffectedRowsOutput!
-  updateManySubmissions(data: SubmissionsUpdateManyMutationInput!, where: SubmissionsWhereInput): AffectedRowsOutput!
+  updateManySubmission(data: SubmissionUpdateManyMutationInput!, where: SubmissionWhereInput): AffectedRowsOutput!
   updateManyUser(data: UserUpdateManyMutationInput!, where: UserWhereInput): AffectedRowsOutput!
   updateManyUserCredentials(data: UserCredentialsUpdateManyMutationInput!, where: UserCredentialsWhereInput): AffectedRowsOutput!
   updateManyVerificationToken(data: VerificationTokenUpdateManyMutationInput!, where: VerificationTokenWhereInput): AffectedRowsOutput!
   updateOneAccount(data: AccountUpdateInput!, where: AccountWhereUniqueInput!): Account
   updateOneQuestion(data: QuestionUpdateInput!, where: QuestionWhereUniqueInput!): Question
-  updateOneQuestionLikes(data: QuestionLikesUpdateInput!, where: QuestionLikesWhereUniqueInput!): QuestionLikes
+  updateOneQuestionLike(data: QuestionLikeUpdateInput!, where: QuestionLikeWhereUniqueInput!): QuestionLike
   updateOneQuiz(data: QuizUpdateInput!, where: QuizWhereUniqueInput!): Quiz
-  updateOneQuizLikes(data: QuizLikesUpdateInput!, where: QuizLikesWhereUniqueInput!): QuizLikes
+  updateOneQuizLike(data: QuizLikeUpdateInput!, where: QuizLikeWhereUniqueInput!): QuizLike
   updateOneSession(data: SessionUpdateInput!, where: SessionWhereUniqueInput!): Session
-  updateOneSubmissions(data: SubmissionsUpdateInput!, where: SubmissionsWhereUniqueInput!): Submissions
+  updateOneSubmission(data: SubmissionUpdateInput!, where: SubmissionWhereUniqueInput!): Submission
   updateOneUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateOneUserCredentials(data: UserCredentialsUpdateInput!, where: UserCredentialsWhereUniqueInput!): UserCredentials
   updateOneVerificationToken(data: VerificationTokenUpdateInput!, where: VerificationTokenWhereUniqueInput!): VerificationToken
   upsertOneAccount(create: AccountCreateInput!, update: AccountUpdateInput!, where: AccountWhereUniqueInput!): Account!
   upsertOneQuestion(create: QuestionCreateInput!, update: QuestionUpdateInput!, where: QuestionWhereUniqueInput!): Question!
-  upsertOneQuestionLikes(create: QuestionLikesCreateInput!, update: QuestionLikesUpdateInput!, where: QuestionLikesWhereUniqueInput!): QuestionLikes!
+  upsertOneQuestionLike(create: QuestionLikeCreateInput!, update: QuestionLikeUpdateInput!, where: QuestionLikeWhereUniqueInput!): QuestionLike!
   upsertOneQuiz(create: QuizCreateInput!, update: QuizUpdateInput!, where: QuizWhereUniqueInput!): Quiz!
-  upsertOneQuizLikes(create: QuizLikesCreateInput!, update: QuizLikesUpdateInput!, where: QuizLikesWhereUniqueInput!): QuizLikes!
+  upsertOneQuizLike(create: QuizLikeCreateInput!, update: QuizLikeUpdateInput!, where: QuizLikeWhereUniqueInput!): QuizLike!
   upsertOneSession(create: SessionCreateInput!, update: SessionUpdateInput!, where: SessionWhereUniqueInput!): Session!
-  upsertOneSubmissions(create: SubmissionsCreateInput!, update: SubmissionsUpdateInput!, where: SubmissionsWhereUniqueInput!): Submissions!
+  upsertOneSubmission(create: SubmissionCreateInput!, update: SubmissionUpdateInput!, where: SubmissionWhereUniqueInput!): Submission!
   upsertOneUser(create: UserCreateInput!, update: UserUpdateInput!, where: UserWhereUniqueInput!): User!
   upsertOneUserCredentials(create: UserCredentialsCreateInput!, update: UserCredentialsUpdateInput!, where: UserCredentialsWhereUniqueInput!): UserCredentials!
   upsertOneVerificationToken(create: VerificationTokenCreateInput!, update: VerificationTokenUpdateInput!, where: VerificationTokenWhereUniqueInput!): VerificationToken!
+}
+
+input NestedBoolFilter {
+  equals: Boolean
+  not: NestedBoolFilter
+}
+
+input NestedBoolWithAggregatesFilter {
+  _count: NestedIntFilter
+  _max: NestedBoolFilter
+  _min: NestedBoolFilter
+  equals: Boolean
+  not: NestedBoolWithAggregatesFilter
 }
 
 input NestedDateTimeFilter {
@@ -1033,68 +1046,68 @@ type Query {
   accounts(cursor: AccountWhereUniqueInput, distinct: [AccountScalarFieldEnum!], orderBy: [AccountOrderByWithRelationInput!], skip: Int, take: Int, where: AccountWhereInput): [Account!]!
   aggregateAccount(cursor: AccountWhereUniqueInput, orderBy: [AccountOrderByWithRelationInput!], skip: Int, take: Int, where: AccountWhereInput): AggregateAccount!
   aggregateQuestion(cursor: QuestionWhereUniqueInput, orderBy: [QuestionOrderByWithRelationInput!], skip: Int, take: Int, where: QuestionWhereInput): AggregateQuestion!
-  aggregateQuestionLikes(cursor: QuestionLikesWhereUniqueInput, orderBy: [QuestionLikesOrderByWithRelationInput!], skip: Int, take: Int, where: QuestionLikesWhereInput): AggregateQuestionLikes!
+  aggregateQuestionLike(cursor: QuestionLikeWhereUniqueInput, orderBy: [QuestionLikeOrderByWithRelationInput!], skip: Int, take: Int, where: QuestionLikeWhereInput): AggregateQuestionLike!
   aggregateQuiz(cursor: QuizWhereUniqueInput, orderBy: [QuizOrderByWithRelationInput!], skip: Int, take: Int, where: QuizWhereInput): AggregateQuiz!
-  aggregateQuizLikes(cursor: QuizLikesWhereUniqueInput, orderBy: [QuizLikesOrderByWithRelationInput!], skip: Int, take: Int, where: QuizLikesWhereInput): AggregateQuizLikes!
+  aggregateQuizLike(cursor: QuizLikeWhereUniqueInput, orderBy: [QuizLikeOrderByWithRelationInput!], skip: Int, take: Int, where: QuizLikeWhereInput): AggregateQuizLike!
   aggregateSession(cursor: SessionWhereUniqueInput, orderBy: [SessionOrderByWithRelationInput!], skip: Int, take: Int, where: SessionWhereInput): AggregateSession!
-  aggregateSubmissions(cursor: SubmissionsWhereUniqueInput, orderBy: [SubmissionsOrderByWithRelationInput!], skip: Int, take: Int, where: SubmissionsWhereInput): AggregateSubmissions!
+  aggregateSubmission(cursor: SubmissionWhereUniqueInput, orderBy: [SubmissionOrderByWithRelationInput!], skip: Int, take: Int, where: SubmissionWhereInput): AggregateSubmission!
   aggregateUser(cursor: UserWhereUniqueInput, orderBy: [UserOrderByWithRelationInput!], skip: Int, take: Int, where: UserWhereInput): AggregateUser!
   aggregateUserCredentials(cursor: UserCredentialsWhereUniqueInput, orderBy: [UserCredentialsOrderByWithRelationInput!], skip: Int, take: Int, where: UserCredentialsWhereInput): AggregateUserCredentials!
   aggregateVerificationToken(cursor: VerificationTokenWhereUniqueInput, orderBy: [VerificationTokenOrderByWithRelationInput!], skip: Int, take: Int, where: VerificationTokenWhereInput): AggregateVerificationToken!
   findFirstAccount(cursor: AccountWhereUniqueInput, distinct: [AccountScalarFieldEnum!], orderBy: [AccountOrderByWithRelationInput!], skip: Int, take: Int, where: AccountWhereInput): Account
   findFirstAccountOrThrow(cursor: AccountWhereUniqueInput, distinct: [AccountScalarFieldEnum!], orderBy: [AccountOrderByWithRelationInput!], skip: Int, take: Int, where: AccountWhereInput): Account
   findFirstQuestion(cursor: QuestionWhereUniqueInput, distinct: [QuestionScalarFieldEnum!], orderBy: [QuestionOrderByWithRelationInput!], skip: Int, take: Int, where: QuestionWhereInput): Question
-  findFirstQuestionLikes(cursor: QuestionLikesWhereUniqueInput, distinct: [QuestionLikesScalarFieldEnum!], orderBy: [QuestionLikesOrderByWithRelationInput!], skip: Int, take: Int, where: QuestionLikesWhereInput): QuestionLikes
-  findFirstQuestionLikesOrThrow(cursor: QuestionLikesWhereUniqueInput, distinct: [QuestionLikesScalarFieldEnum!], orderBy: [QuestionLikesOrderByWithRelationInput!], skip: Int, take: Int, where: QuestionLikesWhereInput): QuestionLikes
+  findFirstQuestionLike(cursor: QuestionLikeWhereUniqueInput, distinct: [QuestionLikeScalarFieldEnum!], orderBy: [QuestionLikeOrderByWithRelationInput!], skip: Int, take: Int, where: QuestionLikeWhereInput): QuestionLike
+  findFirstQuestionLikeOrThrow(cursor: QuestionLikeWhereUniqueInput, distinct: [QuestionLikeScalarFieldEnum!], orderBy: [QuestionLikeOrderByWithRelationInput!], skip: Int, take: Int, where: QuestionLikeWhereInput): QuestionLike
   findFirstQuestionOrThrow(cursor: QuestionWhereUniqueInput, distinct: [QuestionScalarFieldEnum!], orderBy: [QuestionOrderByWithRelationInput!], skip: Int, take: Int, where: QuestionWhereInput): Question
   findFirstQuiz(cursor: QuizWhereUniqueInput, distinct: [QuizScalarFieldEnum!], orderBy: [QuizOrderByWithRelationInput!], skip: Int, take: Int, where: QuizWhereInput): Quiz
-  findFirstQuizLikes(cursor: QuizLikesWhereUniqueInput, distinct: [QuizLikesScalarFieldEnum!], orderBy: [QuizLikesOrderByWithRelationInput!], skip: Int, take: Int, where: QuizLikesWhereInput): QuizLikes
-  findFirstQuizLikesOrThrow(cursor: QuizLikesWhereUniqueInput, distinct: [QuizLikesScalarFieldEnum!], orderBy: [QuizLikesOrderByWithRelationInput!], skip: Int, take: Int, where: QuizLikesWhereInput): QuizLikes
+  findFirstQuizLike(cursor: QuizLikeWhereUniqueInput, distinct: [QuizLikeScalarFieldEnum!], orderBy: [QuizLikeOrderByWithRelationInput!], skip: Int, take: Int, where: QuizLikeWhereInput): QuizLike
+  findFirstQuizLikeOrThrow(cursor: QuizLikeWhereUniqueInput, distinct: [QuizLikeScalarFieldEnum!], orderBy: [QuizLikeOrderByWithRelationInput!], skip: Int, take: Int, where: QuizLikeWhereInput): QuizLike
   findFirstQuizOrThrow(cursor: QuizWhereUniqueInput, distinct: [QuizScalarFieldEnum!], orderBy: [QuizOrderByWithRelationInput!], skip: Int, take: Int, where: QuizWhereInput): Quiz
   findFirstSession(cursor: SessionWhereUniqueInput, distinct: [SessionScalarFieldEnum!], orderBy: [SessionOrderByWithRelationInput!], skip: Int, take: Int, where: SessionWhereInput): Session
   findFirstSessionOrThrow(cursor: SessionWhereUniqueInput, distinct: [SessionScalarFieldEnum!], orderBy: [SessionOrderByWithRelationInput!], skip: Int, take: Int, where: SessionWhereInput): Session
-  findFirstSubmissions(cursor: SubmissionsWhereUniqueInput, distinct: [SubmissionsScalarFieldEnum!], orderBy: [SubmissionsOrderByWithRelationInput!], skip: Int, take: Int, where: SubmissionsWhereInput): Submissions
-  findFirstSubmissionsOrThrow(cursor: SubmissionsWhereUniqueInput, distinct: [SubmissionsScalarFieldEnum!], orderBy: [SubmissionsOrderByWithRelationInput!], skip: Int, take: Int, where: SubmissionsWhereInput): Submissions
+  findFirstSubmission(cursor: SubmissionWhereUniqueInput, distinct: [SubmissionScalarFieldEnum!], orderBy: [SubmissionOrderByWithRelationInput!], skip: Int, take: Int, where: SubmissionWhereInput): Submission
+  findFirstSubmissionOrThrow(cursor: SubmissionWhereUniqueInput, distinct: [SubmissionScalarFieldEnum!], orderBy: [SubmissionOrderByWithRelationInput!], skip: Int, take: Int, where: SubmissionWhereInput): Submission
   findFirstUser(cursor: UserWhereUniqueInput, distinct: [UserScalarFieldEnum!], orderBy: [UserOrderByWithRelationInput!], skip: Int, take: Int, where: UserWhereInput): User
   findFirstUserCredentials(cursor: UserCredentialsWhereUniqueInput, distinct: [UserCredentialsScalarFieldEnum!], orderBy: [UserCredentialsOrderByWithRelationInput!], skip: Int, take: Int, where: UserCredentialsWhereInput): UserCredentials
   findFirstUserCredentialsOrThrow(cursor: UserCredentialsWhereUniqueInput, distinct: [UserCredentialsScalarFieldEnum!], orderBy: [UserCredentialsOrderByWithRelationInput!], skip: Int, take: Int, where: UserCredentialsWhereInput): UserCredentials
   findFirstUserOrThrow(cursor: UserWhereUniqueInput, distinct: [UserScalarFieldEnum!], orderBy: [UserOrderByWithRelationInput!], skip: Int, take: Int, where: UserWhereInput): User
   findFirstVerificationToken(cursor: VerificationTokenWhereUniqueInput, distinct: [VerificationTokenScalarFieldEnum!], orderBy: [VerificationTokenOrderByWithRelationInput!], skip: Int, take: Int, where: VerificationTokenWhereInput): VerificationToken
   findFirstVerificationTokenOrThrow(cursor: VerificationTokenWhereUniqueInput, distinct: [VerificationTokenScalarFieldEnum!], orderBy: [VerificationTokenOrderByWithRelationInput!], skip: Int, take: Int, where: VerificationTokenWhereInput): VerificationToken
-  findManyQuestionLikes(cursor: QuestionLikesWhereUniqueInput, distinct: [QuestionLikesScalarFieldEnum!], orderBy: [QuestionLikesOrderByWithRelationInput!], skip: Int, take: Int, where: QuestionLikesWhereInput): [QuestionLikes!]!
-  findManyQuizLikes(cursor: QuizLikesWhereUniqueInput, distinct: [QuizLikesScalarFieldEnum!], orderBy: [QuizLikesOrderByWithRelationInput!], skip: Int, take: Int, where: QuizLikesWhereInput): [QuizLikes!]!
-  findManySubmissions(cursor: SubmissionsWhereUniqueInput, distinct: [SubmissionsScalarFieldEnum!], orderBy: [SubmissionsOrderByWithRelationInput!], skip: Int, take: Int, where: SubmissionsWhereInput): [Submissions!]!
   findManyUserCredentials(cursor: UserCredentialsWhereUniqueInput, distinct: [UserCredentialsScalarFieldEnum!], orderBy: [UserCredentialsOrderByWithRelationInput!], skip: Int, take: Int, where: UserCredentialsWhereInput): [UserCredentials!]!
-  findUniqueQuestionLikes(where: QuestionLikesWhereUniqueInput!): QuestionLikes
-  findUniqueQuestionLikesOrThrow(where: QuestionLikesWhereUniqueInput!): QuestionLikes
-  findUniqueQuizLikes(where: QuizLikesWhereUniqueInput!): QuizLikes
-  findUniqueQuizLikesOrThrow(where: QuizLikesWhereUniqueInput!): QuizLikes
-  findUniqueSubmissions(where: SubmissionsWhereUniqueInput!): Submissions
-  findUniqueSubmissionsOrThrow(where: SubmissionsWhereUniqueInput!): Submissions
   findUniqueUserCredentials(where: UserCredentialsWhereUniqueInput!): UserCredentials
   findUniqueUserCredentialsOrThrow(where: UserCredentialsWhereUniqueInput!): UserCredentials
   getAccount(where: AccountWhereUniqueInput!): Account
   getQuestion(where: QuestionWhereUniqueInput!): Question
+  getQuestionLike(where: QuestionLikeWhereUniqueInput!): QuestionLike
   getQuiz(where: QuizWhereUniqueInput!): Quiz
+  getQuizLike(where: QuizLikeWhereUniqueInput!): QuizLike
   getSession(where: SessionWhereUniqueInput!): Session
+  getSubmission(where: SubmissionWhereUniqueInput!): Submission
   getUser(where: UserWhereUniqueInput!): User
   getVerificationToken(where: VerificationTokenWhereUniqueInput!): VerificationToken
   groupByAccount(by: [AccountScalarFieldEnum!]!, having: AccountScalarWhereWithAggregatesInput, orderBy: [AccountOrderByWithAggregationInput!], skip: Int, take: Int, where: AccountWhereInput): [AccountGroupBy!]!
   groupByQuestion(by: [QuestionScalarFieldEnum!]!, having: QuestionScalarWhereWithAggregatesInput, orderBy: [QuestionOrderByWithAggregationInput!], skip: Int, take: Int, where: QuestionWhereInput): [QuestionGroupBy!]!
-  groupByQuestionLikes(by: [QuestionLikesScalarFieldEnum!]!, having: QuestionLikesScalarWhereWithAggregatesInput, orderBy: [QuestionLikesOrderByWithAggregationInput!], skip: Int, take: Int, where: QuestionLikesWhereInput): [QuestionLikesGroupBy!]!
+  groupByQuestionLike(by: [QuestionLikeScalarFieldEnum!]!, having: QuestionLikeScalarWhereWithAggregatesInput, orderBy: [QuestionLikeOrderByWithAggregationInput!], skip: Int, take: Int, where: QuestionLikeWhereInput): [QuestionLikeGroupBy!]!
   groupByQuiz(by: [QuizScalarFieldEnum!]!, having: QuizScalarWhereWithAggregatesInput, orderBy: [QuizOrderByWithAggregationInput!], skip: Int, take: Int, where: QuizWhereInput): [QuizGroupBy!]!
-  groupByQuizLikes(by: [QuizLikesScalarFieldEnum!]!, having: QuizLikesScalarWhereWithAggregatesInput, orderBy: [QuizLikesOrderByWithAggregationInput!], skip: Int, take: Int, where: QuizLikesWhereInput): [QuizLikesGroupBy!]!
+  groupByQuizLike(by: [QuizLikeScalarFieldEnum!]!, having: QuizLikeScalarWhereWithAggregatesInput, orderBy: [QuizLikeOrderByWithAggregationInput!], skip: Int, take: Int, where: QuizLikeWhereInput): [QuizLikeGroupBy!]!
   groupBySession(by: [SessionScalarFieldEnum!]!, having: SessionScalarWhereWithAggregatesInput, orderBy: [SessionOrderByWithAggregationInput!], skip: Int, take: Int, where: SessionWhereInput): [SessionGroupBy!]!
-  groupBySubmissions(by: [SubmissionsScalarFieldEnum!]!, having: SubmissionsScalarWhereWithAggregatesInput, orderBy: [SubmissionsOrderByWithAggregationInput!], skip: Int, take: Int, where: SubmissionsWhereInput): [SubmissionsGroupBy!]!
+  groupBySubmission(by: [SubmissionScalarFieldEnum!]!, having: SubmissionScalarWhereWithAggregatesInput, orderBy: [SubmissionOrderByWithAggregationInput!], skip: Int, take: Int, where: SubmissionWhereInput): [SubmissionGroupBy!]!
   groupByUser(by: [UserScalarFieldEnum!]!, having: UserScalarWhereWithAggregatesInput, orderBy: [UserOrderByWithAggregationInput!], skip: Int, take: Int, where: UserWhereInput): [UserGroupBy!]!
   groupByUserCredentials(by: [UserCredentialsScalarFieldEnum!]!, having: UserCredentialsScalarWhereWithAggregatesInput, orderBy: [UserCredentialsOrderByWithAggregationInput!], skip: Int, take: Int, where: UserCredentialsWhereInput): [UserCredentialsGroupBy!]!
   groupByVerificationToken(by: [VerificationTokenScalarFieldEnum!]!, having: VerificationTokenScalarWhereWithAggregatesInput, orderBy: [VerificationTokenOrderByWithAggregationInput!], skip: Int, take: Int, where: VerificationTokenWhereInput): [VerificationTokenGroupBy!]!
   question(where: QuestionWhereUniqueInput!): Question
+  questionLike(where: QuestionLikeWhereUniqueInput!): QuestionLike
+  questionLikes(cursor: QuestionLikeWhereUniqueInput, distinct: [QuestionLikeScalarFieldEnum!], orderBy: [QuestionLikeOrderByWithRelationInput!], skip: Int, take: Int, where: QuestionLikeWhereInput): [QuestionLike!]!
   questions(cursor: QuestionWhereUniqueInput, distinct: [QuestionScalarFieldEnum!], orderBy: [QuestionOrderByWithRelationInput!], skip: Int, take: Int, where: QuestionWhereInput): [Question!]!
   quiz(where: QuizWhereUniqueInput!): Quiz
+  quizLike(where: QuizLikeWhereUniqueInput!): QuizLike
+  quizLikes(cursor: QuizLikeWhereUniqueInput, distinct: [QuizLikeScalarFieldEnum!], orderBy: [QuizLikeOrderByWithRelationInput!], skip: Int, take: Int, where: QuizLikeWhereInput): [QuizLike!]!
   quizzes(cursor: QuizWhereUniqueInput, distinct: [QuizScalarFieldEnum!], orderBy: [QuizOrderByWithRelationInput!], skip: Int, take: Int, where: QuizWhereInput): [Quiz!]!
   session(where: SessionWhereUniqueInput!): Session
   sessions(cursor: SessionWhereUniqueInput, distinct: [SessionScalarFieldEnum!], orderBy: [SessionOrderByWithRelationInput!], skip: Int, take: Int, where: SessionWhereInput): [Session!]!
+  submission(where: SubmissionWhereUniqueInput!): Submission
+  submissions(cursor: SubmissionWhereUniqueInput, distinct: [SubmissionScalarFieldEnum!], orderBy: [SubmissionOrderByWithRelationInput!], skip: Int, take: Int, where: SubmissionWhereInput): [Submission!]!
   user(where: UserWhereUniqueInput!): User
   users(cursor: UserWhereUniqueInput, distinct: [UserScalarFieldEnum!], orderBy: [UserOrderByWithRelationInput!], skip: Int, take: Int, where: UserWhereInput): [User!]!
   verificationToken(where: VerificationTokenWhereUniqueInput!): VerificationToken
@@ -1234,141 +1247,159 @@ type QuestionGroupBy {
   tags: [String!]
 }
 
-type QuestionLikes {
+type QuestionLike {
   dateCreated: DateTimeISO!
+  dislike: Boolean!
   id: String!
   questionId: String!
   userId: String!
 }
 
-type QuestionLikesCountAggregate {
+type QuestionLikeCountAggregate {
   _all: Int!
   dateCreated: Int!
+  dislike: Int!
   id: Int!
   questionId: Int!
   userId: Int!
 }
 
-input QuestionLikesCountOrderByAggregateInput {
+input QuestionLikeCountOrderByAggregateInput {
   dateCreated: SortOrder
+  dislike: SortOrder
   id: SortOrder
   questionId: SortOrder
   userId: SortOrder
 }
 
-input QuestionLikesCreateInput {
+input QuestionLikeCreateInput {
   dateCreated: DateTimeISO
+  dislike: Boolean!
   id: String
   questionId: String!
   userId: String!
 }
 
-input QuestionLikesCreateManyInput {
+input QuestionLikeCreateManyInput {
   dateCreated: DateTimeISO
+  dislike: Boolean!
   id: String
   questionId: String!
   userId: String!
 }
 
-type QuestionLikesGroupBy {
-  _count: QuestionLikesCountAggregate
-  _max: QuestionLikesMaxAggregate
-  _min: QuestionLikesMinAggregate
+type QuestionLikeGroupBy {
+  _count: QuestionLikeCountAggregate
+  _max: QuestionLikeMaxAggregate
+  _min: QuestionLikeMinAggregate
   dateCreated: DateTimeISO!
+  dislike: Boolean!
   id: String!
   questionId: String!
   userId: String!
 }
 
-type QuestionLikesMaxAggregate {
+type QuestionLikeMaxAggregate {
   dateCreated: DateTimeISO
+  dislike: Boolean
   id: String
   questionId: String
   userId: String
 }
 
-input QuestionLikesMaxOrderByAggregateInput {
+input QuestionLikeMaxOrderByAggregateInput {
   dateCreated: SortOrder
+  dislike: SortOrder
   id: SortOrder
   questionId: SortOrder
   userId: SortOrder
 }
 
-type QuestionLikesMinAggregate {
+type QuestionLikeMinAggregate {
   dateCreated: DateTimeISO
+  dislike: Boolean
   id: String
   questionId: String
   userId: String
 }
 
-input QuestionLikesMinOrderByAggregateInput {
+input QuestionLikeMinOrderByAggregateInput {
   dateCreated: SortOrder
+  dislike: SortOrder
   id: SortOrder
   questionId: SortOrder
   userId: SortOrder
 }
 
-input QuestionLikesOrderByWithAggregationInput {
-  _count: QuestionLikesCountOrderByAggregateInput
-  _max: QuestionLikesMaxOrderByAggregateInput
-  _min: QuestionLikesMinOrderByAggregateInput
+input QuestionLikeOrderByWithAggregationInput {
+  _count: QuestionLikeCountOrderByAggregateInput
+  _max: QuestionLikeMaxOrderByAggregateInput
+  _min: QuestionLikeMinOrderByAggregateInput
   dateCreated: SortOrder
+  dislike: SortOrder
   id: SortOrder
   questionId: SortOrder
   userId: SortOrder
 }
 
-input QuestionLikesOrderByWithRelationInput {
+input QuestionLikeOrderByWithRelationInput {
   dateCreated: SortOrder
+  dislike: SortOrder
   id: SortOrder
   questionId: SortOrder
   userId: SortOrder
 }
 
-enum QuestionLikesScalarFieldEnum {
+enum QuestionLikeScalarFieldEnum {
   dateCreated
+  dislike
   id
   questionId
   userId
 }
 
-input QuestionLikesScalarWhereWithAggregatesInput {
-  AND: [QuestionLikesScalarWhereWithAggregatesInput!]
-  NOT: [QuestionLikesScalarWhereWithAggregatesInput!]
-  OR: [QuestionLikesScalarWhereWithAggregatesInput!]
+input QuestionLikeScalarWhereWithAggregatesInput {
+  AND: [QuestionLikeScalarWhereWithAggregatesInput!]
+  NOT: [QuestionLikeScalarWhereWithAggregatesInput!]
+  OR: [QuestionLikeScalarWhereWithAggregatesInput!]
   dateCreated: DateTimeWithAggregatesFilter
+  dislike: BoolWithAggregatesFilter
   id: StringWithAggregatesFilter
   questionId: StringWithAggregatesFilter
   userId: StringWithAggregatesFilter
 }
 
-input QuestionLikesUpdateInput {
+input QuestionLikeUpdateInput {
   dateCreated: DateTimeFieldUpdateOperationsInput
+  dislike: BoolFieldUpdateOperationsInput
   questionId: StringFieldUpdateOperationsInput
   userId: StringFieldUpdateOperationsInput
 }
 
-input QuestionLikesUpdateManyMutationInput {
+input QuestionLikeUpdateManyMutationInput {
   dateCreated: DateTimeFieldUpdateOperationsInput
+  dislike: BoolFieldUpdateOperationsInput
   questionId: StringFieldUpdateOperationsInput
   userId: StringFieldUpdateOperationsInput
 }
 
-input QuestionLikesWhereInput {
-  AND: [QuestionLikesWhereInput!]
-  NOT: [QuestionLikesWhereInput!]
-  OR: [QuestionLikesWhereInput!]
+input QuestionLikeWhereInput {
+  AND: [QuestionLikeWhereInput!]
+  NOT: [QuestionLikeWhereInput!]
+  OR: [QuestionLikeWhereInput!]
   dateCreated: DateTimeFilter
+  dislike: BoolFilter
   id: StringFilter
   questionId: StringFilter
   userId: StringFilter
 }
 
-input QuestionLikesWhereUniqueInput {
-  AND: [QuestionLikesWhereInput!]
-  NOT: [QuestionLikesWhereInput!]
-  OR: [QuestionLikesWhereInput!]
+input QuestionLikeWhereUniqueInput {
+  AND: [QuestionLikeWhereInput!]
+  NOT: [QuestionLikeWhereInput!]
+  OR: [QuestionLikeWhereInput!]
   dateCreated: DateTimeFilter
+  dislike: BoolFilter
   id: String
   questionId: StringFilter
   userId: StringFilter
@@ -1497,24 +1528,13 @@ input QuestionWhereUniqueInput {
 }
 
 type Quiz {
-  answer: AnswerData!
   creatorId: String!
   dateCreated: DateTimeISO!
   id: String!
   likeCounter: LikeCounter!
-  likes: Int!
   name: String!
-  question: QuestionData!
   questionIds: [String!]!
   tags: [String!]!
-}
-
-type QuizAvgAggregate {
-  likes: Float
-}
-
-input QuizAvgOrderByAggregateInput {
-  likes: SortOrder
 }
 
 type QuizCountAggregate {
@@ -1522,7 +1542,6 @@ type QuizCountAggregate {
   creatorId: Int!
   dateCreated: Int!
   id: Int!
-  likes: Int!
   name: Int!
   questionIds: Int!
   tags: Int!
@@ -1532,34 +1551,27 @@ input QuizCountOrderByAggregateInput {
   creatorId: SortOrder
   dateCreated: SortOrder
   id: SortOrder
-  likes: SortOrder
   name: SortOrder
   questionIds: SortOrder
   tags: SortOrder
 }
 
 input QuizCreateInput {
-  answer: AnswerDataCreateEnvelopeInput!
   creatorId: String!
   dateCreated: DateTimeISO
   id: String
   likeCounter: LikeCounterCreateEnvelopeInput!
-  likes: Int!
   name: String!
-  question: QuestionDataCreateEnvelopeInput!
   questionIds: QuizCreatequestionIdsInput
   tags: QuizCreatetagsInput
 }
 
 input QuizCreateManyInput {
-  answer: AnswerDataCreateEnvelopeInput!
   creatorId: String!
   dateCreated: DateTimeISO
   id: String
   likeCounter: LikeCounterCreateEnvelopeInput!
-  likes: Int!
   name: String!
-  question: QuestionDataCreateEnvelopeInput!
   questionIds: QuizCreatequestionIdsInput
   tags: QuizCreatetagsInput
 }
@@ -1573,155 +1585,170 @@ input QuizCreatetagsInput {
 }
 
 type QuizGroupBy {
-  _avg: QuizAvgAggregate
   _count: QuizCountAggregate
   _max: QuizMaxAggregate
   _min: QuizMinAggregate
-  _sum: QuizSumAggregate
   creatorId: String!
   dateCreated: DateTimeISO!
   id: String!
-  likes: Int!
   name: String!
   questionIds: [String!]
   tags: [String!]
 }
 
-type QuizLikes {
+type QuizLike {
   dateCreated: DateTimeISO!
+  dislike: Boolean!
   id: String!
   quizId: String!
   userId: String!
 }
 
-type QuizLikesCountAggregate {
+type QuizLikeCountAggregate {
   _all: Int!
   dateCreated: Int!
+  dislike: Int!
   id: Int!
   quizId: Int!
   userId: Int!
 }
 
-input QuizLikesCountOrderByAggregateInput {
+input QuizLikeCountOrderByAggregateInput {
   dateCreated: SortOrder
+  dislike: SortOrder
   id: SortOrder
   quizId: SortOrder
   userId: SortOrder
 }
 
-input QuizLikesCreateInput {
+input QuizLikeCreateInput {
   dateCreated: DateTimeISO
+  dislike: Boolean!
   id: String
   quizId: String!
   userId: String!
 }
 
-input QuizLikesCreateManyInput {
+input QuizLikeCreateManyInput {
   dateCreated: DateTimeISO
+  dislike: Boolean!
   id: String
   quizId: String!
   userId: String!
 }
 
-type QuizLikesGroupBy {
-  _count: QuizLikesCountAggregate
-  _max: QuizLikesMaxAggregate
-  _min: QuizLikesMinAggregate
+type QuizLikeGroupBy {
+  _count: QuizLikeCountAggregate
+  _max: QuizLikeMaxAggregate
+  _min: QuizLikeMinAggregate
   dateCreated: DateTimeISO!
+  dislike: Boolean!
   id: String!
   quizId: String!
   userId: String!
 }
 
-type QuizLikesMaxAggregate {
+type QuizLikeMaxAggregate {
   dateCreated: DateTimeISO
+  dislike: Boolean
   id: String
   quizId: String
   userId: String
 }
 
-input QuizLikesMaxOrderByAggregateInput {
+input QuizLikeMaxOrderByAggregateInput {
   dateCreated: SortOrder
+  dislike: SortOrder
   id: SortOrder
   quizId: SortOrder
   userId: SortOrder
 }
 
-type QuizLikesMinAggregate {
+type QuizLikeMinAggregate {
   dateCreated: DateTimeISO
+  dislike: Boolean
   id: String
   quizId: String
   userId: String
 }
 
-input QuizLikesMinOrderByAggregateInput {
+input QuizLikeMinOrderByAggregateInput {
   dateCreated: SortOrder
+  dislike: SortOrder
   id: SortOrder
   quizId: SortOrder
   userId: SortOrder
 }
 
-input QuizLikesOrderByWithAggregationInput {
-  _count: QuizLikesCountOrderByAggregateInput
-  _max: QuizLikesMaxOrderByAggregateInput
-  _min: QuizLikesMinOrderByAggregateInput
+input QuizLikeOrderByWithAggregationInput {
+  _count: QuizLikeCountOrderByAggregateInput
+  _max: QuizLikeMaxOrderByAggregateInput
+  _min: QuizLikeMinOrderByAggregateInput
   dateCreated: SortOrder
+  dislike: SortOrder
   id: SortOrder
   quizId: SortOrder
   userId: SortOrder
 }
 
-input QuizLikesOrderByWithRelationInput {
+input QuizLikeOrderByWithRelationInput {
   dateCreated: SortOrder
+  dislike: SortOrder
   id: SortOrder
   quizId: SortOrder
   userId: SortOrder
 }
 
-enum QuizLikesScalarFieldEnum {
+enum QuizLikeScalarFieldEnum {
   dateCreated
+  dislike
   id
   quizId
   userId
 }
 
-input QuizLikesScalarWhereWithAggregatesInput {
-  AND: [QuizLikesScalarWhereWithAggregatesInput!]
-  NOT: [QuizLikesScalarWhereWithAggregatesInput!]
-  OR: [QuizLikesScalarWhereWithAggregatesInput!]
+input QuizLikeScalarWhereWithAggregatesInput {
+  AND: [QuizLikeScalarWhereWithAggregatesInput!]
+  NOT: [QuizLikeScalarWhereWithAggregatesInput!]
+  OR: [QuizLikeScalarWhereWithAggregatesInput!]
   dateCreated: DateTimeWithAggregatesFilter
+  dislike: BoolWithAggregatesFilter
   id: StringWithAggregatesFilter
   quizId: StringWithAggregatesFilter
   userId: StringWithAggregatesFilter
 }
 
-input QuizLikesUpdateInput {
+input QuizLikeUpdateInput {
   dateCreated: DateTimeFieldUpdateOperationsInput
+  dislike: BoolFieldUpdateOperationsInput
   quizId: StringFieldUpdateOperationsInput
   userId: StringFieldUpdateOperationsInput
 }
 
-input QuizLikesUpdateManyMutationInput {
+input QuizLikeUpdateManyMutationInput {
   dateCreated: DateTimeFieldUpdateOperationsInput
+  dislike: BoolFieldUpdateOperationsInput
   quizId: StringFieldUpdateOperationsInput
   userId: StringFieldUpdateOperationsInput
 }
 
-input QuizLikesWhereInput {
-  AND: [QuizLikesWhereInput!]
-  NOT: [QuizLikesWhereInput!]
-  OR: [QuizLikesWhereInput!]
+input QuizLikeWhereInput {
+  AND: [QuizLikeWhereInput!]
+  NOT: [QuizLikeWhereInput!]
+  OR: [QuizLikeWhereInput!]
   dateCreated: DateTimeFilter
+  dislike: BoolFilter
   id: StringFilter
   quizId: StringFilter
   userId: StringFilter
 }
 
-input QuizLikesWhereUniqueInput {
-  AND: [QuizLikesWhereInput!]
-  NOT: [QuizLikesWhereInput!]
-  OR: [QuizLikesWhereInput!]
+input QuizLikeWhereUniqueInput {
+  AND: [QuizLikeWhereInput!]
+  NOT: [QuizLikeWhereInput!]
+  OR: [QuizLikeWhereInput!]
   dateCreated: DateTimeFilter
+  dislike: BoolFilter
   id: String
   quizId: StringFilter
   userId: StringFilter
@@ -1731,7 +1758,6 @@ type QuizMaxAggregate {
   creatorId: String
   dateCreated: DateTimeISO
   id: String
-  likes: Int
   name: String
 }
 
@@ -1739,7 +1765,6 @@ input QuizMaxOrderByAggregateInput {
   creatorId: SortOrder
   dateCreated: SortOrder
   id: SortOrder
-  likes: SortOrder
   name: SortOrder
 }
 
@@ -1747,7 +1772,6 @@ type QuizMinAggregate {
   creatorId: String
   dateCreated: DateTimeISO
   id: String
-  likes: Int
   name: String
 }
 
@@ -1755,34 +1779,27 @@ input QuizMinOrderByAggregateInput {
   creatorId: SortOrder
   dateCreated: SortOrder
   id: SortOrder
-  likes: SortOrder
   name: SortOrder
 }
 
 input QuizOrderByWithAggregationInput {
-  _avg: QuizAvgOrderByAggregateInput
   _count: QuizCountOrderByAggregateInput
   _max: QuizMaxOrderByAggregateInput
   _min: QuizMinOrderByAggregateInput
-  _sum: QuizSumOrderByAggregateInput
   creatorId: SortOrder
   dateCreated: SortOrder
   id: SortOrder
-  likes: SortOrder
   name: SortOrder
   questionIds: SortOrder
   tags: SortOrder
 }
 
 input QuizOrderByWithRelationInput {
-  answer: AnswerDataOrderByInput
   creatorId: SortOrder
   dateCreated: SortOrder
   id: SortOrder
   likeCounter: LikeCounterOrderByInput
-  likes: SortOrder
   name: SortOrder
-  question: QuestionDataOrderByInput
   questionIds: SortOrder
   tags: SortOrder
 }
@@ -1791,7 +1808,6 @@ enum QuizScalarFieldEnum {
   creatorId
   dateCreated
   id
-  likes
   name
   questionIds
   tags
@@ -1804,40 +1820,25 @@ input QuizScalarWhereWithAggregatesInput {
   creatorId: StringWithAggregatesFilter
   dateCreated: DateTimeWithAggregatesFilter
   id: StringWithAggregatesFilter
-  likes: IntWithAggregatesFilter
   name: StringWithAggregatesFilter
   questionIds: StringNullableListFilter
   tags: StringNullableListFilter
 }
 
-type QuizSumAggregate {
-  likes: Int
-}
-
-input QuizSumOrderByAggregateInput {
-  likes: SortOrder
-}
-
 input QuizUpdateInput {
-  answer: AnswerDataUpdateEnvelopeInput
   creatorId: StringFieldUpdateOperationsInput
   dateCreated: DateTimeFieldUpdateOperationsInput
   likeCounter: LikeCounterUpdateEnvelopeInput
-  likes: IntFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
-  question: QuestionDataUpdateEnvelopeInput
   questionIds: QuizUpdatequestionIdsInput
   tags: QuizUpdatetagsInput
 }
 
 input QuizUpdateManyMutationInput {
-  answer: AnswerDataUpdateEnvelopeInput
   creatorId: StringFieldUpdateOperationsInput
   dateCreated: DateTimeFieldUpdateOperationsInput
   likeCounter: LikeCounterUpdateEnvelopeInput
-  likes: IntFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
-  question: QuestionDataUpdateEnvelopeInput
   questionIds: QuizUpdatequestionIdsInput
   tags: QuizUpdatetagsInput
 }
@@ -1856,14 +1857,11 @@ input QuizWhereInput {
   AND: [QuizWhereInput!]
   NOT: [QuizWhereInput!]
   OR: [QuizWhereInput!]
-  answer: AnswerDataCompositeFilter
   creatorId: StringFilter
   dateCreated: DateTimeFilter
   id: StringFilter
   likeCounter: LikeCounterCompositeFilter
-  likes: IntFilter
   name: StringFilter
-  question: QuestionDataCompositeFilter
   questionIds: StringNullableListFilter
   tags: StringNullableListFilter
 }
@@ -1872,14 +1870,11 @@ input QuizWhereUniqueInput {
   AND: [QuizWhereInput!]
   NOT: [QuizWhereInput!]
   OR: [QuizWhereInput!]
-  answer: AnswerDataCompositeFilter
   creatorId: StringFilter
   dateCreated: DateTimeFilter
   id: String
   likeCounter: LikeCounterCompositeFilter
-  likes: IntFilter
   name: StringFilter
-  question: QuestionDataCompositeFilter
   questionIds: StringNullableListFilter
   tags: StringNullableListFilter
 }
@@ -2195,7 +2190,7 @@ input StringWithAggregatesFilter {
   startsWith: String
 }
 
-type Submissions {
+type Submission {
   dateCreated: DateTimeISO!
   id: String!
   questionId: String
@@ -2205,15 +2200,15 @@ type Submissions {
   userId: String!
 }
 
-type SubmissionsAvgAggregate {
+type SubmissionAvgAggregate {
   score: Float
 }
 
-input SubmissionsAvgOrderByAggregateInput {
+input SubmissionAvgOrderByAggregateInput {
   score: SortOrder
 }
 
-type SubmissionsCountAggregate {
+type SubmissionCountAggregate {
   _all: Int!
   dateCreated: Int!
   id: Int!
@@ -2224,7 +2219,7 @@ type SubmissionsCountAggregate {
   userId: Int!
 }
 
-input SubmissionsCountOrderByAggregateInput {
+input SubmissionCountOrderByAggregateInput {
   dateCreated: SortOrder
   id: SortOrder
   questionId: SortOrder
@@ -2234,7 +2229,7 @@ input SubmissionsCountOrderByAggregateInput {
   userId: SortOrder
 }
 
-input SubmissionsCreateInput {
+input SubmissionCreateInput {
   dateCreated: DateTimeISO
   id: String
   questionId: String
@@ -2244,7 +2239,7 @@ input SubmissionsCreateInput {
   userId: String!
 }
 
-input SubmissionsCreateManyInput {
+input SubmissionCreateManyInput {
   dateCreated: DateTimeISO
   id: String
   questionId: String
@@ -2254,12 +2249,12 @@ input SubmissionsCreateManyInput {
   userId: String!
 }
 
-type SubmissionsGroupBy {
-  _avg: SubmissionsAvgAggregate
-  _count: SubmissionsCountAggregate
-  _max: SubmissionsMaxAggregate
-  _min: SubmissionsMinAggregate
-  _sum: SubmissionsSumAggregate
+type SubmissionGroupBy {
+  _avg: SubmissionAvgAggregate
+  _count: SubmissionCountAggregate
+  _max: SubmissionMaxAggregate
+  _min: SubmissionMinAggregate
+  _sum: SubmissionSumAggregate
   dateCreated: DateTimeISO!
   id: String!
   questionId: String
@@ -2269,7 +2264,7 @@ type SubmissionsGroupBy {
   userId: String!
 }
 
-type SubmissionsMaxAggregate {
+type SubmissionMaxAggregate {
   dateCreated: DateTimeISO
   id: String
   questionId: String
@@ -2279,7 +2274,7 @@ type SubmissionsMaxAggregate {
   userId: String
 }
 
-input SubmissionsMaxOrderByAggregateInput {
+input SubmissionMaxOrderByAggregateInput {
   dateCreated: SortOrder
   id: SortOrder
   questionId: SortOrder
@@ -2289,7 +2284,7 @@ input SubmissionsMaxOrderByAggregateInput {
   userId: SortOrder
 }
 
-type SubmissionsMinAggregate {
+type SubmissionMinAggregate {
   dateCreated: DateTimeISO
   id: String
   questionId: String
@@ -2299,7 +2294,7 @@ type SubmissionsMinAggregate {
   userId: String
 }
 
-input SubmissionsMinOrderByAggregateInput {
+input SubmissionMinOrderByAggregateInput {
   dateCreated: SortOrder
   id: SortOrder
   questionId: SortOrder
@@ -2309,12 +2304,12 @@ input SubmissionsMinOrderByAggregateInput {
   userId: SortOrder
 }
 
-input SubmissionsOrderByWithAggregationInput {
-  _avg: SubmissionsAvgOrderByAggregateInput
-  _count: SubmissionsCountOrderByAggregateInput
-  _max: SubmissionsMaxOrderByAggregateInput
-  _min: SubmissionsMinOrderByAggregateInput
-  _sum: SubmissionsSumOrderByAggregateInput
+input SubmissionOrderByWithAggregationInput {
+  _avg: SubmissionAvgOrderByAggregateInput
+  _count: SubmissionCountOrderByAggregateInput
+  _max: SubmissionMaxOrderByAggregateInput
+  _min: SubmissionMinOrderByAggregateInput
+  _sum: SubmissionSumOrderByAggregateInput
   dateCreated: SortOrder
   id: SortOrder
   questionId: SortOrder
@@ -2324,7 +2319,7 @@ input SubmissionsOrderByWithAggregationInput {
   userId: SortOrder
 }
 
-input SubmissionsOrderByWithRelationInput {
+input SubmissionOrderByWithRelationInput {
   dateCreated: SortOrder
   id: SortOrder
   questionId: SortOrder
@@ -2334,7 +2329,7 @@ input SubmissionsOrderByWithRelationInput {
   userId: SortOrder
 }
 
-enum SubmissionsScalarFieldEnum {
+enum SubmissionScalarFieldEnum {
   dateCreated
   id
   questionId
@@ -2344,10 +2339,10 @@ enum SubmissionsScalarFieldEnum {
   userId
 }
 
-input SubmissionsScalarWhereWithAggregatesInput {
-  AND: [SubmissionsScalarWhereWithAggregatesInput!]
-  NOT: [SubmissionsScalarWhereWithAggregatesInput!]
-  OR: [SubmissionsScalarWhereWithAggregatesInput!]
+input SubmissionScalarWhereWithAggregatesInput {
+  AND: [SubmissionScalarWhereWithAggregatesInput!]
+  NOT: [SubmissionScalarWhereWithAggregatesInput!]
+  OR: [SubmissionScalarWhereWithAggregatesInput!]
   dateCreated: DateTimeWithAggregatesFilter
   id: StringWithAggregatesFilter
   questionId: StringNullableWithAggregatesFilter
@@ -2357,15 +2352,15 @@ input SubmissionsScalarWhereWithAggregatesInput {
   userId: StringWithAggregatesFilter
 }
 
-type SubmissionsSumAggregate {
+type SubmissionSumAggregate {
   score: Int
 }
 
-input SubmissionsSumOrderByAggregateInput {
+input SubmissionSumOrderByAggregateInput {
   score: SortOrder
 }
 
-input SubmissionsUpdateInput {
+input SubmissionUpdateInput {
   dateCreated: DateTimeFieldUpdateOperationsInput
   questionId: NullableStringFieldUpdateOperationsInput
   quizId: NullableStringFieldUpdateOperationsInput
@@ -2374,7 +2369,7 @@ input SubmissionsUpdateInput {
   userId: StringFieldUpdateOperationsInput
 }
 
-input SubmissionsUpdateManyMutationInput {
+input SubmissionUpdateManyMutationInput {
   dateCreated: DateTimeFieldUpdateOperationsInput
   questionId: NullableStringFieldUpdateOperationsInput
   quizId: NullableStringFieldUpdateOperationsInput
@@ -2383,10 +2378,10 @@ input SubmissionsUpdateManyMutationInput {
   userId: StringFieldUpdateOperationsInput
 }
 
-input SubmissionsWhereInput {
-  AND: [SubmissionsWhereInput!]
-  NOT: [SubmissionsWhereInput!]
-  OR: [SubmissionsWhereInput!]
+input SubmissionWhereInput {
+  AND: [SubmissionWhereInput!]
+  NOT: [SubmissionWhereInput!]
+  OR: [SubmissionWhereInput!]
   dateCreated: DateTimeFilter
   id: StringFilter
   questionId: StringNullableFilter
@@ -2396,10 +2391,10 @@ input SubmissionsWhereInput {
   userId: StringFilter
 }
 
-input SubmissionsWhereUniqueInput {
-  AND: [SubmissionsWhereInput!]
-  NOT: [SubmissionsWhereInput!]
-  OR: [SubmissionsWhereInput!]
+input SubmissionWhereUniqueInput {
+  AND: [SubmissionWhereInput!]
+  NOT: [SubmissionWhereInput!]
+  OR: [SubmissionWhereInput!]
   dateCreated: DateTimeFilter
   id: String
   questionId: StringNullableFilter
