@@ -8,6 +8,7 @@ import { buildSchema } from "type-graphql";
 import { getServerSession } from "next-auth";
 import { options } from "../auth/[...nextauth]/options";
 import { Session } from "next-auth";
+
 export async function createSchema() {
   const schema = await buildSchema({
     resolvers: allResolvers, // Custom resolvers

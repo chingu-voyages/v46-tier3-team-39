@@ -18,9 +18,8 @@ export default async function DashboardPage() {
 
     const QuestionQueryById = gql`
     query Question {
-      readQuestion(id:  "653c05793171c264d005c0b4") {
+      readQuestion(id:  "653ea9b0f24a705e95df3170") {
         id
-        questionType
       }
     }`
 
