@@ -6,7 +6,7 @@ import { Question } from "../../../prisma/generated/type-graphql";
 
 export default async function DashboardPage() {
   const sessionData = await protectRouteSSR("/auth/login");
-  console.log('user', sessionData.props);
+  console.log('++++++++++++++++++++++++++++', sessionData.props.session.user.id);
 
   // const QuestionQueryById = gql`
   //   query Question($id: String) {
@@ -18,7 +18,7 @@ export default async function DashboardPage() {
 
     const QuestionQueryById = gql`
     query Question {
-      readQuestion(id:  "653ea9b0f24a705e95df3170") {
+      readQuestion(id:  "6542f8351f3b87611d6d9f4f") {
         id
       }
     }`
