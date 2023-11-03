@@ -54,14 +54,18 @@ export class FindUniqueQuestionResolver {
     @Ctx() { req, res, prisma, session }: any
   ): Promise<Question | null> {
     console.log(" HEREEEEEEEEEEEEEEEEE ");
-    console.log(prisma);
+    // console.log(prisma);
     console.log("id: " + id);
-    const question = await prisma.question.findFirst({
-      where: { id: id },
+    const question = await prisma.question.findMany({
+      where: { creatorId: id },
     });
     console.log(question);
     console.log(" question ");
+
     if (!session || session.userId !== question.creatorId) {
+      console.log("session: " + session);
+      console.log("session.userId: " + session.userId);
+      console.log("question.creatorId: " + question.creatorId);
       throw new Error("You are not authorized to perform this action");
     }
     prisma.$disconnect();

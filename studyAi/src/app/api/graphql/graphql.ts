@@ -6,7 +6,7 @@ import { startServerAndCreateNextHandler } from "@as-integrations/next";
 import { prismaDb } from "@/app/util/prisma/connection";
 import { buildSchema } from "type-graphql";
 import { getServerSession } from "next-auth";
-import { options } from "../auth/[...nextauth]/options";
+import { options } from "../auth/[...nextauth]/route";
 import { Session } from "next-auth";
 
 export async function createSchema() {
@@ -24,17 +24,31 @@ const main = startServerAndCreateNextHandler(server, {
   context: async (req, res) => {
     //for testing only, but when writing custom resolver, call the connect function
     prismaDb.$connect();
-    let session: Session | null = null;
+    // let session: Session | null = null;
+    let contextData;
     try {
-      session = await getServerSession(req, res, options);
+      console.log(JSON.stringify(options , null, 1))
+      const session = await getServerSession(options);
+      console.log("------------SUCCESS------------- ");
+      console.log("session: " + session);
     } catch (e) {
-      session = null;
+      console.log("------------------------------------------------");
+      console.log("e: " + e);
+      console.log("------------------------------------------------");
+      // session = null;
     }
-    const contextData = {
+    // contextData = {
+    //   req,
+    //   res,
+    //   prisma: prismaDb,
+    //   session: session,
+    // };
+    // console.log("contextData: " + contextData);
+    contextData = {
       req,
       res,
       prisma: prismaDb,
-      session
+      session: null,
     };
     return contextData;
   },
