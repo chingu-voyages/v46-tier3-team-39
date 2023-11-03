@@ -76,7 +76,7 @@ export const QuestionContainer = ({ height }: { height?: string | number }) => {
   return (
     <Container
       style={{ height: height ? height + "px" : undefined }}
-      className="max-h-[30rem] md:max-h-none md:w-[calc(50%-0.5rem)] md:mr-2"
+      className="max-h-[max(30rem,45vh)] md:max-h-none md:w-[calc(50%-0.5rem)] md:mr-2 grow"
       border
     >
       <TopBar view={view} handleChange={handleChange} />

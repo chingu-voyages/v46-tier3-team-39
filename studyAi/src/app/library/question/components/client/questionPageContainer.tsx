@@ -4,8 +4,9 @@ import { NavigationBtns, PaginationOptions } from "./navigationBtns";
 import { QuestionWrapper } from "./questionWrapper";
 import StopWatch from "@/app/util/components/time/stopwatch";
 import Timer from "@/app/util/components/time/timer";
-import { createPortal } from "react-dom";
-import { Modal } from "@mui/material";
+import { Button, Modal } from "@mui/material";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 type TimeOptions = {
   type: "stopwatch" | "timer";
   initialTime: number;
@@ -29,14 +30,28 @@ const TimeComponent = ({ props }: { props?: TimeOptions }) => {
     //create timer component
     default:
       return (
-        <Modal
-          open={modalOpen}
-          onClose={() => setModalOpen(false)}
-          aria-labelledby="track-your-time"
-          aria-describedby="attach-stopwatch-or-timer"
-        >
-          <></>
-        </Modal>
+        <>
+          {!modalOpen && (
+            <Button
+              type="button"
+              onClick={() => setModalOpen(true)}
+              className="h-full"
+              sx={{ textTransform: "unset", minHeight: "unset" }}
+              aria-label="open-modal-to-attach-stopwatch-or-timer"
+            >
+              <FontAwesomeIcon icon={faPlus} />
+              <span className="ml-1">Add Time</span>
+            </Button>
+          )}
+          <Modal
+            open={modalOpen}
+            onClose={() => setModalOpen(false)}
+            aria-labelledby="track-your-time"
+            aria-describedby="attach-stopwatch-or-timer"
+          >
+            <></>
+          </Modal>
+        </>
       );
     // return createPortal();
   }

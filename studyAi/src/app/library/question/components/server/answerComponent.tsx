@@ -69,7 +69,7 @@ const AnswerContainer = ({ height }: { height?: string | number }) => {
     <Container
       border
       overflow
-      className="max-h-[30rem] md:max-h-none md:w-3/6 md:ml-2"
+      className="max-h-[max(30rem,45vh)] md:max-h-none md:w-3/6 md:ml-2 grow"
       style={{ height: height ? height + "px" : undefined }}
     >
       <TopBar />

@@ -42,7 +42,7 @@ const adjustScroll = (
 export const MultipleChoice = ({ options }: { options: string[] }) => {
   const { currOptions } = useOptionsWithId({ options });
   return (
-    <RadioGroup className="px-[5%] py-5">
+    <RadioGroup className="px-[5%] py-5 grow">
       {currOptions.map((val, idx) => (
         <FormControlLabel
           key={val.id}
@@ -57,7 +57,7 @@ export const MultipleChoice = ({ options }: { options: string[] }) => {
 export const SelectMultiple = ({ options }: { options: string[] }) => {
   const { currOptions } = useOptionsWithId({ options });
   return (
-    <FormGroup className="px-[5%] py-5">
+    <FormGroup className="px-[5%] py-5 grow">
       {currOptions.map((val, idx) => (
         <FormControlLabel
           key={val.id}
@@ -75,8 +75,8 @@ export const ShortAnswer = () => {
       minRows={8}
       onKeyDown={adjustScroll}
       onChange={adjustScroll}
-      style={{ height: "100%", resize:'none' }}
-      className="px-[4%] py-4 pb-6 text-sm"
+      style={{ height: "100%", resize: "none" }}
+      className="px-[4%] py-4 pb-6 text-sm grow"
       placeholder="Type answer here"
     />
   );
