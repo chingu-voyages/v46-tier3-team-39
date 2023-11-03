@@ -2,7 +2,7 @@
 import ContainerBar, { Container } from "../server/containerBar";
 import capitalizeEveryWord from "@/app/util/parsers/capitalizeEveryWord";
 import EditIcon from "@mui/icons-material/Edit";
-import { Button, IconButton, Tab, Tabs } from "@mui/material";
+import { IconButton, Tab, Tabs } from "@mui/material";
 import React, { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useQuestions } from "@/app/stores/questionStore";
@@ -56,6 +56,7 @@ const TopBar = ({
         question &&
         session.data.user.id === question.creatorId && (
           <IconButton
+            type="button"
             sx={btnStyles}
             className={btnClassNames + " aspect-square h-[70%]"}
           >

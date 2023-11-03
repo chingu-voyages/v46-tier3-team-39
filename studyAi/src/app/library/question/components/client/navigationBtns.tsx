@@ -1,25 +1,19 @@
 "use client";
-import StopWatch from "@/app/util/components/time/stopwatch";
-import Timer from "@/app/util/components/time/timer";
 import useWindowWidth from "@/app/util/hooks/useWindowWidth";
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "@mui/material";
-type TimeOptions = {
-  type: "stopwatch" | "timer";
-  //in milliseconds
-  initialTime: number;
-  totalTimeGiven?: number;
+import { MouseEvent } from "react";
+export type PaginationOptions = {
+  onPrev: (e?: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => void;
+  onNext: (e?: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => void;
 };
-export default function NavigationBtns({
-  time,
-  paginationQuestionIds,
+export function NavigationBtns({
+  children,
+  pagination,
 }: {
-  paginationQuestionIds?: {
-    prev: string;
-    next: string;
-  };
-  time?: TimeOptions;
+  pagination: PaginationOptions;
+  children: React.ReactNode;
 }) {
   const windowWidth = useWindowWidth();
   const btnClassNames =
@@ -29,13 +23,15 @@ export default function NavigationBtns({
     minWidth: "unset",
   };
   return (
-    <div className="flex justify-between items-center w-full h-10 mt-2">
-      {/* <Button
+    <div className="flex justify-between items-center w-full h-10 mt-1">
+      <Button
+        type="button"
         size={"large"}
         variant={"outlined"}
         className={btnClassNames}
         sx={btnStyles}
         aria-label="Go to previous question"
+        onClick={pagination.onPrev}
       >
         <FontAwesomeIcon icon={faArrowLeft} className="text-sm" />
         {windowWidth > 480 && (
@@ -43,15 +39,16 @@ export default function NavigationBtns({
             Back
           </span>
         )}
-      </Button> */}
-      {/* <Timer initialTimeLeft={10000} totalTimeGiven={10000} /> */}
-      <StopWatch initialTimeUsed={0} />
-      {/* <Button
+      </Button>
+      {children}
+      <Button
+        type="button"
         size={"large"}
         variant="outlined"
         className={btnClassNames}
         sx={btnStyles}
         aria-label="Go to next question"
+        onClick={pagination.onNext}
       >
         {windowWidth > 480 && (
           <span className="flex items-center justify-center leading-none text-sm tracking-normal">
@@ -59,7 +56,7 @@ export default function NavigationBtns({
           </span>
         )}
         <FontAwesomeIcon icon={faArrowRight} className="text-sm ml-2" />
-      </Button> */}
+      </Button>
     </div>
   );
 }

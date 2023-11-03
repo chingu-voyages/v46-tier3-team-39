@@ -41,10 +41,20 @@ const TopBar = () => {
         {determineAnswerTitle(question?.questionType)}
       </h3>
       <div className="flex items-center h-full grow justify-end">
-        <IconButton size="small" sx={btnStyle} className={btnClassNames}>
+        <IconButton
+          size="small"
+          sx={btnStyle}
+          className={btnClassNames}
+          type="button"
+        >
           <FontAwesomeIcon icon={faRefresh} className="text-base" />
         </IconButton>
-        <IconButton size="small" sx={btnStyle} className={btnClassNames}>
+        <IconButton
+          size="small"
+          sx={btnStyle}
+          className={btnClassNames}
+          type="button"
+        >
           <FontAwesomeIcon
             icon={faUpRightAndDownLeftFromCenter}
             className="text-xs"
@@ -64,7 +74,7 @@ const AnswerContainer = ({ height }: { height?: string | number }) => {
     >
       <TopBar />
       <Container overflow className="grow">
-        <form className="relative flex flex-col w-full h-full">
+        <div className="relative flex flex-col w-full h-full">
           <div className="grow flex flex-col w-full">
             <AnswerType />
           </div>
@@ -77,7 +87,7 @@ const AnswerContainer = ({ height }: { height?: string | number }) => {
               Submit
             </Button>
           </div>
-        </form>
+        </div>
       </Container>
     </Container>
   );

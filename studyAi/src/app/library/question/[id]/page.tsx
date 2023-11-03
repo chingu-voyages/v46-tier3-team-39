@@ -1,11 +1,10 @@
 import NavigationWrapper from "@/app/util/components/navigation/navigationWrapper";
-import NavigationBtns from "../components/client/navigationBtns";
 import ServerGraphQLClient from "@/app/api/graphql/apolloClient";
+import QuestionPageContainer from "../components/client/questionPageContainer";
 import { gql } from "@apollo/client";
 import { Question } from "../../../../../prisma/generated/type-graphql";
 import { QuestionsContainer } from "@/app/stores/questionStore";
 import { QuestionTypes } from "@/app/util/types/UserData";
-import { QuestionWrapper } from "../components/client/questionWrapper";
 const question: Partial<Question> & {
   id: string;
   questionType: (typeof QuestionTypes)[number];
@@ -79,8 +78,7 @@ export default async function QuestionPage({
       }}
     >
       <QuestionsContainer initialItems={data ? [data] : []}>
-        <NavigationBtns />
-        <QuestionWrapper />
+        <QuestionPageContainer />
       </QuestionsContainer>
     </NavigationWrapper>
   );

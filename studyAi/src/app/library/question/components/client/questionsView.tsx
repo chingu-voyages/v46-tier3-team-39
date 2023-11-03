@@ -13,10 +13,10 @@ import { Carousel } from "@/app/util/components/carousel/carousel";
 const QuestionActionBtns = () => {
   return (
     <div className="flex items-center space-x-1">
-      <IconButton className="h-[70%]">
+      <IconButton className="h-[70%]" type="button">
         <FontAwesomeIcon icon={faPlus} className="text-lg" />
       </IconButton>
-      <IconButton className="h-[70%]">
+      <IconButton className="h-[70%]" type="button">
         <Share className="text-lg" />
       </IconButton>
     </div>
@@ -29,13 +29,23 @@ const LikeCounterBtns = () => {
     params.id && typeof params.id === "string" ? questions[params.id] : null;
   return (
     <div className="flex items-center mr-1">
-      <Button className="space-x-1" variant="text" sx={{ minWidth: "unset" }}>
+      <Button
+        className="space-x-1"
+        variant="text"
+        sx={{ minWidth: "unset" }}
+        type="button"
+      >
         <FontAwesomeIcon icon={faThumbsUp} className="text-lg" />
         <span className="text-sm">
           {parseInteger(question?.likeCounter?.likes)}
         </span>
       </Button>
-      <Button className="space-x-1" variant="text" sx={{ minWidth: "unset" }}>
+      <Button
+        className="space-x-1"
+        variant="text"
+        sx={{ minWidth: "unset" }}
+        type="button"
+      >
         <FontAwesomeIcon
           icon={faThumbsDown}
           style={{ transform: "scale(-1, 1)" }}
