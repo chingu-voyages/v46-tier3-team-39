@@ -17,7 +17,7 @@ const determineAnswerTitle = (str?: string) => {
       return "Select the best answer";
     case "selectMultiple":
       return "Select all that apply";
-    case "shortAnswer":
+    case "Short Answer":
       return "Add your answer below";
     default:
       return str;
@@ -41,10 +41,20 @@ const TopBar = () => {
         {determineAnswerTitle(question?.questionType)}
       </h3>
       <div className="flex items-center h-full grow justify-end">
-        <IconButton size="small" sx={btnStyle} className={btnClassNames}>
+        <IconButton
+          size="small"
+          sx={btnStyle}
+          className={btnClassNames}
+          type="button"
+        >
           <FontAwesomeIcon icon={faRefresh} className="text-base" />
         </IconButton>
-        <IconButton size="small" sx={btnStyle} className={btnClassNames}>
+        <IconButton
+          size="small"
+          sx={btnStyle}
+          className={btnClassNames}
+          type="button"
+        >
           <FontAwesomeIcon
             icon={faUpRightAndDownLeftFromCenter}
             className="text-xs"
@@ -59,12 +69,12 @@ const AnswerContainer = ({ height }: { height?: string | number }) => {
     <Container
       border
       overflow
-      className="max-h-[30rem] md:max-h-none"
+      className="max-h-[max(30rem,45vh)] md:max-h-none md:w-3/6 md:ml-2 grow"
       style={{ height: height ? height + "px" : undefined }}
     >
       <TopBar />
       <Container overflow className="grow">
-        <form className="relative flex flex-col w-full h-full">
+        <div className="relative flex flex-col w-full h-full">
           <div className="grow flex flex-col w-full">
             <AnswerType />
           </div>
@@ -77,7 +87,7 @@ const AnswerContainer = ({ height }: { height?: string | number }) => {
               Submit
             </Button>
           </div>
-        </form>
+        </div>
       </Container>
     </Container>
   );
