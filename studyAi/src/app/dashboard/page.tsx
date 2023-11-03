@@ -6,8 +6,7 @@ import { Question } from "../../../prisma/generated/type-graphql";
 
 export default async function DashboardPage() {
   const sessionData = await protectRouteSSR("/auth/login");
-  console.log('user', sessionData.props);
-
+  // console.log("user", sessionData.props);
   // const QuestionQueryById = gql`
   //   query Question($id: String) {
   //     question(where: { id: $id }) {
@@ -15,43 +14,42 @@ export default async function DashboardPage() {
   //       questionType
   //     }
   //   }`
+  // const QuestionQueryById = gql`
+  // query Question {
+  //   readQuestion(id:  "653c05793171c264d005c0b4") {
+  //     id
+  //     questionType
+  //   }
+  // }`
 
-    const QuestionQueryById = gql`
-    query Question {
-      readQuestion(id:  "653c05793171c264d005c0b4") {
-        id
-        questionType
-      }
-    }`
+  // const AddQuestionQuery = gql`
+  // mutation AddQuestion {
+  //   addQuestion(
+  //     questionType: "MCQ",
+  //     tags: ["Geography", "History"],
+  //     questionTitle: "What is the capital of Malaysia?",
+  //     questionDesc: "",
+  //     correctAnswer: ["Kuala Lumpur"],
+  //     incorrectAnswer: ["Penang", "Johor", "Sabah"],
+  //     ) {
+  //       id
+  //       questionType
+  //     }
+  //   }`
 
-    // const AddQuestionQuery = gql`
-    // mutation AddQuestion {
-    //   addQuestion(
-    //     questionType: "MCQ",
-    //     tags: ["Geography", "History"],
-    //     questionTitle: "What is the capital of Malaysia?",
-    //     questionDesc: "",
-    //     correctAnswer: ["Kuala Lumpur"],
-    //     incorrectAnswer: ["Penang", "Johor", "Sabah"],
-    //     ) {
-    //       id
-    //       questionType
-    //     }
-    //   }`
+  // const questionId = "653c05793171c264d005c0b4";
+  // const query = {
+  //   query: QuestionQueryById,
+  //   variables: { id: questionId },
+  // };
 
-    // const questionId = "653c05793171c264d005c0b4";
-    // const query = {
-    //   query: QuestionQueryById,
-    //   variables: { id: questionId },
-    // };
+  // const query1 = {
+  //   query: QuestionQueryById,
+  // };
 
-    const query1 = {
-      query: QuestionQueryById,
-    };
-
-    const {data: result} = await ServerGraphQLClient.query(query1);
-    const data = result as Partial<Question> | null;
-    console.log('question', data)
+  // const {data: result} = await ServerGraphQLClient.query(query1);
+  // const data = result as Partial<Question> | null;
+  // console.log('question', data)
 
   return (
     <NavigationWrapper
@@ -62,7 +60,7 @@ export default async function DashboardPage() {
     >
       {" "}
       Hello
-      <QuestionEditor />
+      {/* <QuestionEditor /> */}
     </NavigationWrapper>
   );
 }
