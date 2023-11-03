@@ -15,7 +15,7 @@ export default function NavigationBtns() {
     minWidth: "unset",
   };
   return (
-    <div className="flex justify-between items-center w-full h-12 mt-2">
+    <div className="flex justify-between items-center w-full h-10 mt-2">
       <Button
         size={"large"}
         variant={"outlined"}
@@ -23,9 +23,9 @@ export default function NavigationBtns() {
         sx={btnStyles}
         aria-label="Go to previous question"
       >
-        <FontAwesomeIcon icon={faArrowLeft} className="text-md" />
+        <FontAwesomeIcon icon={faArrowLeft} className="text-sm" />
         {windowWidth > 480 && (
-          <span className="flex items-center justify-center leading-none text-md tracking-normal ml-3">
+          <span className="flex items-center justify-center leading-none text-sm tracking-normal ml-2">
             Back
           </span>
         )}
@@ -40,11 +40,11 @@ export default function NavigationBtns() {
         aria-label="Go to next question"
       >
         {windowWidth > 480 && (
-          <span className="flex items-center justify-center leading-none text-md tracking-normal">
+          <span className="flex items-center justify-center leading-none text-sm tracking-normal">
             Next
           </span>
         )}
-        <FontAwesomeIcon icon={faArrowRight} className="text-md ml-3" />
+        <FontAwesomeIcon icon={faArrowRight} className="text-sm ml-2" />
       </Button>
     </div>
   );

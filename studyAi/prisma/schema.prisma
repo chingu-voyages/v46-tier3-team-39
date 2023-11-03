@@ -30,7 +30,10 @@ type LikeCounter {
   likes    Int
   dislikes Int
 }
-
+type Score {
+  maxScore Int
+  actualScore Int
+}
 model Question {
   id           String       @id @default(auto()) @map("_id") @db.ObjectId 
   creatorId    String       @db.ObjectId
@@ -71,16 +74,23 @@ model QuizLike {
     quizId String @db.ObjectId
     @@index([userId, quizId])
 }
-
-model Submission {
+model QuestionSubmission {
    id            String  @id @default(auto()) @map("_id") @db.ObjectId
    time          DateTime? @default(now())
-   score         Int
+   score         Score
    dateCreated   DateTime @default(now())
    userId String  @db.ObjectId
-   quizId String? @db.ObjectId
-   questionId String? @db.ObjectId
+   questionId String @db.ObjectId
+   answerProvided String[]
    @@index([userId, questionId])
+}
+model QuizSubmission{
+   id            String  @id @default(auto()) @map("_id") @db.ObjectId
+   time          DateTime? @default(now())
+   score         Score
+   dateCreated   DateTime @default(now())
+   userId String  @db.ObjectId
+   quizId String @db.ObjectId
    @@index([userId, quizId])
 }
 
