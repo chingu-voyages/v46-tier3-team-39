@@ -1,4 +1,9 @@
 const theme = {
+  extend: {
+    height: {
+      "192": "48rem",
+    },
+  },
   colors: {
     Black: "#000000",
     White: "#ffffff",

@@ -1,6 +1,7 @@
-export interface UserInfo {
-  id: string;
-  email: "arkyasmal@gmail.com";
-  first_name: string;
-  last_name: string;
-}
+import { User } from "@prisma/client";
+export const QuestionTypes = [
+  "multipleChoice",
+  "selectMultiple",
+  "shortAnswer",
+] as const;
+export type UserInfo = User

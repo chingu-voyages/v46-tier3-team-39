@@ -38,3 +38,5 @@ my.secrets*
 .env
 env*
 package-lock.json*
+
+generated
