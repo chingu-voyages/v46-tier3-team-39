@@ -8,6 +8,7 @@ import { buildSchema } from "type-graphql";
 import { getServerSession } from "next-auth";
 import { options } from "../auth/[...nextauth]/options";
 import { Session } from "next-auth";
+import { NextApiResponse } from "next";
 export async function createSchema() {
   const schema = await buildSchema({
     // resolvers: allResolvers, // Custom resolvers
@@ -34,7 +35,7 @@ const main = startServerAndCreateNextHandler(server, {
     }
     const contextData = {
       req,
-      res,
+      res: res as NextApiResponse,
       prisma: prismaDb,
       session,
     };
