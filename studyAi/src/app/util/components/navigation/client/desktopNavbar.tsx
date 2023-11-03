@@ -19,11 +19,11 @@ export const menuItemLinks = [
       <FontAwesomeIcon icon={faWandMagicSparkles} className="aspect-square" />
     ),
   },
-  {
-    href: "/",
-    text: "Create Exam",
-    icon: <FontAwesomeIcon icon={faFileLines} className="aspect-square" />,
-  },
+  // {
+  //   href: "/",
+  //   text: "Create Exam",
+  //   icon: <FontAwesomeIcon icon={faFileLines} className="aspect-square" />,
+  // },
 ];
 
 export const GenerateDropdown = () => {
