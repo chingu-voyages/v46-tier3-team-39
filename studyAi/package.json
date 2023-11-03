@@ -5,7 +5,7 @@
   "scripts": {
     "secrets": "ts-node ./scripts/generateEnv.ts",
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run prisma && next build",
     "start": "next start",
     "lint": "next lint",
     "prisma": "npx prisma generate",
