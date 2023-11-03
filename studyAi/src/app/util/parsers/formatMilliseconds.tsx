@@ -1,7 +1,4 @@
-function formatMilliseconds(
-  milliseconds: number,
-  inArr?: boolean
-) {
+function formatMilliseconds(milliseconds: number, inArr?: boolean) {
   const totalSeconds = Math.floor(milliseconds / 1000);
   let seconds = totalSeconds;
   const hours = Math.floor(totalSeconds / 3600);
@@ -15,4 +12,17 @@ function formatMilliseconds(
     return [formattedHours, ":", formattedMinutes, ":", formattedSeconds];
   return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
 }
+
+export function extractTime(timeString: string, splitByColon: boolean = true) {
+  const [hours, minutes, seconds] = splitByColon
+    ? timeString.split(":")
+    : timeString.split(/[hms:]/).filter(Boolean);
+  const time = {
+    hours: hours.padStart(2, "0"),
+    minutes: minutes.padStart(2, "0"),
+    seconds: seconds.padStart(2, "0")
+  };
+  return time;
+}
+
 export default formatMilliseconds;

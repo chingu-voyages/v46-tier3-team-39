@@ -9,10 +9,10 @@ const links = [
     href: "/about",
     text: "About",
   },
-  {
-    href: "/discover",
-    text: "Discover",
-  },
+  // {
+  //   href: "/discover",
+  //   text: "Discover",
+  // },
 ];
 
 export const NavbarLinks = ({

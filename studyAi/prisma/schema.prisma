@@ -15,6 +15,11 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")  
 }
+type TimeOptions {
+  timeType String
+  timeTaken Int?
+  totalTimeGiven Int?
+}
 type QuestionData{
   title String 
   description String
@@ -76,7 +81,7 @@ model QuizLike {
 }
 model QuestionSubmission {
    id            String  @id @default(auto()) @map("_id") @db.ObjectId
-   time          DateTime? @default(now())
+   time          TimeOptions?
    score         Score
    dateCreated   DateTime @default(now())
    userId String  @db.ObjectId
@@ -86,7 +91,7 @@ model QuestionSubmission {
 }
 model QuizSubmission{
    id            String  @id @default(auto()) @map("_id") @db.ObjectId
-   time          DateTime? @default(now())
+   time          TimeOptions?
    score         Score
    dateCreated   DateTime @default(now())
    userId String  @db.ObjectId
