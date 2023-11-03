@@ -10,8 +10,8 @@ import { options } from "../auth/[...nextauth]/options";
 import { Session } from "next-auth";
 export async function createSchema() {
   const schema = await buildSchema({
-    resolvers: allResolvers, // Custom resolvers
-    // resolvers, // Auto-generated resolvers
+    // resolvers: allResolvers, // Custom resolvers
+    resolvers, // Auto-generated resolvers
     emitSchemaFile: true,
   });
   return schema;
@@ -20,11 +20,14 @@ const server = new ApolloServer({
   schema: await createSchema(),
 });
 const main = startServerAndCreateNextHandler(server, {
-  context: async (req, res) => {
+  context: async (req, res: any) => {
     //for testing only, but when writing custom resolver, call the connect function
     prismaDb.$connect();
     let session: Session | null = null;
     try {
+      res.getHeader = (name: string) => res.headers?.get(name);
+      res.setHeader = (name: string, value: string) =>
+        res.headers?.set(name, value);
       session = await getServerSession(req, res, options);
     } catch (e) {
       session = null;
@@ -33,7 +36,7 @@ const main = startServerAndCreateNextHandler(server, {
       req,
       res,
       prisma: prismaDb,
-      session
+      session,
     };
     return contextData;
   },

@@ -16,16 +16,16 @@ const userItemLinks = (userId?: string) => [
     text: "Dashboard",
     icon: <FontAwesomeIcon icon={faChartLine} className="aspect-square" />,
   },
-  {
-    href: `/${userId}/exams`,
-    text: "Your Exams",
-    icon: <FontAwesomeIcon icon={faFileLines} className="aspect-square" />,
-  },
-  {
-    href: `${userId}/profile`,
-    text: "Profile",
-    icon: <FontAwesomeIcon icon={faUserCircle} className="aspect-square" />,
-  },
+  // {
+  //   href: `/${userId}/exams`,
+  //   text: "Your Exams",
+  //   icon: <FontAwesomeIcon icon={faFileLines} className="aspect-square" />,
+  // },
+  // {
+  //   href: `${userId}/profile`,
+  //   text: "Profile",
+  //   icon: <FontAwesomeIcon icon={faUserCircle} className="aspect-square" />,
+  // },
 ];
 const UserProfile = ({
   showUserInfo = false,
