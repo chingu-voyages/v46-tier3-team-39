@@ -2,11 +2,30 @@ import React from "react";
 import { protectRouteSSR } from "../api/utils/sessionFuncs";
 import NavigationWrapper from "../util/components/navigation/navigationWrapper";
 import ServerGraphQLClient from "../api/graphql/apolloClient";
-import { gql, useMutation } from "@apollo/client";
+import { gql } from "@apollo/client";
 import { Question } from "../../../prisma/generated/type-graphql";
-
+const QuestionQueryById = gql`
+  query Question($id: String) {
+    questions(where: { creatorId: { equals: $id } }) {
+      id
+      questionType
+    }
+  }
+`;
 export default async function DashboardPage() {
   const sessionData = await protectRouteSSR("/auth/login");
+  const userId = sessionData?.props?.session?.user?.id;
+  const query = {
+    query: QuestionQueryById,
+    variables: { id: userId },
+  };
+  try {
+    const { data: result } = await ServerGraphQLClient.query(query);
+    console.log(result);
+  } catch (err) {
+    console.log(err);
+    return <>Error fetching items</>
+  }
   // const QuestionQueryById = gql`
   //   query Question($id: String) {
   //     question(where: { id: $id }) {
@@ -27,7 +46,6 @@ export default async function DashboardPage() {
   //   query: QuestionQueryByUserId,
   // };
 
-  // const {data: result} = await ServerGraphQLClient.query(query1);
   // const data = result as Partial<Question> | null;
   // console.log('question', data)
 
