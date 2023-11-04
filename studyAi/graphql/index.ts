@@ -1,4 +1,4 @@
-import { FindUniqueQuestionArgs } from "../prisma/generated/type-graphql";
+import { FindUniqueQuestionArgs, User } from "../prisma/generated/type-graphql";
 import { Resolver, Arg, Args, Ctx, Query, Mutation, Info } from "type-graphql";
 import type { GraphQLResolveInfo } from "graphql";
 import { Question } from "../prisma/generated/type-graphql";
@@ -25,26 +25,13 @@ export class FindUniqueQuestionResolver {
       where: { creatorId: id },
     });
 
-    // if (!session || session.userId !== question.creatorId) {
-    //   throw new Error("You are not authorized to perform this action");
-    // }
-    prisma.$disconnect();
-    return question;
-  }
-  async readUser(
-    @Arg("id") id: string,
-    @Ctx() { req, res, prisma, session }: any
-  ): Promise<Question | null> {
-    prisma.$connect();
-    const user = await prisma.user.findUnique({
-      where: { id: id },
-    });
+    console.log(question)
 
     // if (!session || session.userId !== question.creatorId) {
     //   throw new Error("You are not authorized to perform this action");
     // }
     prisma.$disconnect();
-    return user;
+    return question;
   }
 
   // Add, Update, Delete a question
@@ -136,37 +123,30 @@ export class FindUniqueQuestionResolver {
   }
 }
 
-// async function addQuestion(parent, args, context, info) {
-//   context.prisma.$connect();
+@Resolver((_of) => User)
+export class FindUniqueUserResolver {
 
-//   console.log('---------------------------------------------')
-//   console.log(args)
-//   console.log('---------------------------------------------')
-  
-//   const questionData = await context.prisma.question.create({
-//     data: {
-//       creatorId: args.creatorId,
-//       questionType: args.questionType,
-//       tags: args.tags,
-//       question: {
-//         title: args.questionTitle,
-//         description: args.questionDesc,
-//         options: args.incorrectAnswer
-//       },
-//       answer: {
-//         correctAnswer: args.correctAnswer
-//       },
-//       likeCounter: {
-//         likes: 0,
-//         dislikes: 0
-//       }
-//     }
-//   });
-  
-//   context.prisma.$disconnect();
-//   return questionData;
-// }
+  @Query((_returns) => [Question], {
+    nullable: true,
+  })
+  async readUser(
+    @Arg("id") id: string,
+    @Ctx() { req, res, prisma, session }: any
+  ): Promise<Question | null> {
+    prisma.$connect();
+    const user = await prisma.user.findUnique({
+      where: { id: id },
+    });
+
+    // if (!session || session.userId !== question.creatorId) {
+    //   throw new Error("You are not authorized to perform this action");
+    // }
+    prisma.$disconnect();
+    return user;
+  }
+}
 
 export const allResolvers: NonEmptyArray<Function> = [
-  FindUniqueQuestionResolver
+  FindUniqueQuestionResolver,
+  FindUniqueUserResolver
 ];
