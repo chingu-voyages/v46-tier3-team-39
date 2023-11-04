@@ -33,6 +33,22 @@ const questions: Omit<Question, "id" | "creatorId" | "dateCreated">[] = [
       likes: 1,
       dislikes: 0
     }
+  },
+  {
+    questionType: "Checkbox",
+    tags: ['Science', 'Chemistry'],
+    question: {
+      title: 'Molecular Compound',
+      description: 'Which of the following elements are found in the molecular formula H2O (water)?',
+      options: ['Carbon', 'Nitrogen']
+    },
+    answer: {
+      correctAnswer: ['Hydrogen', 'Oxygen'],
+    },
+    likeCounter: {
+      likes: 1,
+      dislikes: 0
+    }
   }
 ];
 
