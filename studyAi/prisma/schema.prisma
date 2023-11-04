@@ -28,7 +28,10 @@ type QuestionData {
   //for mc and select multiple. short answer will contain empty arr
   options String[]
 }
-
+type UserQuestionData {
+  generated Int @default(0)
+  answered Int @default(0)
+}
 type AnswerData {
   correctAnswer String[]
 }
@@ -150,6 +153,9 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  questionData QuestionData
+  school String? 
+  
 }
 
 model VerificationToken {

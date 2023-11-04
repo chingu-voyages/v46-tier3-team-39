@@ -4,6 +4,8 @@ import NavigationWrapper from "../util/components/navigation/navigationWrapper";
 import ServerGraphQLClient from "../api/graphql/apolloClient";
 import { gql } from "@apollo/client";
 import { Question } from "../../../prisma/generated/type-graphql";
+import GreetingBanner from "./server/greetingBannerContainer";
+
 const QuestionQueryById = gql`
   query Question($id: String) {
     questions(where: { creatorId: { equals: $id } }) {
@@ -21,11 +23,10 @@ export default async function DashboardPage() {
   };
   try {
     const { data: result } = await ServerGraphQLClient.query(query);
-    console.log(result);
   } catch (err) {
-    console.log(err);
     return <>Error fetching items</>
   }
+
   // const QuestionQueryById = gql`
   //   query Question($id: String) {
   //     question(where: { id: $id }) {
@@ -91,8 +92,9 @@ export default async function DashboardPage() {
         navbar: true,
         footer: true,
       }}
+      usePadding
     >
-      Hello
+      <GreetingBanner />
       {/* <QuestionEditor /> */}
     </NavigationWrapper>
   );
