@@ -11,24 +11,24 @@ import {
 
 @Resolver((_of) => Question)
 export class FindUniqueQuestionResolver {
-  @Query((_returns) => Question, {
-    nullable: true,
-  })
-  async question(
-    @Ctx() ctx: any,
-    @Info() info: GraphQLResolveInfo,
-    @Args() args: FindUniqueQuestionArgs
-  ): Promise<Question | null> {
-    const { _count } = transformInfoIntoPrismaArgs(info);
-    const question = getPrismaFromContext(ctx).question.findUnique({
-      ...args,
-      ...(_count && transformCountFieldIntoSelectRelationsCount(_count)),
-    });
-    if (!ctx.session || ctx.session.userId !== question.creatorId) {
-      throw new Error("You are not authorized to perform this action");
-    }
-    return question;
-  }
+  // @Query((_returns) => Question, {
+  //   nullable: true,
+  // })
+  // async question(
+  //   @Ctx() ctx: any,
+  //   @Info() info: GraphQLResolveInfo,
+  //   @Args() args: FindUniqueQuestionArgs
+  // ): Promise<Question | null> {
+  //   const { _count } = transformInfoIntoPrismaArgs(info);
+  //   const question = getPrismaFromContext(ctx).question.findUnique({
+  //     ...args,
+  //     ...(_count && transformCountFieldIntoSelectRelationsCount(_count)),
+  //   });
+  //   if (!ctx.session || ctx.session.userId !== question.creatorId) {
+  //     throw new Error("You are not authorized to perform this action");
+  //   }
+  //   return question;
+  // }
 
   @Query((_returns) => Question, {
     nullable: true,
@@ -37,10 +37,13 @@ export class FindUniqueQuestionResolver {
     @Arg("id") id: string,
     @Ctx() { req, res, prisma, session }: any
   ): Promise<Question | null> {
-    prisma.$connect();
     const question = await prisma.question.findUnique({
       where: { id: id },
     });
+    console.log('------------------------------------------------------------')
+    console.log(question)
+    console.log(id)
+    console.log('------------------------------------------------------------')
     // if (!session || session.userId !== question.creatorId) {
     //   throw new Error("You are not authorized to perform this action");
     // }
@@ -48,51 +51,51 @@ export class FindUniqueQuestionResolver {
     return question;
   }
 
-  @Mutation((_returns) => Question, {
-    nullable: true,
-  })
-  async addQuestion(
-    @Arg("questionType") questionType: string,
-    @Arg("tags") tags: string[],
-    @Arg("questionTitle") questionTitle: string,
-    @Arg("questionDesc") questionDesc: string,
-    @Arg("correctAnswer") correctAnswer: string[],
-    @Arg("incorrectAnswer") incorrectAnswer: string[],
-    @Ctx() { req, res, prisma, session }: any
-  ): Promise<Question | null> {
-    prisma.$connect();
-    const questionData = await prisma.questionData.create({
-      data: {
-        questionTitle: questionTitle,
-        questionDesc: questionDesc,
-      },
-    });
-    const answer = await prisma.answer.create({
-      data: {
-        correctAnswer: correctAnswer,
-        incorrectAnswer: incorrectAnswer,
-      },
-    });
-    const creator = await prisma.user.findUnique({
-      where: { id: session.userId },
-    });
-    const likeCounter = await prisma.likeCounter.create({
-      likes: 0,
-      dislikes: 0,
-    });
-    const question = await prisma.question.create({
-      data: {
-        creatorId: creator.id,
-        questionType: questionType,
-        tags: tags,
-        question: questionData,
-        answer: answer,
-        likeCounter: likeCounter,
-      },
-    });
-    prisma.$disconnect();
-    return question;
-  }
+  // @Mutation((_returns) => Question, {
+  //   nullable: true,
+  // })
+  // async addQuestion(
+  //   @Arg("questionType") questionType: string,
+  //   @Arg("tags") tags: string[],
+  //   @Arg("questionTitle") questionTitle: string,
+  //   @Arg("questionDesc") questionDesc: string,
+  //   @Arg("correctAnswer") correctAnswer: string[],
+  //   @Arg("incorrectAnswer") incorrectAnswer: string[],
+  //   @Ctx() { req, res, prisma, session }: any
+  // ): Promise<Question | null> {
+  //   prisma.$connect();
+  //   const questionData = await prisma.questionData.create({
+  //     data: {
+  //       questionTitle: questionTitle,
+  //       questionDesc: questionDesc,
+  //     },
+  //   });
+  //   const answer = await prisma.answer.create({
+  //     data: {
+  //       correctAnswer: correctAnswer,
+  //       incorrectAnswer: incorrectAnswer,
+  //     },
+  //   });
+  //   const creator = await prisma.user.findUnique({
+  //     where: { id: session.userId },
+  //   });
+  //   const likeCounter = await prisma.likeCounter.create({
+  //     likes: 0,
+  //     dislikes: 0,
+  //   });
+  //   const question = await prisma.question.create({
+  //     data: {
+  //       creatorId: creator.id,
+  //       questionType: questionType,
+  //       tags: tags,
+  //       question: questionData,
+  //       answer: answer,
+  //       likeCounter: likeCounter,
+  //     },
+  //   });
+  //   prisma.$disconnect();
+  //   return question;
+  // }
 }
 
 export const allResolvers: NonEmptyArray<Function> = [
