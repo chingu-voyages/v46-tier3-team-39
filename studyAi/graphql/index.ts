@@ -11,93 +11,162 @@ import {
 
 @Resolver((_of) => Question)
 export class FindUniqueQuestionResolver {
-  // @Query((_returns) => Question, {
-  //   nullable: true,
-  // })
-  // async question(
-  //   @Ctx() ctx: any,
-  //   @Info() info: GraphQLResolveInfo,
-  //   @Args() args: FindUniqueQuestionArgs
-  // ): Promise<Question | null> {
-  //   const { _count } = transformInfoIntoPrismaArgs(info);
-  //   const question = getPrismaFromContext(ctx).question.findUnique({
-  //     ...args,
-  //     ...(_count && transformCountFieldIntoSelectRelationsCount(_count)),
-  //   });
-  //   if (!ctx.session || ctx.session.userId !== question.creatorId) {
-  //     throw new Error("You are not authorized to perform this action");
-  //   }
-  //   return question;
-  // }
 
-  @Query((_returns) => Question, {
+  // Returns array of question by creatorId or user information by userId
+  @Query((_returns) => [Question], {
     nullable: true,
   })
   async readQuestion(
     @Arg("id") id: string,
     @Ctx() { req, res, prisma, session }: any
-  ): Promise<Question | null> {
-    const question = await prisma.question.findUnique({
-      where: { id: id },
+  ): Promise<[Question] | null> {
+    prisma.$connect();
+    const question = await prisma.question.findMany({
+      where: { creatorId: id },
     });
-    console.log('------------------------------------------------------------')
-    console.log(question)
-    console.log(id)
-    console.log('------------------------------------------------------------')
+
     // if (!session || session.userId !== question.creatorId) {
     //   throw new Error("You are not authorized to perform this action");
     // }
     prisma.$disconnect();
     return question;
   }
+  async readUser(
+    @Arg("id") id: string,
+    @Ctx() { req, res, prisma, session }: any
+  ): Promise<Question | null> {
+    prisma.$connect();
+    const user = await prisma.user.findUnique({
+      where: { id: id },
+    });
 
-  // @Mutation((_returns) => Question, {
-  //   nullable: true,
-  // })
-  // async addQuestion(
-  //   @Arg("questionType") questionType: string,
-  //   @Arg("tags") tags: string[],
-  //   @Arg("questionTitle") questionTitle: string,
-  //   @Arg("questionDesc") questionDesc: string,
-  //   @Arg("correctAnswer") correctAnswer: string[],
-  //   @Arg("incorrectAnswer") incorrectAnswer: string[],
-  //   @Ctx() { req, res, prisma, session }: any
-  // ): Promise<Question | null> {
-  //   prisma.$connect();
-  //   const questionData = await prisma.questionData.create({
-  //     data: {
-  //       questionTitle: questionTitle,
-  //       questionDesc: questionDesc,
-  //     },
-  //   });
-  //   const answer = await prisma.answer.create({
-  //     data: {
-  //       correctAnswer: correctAnswer,
-  //       incorrectAnswer: incorrectAnswer,
-  //     },
-  //   });
-  //   const creator = await prisma.user.findUnique({
-  //     where: { id: session.userId },
-  //   });
-  //   const likeCounter = await prisma.likeCounter.create({
-  //     likes: 0,
-  //     dislikes: 0,
-  //   });
-  //   const question = await prisma.question.create({
-  //     data: {
-  //       creatorId: creator.id,
-  //       questionType: questionType,
-  //       tags: tags,
-  //       question: questionData,
-  //       answer: answer,
-  //       likeCounter: likeCounter,
-  //     },
-  //   });
-  //   prisma.$disconnect();
-  //   return question;
-  // }
+    // if (!session || session.userId !== question.creatorId) {
+    //   throw new Error("You are not authorized to perform this action");
+    // }
+    prisma.$disconnect();
+    return user;
+  }
+
+  // Add, Update, Delete a question
+  @Mutation((_returns) => Question, {
+    nullable: true,
+  })
+  async addQuestion(
+    @Arg("creatorId") creatorId: string,
+    @Arg("questionType") questionType: string,
+    @Arg("tags") tags: string[],
+    @Arg("questionTitle") questionTitle: string,
+    @Arg("questionDesc") questionDesc: string,
+    @Arg("correctAnswer") correctAnswer: string[],
+    @Arg("incorrectAnswer") incorrectAnswer: string[],
+    @Ctx() { req, res, prisma, session }: any
+  ): Promise<Question | null> {
+    prisma.$connect();
+    
+    const questionData = await prisma.question.create({
+      data: {
+       creatorId,
+       questionType,
+       tags,
+       question: {
+        title: questionTitle,
+        description: questionDesc,
+        options: incorrectAnswer
+       },
+       answer: {
+        correctAnswer
+       },
+       likeCounter: {
+        likes: 0,
+        dislikes: 0
+       }
+      },
+    });
+
+    prisma.$disconnect();
+    return questionData;
+  }
+  async updateQuestion(
+    @Arg("id") id: string,
+    @Arg("questionType") questionType: string,
+    @Arg("tags") tags: string[],
+    @Arg("questionTitle") questionTitle: string,
+    @Arg("questionDesc") questionDesc: string,
+    @Arg("correctAnswer") correctAnswer: string[],
+    @Arg("incorrectAnswer") incorrectAnswer: string[],
+    @Ctx() { req, res, prisma, session }: any
+  ): Promise<Question | null> {
+    prisma.$connect();
+    
+    const questionData = await prisma.question.update({
+      where: { id },
+      data: {
+       questionType,
+       tags,
+       question: {
+        title: questionTitle,
+        description: questionDesc,
+        options: incorrectAnswer
+       },
+       answer: {
+        correctAnswer
+       },
+       likeCounter: {
+        likes: 0,
+        dislikes: 0
+       }
+      }
+    });
+
+    prisma.$disconnect();
+    return questionData;
+  }
+  async deleteQuestion(
+    @Arg("id") id: string,
+    @Ctx() { req, res, prisma, session }: any
+  ): Promise<Question | null> {
+    prisma.$connect();
+    
+    const questionData = await prisma.question.delete({
+      where: { id },
+    });
+
+    prisma.$disconnect();
+    return questionData;
+  }
 }
 
+// async function addQuestion(parent, args, context, info) {
+//   context.prisma.$connect();
+
+//   console.log('---------------------------------------------')
+//   console.log(args)
+//   console.log('---------------------------------------------')
+  
+//   const questionData = await context.prisma.question.create({
+//     data: {
+//       creatorId: args.creatorId,
+//       questionType: args.questionType,
+//       tags: args.tags,
+//       question: {
+//         title: args.questionTitle,
+//         description: args.questionDesc,
+//         options: args.incorrectAnswer
+//       },
+//       answer: {
+//         correctAnswer: args.correctAnswer
+//       },
+//       likeCounter: {
+//         likes: 0,
+//         dislikes: 0
+//       }
+//     }
+//   });
+  
+//   context.prisma.$disconnect();
+//   return questionData;
+// }
+
 export const allResolvers: NonEmptyArray<Function> = [
-  FindUniqueQuestionResolver,
+  FindUniqueQuestionResolver
 ];

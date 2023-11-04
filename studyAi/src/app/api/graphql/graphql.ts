@@ -21,7 +21,6 @@ const server = new ApolloServer({
 });
 const main = startServerAndCreateNextHandler(server, {
   context: async (req, res: any) => {
-    prismaDb.$connect();
     let session: Session | null = null;
     // try {
     //   res.getHeader = (name: string) => res.headers?.get(name);

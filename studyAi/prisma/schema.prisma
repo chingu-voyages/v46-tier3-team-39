@@ -20,7 +20,7 @@ type TimeOptions {
   timeTaken Int?
   totalTimeGiven Int?
 }
-type QuestionData{
+type QuestionData {
   title String 
   description String
   //for mc and select multiple. short answer will contain empty arr
