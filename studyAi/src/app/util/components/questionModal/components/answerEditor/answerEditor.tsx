@@ -1,9 +1,9 @@
 import * as React from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { MultipleChoice, SelectAll, ShortAnswer } from './answerTypes';
+import styles from "./answerEditorStyles"
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -23,8 +23,8 @@ function CustomTabPanel(props: TabPanelProps) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
+        <Box className="bg-White sm:h-[365px] p-3">
+          {children}
         </Box>
       )}
     </div>
@@ -44,17 +44,20 @@ export default function AnswerEditor() {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
-
   return (
-    <Box className="w-96">
-      <h2 className="text-5xl">Answer</h2>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-          <Tab label="Multiple Choice" {...a11yProps(0)} />
-          <Tab label="Select All" {...a11yProps(1)} />
-          <Tab label="Short Answer" {...a11yProps(2)} />
+    <Box className={styles.layout}>
+      <h2 className={styles.h2}>Answer</h2>
+      <div className={styles.tabsContainer}>
+        <Tabs 
+          value={value} 
+          onChange={handleChange} 
+          aria-label="answer types"
+        >
+          <Tab className={styles.tabLabel} label="Multiple Choice" {...a11yProps(0)} />
+          <Tab className={styles.tabLabel} label="Select All" {...a11yProps(1)} />
+          <Tab className={styles.tabLabel} label="Short Answer" {...a11yProps(2)} />
         </Tabs>
-      </Box>
+      </div>
       <CustomTabPanel value={value} index={0}>
         <MultipleChoice />
       </CustomTabPanel>

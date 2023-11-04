@@ -5,13 +5,11 @@
   "scripts": {
     "secrets": "ts-node ./scripts/generateEnv.ts",
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run prisma && next build",
     "start": "next start",
     "lint": "next lint",
-    "prisma": "npx prisma generate"
-  },
-  "prisma": {
-    "seed": "ts-node ./src/app/util/prisma/seed.ts"
+    "prisma": "npx prisma generate",
+    "seed": "npx ts-node ./src/app/util/prisma/seed.ts"
   },
   "dependencies": {
     "@apollo/client": "^3.8.6",
@@ -41,16 +39,18 @@
     "micro-cors": "^0.1.1",
     "mongodb": "^6.1.0",
     "next": "13.5.4",
-    "next-auth": "^4.23.2",
+    "next-auth": "^4.24.4",
     "nexus": "^1.3.0",
     "openai": "^3.3.0",
     "react": "18",
     "react-dom": "18",
     "react-sweet-state": "^2.7.1",
     "reflect-metadata": "^0.1.13",
+    "swiper": "^11.0.3",
     "tslib": "^2.6.2",
     "type-graphql": "^2.0.0-beta.3",
     "typegraphql-prisma": "^0.27.1",
+    "uuid": "^9.0.1",
     "zod": "^3.22.4"
   },
   "devDependencies": {
@@ -63,6 +63,7 @@
     "@types/node": "^20.8.9",
     "@types/react": "18",
     "@types/react-dom": "18",
+    "@types/uuid": "^9.0.6",
     "autoprefixer": "10",
     "encoding": "^0.1.13",
     "eslint": "8",

@@ -7,22 +7,14 @@ export const SubscribeAction = () => {
     setRef,
     position: { height: inputHeight },
   } = useElementPosition();
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    //grab uncontrolled inputs here
-    const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData.entries());
-    const { email } = data;
-  };
   return (
-    <form
+    <div
       className="flex flex-col space-y-3 items-end sm:flex-row sm:space-y-0"
-      onSubmit={onSubmit}
     >
       <TextFieldInput
         ref={setRef}
         size={"small"}
-        labelContainerClassNames="mb-3 font-bold text-md text-Black tracking-tight"
+        labelContainerClassNames="mb-3 font-semibold text-md text-Black tracking-tight"
         label="Join us"
         id="email"
         name="email"
@@ -50,6 +42,6 @@ export const SubscribeAction = () => {
       >
         Subscribe
       </Button>
-    </form>
+    </div>
   );
 };

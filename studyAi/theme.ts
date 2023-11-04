@@ -1,6 +1,8 @@
 const theme = {
-  height: {
-    "192": "48rem"
+  extend: {
+    height: {
+      "192": "48rem",
+    },
   },
   colors: {
     Black: "#000000",

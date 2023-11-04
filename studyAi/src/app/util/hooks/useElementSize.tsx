@@ -3,7 +3,7 @@ import { debounce } from "lodash";
 import { useState, useEffect } from "react";
 
 const useElementPosition = () => {
-  const [elementRef, setRef] = useState<HTMLElement | null>(null);
+  const [elementRef, setRef] = useState<HTMLElement | Element |null>(null);
   const [position, setPosition] = useState({ x: 0, y: 0, width: 0, height: 0 });
 
   useEffect(() => {

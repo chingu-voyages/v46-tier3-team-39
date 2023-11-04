@@ -6,8 +6,7 @@ import { Question } from "../../../prisma/generated/type-graphql";
 
 export default async function DashboardPage() {
   const sessionData = await protectRouteSSR("/auth/login");
-  console.log("user", sessionData.props);
-
+  // console.log("user", sessionData.props);
   // const QuestionQueryById = gql`
   //   query Question($id: String) {
   //     question(where: { id: $id }) {
@@ -15,16 +14,13 @@ export default async function DashboardPage() {
   //       questionType
   //     }
   //   }`
-
-  const QuestionQueryById = gql`
-    query Question {
-      readQuestion(id: "${sessionData.props.session.user.id}") {
-        questionType
-      }
-    }
-  `;
-
-  console.log("QuestionQueryById: " + JSON.stringify(QuestionQueryById , null, 1));
+  // const QuestionQueryById = gql`
+  // query Question {
+  //   readQuestion(id:  "653c05793171c264d005c0b4") {
+  //     id
+  //     questionType
+  //   }
+  // }`
 
   // const AddQuestionQuery = gql`
   // mutation AddQuestion {
@@ -47,13 +43,13 @@ export default async function DashboardPage() {
   //   variables: { id: questionId },
   // };
 
-  const query1 = {
-    query: QuestionQueryById,
-  };
+  // const query1 = {
+  //   query: QuestionQueryById,
+  // };
 
-  const { data: result } = await ServerGraphQLClient.query(query1);
-  const data = result as Partial<Question> | null;
-  console.log("question", data);
+  // const {data: result} = await ServerGraphQLClient.query(query1);
+  // const data = result as Partial<Question> | null;
+  // console.log('question', data)
 
   return (
     <NavigationWrapper
@@ -64,6 +60,7 @@ export default async function DashboardPage() {
     >
       {" "}
       Hello
+      {/* <QuestionEditor /> */}
     </NavigationWrapper>
   );
 }

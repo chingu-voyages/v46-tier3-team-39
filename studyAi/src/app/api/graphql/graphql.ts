@@ -8,11 +8,11 @@ import { buildSchema } from "type-graphql";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/route";
 import { Session } from "next-auth";
-
+import { NextApiResponse } from "next";
 export async function createSchema() {
   const schema = await buildSchema({
-    resolvers: allResolvers, // Custom resolvers
-    // resolvers, // Auto-generated resolvers
+    // resolvers: allResolvers, // Custom resolvers
+    resolvers, // Auto-generated resolvers
     emitSchemaFile: true,
   });
   return schema;
@@ -21,16 +21,16 @@ const server = new ApolloServer({
   schema: await createSchema(),
 });
 const main = startServerAndCreateNextHandler(server, {
-  context: async (req, res) => {
+  context: async (req, res: any) => {
     //for testing only, but when writing custom resolver, call the connect function
     prismaDb.$connect();
     // let session: Session | null = null;
     let contextData;
     try {
-      console.log(JSON.stringify(authOptions , null, 1))
-      const session = await getServerSession(authOptions);
-      console.log("------------SUCCESS------------- ");
-      console.log("session: " + session);
+      res.getHeader = (name: string) => res.headers?.get(name);
+      res.setHeader = (name: string, value: string) =>
+        res.headers?.set(name, value);
+      session = await getServerSession(req, res, options);
     } catch (e) {
       console.log("------------------------------------------------");
       console.log("e: " + e);
@@ -46,9 +46,9 @@ const main = startServerAndCreateNextHandler(server, {
     // console.log("contextData: " + contextData);
     contextData = {
       req,
-      res,
+      res: res as NextApiResponse,
       prisma: prismaDb,
-      session: null,
+      session,
     };
     return contextData;
   },
