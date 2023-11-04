@@ -13,7 +13,11 @@ const getSubmissionByQuestionId = gql`
       }
     ) {
       id
-      time
+      time {
+        timeType
+        timeTaken
+        totalTimeGiven
+      }
       score {
         maxScore
         actualScore

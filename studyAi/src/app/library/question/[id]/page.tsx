@@ -66,8 +66,8 @@ export default async function QuestionPage({
     variables: { id: questionId },
   };
   const { data: result } = await ServerGraphQLClient.query(query);
-  // const data = result.question as (Partial<Question> & { id: string }) | null;
-  const data = question;
+  const data = result.question as (Partial<Question> & { id: string }) | null;
+  // const data = question;
 
   return (
     <NavigationWrapper
