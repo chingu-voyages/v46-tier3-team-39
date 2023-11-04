@@ -15,21 +15,21 @@ export default async function DashboardPage() {
   //     }
   //   }`
 
-  const QuestionQueryByUserId = gql`
-  query Question {
-    readQuestion(id:  "${sessionData.props.session.user.id}") {
-      id
-      questionType
-    }
-  }`
+  // const QuestionQueryByUserId = gql`
+  // query Question {
+  //   readQuestion(id:  "${sessionData.props.session.user.id}") {
+  //     id
+  //     questionType
+  //   }
+  // }`
 
-  const query1 = {
-    query: QuestionQueryByUserId,
-  };
+  // const query1 = {
+  //   query: QuestionQueryByUserId,
+  // };
 
-  const {data: result} = await ServerGraphQLClient.query(query1);
-  const data = result as Partial<Question> | null;
-  console.log('question', data)
+  // const {data: result} = await ServerGraphQLClient.query(query1);
+  // const data = result as Partial<Question> | null;
+  // console.log('question', data)
 
   //   const CREATE_LINK_MUTATION = gql`
   //   mutation PostMutation(
