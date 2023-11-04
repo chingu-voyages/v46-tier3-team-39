@@ -15,6 +15,11 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")  
 }
+type TimeOptions {
+  timeType String
+  timeTaken Int?
+  totalTimeGiven Int?
+}
 type QuestionData{
   title String 
   description String
@@ -30,7 +35,10 @@ type LikeCounter {
   likes    Int
   dislikes Int
 }
-
+type Score {
+  maxScore Int
+  actualScore Int
+}
 model Question {
   id           String       @id @default(auto()) @map("_id") @db.ObjectId 
   creatorId    String       @db.ObjectId
@@ -43,9 +51,10 @@ model Question {
   @@index([creatorId])
 }
 
-model QuestionLikes {
+model QuestionLike {
     id            String  @id @default(auto()) @map("_id") @db.ObjectId
     dateCreated   DateTime @default(now())
+    dislike Boolean
     userId String @db.ObjectId
     questionId String @db.ObjectId
     @@index([userId, questionId])
@@ -62,23 +71,31 @@ model Quiz {
   @@index([creatorId])
 }
 
-model QuizLikes {
+model QuizLike {
     id            String   @id @default(auto()) @map("_id") @db.ObjectId
     dateCreated   DateTime @default(now())
+    dislike Boolean
     userId String @db.ObjectId
     quizId String @db.ObjectId
     @@index([userId, quizId])
 }
-
-model Submissions {
+model QuestionSubmission {
    id            String  @id @default(auto()) @map("_id") @db.ObjectId
-   time          DateTime? @default(now())
-   score         Int
+   time          TimeOptions?
+   score         Score
    dateCreated   DateTime @default(now())
    userId String  @db.ObjectId
-   quizId String? @db.ObjectId
-   questionId String? @db.ObjectId
+   questionId String @db.ObjectId
+   answerProvided String[]
    @@index([userId, questionId])
+}
+model QuizSubmission{
+   id            String  @id @default(auto()) @map("_id") @db.ObjectId
+   time          TimeOptions?
+   score         Score
+   dateCreated   DateTime @default(now())
+   userId String  @db.ObjectId
+   quizId String @db.ObjectId
    @@index([userId, quizId])
 }
 

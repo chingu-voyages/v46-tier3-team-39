@@ -4,10 +4,8 @@ import { SubmissionView } from "./submissionView";
 export const containerTabs = ["description", "solution", "attempts"] as const;
 export const InnerContainer = ({
   view,
-  params,
 }: {
   view: (typeof containerTabs)[number];
-  params: { id: string };
 }) => {
   switch (view) {
     case "description":
@@ -15,7 +13,7 @@ export const InnerContainer = ({
     case "solution":
       return <SolutionView />;
     case "attempts":
-      return <SubmissionView params={params} />;
+      return <SubmissionView />;
     default:
       return <QuestionView />;
   }

@@ -11,7 +11,7 @@ const Timer = ({
 }: {
   updateTimeAction?: () => void;
   initialTimeLeft: number;
-  totalTimeGiven?: number;
+  totalTimeGiven?: number | null;
 }) => {
   const {
     time,
@@ -62,6 +62,7 @@ const Timer = ({
       clearInterval(updateTimeActionIntervalRef.current);
     setTime(totalTimeGiven ? totalTimeGiven : 100000);
   };
+  const timeArr = formatMilliseconds(time, true);
   return (
     <div className="flex items-center justify-center h-full space-x-1">
       <TimeControlsWrapper
@@ -73,8 +74,15 @@ const Timer = ({
         <div
           className="flex justify-center items-center leading-none"
           style={{ lineHeight: 0 }}
+          aria-label={formatMilliseconds(time) + " remaining"}
         >
-          {formatMilliseconds(time)}
+          {typeof timeArr === "string"
+            ? timeArr
+            : timeArr.map((e, idx) => (
+                <div key={e + idx} className="mx-[0.03em]">
+                  {e}
+                </div>
+              ))}
         </div>
       </TimeControlsWrapper>
     </div>

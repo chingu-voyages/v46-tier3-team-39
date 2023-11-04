@@ -7,13 +7,9 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 export default async function generatePrompts(model: string, prompt: string) {
-  
-  const response = await openai.createCompletion({
+  const response = await openai.createChatCompletion({
     model,
-    prompt,
-    max_tokens: 300,
-    temperature: 0
+    messages: [{ role: "user", content: prompt }],
   });
-
-  return response.data;
+  return response.data?.choices[0].message?.content;
 }

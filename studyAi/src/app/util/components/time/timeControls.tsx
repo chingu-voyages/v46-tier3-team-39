@@ -1,55 +1,97 @@
 "use client";
-import { Button } from "@mui/material";
+import { Button, IconButton } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons";
-import { faCirclePause } from "@fortawesome/free-regular-svg-icons";
+import {
+  faCirclePause,
+  faCirclePlay,
+} from "@fortawesome/free-regular-svg-icons";
 import TimerIcon from "../../icons/timerIcon";
+import { MouseEvent, useState } from "react";
 const TimeControlsWrapper = ({
   children,
   paused,
   startTimer,
   resetTimer,
   stopTimer,
+  showTimer,
 }: {
   children: React.ReactNode;
   startTimer: () => void;
   resetTimer: () => void;
   stopTimer: () => void;
   paused: boolean;
+  showTimer?: boolean;
 }) => {
+  const [show, setShow] = useState(showTimer);
+  const showTimeVisibility =
+    (callback?: () => void) =>
+    (e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => {
+      if (callback) callback();
+      setShow(true);
+    };
   return (
-    <div className="flex items-center justify-center h-full">
-      <Button
-        size="medium"
-        variant="text"
-        className="flex justify-center items-center px-2 text-Black h-full font-semibold text-lg"
-        onClick={paused ? startTimer : stopTimer}
+    <div className="flex items-center justify-center h-full w-full">
+      {show && (
+        <div className="flex justify-center items-center h-full">
+          <Button
+            type="button"
+            onClick={() => setShow(false)}
+            className="flex items-center px-1 py-2 text-Black h-[80%] font-medium text-base break-words"
+            sx={{
+              minWidth: "unset",
+              minHeight: "unset",
+            }}
+          >
+            {children}
+          </Button>
+        </div>
+      )}
+      <IconButton
+        type="button"
+        size="large"
+        className="flex justify-center items-center p-0 aspect-square h-[80%]"
+        onClick={
+          paused && show
+            ? showTimeVisibility(startTimer)
+            : !paused && show
+            ? showTimeVisibility(stopTimer)
+            : !show
+            ? () => setShow(true)
+            : () => setShow(false)
+        }
         sx={{ minWidth: "unset" }}
       >
-        {paused && (
+        {!show && (
           <TimerIcon
-            className="fill-Black aspect-square text-2xl svg-inline--fa mr-2"
+            className="fill-Black aspect-square text-lg svg-inline--fa"
             height={"1em"}
             width={"1em"}
           />
         )}
-        {!paused && (
+        {paused && show && (
           <FontAwesomeIcon
-            icon={faCirclePause}
-            className="aspect-square text-2xl mr-2"
+            icon={faCirclePlay}
+            className="aspect-square text-xl"
           />
         )}
-        {children}
-      </Button>
-      <Button
+        {!paused && show && (
+          <FontAwesomeIcon
+            icon={faCirclePause}
+            className="aspect-square text-xl"
+          />
+        )}
+      </IconButton>
+      <IconButton
         size="large"
-        variant="text"
+        type="button"
+        // variant="text"
         onClick={resetTimer}
-        className="flex justify-center items-center p-0 aspect-square h-full"
+        className="flex justify-center items-center p-0 aspect-square h-[80%]"
         sx={{ minWidth: "unset" }}
       >
-        <FontAwesomeIcon icon={faArrowsRotate} className="text-xl" />
-      </Button>
+        <FontAwesomeIcon icon={faArrowsRotate} className="text-lg" />
+      </IconButton>
     </div>
   );
 };
