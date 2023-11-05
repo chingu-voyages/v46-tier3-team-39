@@ -1,9 +1,7 @@
-import "reflect-metadata";
+
 import { ApolloServer } from "@apollo/server";
-import { resolvers } from "../../../../prisma/generated/type-graphql";
-import { startServerAndCreateNextHandler } from "./lib/startServerAndCreateNextHandler";
+import { startServerAndCreateNextHandler } from "@as-integrations/next";
 import { prismaDb } from "@/app/util/prisma/connection";
-import { buildSchema } from "type-graphql";
 import { getServerSession } from "next-auth";
 import { options } from "../auth/[...nextauth]/options";
 import { Session } from "next-auth";
@@ -14,10 +12,17 @@ import { createSchema } from "../../../../graphql/createSchema";
 const server = new ApolloServer({
   schema: await createSchema(),
 });
-
+const canUserModify = (userId: string | undefined, creatorId: string) => {
+  if (userId !== creatorId)
+    throw new GraphQLError("User is not authorized/authenticated", {
+      extensions: {
+        code: "UNAUTHENTICATED",
+        http: { status: 401 },
+      },
+    });
+};
 const main = startServerAndCreateNextHandler(server, {
   context: async (req: any, res: any) => {
-    const body = await req.graphQLBody;
     let session: Session | null = null;
     try {
       res.getHeader = (name: string) => res.headers?.get(name);
@@ -50,7 +55,7 @@ const main = startServerAndCreateNextHandler(server, {
 
     const contextData = {
       req,
-      res,
+      res: res as NextApiResponse,
       prisma: prismaDb,
       session,
     };
@@ -58,4 +63,5 @@ const main = startServerAndCreateNextHandler(server, {
     return contextData;
   },
 });
+
 export default main;
