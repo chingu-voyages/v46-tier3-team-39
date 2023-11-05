@@ -26,46 +26,46 @@ const server = new ApolloServer({
 
 const main = startServerAndCreateNextHandler(server, {
   context: async (req, res: any) => {
+    const body = await req.body;
     let session: Session | null = null;
     try {
       res.getHeader = (name: string) => res.headers?.get(name);
       res.setHeader = (name: string, value: string) =>
-      res.headers?.set(name, value);
+        res.headers?.set(name, value);
       session = await getServerSession(req, res, options);
     } catch (e) {
-        session = null;
+      session = null;
     }
+    console.log(body);
+    // const acessibleModels = {
+    //   question: "question",
+    //   quiz: "quiz"
+    // }
+    // const actualId = (req.body.variables.creatorId) ? req.body.variables.creatorId : (req.body.variables.userId) ? req.body.variables.userId : req.body.variables.id;
+    // const resolverRequested = req.body.query.split('{')[1].split("(")[0];
+    // let sessionNeeded = true;
+    // for (const key of Object.keys(acessibleModels)) {
+    //   if (resolverRequested.toLowerCase().include(acessibleModels[key])) {
+    //     sessionNeeded = false;
+    //     break;
+    //   }
+    // }
 
-    const acessibleModels = {
-      question: "question",
-      quiz: "quiz"
-    }
-  
-    const actualId = (req.body.variables.creatorId) ? req.body.variables.creatorId : (req.body.variables.userId) ? req.body.variables.userId : req.body.variables.id;
-    const resolverRequested = req.body.query.split('{')[1].split("(")[0];
-    let sessionNeeded = true;
-    for (const key of Object.keys(acessibleModels)) {
-      if (resolverRequested.toLowerCase().include(acessibleModels[key])) {
-        sessionNeeded = false;
-        break;
-      }
-    }
+    // console.log(sessionNeeded)
 
-    console.log(sessionNeeded)
+    // if (sessionNeeded && !session || session.user.id !== actualId)
+    //   throw new GraphQLError('User is not authorized/authenticated', {
+    //     extensions: {
+    //       code: 'UNAUTHENTICATED',
+    //       http: { status: 401 },
+    //     }
+    // });
 
-    if (sessionNeeded && !session || session.user.id !== actualId)
-      throw new GraphQLError('User is not authorized/authenticated', {
-        extensions: {
-          code: 'UNAUTHENTICATED',
-          http: { status: 401 },
-        }
-    });
-    
     const contextData = {
       req,
       res: res as NextApiResponse,
       prisma: prismaDb,
-      session
+      session,
     };
 
     return contextData;
