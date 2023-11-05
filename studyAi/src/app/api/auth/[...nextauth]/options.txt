@@ -42,7 +42,7 @@ export const options: NextAuthOptions = {
           await connectToDb();
           const user = await findUniqueByEmail(
             credentials.email,
-            "userCredentials"
+            "userCredential"
           );
           //if no user was found
           if (!user || !user?.password) throw new Error("No user found");
@@ -75,7 +75,7 @@ export const options: NextAuthOptions = {
         await connectToDb();
         const sessionCreds = await findUniqueByEmail(
           session.user.email,
-          "userCredentials"
+          "userCredential"
         );
         if (!sessionCreds) return session;
         const sessionUser = await findUniqueById(sessionCreds.userId, "user");

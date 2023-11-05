@@ -45,9 +45,18 @@ function TimerInput() {
   );
   const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const target = e.target as HTMLInputElement;
-    const { hours, minutes, seconds } = extractTime(target.value, false);
-    if (!(hours) || !(minutes) || !(seconds)) return;
-    console.log(hours, minutes, seconds)
+    // setTotalTime((prevVal) => {
+    //   const currVal = target.value
+    //   let newVal = ""
+    //   if (prevVal < currVal) newVal = "0" + currVal.substring(1, currVal.length)
+    //   else 
+    //   const { hours, minutes, seconds } = extractTime(currVal, false);
+
+    // })
+    // if (!(hours) || !(minutes) || !(seconds)) return;
+    // console.log(hours, minutes, seconds)
+    
+    
     // const timeTotalSeconds =
     //   parseInt(hours.toString().padStart(2, "0"), 10) * 3600 +
     //   parseInt(minutes.toString().padStart(2, "0"), 10) * 60 +
