@@ -1,13 +1,17 @@
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import { getServerSession } from "next-auth";
 import GreetingBanner from "./greetingBanner";
-import { gql } from "@apollo/client";
 import { sub } from "date-fns";
 import ServerGraphQLClient from "@/app/api/graphql/apolloClient";
 import { Question } from "../../../../prisma/generated/type-graphql";
 import { QuestionSubmission } from "@prisma/client";
-const QueryUserGeneratedQuestions = gql`
-  query Question($id: String, $startDate: DateTimeISO, $endDate: DateTimeISO) {
+import { gql } from "../../../../graphql/generated";
+const QueryUserGeneratedQuestions = gql(`
+  query QueryUserGeneratedQuestions(
+    $id: String
+    $startDate: DateTimeISO
+    $endDate: DateTimeISO
+  ) {
     questions(
       where: {
         creatorId: { equals: $id }
@@ -18,9 +22,9 @@ const QueryUserGeneratedQuestions = gql`
       id
     }
   }
-`;
-const QueryQuestionSubmissions = gql`
-  query QuestionSubmission(
+`);
+const QueryQuestionSubmissions = gql(`
+  query QueryQuestionSubmissions(
     $id: String
     $startDate: DateTimeISO
     $endDate: DateTimeISO
@@ -35,7 +39,7 @@ const QueryQuestionSubmissions = gql`
       id
     }
   }
-`;
+`);
 const GreetingBannerContainer = async () => {
   const session = await getServerSession(options);
   const userId = session?.user.id;

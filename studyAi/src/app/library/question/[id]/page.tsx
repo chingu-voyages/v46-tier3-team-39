@@ -1,10 +1,10 @@
 import NavigationWrapper from "@/app/util/components/navigation/navigationWrapper";
 import ServerGraphQLClient from "@/app/api/graphql/apolloClient";
 import QuestionPageContainer from "../components/client/questionPageContainer";
-import { gql } from "@apollo/client";
 import { Question } from "../../../../../prisma/generated/type-graphql";
 import { QuestionsContainer } from "@/app/stores/questionStore";
 import { QuestionTypes } from "@/app/util/types/UserData";
+import { gql } from "../../../../../graphql/generated";
 const question: Partial<Question> & {
   id: string;
   questionType: (typeof QuestionTypes)[number];
@@ -36,8 +36,8 @@ const question: Partial<Question> & {
     options: ["the world", "the world", "the world", "the world"],
   },
 };
-const QuestionQueryById = gql`
-  query Question($id: String) {
+const QuestionQueryById = gql(`
+  query GetFullQuestion($id: String) {
     question(where: { id: $id }) {
       id
       creatorId
@@ -54,7 +54,7 @@ const QuestionQueryById = gql`
       }
     }
   }
-`;
+`);
 export default async function QuestionPage({
   params,
 }: {

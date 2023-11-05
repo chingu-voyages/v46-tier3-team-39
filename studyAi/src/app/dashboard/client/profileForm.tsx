@@ -1,10 +1,10 @@
 "use client";
 import { UserProfile } from "@/app/util/components/navigation/client/userProfile";
-import { gql, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { useSession } from "next-auth/react";
 import { useRef, useState } from "react";
-
-const UpdateUserProfileInfo = gql`
+import { gql } from "../../../../graphql/generated";
+const UpdateUserProfileInfo = gql(`
   mutation UpdateUserProfileInfo(
     $tags: [String!]!,
     $name: String!,
@@ -16,7 +16,7 @@ const UpdateUserProfileInfo = gql`
   ){
     updateUser()
   }
-`;
+`);
 const ProfileForm = async () => {
   const session = useSession();
   const [tags, setTags] = useState(session.data ? session.data.user.tags : []);
