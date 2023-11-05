@@ -10,8 +10,23 @@ async function main() {
     prismaDb.questionSubmission.deleteMany({}),
     prismaDb.quizSubmission.deleteMany({}),
   ];
-  
   await Promise.all(deleteArrPromise);
+  try {
+    //update user default keys
+    await prismaDb.user.updateMany({
+      data: {
+        tags: [],
+        school: "",
+        questionData: {
+          generated: 0,
+          answered: 0,
+        },
+      },
+    });
+  } catch (e) {
+    console.log(e);
+  }
+
   // Question
   const allUserQuestions = await allQuestions();
   const questionPromise: Promise<Question>[] = [];
@@ -21,7 +36,7 @@ async function main() {
     );
   }
   const questionInfo = await Promise.all(questionPromise);
-  
+
   // QuestionLikes, Quiz, and Question Submissions
   const questionSubmissionsData = questionInfo.map((question) => ({
     userId: question.creatorId,
@@ -57,7 +72,7 @@ async function main() {
     prismaDb.questionLike.createMany({ data: questionLikesData }),
     prismaDb.questionSubmission.createMany({ data: questionSubmissionsData }),
   ]);
-  
+
   // QuizLikes and Submissions
   const quizLike: Omit<QuizLike, "id" | "dateCreated">[] = quizInfo.map(
     (quiz) => {

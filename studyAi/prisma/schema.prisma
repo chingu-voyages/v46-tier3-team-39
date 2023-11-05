@@ -149,13 +149,13 @@ model User {
   email         String   @unique
   usersReached  Int      @default(0)
   dateCreated   DateTime @default(now())
+  tags          String[]
+  school        String?
   emailVerified DateTime?
   image         String?
+  questionData  UserQuestionData
   accounts      Account[]
   sessions      Session[]
-  questionData QuestionData
-  school String? 
-  
 }
 
 model VerificationToken {

@@ -1,7 +1,5 @@
 import { hash } from "bcryptjs";
-import {
-  findUniqueByEmail,
-} from "@/app/util/prisma/helpers";
+import { findUniqueByEmail } from "@/app/util/prisma/helpers";
 import { connectToDb, prismaDb } from "@/app/util/prisma/connection";
 
 import { NextResponse } from "next/server";
@@ -33,6 +31,11 @@ export async function createUser(req: Request) {
             name,
             email,
             usersReached: 0,
+            questionData: {
+              generated: 0,
+              answered: 0,
+            },
+            tags: [],
           },
         });
     let hashPasswordPromise = null;

@@ -1,11 +1,11 @@
 import React from "react";
 import { protectRouteSSR } from "../api/utils/sessionFuncs";
 import NavigationWrapper from "../util/components/navigation/navigationWrapper";
-import ServerGraphQLClient from "../api/graphql/apolloClient";
 import { gql } from "@apollo/client";
+import ServerGraphQLClient from "../api/graphql/apolloClient";
 import { Question } from "../../../prisma/generated/type-graphql";
 import GreetingBanner from "./server/greetingBannerContainer";
-
+import Profile from "./server/profile";
 const QuestionQueryById = gql`
   query Question($id: String) {
     questions(where: { creatorId: { equals: $id } }) {
@@ -16,17 +16,6 @@ const QuestionQueryById = gql`
 `;
 export default async function DashboardPage() {
   const sessionData = await protectRouteSSR("/auth/login");
-  const userId = sessionData?.props?.session?.user?.id;
-  const query = {
-    query: QuestionQueryById,
-    variables: { id: userId },
-  };
-  try {
-    const { data: result } = await ServerGraphQLClient.query(query);
-  } catch (err) {
-    return <>Error fetching items</>
-  }
-
   // const QuestionQueryById = gql`
   //   query Question($id: String) {
   //     question(where: { id: $id }) {
@@ -83,9 +72,7 @@ export default async function DashboardPage() {
   //     correctAnswer: ["Kuala Lumpur"],
   //     incorrectAnswer: ["Penang", "Johor", "Sabah"]
   // }})
-
   // createQuestion()
-
   return (
     <NavigationWrapper
       appBars={{
@@ -94,7 +81,8 @@ export default async function DashboardPage() {
       }}
       usePadding
     >
-      <GreetingBanner />
+      <Profile />
+      {/* <GreetingBanner /> */}
       {/* <QuestionEditor /> */}
     </NavigationWrapper>
   );

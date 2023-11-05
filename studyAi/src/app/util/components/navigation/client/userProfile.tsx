@@ -27,7 +27,7 @@ const userItemLinks = (userId?: string) => [
   //   icon: <FontAwesomeIcon icon={faUserCircle} className="aspect-square" />,
   // },
 ];
-const UserProfile = ({
+export const UserProfile = ({
   showUserInfo = false,
   name,
   email,
