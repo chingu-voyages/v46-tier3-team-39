@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import { ApolloServer } from "@apollo/server";
 import { resolvers } from "../../../../prisma/generated/type-graphql";
-import { startServerAndCreateNextHandler } from "@as-integrations/next";
+import { startServerAndCreateNextHandler } from "./lib/startServerAndCreateNextHandler";
 import { prismaDb } from "@/app/util/prisma/connection";
 import { buildSchema } from "type-graphql";
 import { getServerSession } from "next-auth";
@@ -26,7 +26,6 @@ const server = new ApolloServer({
 const main = startServerAndCreateNextHandler(server, {
   context: async (req, res: any) => {
     let session: Session | null = null;
-    
     try {
       res.getHeader = (name: string) => res.headers?.get(name);
       res.setHeader = (name: string, value: string) =>
@@ -35,6 +34,14 @@ const main = startServerAndCreateNextHandler(server, {
     } catch (e) {
         session = null;
     }
+
+    
+
+    console.log('------------------------------------------------')
+    console.log(req.body.query)
+    console.log(typeof req.body.query)
+    console.log('------------------------------------------------')
+    
 
     const contextData = {
       req,
