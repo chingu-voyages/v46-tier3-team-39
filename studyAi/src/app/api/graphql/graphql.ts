@@ -36,17 +36,11 @@ const main = startServerAndCreateNextHandler(server, {
         session = null;
     }
   
-    let actualId = (req.body.variables.creatorId) ? req.body.variables.creatorId : (req.body.variables.userId) ? req.body.variables.userId : req.body.variables.id;
-    let resolverRequested = req.body.query.split('{')[1].split("(")[0];
-    // Cases to consider: queries where user doesn't need to be logged in (getAll type), question and quiz contains creatorId`
-    // All mutations (add, update, delete) will have creatorId
+    const actualId = (req.body.variables.creatorId) ? req.body.variables.creatorId : (req.body.variables.userId) ? req.body.variables.userId : req.body.variables.id;
+    const resolverRequested = req.body.query.split('{')[1].split("(")[0];
+    const sessionNeeded = (resolverRequested.toLowerCase().includes("question") || resolverRequested.toLowerCase().includes("quiz")) ? false : true;
 
-    console.log('-----------------------------------')
-    console.log(req.body)
-    console.log('-----------------------------------')
-
-    // Session may be null (eg. question library page)
-    if (session.user.id !== actualId)
+    if (sessionNeeded && !session || session.user.id !== actualId)
       throw new GraphQLError('User is not authorized/authenticated', {
         extensions: {
           code: 'UNAUTHENTICATED',
