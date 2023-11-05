@@ -6,16 +6,11 @@ import { Question } from "../../../prisma/generated/type-graphql";
 import GreetingBanner from "./server/greetingBannerContainer";
 import Profile from "./server/profile";
 import { gql } from 'graphql-tag';
-const QuestionQueryById = gql`
-  query QuestionQueryById($id: String) {
-    questions(where: { creatorId: { equals: $id } }) {
-      id
-      questionType
-    }
-  }
-`;
+import Blah from "./blah"
+
 export default async function DashboardPage() {
   const sessionData = await protectRouteSSR("/auth/login");
+
   return (
     <NavigationWrapper
       appBars={{
@@ -24,8 +19,9 @@ export default async function DashboardPage() {
       }}
       usePadding
     >
-      {/* <Profile /> */}
-      {/* <GreetingBanner /> */}
+      <Blah />
+      <Profile />
+      <GreetingBanner />
       {/* <QuestionEditor /> */}
     </NavigationWrapper>
   );
