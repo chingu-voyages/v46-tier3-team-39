@@ -24,7 +24,7 @@ const QuestionModal = ({questionId}: {questionId?: string}) => {
                 <h1 className={styles.h1}>Question Editor</h1>
                 <div className={styles.contentLayout}>
                     <LeftContent questionData={questionData}/>
-                    <AnswerEditor />
+                    <AnswerEditor initialChoices={questionData ? questionData?.choices : ["","","",""]}/>
                 </div>
                 <Controls />
             </div>

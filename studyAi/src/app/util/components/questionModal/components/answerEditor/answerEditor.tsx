@@ -38,8 +38,9 @@ function a11yProps(index: number) {
   };
 }
 
-export default function AnswerEditor() {
+export default function AnswerEditor({initialChoices} : {initialChoices: string[]}) {
   const [value, setValue] = React.useState(0);
+  const [choices, setChoices] = React.useState(initialChoices)
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -59,10 +60,10 @@ export default function AnswerEditor() {
         </Tabs>
       </div>
       <CustomTabPanel value={value} index={0}>
-        <MultipleChoice />
+        <MultipleChoice choices={choices} setChoices={setChoices}/>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <SelectAll />
+        <SelectAll choices={choices} setChoices={setChoices}/>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
         <ShortAnswer/>

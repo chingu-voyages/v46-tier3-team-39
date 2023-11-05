@@ -23,7 +23,7 @@ const LeftContent = ({questionData} : {questionData?: Partial<Question>}) => {
             <form>
                 <div>
                     <label htmlFor="title" className={styles.label}>Question Title</label>
-                    <input id="title" className={styles.input({})} placeholder={titlePlaceholder}/>
+                    <input id="title" className={styles.input({})} value={questionData?.question?.title} />
                 </div>
                 <div className={styles.estTimeLayout}>
                     <label htmlFor="time" className={styles.label}>Est. Time</label>
@@ -32,11 +32,11 @@ const LeftContent = ({questionData} : {questionData?: Partial<Question>}) => {
                 </div>
                 <div>
                     <label htmlFor="tags" className={styles.label}>Tags</label>
-                    <input id="tags" className={styles.input({})} />
+                    <input id="tags" className={styles.input({})} value={questionData?.tags} />
                 </div>
                 <div>
                     <label htmlFor="description" className={styles.label}>Question Description</label>
-                    <textarea id="description" className={styles.input({isTextArea: true})} />
+                    <textarea id="description" className={styles.input({isTextArea: true})} value={questionData?.question?.description} />
                 </div>
             </form>
         </div>
