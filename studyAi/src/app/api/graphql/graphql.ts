@@ -25,8 +25,8 @@ const server = new ApolloServer({
 });
 
 const main = startServerAndCreateNextHandler(server, {
-  context: async (req, res: any) => {
-    const body = await req.body;
+  context: async (req: any, res: any) => {
+    const body = await req.graphQLBody;
     let session: Session | null = null;
     try {
       res.getHeader = (name: string) => res.headers?.get(name);
@@ -36,6 +36,8 @@ const main = startServerAndCreateNextHandler(server, {
     } catch (e) {
       session = null;
     }
+    req = req as NextApiRequest;
+    res = res as NextApiResponse;
     console.log(body);
     // const acessibleModels = {
     //   question: "question",
@@ -63,7 +65,7 @@ const main = startServerAndCreateNextHandler(server, {
 
     const contextData = {
       req,
-      res: res as NextApiResponse,
+      res,
       prisma: prismaDb,
       session,
     };
