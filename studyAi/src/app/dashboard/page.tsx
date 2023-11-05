@@ -5,8 +5,12 @@ import ServerGraphQLClient from "../api/graphql/apolloClient";
 import { Question } from "../../../prisma/generated/type-graphql";
 import GreetingBanner from "./server/greetingBannerContainer";
 import Profile from "./server/profile";
+import { gql } from 'graphql-tag';
+import Blah from "./blah"
+
 export default async function DashboardPage() {
   const sessionData = await protectRouteSSR("/auth/login");
+
   return (
     <NavigationWrapper
       appBars={{
@@ -15,8 +19,9 @@ export default async function DashboardPage() {
       }}
       usePadding
     >
+      <Blah />
       <Profile />
-      {/* <GreetingBanner /> */}
+      <GreetingBanner />
       {/* <QuestionEditor /> */}
     </NavigationWrapper>
   );

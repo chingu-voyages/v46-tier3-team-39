@@ -13,29 +13,33 @@ generator typegraphql {
 
 datasource db {
   provider = "mongodb"
-  url      = env("DATABASE_URL")  
+  url      = env("DATABASE_URL")
 }
+
 type LocationData {
-    locationType String
-    //latitude and longitude
-    coordinates Float[]
+  locationType String
+  //latitude and longitude
+  coordinates  Float[]
 }
+
 type TimeOptions {
-  timeType String
-  timeTaken Int?
+  timeType       String
+  timeTaken      Int?
   totalTimeGiven Int?
 }
 
 type QuestionInfoData {
-  title String 
+  title       String
   description String
   //for mc and select multiple. short answer will contain empty arr
-  options String[]
+  options     String[]
 }
+
 type UserQuestionData {
   generated Int @default(0)
-  answered Int @default(0)
+  answered  Int @default(0)
 }
+
 type AnswerData {
   correctAnswer String[]
 }
@@ -46,95 +50,101 @@ type LikeCounter {
 }
 
 type Score {
-  maxScore Int
+  maxScore    Int
   actualScore Int
 }
 
 model Question {
-  id           String       @id @default(auto()) @map("_id") @db.ObjectId 
-  creatorId    String       @db.ObjectId
+  id           String           @id @default(auto()) @map("_id") @db.ObjectId
+  creatorId    String           @db.ObjectId
   questionType String
-  tags String[]
-  dateCreated   DateTime @default(now())
+  tags         String[]
+  dateCreated  DateTime         @default(now())
   questionInfo QuestionInfoData
-  answer AnswerData
-  likeCounter LikeCounter
+  answer       AnswerData
+  likeCounter  LikeCounter
+
   @@index([creatorId])
 }
 
 model QuestionLike {
-    id            String  @id @default(auto()) @map("_id") @db.ObjectId
-    dateCreated   DateTime @default(now())
-    dislike Boolean
-    userId String @db.ObjectId
-    questionId String @db.ObjectId
-    @@index([userId, questionId])
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  dateCreated DateTime @default(now())
+  dislike     Boolean
+  userId      String   @db.ObjectId
+  questionId  String   @db.ObjectId
+
+  @@index([userId, questionId])
 }
 
 model Quiz {
-  id    String                           @id @default(auto()) @map("_id") @db.ObjectId
-  name  String
-  tags   String[]
-  creatorId String @db.ObjectId
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  tags        String[]
+  creatorId   String      @db.ObjectId
   questionIds String[]
-  dateCreated   DateTime @default(now())
-  likeCounter  LikeCounter
+  dateCreated DateTime    @default(now())
+  likeCounter LikeCounter
+
   @@index([creatorId])
 }
 
 model QuizLike {
-    id            String   @id @default(auto()) @map("_id") @db.ObjectId
-    dateCreated   DateTime @default(now())
-    dislike Boolean
-    userId String @db.ObjectId
-    quizId String @db.ObjectId
-    @@index([userId, quizId])
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  dateCreated DateTime @default(now())
+  dislike     Boolean
+  userId      String   @db.ObjectId
+  quizId      String   @db.ObjectId
+
+  @@index([userId, quizId])
 }
 
 model QuestionSubmission {
-   id            String  @id @default(auto()) @map("_id") @db.ObjectId
-   time          TimeOptions?
-   score         Score
-   dateCreated   DateTime @default(now())
-   userId String  @db.ObjectId
-   questionId String @db.ObjectId
-   answerProvided String[]
-   @@index([userId, questionId])
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  time           TimeOptions?
+  score          Score
+  dateCreated    DateTime     @default(now())
+  userId         String       @db.ObjectId
+  questionId     String       @db.ObjectId
+  answerProvided String[]
+
+  @@index([userId, questionId])
 }
 
-model QuizSubmission{
-   id            String  @id @default(auto()) @map("_id") @db.ObjectId
-   time          TimeOptions?
-   score         Score
-   dateCreated   DateTime @default(now())
-   userId String  @db.ObjectId
-   quizId String @db.ObjectId
-   @@index([userId, quizId])
+model QuizSubmission {
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  time        TimeOptions?
+  score       Score
+  dateCreated DateTime     @default(now())
+  userId      String       @db.ObjectId
+  quizId      String       @db.ObjectId
+
+  @@index([userId, quizId])
 }
 
 model UserCredential {
-  id            String @id     @default(auto()) @map("_id") @db.ObjectId
-  userId        String @unique @db.ObjectId
-  email         String @unique
-  password      String?
-  provider      String
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId   String  @unique @db.ObjectId
+  email    String  @unique
+  password String?
+  provider String
 }
 
 model Account {
-  id                 String  @id @default(auto()) @map("_id") @db.ObjectId 
-  userId             String  @unique @db.ObjectId
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @unique @db.ObjectId
   /// @TypeGraphQL.omit(output: true)
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?  
-  access_token       String?  
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?  
-  session_state      String?
-  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -148,11 +158,11 @@ model Session {
 }
 
 model User {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId 
+  id            String           @id @default(auto()) @map("_id") @db.ObjectId
   name          String
-  email         String   @unique
-  usersReached  Int      @default(0)
-  dateCreated   DateTime @default(now())
+  email         String           @unique
+  usersReached  Int              @default(0)
+  dateCreated   DateTime         @default(now())
   tags          String[]
   school        String?
   emailVerified DateTime?
@@ -164,9 +174,10 @@ model User {
 }
 
 model VerificationToken {
-  id String  @id      @default(auto()) @map("_id") @db.ObjectId 
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
   identifier String
   token      String   @unique
   expires    DateTime
+
   @@unique([identifier, token])
 }

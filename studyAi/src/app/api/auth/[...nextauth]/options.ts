@@ -6,6 +6,7 @@ import { findUniqueByEmail, findUniqueById } from "@/app/util/prisma/helpers";
 import { connectToDb, prismaDb } from "@/app/util/prisma/connection";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { addCredDoc } from "./funcs";
+
 export const options: NextAuthOptions = {
   adapter: PrismaAdapter(prismaDb),
   session: {
