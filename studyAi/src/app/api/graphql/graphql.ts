@@ -8,7 +8,7 @@ import { getServerSession } from "next-auth";
 import { options } from "../auth/[...nextauth]/options";
 import { Session } from "next-auth";
 import { NextApiRequest, NextApiResponse } from "next";
-import { GraphQLError } from "graphql";
+import { GraphQLError, parse } from "graphql";
 
 export async function createSchema() {
   const schema = await buildSchema({
@@ -38,6 +38,10 @@ const main = startServerAndCreateNextHandler(server, {
   
     let actualId = req.body.variables.id;
     let resolverRequested = req.body.query.split('{')[1].split("(")[0];
+
+    console.log('-----------------------------------')
+    console.log(parse(req.body.query).definitions)
+    console.log('-----------------------------------')
 
     // Session may be null (eg. question library page)
     if (session.user.id !== actualId)
