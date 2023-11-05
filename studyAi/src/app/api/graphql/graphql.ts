@@ -20,31 +20,26 @@ export async function createSchema() {
   });
   return schema;
 }
+
 const server = new ApolloServer({
   schema: await createSchema(),
 });
+
 const main = startServerAndCreateNextHandler(server, {
   context: async (req, res: any) => {
     let session: Session | null = null;
     try {
       res.getHeader = (name: string) => res.headers?.get(name);
       res.setHeader = (name: string, value: string) =>
-        res.headers?.set(name, value);
+      res.headers?.set(name, value);
       session = await getServerSession(req, res, options);
+      console.log("------------------------------------------------");
+      console.log(session)
+      console.log("------------------------------------------------");
     } catch (e) {
-      console.log("------------------------------------------------");
-      console.log("e: " + e);
-      console.log("------------------------------------------------");
-      // session = null;
+      session = null;
     }
-    // contextData = {
-    //   req,
-    //   res,
-    //   prisma: prismaDb,
-    //   session: session,
-    // };
-    // console.log("contextData: " + contextData);
-    contextData = {
+    const contextData = {
       req,
       res: res as NextApiResponse,
       prisma: prismaDb,

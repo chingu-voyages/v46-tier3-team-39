@@ -5,7 +5,7 @@ import ServerGraphQLClient from "../api/graphql/apolloClient";
 import { Question } from "../../../prisma/generated/type-graphql";
 import GreetingBanner from "./server/greetingBannerContainer";
 import Profile from "./server/profile";
-import { gql } from "../../../graphql/generated";
+import { gql } from 'graphql-tag';
 const QuestionQueryById = gql`
   query QuestionQueryById($id: String) {
     questions(where: { creatorId: { equals: $id } }) {
@@ -24,7 +24,7 @@ export default async function DashboardPage() {
       }}
       usePadding
     >
-      <Profile />
+      {/* <Profile /> */}
       {/* <GreetingBanner /> */}
       {/* <QuestionEditor /> */}
     </NavigationWrapper>
