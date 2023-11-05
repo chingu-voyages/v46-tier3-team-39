@@ -35,10 +35,23 @@ const main = startServerAndCreateNextHandler(server, {
     } catch (e) {
         session = null;
     }
+
+    const acessibleModels = {
+      question: "question",
+      quiz: "quiz"
+    }
   
     const actualId = (req.body.variables.creatorId) ? req.body.variables.creatorId : (req.body.variables.userId) ? req.body.variables.userId : req.body.variables.id;
     const resolverRequested = req.body.query.split('{')[1].split("(")[0];
-    const sessionNeeded = (resolverRequested.toLowerCase().includes("question") || resolverRequested.toLowerCase().includes("quiz")) ? false : true;
+    let sessionNeeded = true;
+    for (const key of Object.keys(acessibleModels)) {
+      if (resolverRequested.toLowerCase().include(acessibleModels[key])) {
+        sessionNeeded = false;
+        break;
+      }
+    }
+
+    console.log(sessionNeeded)
 
     if (sessionNeeded && !session || session.user.id !== actualId)
       throw new GraphQLError('User is not authorized/authenticated', {
