@@ -1,14 +1,29 @@
 import TimeFormatDropdown from "./timeFormat"
 import styles from "./leftContentStyles"
+import type { Question } from "../../../../../../../prisma/generated/type-graphql"
+import { useState } from "react"
 
-const LeftContent = () => {
+const LeftContent = ({questionData} : {questionData?: Partial<Question>}) => {
 
+    let titlePlaceholder = undefined;
+    let currentTags: string[] = [];
+    
+    if (questionData) {
+        if (questionData.question) {
+            titlePlaceholder = questionData.question.title
+        }
+        if (questionData.tags) {
+            currentTags = questionData.tags
+        }
+    }
+    const [tags, setTags] = useState<string[]>(currentTags);
+    
     return (
         <div className={styles.layout}>
             <form>
                 <div>
                     <label htmlFor="title" className={styles.label}>Question Title</label>
-                    <input id="title" className={styles.input({})} />
+                    <input id="title" className={styles.input({})} placeholder={titlePlaceholder}/>
                 </div>
                 <div className={styles.estTimeLayout}>
                     <label htmlFor="time" className={styles.label}>Est. Time</label>
