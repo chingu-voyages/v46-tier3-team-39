@@ -5,7 +5,7 @@ const questions: Omit<Question, "id" | "creatorId" | "dateCreated">[] = [
   {
     questionType: "Short Answer",
     tags: ["Science", "Chemistry"],
-    question: {
+    questionInfo: {
       title: "Molecular Compound",
       description: "What is the molecular compound of water?",
       options: [],
@@ -21,13 +21,29 @@ const questions: Omit<Question, "id" | "creatorId" | "dateCreated">[] = [
   {
     questionType: "Multiple Choice",
     tags: ['Maths', 'Technology'],
-    question: {
+    questionInfo: {
       title: 'Recursion',
       description: 'When does recursion end?',
       options: ['When the loop ends.', 'When the loop starts.', 'At the second iteration.']
     },
     answer: {
       correctAnswer: ['When we reach base case.'],
+    },
+    likeCounter: {
+      likes: 1,
+      dislikes: 0
+    }
+  },
+  {
+    questionType: "Checkbox",
+    tags: ['Science', 'Chemistry'],
+    questionInfo: {
+      title: 'Molecular Compound',
+      description: 'Which of the following elements are found in the molecular formula H2O (water)?',
+      options: ['Carbon', 'Nitrogen']
+    },
+    answer: {
+      correctAnswer: ['Hydrogen', 'Oxygen'],
     },
     likeCounter: {
       likes: 1,

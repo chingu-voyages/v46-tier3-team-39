@@ -1,12 +1,12 @@
 "use client";
 import { useQuery } from "@apollo/client";
 import { Question } from "../../../../../../prisma/generated/type-graphql";
-import { gql } from "@apollo/client";
 import { useParams } from "next/navigation";
 import { useQuestions } from "@/app/stores/questionStore";
 import { Container } from "../server/containerBar";
-const getAnswerById = gql`
-  query Question($id: String) {
+import { gql } from "../../../../../../graphql/generated";
+const getAnswerById = gql(`
+  query GetAnswerById($id: String) {
     question(where: { id: $id }) {
       id
       answer {
@@ -14,7 +14,7 @@ const getAnswerById = gql`
       }
     }
   }
-`;
+`);
 const SolutionView = () => {
   const params = useParams();
   const questions = useQuestions()[0].data;

@@ -1,11 +1,12 @@
 "use client";
 import { QuestionSubmission } from "../../../../../../prisma/generated/type-graphql";
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { Container } from "./containerBar";
 import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
-const getSubmissionByQuestionId = gql`
-  query Submission($questionId: String, $userId: String) {
+import { gql } from "../../../../../../graphql/generated";
+const getSubmissionByQuestionId = gql(`
+  query GetQuestionSubmissionByQuestionId($questionId: String, $userId: String) {
     questionSubmissions(
       where: {
         userId: { equals: $userId }
@@ -13,7 +14,11 @@ const getSubmissionByQuestionId = gql`
       }
     ) {
       id
-      time
+      time {
+        timeType
+        timeTaken
+        totalTimeGiven
+      }
       score {
         maxScore
         actualScore
@@ -22,15 +27,16 @@ const getSubmissionByQuestionId = gql`
       userId
     }
   }
-`;
+`);
 export const SubmissionView = () => {
   const params = useParams();
   const { data: session } = useSession();
   if (!params?.id) return <></>;
+  if(!session) return <></>
   const queryOptions = {
     variables: {
-      questionId: params.id,
-      userId: session?.user.id,
+      questionId: typeof params.id === 'string'? params.id : params.id[0],
+      userId: session.user.id,
     },
   };
   const { data: result } = useQuery(getSubmissionByQuestionId, queryOptions);

@@ -87,10 +87,10 @@ export const AnswerType = () => {
   const question =
     params.id && typeof params.id === "string" ? questions[params.id] : null;
   if (!question) return <></>;
-  if (!question.question) return <></>;
+  if (!question.questionInfo) return <></>;
   const {
     questionType,
-    question: { options: questionOptions },
+    questionInfo: { options: questionOptions },
   } = question;
   switch (questionType) {
     case "multipleChoice":
