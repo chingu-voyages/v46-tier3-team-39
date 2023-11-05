@@ -15,18 +15,27 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")  
 }
+type LocationData {
+    locationType String
+    //latitude and longitude
+    coordinates Float[]
+}
 type TimeOptions {
   timeType String
   timeTaken Int?
   totalTimeGiven Int?
 }
-type QuestionData{
+
+type QuestionInfoData {
   title String 
   description String
   //for mc and select multiple. short answer will contain empty arr
   options String[]
 }
-
+type UserQuestionData {
+  generated Int @default(0)
+  answered Int @default(0)
+}
 type AnswerData {
   correctAnswer String[]
 }
@@ -35,18 +44,20 @@ type LikeCounter {
   likes    Int
   dislikes Int
 }
+
 type Score {
   maxScore Int
   actualScore Int
 }
+
 model Question {
   id           String       @id @default(auto()) @map("_id") @db.ObjectId 
   creatorId    String       @db.ObjectId
   questionType String
   tags String[]
-  question QuestionData
-  answer AnswerData
   dateCreated   DateTime @default(now())
+  questionInfo QuestionInfoData
+  answer AnswerData
   likeCounter LikeCounter
   @@index([creatorId])
 }
@@ -79,6 +90,7 @@ model QuizLike {
     quizId String @db.ObjectId
     @@index([userId, quizId])
 }
+
 model QuestionSubmission {
    id            String  @id @default(auto()) @map("_id") @db.ObjectId
    time          TimeOptions?
@@ -89,6 +101,7 @@ model QuestionSubmission {
    answerProvided String[]
    @@index([userId, questionId])
 }
+
 model QuizSubmission{
    id            String  @id @default(auto()) @map("_id") @db.ObjectId
    time          TimeOptions?
@@ -99,7 +112,7 @@ model QuizSubmission{
    @@index([userId, quizId])
 }
 
-model UserCredentials {
+model UserCredential {
   id            String @id     @default(auto()) @map("_id") @db.ObjectId
   userId        String @unique @db.ObjectId
   email         String @unique
@@ -140,8 +153,12 @@ model User {
   email         String   @unique
   usersReached  Int      @default(0)
   dateCreated   DateTime @default(now())
+  tags          String[]
+  school        String?
   emailVerified DateTime?
   image         String?
+  location      LocationData?
+  questionData  UserQuestionData
   accounts      Account[]
   sessions      Session[]
 }

@@ -67,9 +67,9 @@ export const QuestionView = () => {
   if (!question) return <></>;
   return (
     <Container overflow className="px-[5%] py-5 grow">
-      {question.question && (
+      {question.questionInfo && (
         <h2 className="text-3xl font-semibold mb-1 flex align-center">
-          {question.question.title}
+          {question.questionInfo.title}
         </h2>
       )}
       <div className="flex items-center w-full mb-2">
@@ -94,8 +94,8 @@ export const QuestionView = () => {
         </div>
       )}
 
-      {question.question && (
-        <p className="text-sm pb-5">{question.question.description}</p>
+      {question.questionInfo && (
+        <p className="text-sm pb-5">{question.questionInfo.description}</p>
       )}
     </Container>
   );

@@ -492,10 +492,10 @@ type AggregateUser {
   _sum: UserSumAggregate
 }
 
-type AggregateUserCredentials {
-  _count: UserCredentialsCountAggregate
-  _max: UserCredentialsMaxAggregate
-  _min: UserCredentialsMinAggregate
+type AggregateUserCredential {
+  _count: UserCredentialCountAggregate
+  _max: UserCredentialMaxAggregate
+  _min: UserCredentialMinAggregate
 }
 
 type AggregateVerificationToken {
@@ -633,6 +633,14 @@ input DateTimeWithAggregatesFilter {
   notIn: [DateTimeISO!]
 }
 
+input FloatNullableListFilter {
+  equals: [Float!]
+  has: Float
+  hasEvery: [Float!]
+  hasSome: [Float!]
+  isEmpty: Boolean
+}
+
 input IntFieldUpdateOperationsInput {
   decrement: Int
   divide: Int
@@ -745,6 +753,70 @@ input LikeCounterWhereInput {
   likes: IntFilter
 }
 
+type LocationData {
+  coordinates: [Float!]!
+  locationType: String!
+}
+
+input LocationDataCreateInput {
+  coordinates: LocationDataCreatecoordinatesInput
+  locationType: String!
+}
+
+input LocationDataCreatecoordinatesInput {
+  set: [Float!]!
+}
+
+input LocationDataNullableCompositeFilter {
+  equals: LocationDataObjectEqualityInput
+  is: LocationDataWhereInput
+  isNot: LocationDataWhereInput
+  isSet: Boolean
+}
+
+input LocationDataNullableCreateEnvelopeInput {
+  set: LocationDataCreateInput
+}
+
+input LocationDataNullableUpdateEnvelopeInput {
+  set: LocationDataCreateInput
+  unset: Boolean
+  upsert: LocationDataUpsertInput
+}
+
+input LocationDataObjectEqualityInput {
+  coordinates: [Float!]
+  locationType: String!
+}
+
+input LocationDataOrderByInput {
+  coordinates: SortOrder
+  locationType: SortOrder
+}
+
+input LocationDataUpdateInput {
+  coordinates: LocationDataUpdatecoordinatesInput
+  locationType: StringFieldUpdateOperationsInput
+}
+
+input LocationDataUpdatecoordinatesInput {
+  push: [Float!]
+  set: [Float!]
+}
+
+input LocationDataUpsertInput {
+  set: LocationDataCreateInput!
+  update: LocationDataUpdateInput!
+}
+
+input LocationDataWhereInput {
+  AND: [LocationDataWhereInput!]
+  NOT: [LocationDataWhereInput!]
+  OR: [LocationDataWhereInput!]
+  coordinates: FloatNullableListFilter
+  locationType: StringFilter
+}
+
 type Mutation {
   createManyAccount(data: [AccountCreateManyInput!]!): AffectedRowsOutput!
   createManyQuestion(data: [QuestionCreateManyInput!]!): AffectedRowsOutput!
@@ -755,7 +827,7 @@ type Mutation {
   createManyQuizSubmission(data: [QuizSubmissionCreateManyInput!]!): AffectedRowsOutput!
   createManySession(data: [SessionCreateManyInput!]!): AffectedRowsOutput!
   createManyUser(data: [UserCreateManyInput!]!): AffectedRowsOutput!
-  createManyUserCredentials(data: [UserCredentialsCreateManyInput!]!): AffectedRowsOutput!
+  createManyUserCredential(data: [UserCredentialCreateManyInput!]!): AffectedRowsOutput!
   createManyVerificationToken(data: [VerificationTokenCreateManyInput!]!): AffectedRowsOutput!
   createOneAccount(data: AccountCreateInput!): Account!
   createOneQuestion(data: QuestionCreateInput!): Question!
@@ -766,7 +838,7 @@ type Mutation {
   createOneQuizSubmission(data: QuizSubmissionCreateInput!): QuizSubmission!
   createOneSession(data: SessionCreateInput!): Session!
   createOneUser(data: UserCreateInput!): User!
-  createOneUserCredentials(data: UserCredentialsCreateInput!): UserCredentials!
+  createOneUserCredential(data: UserCredentialCreateInput!): UserCredential!
   createOneVerificationToken(data: VerificationTokenCreateInput!): VerificationToken!
   deleteManyAccount(where: AccountWhereInput): AffectedRowsOutput!
   deleteManyQuestion(where: QuestionWhereInput): AffectedRowsOutput!
@@ -777,7 +849,7 @@ type Mutation {
   deleteManyQuizSubmission(where: QuizSubmissionWhereInput): AffectedRowsOutput!
   deleteManySession(where: SessionWhereInput): AffectedRowsOutput!
   deleteManyUser(where: UserWhereInput): AffectedRowsOutput!
-  deleteManyUserCredentials(where: UserCredentialsWhereInput): AffectedRowsOutput!
+  deleteManyUserCredential(where: UserCredentialWhereInput): AffectedRowsOutput!
   deleteManyVerificationToken(where: VerificationTokenWhereInput): AffectedRowsOutput!
   deleteOneAccount(where: AccountWhereUniqueInput!): Account
   deleteOneQuestion(where: QuestionWhereUniqueInput!): Question
@@ -788,7 +860,7 @@ type Mutation {
   deleteOneQuizSubmission(where: QuizSubmissionWhereUniqueInput!): QuizSubmission
   deleteOneSession(where: SessionWhereUniqueInput!): Session
   deleteOneUser(where: UserWhereUniqueInput!): User
-  deleteOneUserCredentials(where: UserCredentialsWhereUniqueInput!): UserCredentials
+  deleteOneUserCredential(where: UserCredentialWhereUniqueInput!): UserCredential
   deleteOneVerificationToken(where: VerificationTokenWhereUniqueInput!): VerificationToken
   updateManyAccount(data: AccountUpdateManyMutationInput!, where: AccountWhereInput): AffectedRowsOutput!
   updateManyQuestion(data: QuestionUpdateManyMutationInput!, where: QuestionWhereInput): AffectedRowsOutput!
@@ -799,7 +871,7 @@ type Mutation {
   updateManyQuizSubmission(data: QuizSubmissionUpdateManyMutationInput!, where: QuizSubmissionWhereInput): AffectedRowsOutput!
   updateManySession(data: SessionUpdateManyMutationInput!, where: SessionWhereInput): AffectedRowsOutput!
   updateManyUser(data: UserUpdateManyMutationInput!, where: UserWhereInput): AffectedRowsOutput!
-  updateManyUserCredentials(data: UserCredentialsUpdateManyMutationInput!, where: UserCredentialsWhereInput): AffectedRowsOutput!
+  updateManyUserCredential(data: UserCredentialUpdateManyMutationInput!, where: UserCredentialWhereInput): AffectedRowsOutput!
   updateManyVerificationToken(data: VerificationTokenUpdateManyMutationInput!, where: VerificationTokenWhereInput): AffectedRowsOutput!
   updateOneAccount(data: AccountUpdateInput!, where: AccountWhereUniqueInput!): Account
   updateOneQuestion(data: QuestionUpdateInput!, where: QuestionWhereUniqueInput!): Question
@@ -810,7 +882,7 @@ type Mutation {
   updateOneQuizSubmission(data: QuizSubmissionUpdateInput!, where: QuizSubmissionWhereUniqueInput!): QuizSubmission
   updateOneSession(data: SessionUpdateInput!, where: SessionWhereUniqueInput!): Session
   updateOneUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
-  updateOneUserCredentials(data: UserCredentialsUpdateInput!, where: UserCredentialsWhereUniqueInput!): UserCredentials
+  updateOneUserCredential(data: UserCredentialUpdateInput!, where: UserCredentialWhereUniqueInput!): UserCredential
   updateOneVerificationToken(data: VerificationTokenUpdateInput!, where: VerificationTokenWhereUniqueInput!): VerificationToken
   upsertOneAccount(create: AccountCreateInput!, update: AccountUpdateInput!, where: AccountWhereUniqueInput!): Account!
   upsertOneQuestion(create: QuestionCreateInput!, update: QuestionUpdateInput!, where: QuestionWhereUniqueInput!): Question!
@@ -821,7 +893,7 @@ type Mutation {
   upsertOneQuizSubmission(create: QuizSubmissionCreateInput!, update: QuizSubmissionUpdateInput!, where: QuizSubmissionWhereUniqueInput!): QuizSubmission!
   upsertOneSession(create: SessionCreateInput!, update: SessionUpdateInput!, where: SessionWhereUniqueInput!): Session!
   upsertOneUser(create: UserCreateInput!, update: UserUpdateInput!, where: UserWhereUniqueInput!): User!
-  upsertOneUserCredentials(create: UserCredentialsCreateInput!, update: UserCredentialsUpdateInput!, where: UserCredentialsWhereUniqueInput!): UserCredentials!
+  upsertOneUserCredential(create: UserCredentialCreateInput!, update: UserCredentialUpdateInput!, where: UserCredentialWhereUniqueInput!): UserCredential!
   upsertOneVerificationToken(create: VerificationTokenCreateInput!, update: VerificationTokenUpdateInput!, where: VerificationTokenWhereUniqueInput!): VerificationToken!
 }
 
@@ -1064,7 +1136,7 @@ type Query {
   aggregateQuizSubmission(cursor: QuizSubmissionWhereUniqueInput, orderBy: [QuizSubmissionOrderByWithRelationInput!], skip: Int, take: Int, where: QuizSubmissionWhereInput): AggregateQuizSubmission!
   aggregateSession(cursor: SessionWhereUniqueInput, orderBy: [SessionOrderByWithRelationInput!], skip: Int, take: Int, where: SessionWhereInput): AggregateSession!
   aggregateUser(cursor: UserWhereUniqueInput, orderBy: [UserOrderByWithRelationInput!], skip: Int, take: Int, where: UserWhereInput): AggregateUser!
-  aggregateUserCredentials(cursor: UserCredentialsWhereUniqueInput, orderBy: [UserCredentialsOrderByWithRelationInput!], skip: Int, take: Int, where: UserCredentialsWhereInput): AggregateUserCredentials!
+  aggregateUserCredential(cursor: UserCredentialWhereUniqueInput, orderBy: [UserCredentialOrderByWithRelationInput!], skip: Int, take: Int, where: UserCredentialWhereInput): AggregateUserCredential!
   aggregateVerificationToken(cursor: VerificationTokenWhereUniqueInput, orderBy: [VerificationTokenOrderByWithRelationInput!], skip: Int, take: Int, where: VerificationTokenWhereInput): AggregateVerificationToken!
   findFirstAccount(cursor: AccountWhereUniqueInput, distinct: [AccountScalarFieldEnum!], orderBy: [AccountOrderByWithRelationInput!], skip: Int, take: Int, where: AccountWhereInput): Account
   findFirstAccountOrThrow(cursor: AccountWhereUniqueInput, distinct: [AccountScalarFieldEnum!], orderBy: [AccountOrderByWithRelationInput!], skip: Int, take: Int, where: AccountWhereInput): Account
@@ -1083,14 +1155,11 @@ type Query {
   findFirstSession(cursor: SessionWhereUniqueInput, distinct: [SessionScalarFieldEnum!], orderBy: [SessionOrderByWithRelationInput!], skip: Int, take: Int, where: SessionWhereInput): Session
   findFirstSessionOrThrow(cursor: SessionWhereUniqueInput, distinct: [SessionScalarFieldEnum!], orderBy: [SessionOrderByWithRelationInput!], skip: Int, take: Int, where: SessionWhereInput): Session
   findFirstUser(cursor: UserWhereUniqueInput, distinct: [UserScalarFieldEnum!], orderBy: [UserOrderByWithRelationInput!], skip: Int, take: Int, where: UserWhereInput): User
-  findFirstUserCredentials(cursor: UserCredentialsWhereUniqueInput, distinct: [UserCredentialsScalarFieldEnum!], orderBy: [UserCredentialsOrderByWithRelationInput!], skip: Int, take: Int, where: UserCredentialsWhereInput): UserCredentials
-  findFirstUserCredentialsOrThrow(cursor: UserCredentialsWhereUniqueInput, distinct: [UserCredentialsScalarFieldEnum!], orderBy: [UserCredentialsOrderByWithRelationInput!], skip: Int, take: Int, where: UserCredentialsWhereInput): UserCredentials
+  findFirstUserCredential(cursor: UserCredentialWhereUniqueInput, distinct: [UserCredentialScalarFieldEnum!], orderBy: [UserCredentialOrderByWithRelationInput!], skip: Int, take: Int, where: UserCredentialWhereInput): UserCredential
+  findFirstUserCredentialOrThrow(cursor: UserCredentialWhereUniqueInput, distinct: [UserCredentialScalarFieldEnum!], orderBy: [UserCredentialOrderByWithRelationInput!], skip: Int, take: Int, where: UserCredentialWhereInput): UserCredential
   findFirstUserOrThrow(cursor: UserWhereUniqueInput, distinct: [UserScalarFieldEnum!], orderBy: [UserOrderByWithRelationInput!], skip: Int, take: Int, where: UserWhereInput): User
   findFirstVerificationToken(cursor: VerificationTokenWhereUniqueInput, distinct: [VerificationTokenScalarFieldEnum!], orderBy: [VerificationTokenOrderByWithRelationInput!], skip: Int, take: Int, where: VerificationTokenWhereInput): VerificationToken
   findFirstVerificationTokenOrThrow(cursor: VerificationTokenWhereUniqueInput, distinct: [VerificationTokenScalarFieldEnum!], orderBy: [VerificationTokenOrderByWithRelationInput!], skip: Int, take: Int, where: VerificationTokenWhereInput): VerificationToken
-  findManyUserCredentials(cursor: UserCredentialsWhereUniqueInput, distinct: [UserCredentialsScalarFieldEnum!], orderBy: [UserCredentialsOrderByWithRelationInput!], skip: Int, take: Int, where: UserCredentialsWhereInput): [UserCredentials!]!
-  findUniqueUserCredentials(where: UserCredentialsWhereUniqueInput!): UserCredentials
-  findUniqueUserCredentialsOrThrow(where: UserCredentialsWhereUniqueInput!): UserCredentials
   getAccount(where: AccountWhereUniqueInput!): Account
   getQuestion(where: QuestionWhereUniqueInput!): Question
   getQuestionLike(where: QuestionLikeWhereUniqueInput!): QuestionLike
@@ -1100,6 +1169,7 @@ type Query {
   getQuizSubmission(where: QuizSubmissionWhereUniqueInput!): QuizSubmission
   getSession(where: SessionWhereUniqueInput!): Session
   getUser(where: UserWhereUniqueInput!): User
+  getUserCredential(where: UserCredentialWhereUniqueInput!): UserCredential
   getVerificationToken(where: VerificationTokenWhereUniqueInput!): VerificationToken
   groupByAccount(by: [AccountScalarFieldEnum!]!, having: AccountScalarWhereWithAggregatesInput, orderBy: [AccountOrderByWithAggregationInput!], skip: Int, take: Int, where: AccountWhereInput): [AccountGroupBy!]!
   groupByQuestion(by: [QuestionScalarFieldEnum!]!, having: QuestionScalarWhereWithAggregatesInput, orderBy: [QuestionOrderByWithAggregationInput!], skip: Int, take: Int, where: QuestionWhereInput): [QuestionGroupBy!]!
@@ -1110,7 +1180,7 @@ type Query {
   groupByQuizSubmission(by: [QuizSubmissionScalarFieldEnum!]!, having: QuizSubmissionScalarWhereWithAggregatesInput, orderBy: [QuizSubmissionOrderByWithAggregationInput!], skip: Int, take: Int, where: QuizSubmissionWhereInput): [QuizSubmissionGroupBy!]!
   groupBySession(by: [SessionScalarFieldEnum!]!, having: SessionScalarWhereWithAggregatesInput, orderBy: [SessionOrderByWithAggregationInput!], skip: Int, take: Int, where: SessionWhereInput): [SessionGroupBy!]!
   groupByUser(by: [UserScalarFieldEnum!]!, having: UserScalarWhereWithAggregatesInput, orderBy: [UserOrderByWithAggregationInput!], skip: Int, take: Int, where: UserWhereInput): [UserGroupBy!]!
-  groupByUserCredentials(by: [UserCredentialsScalarFieldEnum!]!, having: UserCredentialsScalarWhereWithAggregatesInput, orderBy: [UserCredentialsOrderByWithAggregationInput!], skip: Int, take: Int, where: UserCredentialsWhereInput): [UserCredentialsGroupBy!]!
+  groupByUserCredential(by: [UserCredentialScalarFieldEnum!]!, having: UserCredentialScalarWhereWithAggregatesInput, orderBy: [UserCredentialOrderByWithAggregationInput!], skip: Int, take: Int, where: UserCredentialWhereInput): [UserCredentialGroupBy!]!
   groupByVerificationToken(by: [VerificationTokenScalarFieldEnum!]!, having: VerificationTokenScalarWhereWithAggregatesInput, orderBy: [VerificationTokenOrderByWithAggregationInput!], skip: Int, take: Int, where: VerificationTokenWhereInput): [VerificationTokenGroupBy!]!
   question(where: QuestionWhereUniqueInput!): Question
   questionLike(where: QuestionLikeWhereUniqueInput!): QuestionLike
@@ -1127,6 +1197,8 @@ type Query {
   session(where: SessionWhereUniqueInput!): Session
   sessions(cursor: SessionWhereUniqueInput, distinct: [SessionScalarFieldEnum!], orderBy: [SessionOrderByWithRelationInput!], skip: Int, take: Int, where: SessionWhereInput): [Session!]!
   user(where: UserWhereUniqueInput!): User
+  userCredential(where: UserCredentialWhereUniqueInput!): UserCredential
+  userCredentials(cursor: UserCredentialWhereUniqueInput, distinct: [UserCredentialScalarFieldEnum!], orderBy: [UserCredentialOrderByWithRelationInput!], skip: Int, take: Int, where: UserCredentialWhereInput): [UserCredential!]!
   users(cursor: UserWhereUniqueInput, distinct: [UserScalarFieldEnum!], orderBy: [UserOrderByWithRelationInput!], skip: Int, take: Int, where: UserWhereInput): [User!]!
   verificationToken(where: VerificationTokenWhereUniqueInput!): VerificationToken
   verificationTokens(cursor: VerificationTokenWhereUniqueInput, distinct: [VerificationTokenScalarFieldEnum!], orderBy: [VerificationTokenOrderByWithRelationInput!], skip: Int, take: Int, where: VerificationTokenWhereInput): [VerificationToken!]!
@@ -1143,7 +1215,7 @@ type Question {
   dateCreated: DateTimeISO!
   id: String!
   likeCounter: LikeCounter!
-  question: QuestionData!
+  questionInfo: QuestionInfoData!
   questionType: String!
   tags: [String!]!
 }
@@ -1171,7 +1243,7 @@ input QuestionCreateInput {
   dateCreated: DateTimeISO
   id: String
   likeCounter: LikeCounterCreateEnvelopeInput!
-  question: QuestionDataCreateEnvelopeInput!
+  questionInfo: QuestionInfoDataCreateEnvelopeInput!
   questionType: String!
   tags: QuestionCreatetagsInput
 }
@@ -1182,76 +1254,13 @@ input QuestionCreateManyInput {
   dateCreated: DateTimeISO
   id: String
   likeCounter: LikeCounterCreateEnvelopeInput!
-  question: QuestionDataCreateEnvelopeInput!
+  questionInfo: QuestionInfoDataCreateEnvelopeInput!
   questionType: String!
   tags: QuestionCreatetagsInput
 }
 
 input QuestionCreatetagsInput {
   set: [String!]!
-}
-
-type QuestionData {
-  description: String!
-  options: [String!]!
-  title: String!
-}
-
-input QuestionDataCompositeFilter {
-  equals: QuestionDataObjectEqualityInput
-  is: QuestionDataWhereInput
-  isNot: QuestionDataWhereInput
-}
-
-input QuestionDataCreateEnvelopeInput {
-  set: QuestionDataCreateInput
-}
-
-input QuestionDataCreateInput {
-  description: String!
-  options: QuestionDataCreateoptionsInput
-  title: String!
-}
-
-input QuestionDataCreateoptionsInput {
-  set: [String!]!
-}
-
-input QuestionDataObjectEqualityInput {
-  description: String!
-  options: [String!]
-  title: String!
-}
-
-input QuestionDataOrderByInput {
-  description: SortOrder
-  options: SortOrder
-  title: SortOrder
-}
-
-input QuestionDataUpdateEnvelopeInput {
-  set: QuestionDataCreateInput
-  update: QuestionDataUpdateInput
-}
-
-input QuestionDataUpdateInput {
-  description: StringFieldUpdateOperationsInput
-  options: QuestionDataUpdateoptionsInput
-  title: StringFieldUpdateOperationsInput
-}
-
-input QuestionDataUpdateoptionsInput {
-  push: [String!]
-  set: [String!]
-}
-
-input QuestionDataWhereInput {
-  AND: [QuestionDataWhereInput!]
-  NOT: [QuestionDataWhereInput!]
-  OR: [QuestionDataWhereInput!]
-  description: StringFilter
-  options: StringNullableListFilter
-  title: StringFilter
 }
 
 type QuestionGroupBy {
@@ -1263,6 +1272,69 @@ type QuestionGroupBy {
   id: String!
   questionType: String!
   tags: [String!]
+}
+
+type QuestionInfoData {
+  description: String!
+  options: [String!]!
+  title: String!
+}
+
+input QuestionInfoDataCompositeFilter {
+  equals: QuestionInfoDataObjectEqualityInput
+  is: QuestionInfoDataWhereInput
+  isNot: QuestionInfoDataWhereInput
+}
+
+input QuestionInfoDataCreateEnvelopeInput {
+  set: QuestionInfoDataCreateInput
+}
+
+input QuestionInfoDataCreateInput {
+  description: String!
+  options: QuestionInfoDataCreateoptionsInput
+  title: String!
+}
+
+input QuestionInfoDataCreateoptionsInput {
+  set: [String!]!
+}
+
+input QuestionInfoDataObjectEqualityInput {
+  description: String!
+  options: [String!]
+  title: String!
+}
+
+input QuestionInfoDataOrderByInput {
+  description: SortOrder
+  options: SortOrder
+  title: SortOrder
+}
+
+input QuestionInfoDataUpdateEnvelopeInput {
+  set: QuestionInfoDataCreateInput
+  update: QuestionInfoDataUpdateInput
+}
+
+input QuestionInfoDataUpdateInput {
+  description: StringFieldUpdateOperationsInput
+  options: QuestionInfoDataUpdateoptionsInput
+  title: StringFieldUpdateOperationsInput
+}
+
+input QuestionInfoDataUpdateoptionsInput {
+  push: [String!]
+  set: [String!]
+}
+
+input QuestionInfoDataWhereInput {
+  AND: [QuestionInfoDataWhereInput!]
+  NOT: [QuestionInfoDataWhereInput!]
+  OR: [QuestionInfoDataWhereInput!]
+  description: StringFilter
+  options: StringNullableListFilter
+  title: StringFilter
 }
 
 type QuestionLike {
@@ -1468,7 +1540,7 @@ input QuestionOrderByWithRelationInput {
   dateCreated: SortOrder
   id: SortOrder
   likeCounter: LikeCounterOrderByInput
-  question: QuestionDataOrderByInput
+  questionInfo: QuestionInfoDataOrderByInput
   questionType: SortOrder
   tags: SortOrder
 }
@@ -1498,7 +1570,7 @@ type QuestionSubmission {
   id: String!
   questionId: String!
   score: Score!
-  time: DateTimeISO
+  time: TimeOptions
   userId: String!
 }
 
@@ -1508,7 +1580,6 @@ type QuestionSubmissionCountAggregate {
   dateCreated: Int!
   id: Int!
   questionId: Int!
-  time: Int!
   userId: Int!
 }
 
@@ -1517,7 +1588,6 @@ input QuestionSubmissionCountOrderByAggregateInput {
   dateCreated: SortOrder
   id: SortOrder
   questionId: SortOrder
-  time: SortOrder
   userId: SortOrder
 }
 
@@ -1527,7 +1597,7 @@ input QuestionSubmissionCreateInput {
   id: String
   questionId: String!
   score: ScoreCreateEnvelopeInput!
-  time: DateTimeISO
+  time: TimeOptionsNullableCreateEnvelopeInput
   userId: String!
 }
 
@@ -1537,7 +1607,7 @@ input QuestionSubmissionCreateManyInput {
   id: String
   questionId: String!
   score: ScoreCreateEnvelopeInput!
-  time: DateTimeISO
+  time: TimeOptionsNullableCreateEnvelopeInput
   userId: String!
 }
 
@@ -1553,7 +1623,6 @@ type QuestionSubmissionGroupBy {
   dateCreated: DateTimeISO!
   id: String!
   questionId: String!
-  time: DateTimeISO
   userId: String!
 }
 
@@ -1561,7 +1630,6 @@ type QuestionSubmissionMaxAggregate {
   dateCreated: DateTimeISO
   id: String
   questionId: String
-  time: DateTimeISO
   userId: String
 }
 
@@ -1569,7 +1637,6 @@ input QuestionSubmissionMaxOrderByAggregateInput {
   dateCreated: SortOrder
   id: SortOrder
   questionId: SortOrder
-  time: SortOrder
   userId: SortOrder
 }
 
@@ -1577,7 +1644,6 @@ type QuestionSubmissionMinAggregate {
   dateCreated: DateTimeISO
   id: String
   questionId: String
-  time: DateTimeISO
   userId: String
 }
 
@@ -1585,7 +1651,6 @@ input QuestionSubmissionMinOrderByAggregateInput {
   dateCreated: SortOrder
   id: SortOrder
   questionId: SortOrder
-  time: SortOrder
   userId: SortOrder
 }
 
@@ -1597,7 +1662,6 @@ input QuestionSubmissionOrderByWithAggregationInput {
   dateCreated: SortOrder
   id: SortOrder
   questionId: SortOrder
-  time: SortOrder
   userId: SortOrder
 }
 
@@ -1607,7 +1671,7 @@ input QuestionSubmissionOrderByWithRelationInput {
   id: SortOrder
   questionId: SortOrder
   score: ScoreOrderByInput
-  time: SortOrder
+  time: TimeOptionsOrderByInput
   userId: SortOrder
 }
 
@@ -1616,7 +1680,6 @@ enum QuestionSubmissionScalarFieldEnum {
   dateCreated
   id
   questionId
-  time
   userId
 }
 
@@ -1628,7 +1691,6 @@ input QuestionSubmissionScalarWhereWithAggregatesInput {
   dateCreated: DateTimeWithAggregatesFilter
   id: StringWithAggregatesFilter
   questionId: StringWithAggregatesFilter
-  time: DateTimeNullableWithAggregatesFilter
   userId: StringWithAggregatesFilter
 }
 
@@ -1637,7 +1699,7 @@ input QuestionSubmissionUpdateInput {
   dateCreated: DateTimeFieldUpdateOperationsInput
   questionId: StringFieldUpdateOperationsInput
   score: ScoreUpdateEnvelopeInput
-  time: NullableDateTimeFieldUpdateOperationsInput
+  time: TimeOptionsNullableUpdateEnvelopeInput
   userId: StringFieldUpdateOperationsInput
 }
 
@@ -1646,7 +1708,7 @@ input QuestionSubmissionUpdateManyMutationInput {
   dateCreated: DateTimeFieldUpdateOperationsInput
   questionId: StringFieldUpdateOperationsInput
   score: ScoreUpdateEnvelopeInput
-  time: NullableDateTimeFieldUpdateOperationsInput
+  time: TimeOptionsNullableUpdateEnvelopeInput
   userId: StringFieldUpdateOperationsInput
 }
 
@@ -1664,7 +1726,7 @@ input QuestionSubmissionWhereInput {
   id: StringFilter
   questionId: StringFilter
   score: ScoreCompositeFilter
-  time: DateTimeNullableFilter
+  time: TimeOptionsNullableCompositeFilter
   userId: StringFilter
 }
 
@@ -1677,7 +1739,7 @@ input QuestionSubmissionWhereUniqueInput {
   id: String
   questionId: StringFilter
   score: ScoreCompositeFilter
-  time: DateTimeNullableFilter
+  time: TimeOptionsNullableCompositeFilter
   userId: StringFilter
 }
 
@@ -1686,7 +1748,7 @@ input QuestionUpdateInput {
   creatorId: StringFieldUpdateOperationsInput
   dateCreated: DateTimeFieldUpdateOperationsInput
   likeCounter: LikeCounterUpdateEnvelopeInput
-  question: QuestionDataUpdateEnvelopeInput
+  questionInfo: QuestionInfoDataUpdateEnvelopeInput
   questionType: StringFieldUpdateOperationsInput
   tags: QuestionUpdatetagsInput
 }
@@ -1696,7 +1758,7 @@ input QuestionUpdateManyMutationInput {
   creatorId: StringFieldUpdateOperationsInput
   dateCreated: DateTimeFieldUpdateOperationsInput
   likeCounter: LikeCounterUpdateEnvelopeInput
-  question: QuestionDataUpdateEnvelopeInput
+  questionInfo: QuestionInfoDataUpdateEnvelopeInput
   questionType: StringFieldUpdateOperationsInput
   tags: QuestionUpdatetagsInput
 }
@@ -1715,7 +1777,7 @@ input QuestionWhereInput {
   dateCreated: DateTimeFilter
   id: StringFilter
   likeCounter: LikeCounterCompositeFilter
-  question: QuestionDataCompositeFilter
+  questionInfo: QuestionInfoDataCompositeFilter
   questionType: StringFilter
   tags: StringNullableListFilter
 }
@@ -1729,7 +1791,7 @@ input QuestionWhereUniqueInput {
   dateCreated: DateTimeFilter
   id: String
   likeCounter: LikeCounterCompositeFilter
-  question: QuestionDataCompositeFilter
+  questionInfo: QuestionInfoDataCompositeFilter
   questionType: StringFilter
   tags: StringNullableListFilter
 }
@@ -2037,7 +2099,7 @@ type QuizSubmission {
   id: String!
   quizId: String!
   score: Score!
-  time: DateTimeISO
+  time: TimeOptions
   userId: String!
 }
 
@@ -2046,7 +2108,6 @@ type QuizSubmissionCountAggregate {
   dateCreated: Int!
   id: Int!
   quizId: Int!
-  time: Int!
   userId: Int!
 }
 
@@ -2054,7 +2115,6 @@ input QuizSubmissionCountOrderByAggregateInput {
   dateCreated: SortOrder
   id: SortOrder
   quizId: SortOrder
-  time: SortOrder
   userId: SortOrder
 }
 
@@ -2063,7 +2123,7 @@ input QuizSubmissionCreateInput {
   id: String
   quizId: String!
   score: ScoreCreateEnvelopeInput!
-  time: DateTimeISO
+  time: TimeOptionsNullableCreateEnvelopeInput
   userId: String!
 }
 
@@ -2072,7 +2132,7 @@ input QuizSubmissionCreateManyInput {
   id: String
   quizId: String!
   score: ScoreCreateEnvelopeInput!
-  time: DateTimeISO
+  time: TimeOptionsNullableCreateEnvelopeInput
   userId: String!
 }
 
@@ -2083,7 +2143,6 @@ type QuizSubmissionGroupBy {
   dateCreated: DateTimeISO!
   id: String!
   quizId: String!
-  time: DateTimeISO
   userId: String!
 }
 
@@ -2091,7 +2150,6 @@ type QuizSubmissionMaxAggregate {
   dateCreated: DateTimeISO
   id: String
   quizId: String
-  time: DateTimeISO
   userId: String
 }
 
@@ -2099,7 +2157,6 @@ input QuizSubmissionMaxOrderByAggregateInput {
   dateCreated: SortOrder
   id: SortOrder
   quizId: SortOrder
-  time: SortOrder
   userId: SortOrder
 }
 
@@ -2107,7 +2164,6 @@ type QuizSubmissionMinAggregate {
   dateCreated: DateTimeISO
   id: String
   quizId: String
-  time: DateTimeISO
   userId: String
 }
 
@@ -2115,7 +2171,6 @@ input QuizSubmissionMinOrderByAggregateInput {
   dateCreated: SortOrder
   id: SortOrder
   quizId: SortOrder
-  time: SortOrder
   userId: SortOrder
 }
 
@@ -2126,7 +2181,6 @@ input QuizSubmissionOrderByWithAggregationInput {
   dateCreated: SortOrder
   id: SortOrder
   quizId: SortOrder
-  time: SortOrder
   userId: SortOrder
 }
 
@@ -2135,7 +2189,7 @@ input QuizSubmissionOrderByWithRelationInput {
   id: SortOrder
   quizId: SortOrder
   score: ScoreOrderByInput
-  time: SortOrder
+  time: TimeOptionsOrderByInput
   userId: SortOrder
 }
 
@@ -2143,7 +2197,6 @@ enum QuizSubmissionScalarFieldEnum {
   dateCreated
   id
   quizId
-  time
   userId
 }
 
@@ -2154,7 +2207,6 @@ input QuizSubmissionScalarWhereWithAggregatesInput {
   dateCreated: DateTimeWithAggregatesFilter
   id: StringWithAggregatesFilter
   quizId: StringWithAggregatesFilter
-  time: DateTimeNullableWithAggregatesFilter
   userId: StringWithAggregatesFilter
 }
 
@@ -2162,7 +2214,7 @@ input QuizSubmissionUpdateInput {
   dateCreated: DateTimeFieldUpdateOperationsInput
   quizId: StringFieldUpdateOperationsInput
   score: ScoreUpdateEnvelopeInput
-  time: NullableDateTimeFieldUpdateOperationsInput
+  time: TimeOptionsNullableUpdateEnvelopeInput
   userId: StringFieldUpdateOperationsInput
 }
 
@@ -2170,7 +2222,7 @@ input QuizSubmissionUpdateManyMutationInput {
   dateCreated: DateTimeFieldUpdateOperationsInput
   quizId: StringFieldUpdateOperationsInput
   score: ScoreUpdateEnvelopeInput
-  time: NullableDateTimeFieldUpdateOperationsInput
+  time: TimeOptionsNullableUpdateEnvelopeInput
   userId: StringFieldUpdateOperationsInput
 }
 
@@ -2182,7 +2234,7 @@ input QuizSubmissionWhereInput {
   id: StringFilter
   quizId: StringFilter
   score: ScoreCompositeFilter
-  time: DateTimeNullableFilter
+  time: TimeOptionsNullableCompositeFilter
   userId: StringFilter
 }
 
@@ -2194,7 +2246,7 @@ input QuizSubmissionWhereUniqueInput {
   id: String
   quizId: StringFilter
   score: ScoreCompositeFilter
-  time: DateTimeNullableFilter
+  time: TimeOptionsNullableCompositeFilter
   userId: StringFilter
 }
 
@@ -2611,6 +2663,67 @@ input StringWithAggregatesFilter {
   startsWith: String
 }
 
+type TimeOptions {
+  timeTaken: Int
+  timeType: String!
+  totalTimeGiven: Int
+}
+
+input TimeOptionsCreateInput {
+  timeTaken: Int
+  timeType: String!
+  totalTimeGiven: Int
+}
+
+input TimeOptionsNullableCompositeFilter {
+  equals: TimeOptionsObjectEqualityInput
+  is: TimeOptionsWhereInput
+  isNot: TimeOptionsWhereInput
+  isSet: Boolean
+}
+
+input TimeOptionsNullableCreateEnvelopeInput {
+  set: TimeOptionsCreateInput
+}
+
+input TimeOptionsNullableUpdateEnvelopeInput {
+  set: TimeOptionsCreateInput
+  unset: Boolean
+  upsert: TimeOptionsUpsertInput
+}
+
+input TimeOptionsObjectEqualityInput {
+  timeTaken: Int
+  timeType: String!
+  totalTimeGiven: Int
+}
+
+input TimeOptionsOrderByInput {
+  timeTaken: SortOrder
+  timeType: SortOrder
+  totalTimeGiven: SortOrder
+}
+
+input TimeOptionsUpdateInput {
+  timeTaken: NullableIntFieldUpdateOperationsInput
+  timeType: StringFieldUpdateOperationsInput
+  totalTimeGiven: NullableIntFieldUpdateOperationsInput
+}
+
+input TimeOptionsUpsertInput {
+  set: TimeOptionsCreateInput!
+  update: TimeOptionsUpdateInput!
+}
+
+input TimeOptionsWhereInput {
+  AND: [TimeOptionsWhereInput!]
+  NOT: [TimeOptionsWhereInput!]
+  OR: [TimeOptionsWhereInput!]
+  timeTaken: IntNullableFilter
+  timeType: StringFilter
+  totalTimeGiven: IntNullableFilter
+}
+
 type User {
   _count: UserCount
   accounts(cursor: AccountWhereUniqueInput, distinct: [AccountScalarFieldEnum!], orderBy: [AccountOrderByWithRelationInput!], skip: Int, take: Int, where: AccountWhereInput): [Account!]!
@@ -2619,8 +2732,12 @@ type User {
   emailVerified: DateTimeISO
   id: String!
   image: String
+  location: LocationData
   name: String!
+  questionData: UserQuestionData!
+  school: String
   sessions(cursor: SessionWhereUniqueInput, distinct: [SessionScalarFieldEnum!], orderBy: [SessionOrderByWithRelationInput!], skip: Int, take: Int, where: SessionWhereInput): [Session!]!
+  tags: [String!]!
   usersReached: Int!
 }
 
@@ -2645,6 +2762,8 @@ type UserCountAggregate {
   id: Int!
   image: Int!
   name: Int!
+  school: Int!
+  tags: Int!
   usersReached: Int!
 }
 
@@ -2655,6 +2774,8 @@ input UserCountOrderByAggregateInput {
   id: SortOrder
   image: SortOrder
   name: SortOrder
+  school: SortOrder
+  tags: SortOrder
   usersReached: SortOrder
 }
 
@@ -2665,8 +2786,12 @@ input UserCreateInput {
   emailVerified: DateTimeISO
   id: String
   image: String
+  location: LocationDataNullableCreateEnvelopeInput
   name: String!
+  questionData: UserQuestionDataCreateEnvelopeInput!
+  school: String
   sessions: SessionCreateNestedManyWithoutUserInput
+  tags: UserCreatetagsInput
   usersReached: Int
 }
 
@@ -2676,7 +2801,11 @@ input UserCreateManyInput {
   emailVerified: DateTimeISO
   id: String
   image: String
+  location: LocationDataNullableCreateEnvelopeInput
   name: String!
+  questionData: UserQuestionDataCreateEnvelopeInput!
+  school: String
+  tags: UserCreatetagsInput
   usersReached: Int
 }
 
@@ -2708,8 +2837,12 @@ input UserCreateWithoutAccountsInput {
   emailVerified: DateTimeISO
   id: String
   image: String
+  location: LocationDataNullableCreateEnvelopeInput
   name: String!
+  questionData: UserQuestionDataCreateEnvelopeInput!
+  school: String
   sessions: SessionCreateNestedManyWithoutUserInput
+  tags: UserCreatetagsInput
   usersReached: Int
 }
 
@@ -2720,11 +2853,19 @@ input UserCreateWithoutSessionsInput {
   emailVerified: DateTimeISO
   id: String
   image: String
+  location: LocationDataNullableCreateEnvelopeInput
   name: String!
+  questionData: UserQuestionDataCreateEnvelopeInput!
+  school: String
+  tags: UserCreatetagsInput
   usersReached: Int
 }
 
-type UserCredentials {
+input UserCreatetagsInput {
+  set: [String!]!
+}
+
+type UserCredential {
   email: String!
   id: String!
   password: String
@@ -2732,7 +2873,7 @@ type UserCredentials {
   userId: String!
 }
 
-type UserCredentialsCountAggregate {
+type UserCredentialCountAggregate {
   _all: Int!
   email: Int!
   id: Int!
@@ -2741,7 +2882,7 @@ type UserCredentialsCountAggregate {
   userId: Int!
 }
 
-input UserCredentialsCountOrderByAggregateInput {
+input UserCredentialCountOrderByAggregateInput {
   email: SortOrder
   id: SortOrder
   password: SortOrder
@@ -2749,7 +2890,7 @@ input UserCredentialsCountOrderByAggregateInput {
   userId: SortOrder
 }
 
-input UserCredentialsCreateInput {
+input UserCredentialCreateInput {
   email: String!
   id: String
   password: String
@@ -2757,7 +2898,7 @@ input UserCredentialsCreateInput {
   userId: String!
 }
 
-input UserCredentialsCreateManyInput {
+input UserCredentialCreateManyInput {
   email: String!
   id: String
   password: String
@@ -2765,10 +2906,10 @@ input UserCredentialsCreateManyInput {
   userId: String!
 }
 
-type UserCredentialsGroupBy {
-  _count: UserCredentialsCountAggregate
-  _max: UserCredentialsMaxAggregate
-  _min: UserCredentialsMinAggregate
+type UserCredentialGroupBy {
+  _count: UserCredentialCountAggregate
+  _max: UserCredentialMaxAggregate
+  _min: UserCredentialMinAggregate
   email: String!
   id: String!
   password: String
@@ -2776,7 +2917,7 @@ type UserCredentialsGroupBy {
   userId: String!
 }
 
-type UserCredentialsMaxAggregate {
+type UserCredentialMaxAggregate {
   email: String
   id: String
   password: String
@@ -2784,7 +2925,7 @@ type UserCredentialsMaxAggregate {
   userId: String
 }
 
-input UserCredentialsMaxOrderByAggregateInput {
+input UserCredentialMaxOrderByAggregateInput {
   email: SortOrder
   id: SortOrder
   password: SortOrder
@@ -2792,7 +2933,7 @@ input UserCredentialsMaxOrderByAggregateInput {
   userId: SortOrder
 }
 
-type UserCredentialsMinAggregate {
+type UserCredentialMinAggregate {
   email: String
   id: String
   password: String
@@ -2800,7 +2941,7 @@ type UserCredentialsMinAggregate {
   userId: String
 }
 
-input UserCredentialsMinOrderByAggregateInput {
+input UserCredentialMinOrderByAggregateInput {
   email: SortOrder
   id: SortOrder
   password: SortOrder
@@ -2808,10 +2949,10 @@ input UserCredentialsMinOrderByAggregateInput {
   userId: SortOrder
 }
 
-input UserCredentialsOrderByWithAggregationInput {
-  _count: UserCredentialsCountOrderByAggregateInput
-  _max: UserCredentialsMaxOrderByAggregateInput
-  _min: UserCredentialsMinOrderByAggregateInput
+input UserCredentialOrderByWithAggregationInput {
+  _count: UserCredentialCountOrderByAggregateInput
+  _max: UserCredentialMaxOrderByAggregateInput
+  _min: UserCredentialMinOrderByAggregateInput
   email: SortOrder
   id: SortOrder
   password: SortOrder
@@ -2819,7 +2960,7 @@ input UserCredentialsOrderByWithAggregationInput {
   userId: SortOrder
 }
 
-input UserCredentialsOrderByWithRelationInput {
+input UserCredentialOrderByWithRelationInput {
   email: SortOrder
   id: SortOrder
   password: SortOrder
@@ -2827,7 +2968,7 @@ input UserCredentialsOrderByWithRelationInput {
   userId: SortOrder
 }
 
-enum UserCredentialsScalarFieldEnum {
+enum UserCredentialScalarFieldEnum {
   email
   id
   password
@@ -2835,10 +2976,10 @@ enum UserCredentialsScalarFieldEnum {
   userId
 }
 
-input UserCredentialsScalarWhereWithAggregatesInput {
-  AND: [UserCredentialsScalarWhereWithAggregatesInput!]
-  NOT: [UserCredentialsScalarWhereWithAggregatesInput!]
-  OR: [UserCredentialsScalarWhereWithAggregatesInput!]
+input UserCredentialScalarWhereWithAggregatesInput {
+  AND: [UserCredentialScalarWhereWithAggregatesInput!]
+  NOT: [UserCredentialScalarWhereWithAggregatesInput!]
+  OR: [UserCredentialScalarWhereWithAggregatesInput!]
   email: StringWithAggregatesFilter
   id: StringWithAggregatesFilter
   password: StringNullableWithAggregatesFilter
@@ -2846,24 +2987,24 @@ input UserCredentialsScalarWhereWithAggregatesInput {
   userId: StringWithAggregatesFilter
 }
 
-input UserCredentialsUpdateInput {
+input UserCredentialUpdateInput {
   email: StringFieldUpdateOperationsInput
   password: NullableStringFieldUpdateOperationsInput
   provider: StringFieldUpdateOperationsInput
   userId: StringFieldUpdateOperationsInput
 }
 
-input UserCredentialsUpdateManyMutationInput {
+input UserCredentialUpdateManyMutationInput {
   email: StringFieldUpdateOperationsInput
   password: NullableStringFieldUpdateOperationsInput
   provider: StringFieldUpdateOperationsInput
   userId: StringFieldUpdateOperationsInput
 }
 
-input UserCredentialsWhereInput {
-  AND: [UserCredentialsWhereInput!]
-  NOT: [UserCredentialsWhereInput!]
-  OR: [UserCredentialsWhereInput!]
+input UserCredentialWhereInput {
+  AND: [UserCredentialWhereInput!]
+  NOT: [UserCredentialWhereInput!]
+  OR: [UserCredentialWhereInput!]
   email: StringFilter
   id: StringFilter
   password: StringNullableFilter
@@ -2871,10 +3012,10 @@ input UserCredentialsWhereInput {
   userId: StringFilter
 }
 
-input UserCredentialsWhereUniqueInput {
-  AND: [UserCredentialsWhereInput!]
-  NOT: [UserCredentialsWhereInput!]
-  OR: [UserCredentialsWhereInput!]
+input UserCredentialWhereUniqueInput {
+  AND: [UserCredentialWhereInput!]
+  NOT: [UserCredentialWhereInput!]
+  OR: [UserCredentialWhereInput!]
   email: String
   id: String
   password: StringNullableFilter
@@ -2894,6 +3035,8 @@ type UserGroupBy {
   id: String!
   image: String
   name: String!
+  school: String
+  tags: [String!]
   usersReached: Int!
 }
 
@@ -2904,6 +3047,7 @@ type UserMaxAggregate {
   id: String
   image: String
   name: String
+  school: String
   usersReached: Int
 }
 
@@ -2914,6 +3058,7 @@ input UserMaxOrderByAggregateInput {
   id: SortOrder
   image: SortOrder
   name: SortOrder
+  school: SortOrder
   usersReached: SortOrder
 }
 
@@ -2924,6 +3069,7 @@ type UserMinAggregate {
   id: String
   image: String
   name: String
+  school: String
   usersReached: Int
 }
 
@@ -2934,6 +3080,7 @@ input UserMinOrderByAggregateInput {
   id: SortOrder
   image: SortOrder
   name: SortOrder
+  school: SortOrder
   usersReached: SortOrder
 }
 
@@ -2949,6 +3096,8 @@ input UserOrderByWithAggregationInput {
   id: SortOrder
   image: SortOrder
   name: SortOrder
+  school: SortOrder
+  tags: SortOrder
   usersReached: SortOrder
 }
 
@@ -2959,9 +3108,61 @@ input UserOrderByWithRelationInput {
   emailVerified: SortOrder
   id: SortOrder
   image: SortOrder
+  location: LocationDataOrderByInput
   name: SortOrder
+  questionData: UserQuestionDataOrderByInput
+  school: SortOrder
   sessions: SessionOrderByRelationAggregateInput
+  tags: SortOrder
   usersReached: SortOrder
+}
+
+type UserQuestionData {
+  answered: Int!
+  generated: Int!
+}
+
+input UserQuestionDataCompositeFilter {
+  equals: UserQuestionDataObjectEqualityInput
+  is: UserQuestionDataWhereInput
+  isNot: UserQuestionDataWhereInput
+}
+
+input UserQuestionDataCreateEnvelopeInput {
+  set: UserQuestionDataCreateInput
+}
+
+input UserQuestionDataCreateInput {
+  answered: Int
+  generated: Int
+}
+
+input UserQuestionDataObjectEqualityInput {
+  answered: Int!
+  generated: Int!
+}
+
+input UserQuestionDataOrderByInput {
+  answered: SortOrder
+  generated: SortOrder
+}
+
+input UserQuestionDataUpdateEnvelopeInput {
+  set: UserQuestionDataCreateInput
+  update: UserQuestionDataUpdateInput
+}
+
+input UserQuestionDataUpdateInput {
+  answered: IntFieldUpdateOperationsInput
+  generated: IntFieldUpdateOperationsInput
+}
+
+input UserQuestionDataWhereInput {
+  AND: [UserQuestionDataWhereInput!]
+  NOT: [UserQuestionDataWhereInput!]
+  OR: [UserQuestionDataWhereInput!]
+  answered: IntFilter
+  generated: IntFilter
 }
 
 input UserRelationFilter {
@@ -2976,6 +3177,8 @@ enum UserScalarFieldEnum {
   id
   image
   name
+  school
+  tags
   usersReached
 }
 
@@ -2989,6 +3192,8 @@ input UserScalarWhereWithAggregatesInput {
   id: StringWithAggregatesFilter
   image: StringNullableWithAggregatesFilter
   name: StringWithAggregatesFilter
+  school: StringNullableWithAggregatesFilter
+  tags: StringNullableListFilter
   usersReached: IntWithAggregatesFilter
 }
 
@@ -3006,8 +3211,12 @@ input UserUpdateInput {
   email: StringFieldUpdateOperationsInput
   emailVerified: NullableDateTimeFieldUpdateOperationsInput
   image: NullableStringFieldUpdateOperationsInput
+  location: LocationDataNullableUpdateEnvelopeInput
   name: StringFieldUpdateOperationsInput
+  questionData: UserQuestionDataUpdateEnvelopeInput
+  school: NullableStringFieldUpdateOperationsInput
   sessions: SessionUpdateManyWithoutUserNestedInput
+  tags: UserUpdatetagsInput
   usersReached: IntFieldUpdateOperationsInput
 }
 
@@ -3016,7 +3225,11 @@ input UserUpdateManyMutationInput {
   email: StringFieldUpdateOperationsInput
   emailVerified: NullableDateTimeFieldUpdateOperationsInput
   image: NullableStringFieldUpdateOperationsInput
+  location: LocationDataNullableUpdateEnvelopeInput
   name: StringFieldUpdateOperationsInput
+  questionData: UserQuestionDataUpdateEnvelopeInput
+  school: NullableStringFieldUpdateOperationsInput
+  tags: UserUpdatetagsInput
   usersReached: IntFieldUpdateOperationsInput
 }
 
@@ -3051,8 +3264,12 @@ input UserUpdateWithoutAccountsInput {
   email: StringFieldUpdateOperationsInput
   emailVerified: NullableDateTimeFieldUpdateOperationsInput
   image: NullableStringFieldUpdateOperationsInput
+  location: LocationDataNullableUpdateEnvelopeInput
   name: StringFieldUpdateOperationsInput
+  questionData: UserQuestionDataUpdateEnvelopeInput
+  school: NullableStringFieldUpdateOperationsInput
   sessions: SessionUpdateManyWithoutUserNestedInput
+  tags: UserUpdatetagsInput
   usersReached: IntFieldUpdateOperationsInput
 }
 
@@ -3062,8 +3279,17 @@ input UserUpdateWithoutSessionsInput {
   email: StringFieldUpdateOperationsInput
   emailVerified: NullableDateTimeFieldUpdateOperationsInput
   image: NullableStringFieldUpdateOperationsInput
+  location: LocationDataNullableUpdateEnvelopeInput
   name: StringFieldUpdateOperationsInput
+  questionData: UserQuestionDataUpdateEnvelopeInput
+  school: NullableStringFieldUpdateOperationsInput
+  tags: UserUpdatetagsInput
   usersReached: IntFieldUpdateOperationsInput
+}
+
+input UserUpdatetagsInput {
+  push: [String!]
+  set: [String!]
 }
 
 input UserUpsertWithoutAccountsInput {
@@ -3088,8 +3314,12 @@ input UserWhereInput {
   emailVerified: DateTimeNullableFilter
   id: StringFilter
   image: StringNullableFilter
+  location: LocationDataNullableCompositeFilter
   name: StringFilter
+  questionData: UserQuestionDataCompositeFilter
+  school: StringNullableFilter
   sessions: SessionListRelationFilter
+  tags: StringNullableListFilter
   usersReached: IntFilter
 }
 
@@ -3103,8 +3333,12 @@ input UserWhereUniqueInput {
   emailVerified: DateTimeNullableFilter
   id: String
   image: StringNullableFilter
+  location: LocationDataNullableCompositeFilter
   name: StringFilter
+  questionData: UserQuestionDataCompositeFilter
+  school: StringNullableFilter
   sessions: SessionListRelationFilter
+  tags: StringNullableListFilter
   usersReached: IntFilter
 }
 
