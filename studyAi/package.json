@@ -3,13 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "secrets": "npx ts-node ./scripts/generateEnv.ts",
+    "secrets": "ts-node ./scripts/generateEnv.ts",
     "dev": "next dev",
     "build": "npm run prisma && next build",
     "start": "next start",
     "lint": "next lint",
-    "prisma": "npx prisma generate && npm run createSchema && npm run compileGql",
-    "createSchema": "npx ts-node ./graphql/createSchema.ts",
+    "prisma": "npx prisma generate && npm run compileGql",
     "seed": "npx ts-node ./src/app/util/prisma/seed.ts",
     "compileGql": "graphql-codegen",
     "watchGql": "graphql-codegen -w"
