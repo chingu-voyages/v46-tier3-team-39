@@ -36,11 +36,13 @@ const main = startServerAndCreateNextHandler(server, {
         session = null;
     }
   
-    let actualId = req.body.variables.id;
+    let actualId = (req.body.variables.creatorId) ? req.body.variables.creatorId : (req.body.variables.userId) ? req.body.variables.userId : req.body.variables.id;
     let resolverRequested = req.body.query.split('{')[1].split("(")[0];
+    // Cases to consider: queries where user doesn't need to be logged in (getAll type), question and quiz contains creatorId`
+    // All mutations (add, update, delete) will have creatorId
 
     console.log('-----------------------------------')
-    console.log(parse(req.body.query).definitions)
+    console.log(req.body)
     console.log('-----------------------------------')
 
     // Session may be null (eg. question library page)
