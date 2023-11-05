@@ -15,14 +15,18 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")  
 }
-
+type LocationData {
+    locationType String
+    //latitude and longitude
+    coordinates Float[]
+}
 type TimeOptions {
   timeType String
   timeTaken Int?
   totalTimeGiven Int?
 }
 
-type QuestionData {
+type QuestionInfoData {
   title String 
   description String
   //for mc and select multiple. short answer will contain empty arr
@@ -51,9 +55,9 @@ model Question {
   creatorId    String       @db.ObjectId
   questionType String
   tags String[]
-  question QuestionData
-  answer AnswerData
   dateCreated   DateTime @default(now())
+  questionInfo QuestionInfoData
+  answer AnswerData
   likeCounter LikeCounter
   @@index([creatorId])
 }
@@ -108,7 +112,7 @@ model QuizSubmission{
    @@index([userId, quizId])
 }
 
-model UserCredentials {
+model UserCredential {
   id            String @id     @default(auto()) @map("_id") @db.ObjectId
   userId        String @unique @db.ObjectId
   email         String @unique
@@ -153,6 +157,7 @@ model User {
   school        String?
   emailVerified DateTime?
   image         String?
+  location      LocationData?
   questionData  UserQuestionData
   accounts      Account[]
   sessions      Session[]

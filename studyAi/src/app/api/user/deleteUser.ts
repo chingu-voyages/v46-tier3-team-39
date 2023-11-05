@@ -6,7 +6,7 @@ export async function deleteUser(req: Request) {
     const [body, _] = await Promise.all([bodyPromise, connectToDb()]);
     const { userId } = body;
     //add verify token here
-    const userCred = prismaDb.userCredentials.delete({
+    const userCred = prismaDb.userCredential.delete({
       where: {
         userId,
       },

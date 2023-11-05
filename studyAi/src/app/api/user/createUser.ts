@@ -16,7 +16,7 @@ export async function createUser(req: Request) {
     const bodyPromise = req.json();
     const [body, _] = await Promise.all([bodyPromise, connectToDb()]);
     const { email, password, name, provider } = userSchema.parse(body);
-    const user = await findUniqueByEmail(email, "userCredentials");
+    const user = await findUniqueByEmail(email, "userCredential");
     if (user)
       return NextResponse.json({
         status: 409,
@@ -44,7 +44,7 @@ export async function createUser(req: Request) {
       newUserPromise,
       hashPasswordPromise,
     ]);
-    await prismaDb.userCredentials.create({
+    await prismaDb.userCredential.create({
       data: {
         userId: newUser.id,
         email,

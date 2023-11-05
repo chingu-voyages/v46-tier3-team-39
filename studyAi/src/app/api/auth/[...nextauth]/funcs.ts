@@ -21,11 +21,11 @@ export const addCredDoc = async ({
     if (!email || !name) return;
     await connectToDb();
     const [user, userDoc] = await Promise.all([
-      findUniqueByEmail(email, "userCredentials"),
+      findUniqueByEmail(email, "userCredential"),
       findUniqueByEmail(email, "user"),
     ]);
     if (account && account.userId && !user)
-      return await prismaDb.userCredentials.create({
+      return await prismaDb.userCredential.create({
         data: {
           userId: account.userId,
           email,
@@ -36,7 +36,7 @@ export const addCredDoc = async ({
     //since sign with email and pw already
     //has the cred file created
     if (userDoc && !user)
-      return await prismaDb.userCredentials.create({
+      return await prismaDb.userCredential.create({
         data: {
           userId: userDoc.id,
           email,

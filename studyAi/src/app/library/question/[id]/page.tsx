@@ -30,7 +30,7 @@ const question: Partial<Question> & {
     likes: 1500000000,
     dislikes: 100000,
   },
-  question: {
+  questionInfo: {
     title: "Question 1",
     description: "Question 2 is the world",
     options: ["the world", "the world", "the world", "the world"],
@@ -43,7 +43,7 @@ const QuestionQueryById = gql`
       creatorId
       questionType
       tags
-      question {
+      questionInfo {
         title
         description
         options
@@ -65,21 +65,25 @@ export default async function QuestionPage({
     query: QuestionQueryById,
     variables: { id: questionId },
   };
-  const { data: result } = await ServerGraphQLClient.query(query);
-  const data = result.question as (Partial<Question> & { id: string }) | null;
-  // const data = question;
-
-  return (
-    <NavigationWrapper
-      usePadding
-      appBars={{
-        footer: false,
-        navbar: true,
-      }}
-    >
-      <QuestionsContainer initialItems={data ? [data] : []}>
-        <QuestionPageContainer />
-      </QuestionsContainer>
-    </NavigationWrapper>
-  );
+  try {
+    const { data: result } = await ServerGraphQLClient.query(query);
+    const data = result.question as (Partial<Question> & { id: string }) | null;
+    // const data = question;
+    return (
+      <NavigationWrapper
+        usePadding
+        appBars={{
+          footer: false,
+          navbar: true,
+        }}
+      >
+        <QuestionsContainer initialItems={data ? [data] : []}>
+          <QuestionPageContainer />
+        </QuestionsContainer>
+      </NavigationWrapper>
+    );
+  } catch (err) {
+    console.log(err);
+    return <></>;
+  }
 }

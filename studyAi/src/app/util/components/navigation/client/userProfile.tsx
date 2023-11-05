@@ -52,9 +52,11 @@ export const UserProfile = ({
       </Avatar>
       {showUserInfo && (
         <div ref={setRef} className="flex flex-col w-full ml-4 py-1 space-y-0">
-          <span className="text-Black font-bold tracking-tight text-lg">
-            {name && name}
-          </span>
+          {name && (
+            <span className="text-Black font-bold tracking-tight text-lg">
+              { name}
+            </span>
+          )}
           <span className="text-Black font-regular tracking-tight text-xs">
             {email}
           </span>

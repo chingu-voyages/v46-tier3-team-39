@@ -14,7 +14,9 @@ export async function createSchema() {
   const schema = await buildSchema({
     // resolvers: allResolvers, // Custom resolvers
     resolvers,
-    emitSchemaFile: true,
+    emitSchemaFile: {
+      path: "./graphql/schema.graphql",
+    },
   });
   return schema;
 }
