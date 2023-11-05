@@ -1,30 +1,18 @@
 import "reflect-metadata";
 import { ApolloServer } from "@apollo/server";
-// import { allResolvers } from "../../../../graphql/index"; // Custom resolvers
-import { resolvers } from "../../../../prisma/generated/type-graphql"; // Auto-generated resolvers
 import { startServerAndCreateNextHandler } from "@as-integrations/next";
 import { prismaDb } from "@/app/util/prisma/connection";
-import { buildSchema } from "type-graphql";
 import { getServerSession } from "next-auth";
 import { options } from "../auth/[...nextauth]/options";
 import { Session } from "next-auth";
+import { GraphQLError } from "graphql";
+import { createSchema } from "../../../../graphql/createSchema";
 import { NextApiResponse } from "next";
-
-export async function createSchema() {
-  const schema = await buildSchema({
-    // resolvers: allResolvers, // Custom resolvers
-    resolvers,
-    emitSchemaFile: {
-      path: "./graphql/schema.graphql",
-    },
-  });
-  return schema;
-}
 const server = new ApolloServer({
   schema: await createSchema(),
 });
 const main = startServerAndCreateNextHandler(server, {
-  context: async (req, res: any) => {
+  context: async (req: any, res: any) => {
     let session: Session | null = null;
     try {
       res.getHeader = (name: string) => res.headers?.get(name);
@@ -33,6 +21,16 @@ const main = startServerAndCreateNextHandler(server, {
       session = await getServerSession(req, res, options);
     } catch (e) {
       session = null;
+    }
+    try {
+    } catch (err) {
+      console.log(err, "error");
+      throw new GraphQLError("Please provide a prop gql request in the body", {
+        extensions: {
+          code: "BAD_REQUEST",
+          http: { status: 400 },
+        },
+      });
     }
     const contextData = {
       req,
@@ -43,4 +41,5 @@ const main = startServerAndCreateNextHandler(server, {
     return contextData;
   },
 });
+
 export default main;

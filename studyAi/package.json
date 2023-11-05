@@ -8,7 +8,8 @@
     "build": "npm run prisma && next build",
     "start": "next start",
     "lint": "next lint",
-    "prisma": "npx prisma generate && npm run compileGql",
+    "prisma": "npx prisma generate && ts-node ./graphql/createSchema.ts",
+    "createSchema": "ts-node ./graphql/createSchema.ts",
     "seed": "npx ts-node ./src/app/util/prisma/seed.ts",
     "compileGql": "graphql-codegen",
     "watchGql": "graphql-codegen -w"
