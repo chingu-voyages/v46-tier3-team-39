@@ -8,6 +8,7 @@ import { getServerSession } from "next-auth";
 import { options } from "../auth/[...nextauth]/options";
 import { Session } from "next-auth";
 import { NextApiRequest, NextApiResponse } from "next";
+import { GraphQLError } from "graphql";
 
 export async function createSchema() {
   const schema = await buildSchema({
@@ -34,15 +35,19 @@ const main = startServerAndCreateNextHandler(server, {
     } catch (e) {
         session = null;
     }
+  
+    let actualId = req.body.variables.id;
+    let resolverRequested = req.body.query.split('{')[1].split("(")[0];
 
+    // Session may be null (eg. question library page)
+    if (session.user.id !== actualId)
+      throw new GraphQLError('User is not authorized/authenticated', {
+        extensions: {
+          code: 'UNAUTHENTICATED',
+          http: { status: 401 },
+        }
+    });
     
-
-    console.log('------------------------------------------------')
-    console.log(req.body.query)
-    console.log(typeof req.body.query)
-    console.log('------------------------------------------------')
-    
-
     const contextData = {
       req,
       res: res as NextApiResponse,
