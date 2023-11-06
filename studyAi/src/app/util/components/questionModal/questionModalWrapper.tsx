@@ -3,8 +3,9 @@
 import { useState } from "react";
 import QuestionEditForm from "./Modal"
 import { Modal } from "@mui/material";
+import { Question } from "../../../../../prisma/generated/type-graphql";
 
-const QuestionModalWrapper = ({children, questionId} : {children: React.ReactNode, questionId?: string}) => {
+const QuestionModalWrapper = ({children, questionData} : {children: React.ReactNode, questionData?: Partial<Question>}) => {
 
     const [isOpen, setIsOpen] = useState(false);
     const styles = {
@@ -18,12 +19,12 @@ const QuestionModalWrapper = ({children, questionId} : {children: React.ReactNod
         ].join(" ")
     }
     return (
-        <>
-            <button onClick={() => setIsOpen(true)}>{children}</button>
+        <div>
+            <div onClick={() => setIsOpen(true)}>{children}</div>
             <Modal open={isOpen} className={styles.modal} onClose={() => setIsOpen(false)}>
-                <QuestionEditForm questionId={questionId} setIsOpen={setIsOpen}/>
+                <QuestionEditForm setIsOpen={setIsOpen} questionData = {questionData} />
             </Modal>
-        </>
+        </div>
     )
 }
 

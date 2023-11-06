@@ -6,24 +6,29 @@ import LeftContent from './components/leftContent/leftContent'
 import AnswerEditor from './components/answerEditor/answerEditor'
 import Controls from './components/controls'
 import styles from './ModalStyles'
-import { useQuestions } from '@/app/stores/questionStore'
+import { Question } from '../../../../../prisma/generated/type-graphql'
+import { ForwardedRef, forwardRef } from 'react'
 
-const QuestionEditForm = ({questionId, setIsOpen}: {questionId?: string, setIsOpen: React.Dispatch<React.SetStateAction<boolean>>}) => {
+interface Props {
+    questionData?: Partial<Question>, 
+    setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
+}
 
-    const questionData = questionId ? useQuestions()[0].data[questionId]: undefined;
-    const options = questionData?.question?.options
+const QuestionEditForm = forwardRef((props: Props, ref: ForwardedRef<any>) => {
+
+    const options = props.questionData?.questionInfo?.options
     
     return (
         <div className={styles.modal}>
-            <FontAwesomeIcon icon={faXmark} className={styles.closeIcon} onClick={() => setIsOpen(false)}/>
+            <FontAwesomeIcon icon={faXmark} className={styles.closeIcon} onClick={() => props.setIsOpen(false)}/>
             <h1 className={styles.h1}>Question Editor</h1>
-            <Controls setIsOpen={setIsOpen} />
+            <Controls setIsOpen={props.setIsOpen} />
             <div className={styles.contentLayout}>
-                <LeftContent questionData={questionData}/>
+                <LeftContent questionData={props.questionData}/>
                 <AnswerEditor initialChoices={options ? options : ["","","",""]}/>
             </div>
         </div>
     )
-}
+})
 
 export default QuestionEditForm;

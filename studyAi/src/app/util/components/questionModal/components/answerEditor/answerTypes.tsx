@@ -13,7 +13,7 @@ export const MultipleChoice = ({choices, setChoices} : {choices: string[], setCh
                     setChoices(choices.slice(0, index).concat(event.target.value).concat(choices.slice(index+1)))
                 }
                 return (
-                    <RadioInput initialValue={choice} id={index.toString()} choices={choices} setChoices={setChoices} onChange={(e) => handleChange(e)} />
+                    <RadioInput key={index} initialValue={choice} id={index.toString()} choices={choices} setChoices={setChoices} onChange={(e) => handleChange(e)} />
                 )
             })}
             <NewAnswer choices={choices} setChoices={setChoices}/>
