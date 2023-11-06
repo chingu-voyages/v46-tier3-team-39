@@ -9,8 +9,11 @@ export const MultipleChoice = ({choices, setChoices} : {choices: string[], setCh
     return (
         <RadioGroup className="mt-2" defaultValue="outlined" name="radio-buttons-group">
             {choices.map((choice, index) => {
+                const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+                    setChoices(choices.slice(0, index).concat(event.target.value).concat(choices.slice(index+1)))
+                }
                 return (
-                    <RadioInput initialValue={choice} id={index.toString()}/>
+                    <RadioInput initialValue={choice} id={index.toString()} choices={choices} setChoices={setChoices} onChange={(e) => handleChange(e)} />
                 )
             })}
             <NewAnswer choices={choices} setChoices={setChoices}/>
@@ -21,10 +24,14 @@ export const MultipleChoice = ({choices, setChoices} : {choices: string[], setCh
 export const SelectAll = ({choices, setChoices} : {choices: string[], setChoices: React.Dispatch<React.SetStateAction<string[]>>}) => {
     return (
         <>
-            <CheckboxInput id="1" />
-            <CheckboxInput id="2" />
-            <CheckboxInput id="3" />
-            <CheckboxInput id="4" />
+            {choices.map((choice, index) => {
+                const handleChange = (event: React.ChangeEvent) => {
+                    setChoices(choices.slice(0, index).concat(event.target.nodeValue as string).concat(choices.slice(index+1)))
+                }
+                return (
+                    <CheckboxInput initialValue={choice} id={index.toString()} choices={choices} setChoices={setChoices} onChange={(e) => handleChange(e)}/>
+                )
+            })}
             <NewAnswer choices={choices} setChoices={setChoices} />
         </>
     )
@@ -33,28 +40,26 @@ export const SelectAll = ({choices, setChoices} : {choices: string[], setChoices
 
 export const ShortAnswer = () => {
     return (
-        <>
-            <textarea className="mt-4 bg-gray-50 border border-light-on-secondary-container text-Black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 h-[215px] max-h-[215px]"/>
-        </>
+        <textarea className={styles.input({isTextArea: true})}/>
     )
 }
 
-const RadioInput = ({id, initialValue}:{initialValue: string, id: string}) => {
+const RadioInput = ({id, initialValue, choices, setChoices, onChange}:{initialValue: string, id: string, choices: string[], setChoices: React.Dispatch<React.SetStateAction<string[]>>, onChange: React.ChangeEventHandler<HTMLInputElement>}) => {
     return (
         <div className="flex my-2 px-4 items-center">
             <Radio value={id} />
-            <input value={initialValue} type="text" id={id} className={styles.input({})} />
-            <FontAwesomeIcon icon={faTrash} className="ml-2"/>
+            <input value={initialValue} type="text" id={id} className={styles.input({})} onChange={onChange} />
+            <FontAwesomeIcon icon={faTrash} className="ml-2 hover:cursor-pointer" onClick={() => deleteChoice(Number(id), choices, setChoices)}/>
         </div>
     )
 }
 
-const CheckboxInput = ({id}:{id: string}) => {
+const CheckboxInput = ({id, initialValue, choices, setChoices, onChange}:{initialValue: string, id: string, choices: string[], setChoices: React.Dispatch<React.SetStateAction<string[]>>, onChange: React.ChangeEventHandler<HTMLInputElement>}) => {
     return (
         <div className="flex my-4 px-4 items-center">
             <Checkbox value={id} />
-            <input type="text" id={id} className={styles.input({})} />
-            <FontAwesomeIcon icon={faTrash} className="ml-2"/>
+            <input type="text" id={id} className={styles.input({})} value={initialValue} onChange={onChange} />
+            <FontAwesomeIcon icon={faTrash} className="ml-2 hover:cursor-pointer" onClick={() => deleteChoice(Number(id), choices, setChoices)}/>
         </div>
     )
 }
@@ -70,4 +75,8 @@ const NewAnswer = ({choices, setChoices}: {choices: string[] ,setChoices: React.
             <span className="ml-3 text-md font-semibold">New Answer</span>
         </button>
     )
+}
+
+const deleteChoice = (index: number, choices: string[], setChoices: React.Dispatch<React.SetStateAction<string[]>>) => {
+    setChoices(choices.toSpliced(index, 1));
 }

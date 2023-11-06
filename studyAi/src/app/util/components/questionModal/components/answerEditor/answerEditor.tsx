@@ -23,7 +23,7 @@ function CustomTabPanel(props: TabPanelProps) {
       {...other}
     >
       {value === index && (
-        <Box className="bg-White sm:h-[365px] p-3">
+        <Box className={styles.customTabPanel}>
           {children}
         </Box>
       )}
