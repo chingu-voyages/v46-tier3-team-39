@@ -11,6 +11,7 @@ import { useQuestions } from '@/app/stores/questionStore'
 const QuestionEditForm = ({questionId, setIsOpen}: {questionId?: string, setIsOpen: React.Dispatch<React.SetStateAction<boolean>>}) => {
 
     const questionData = questionId ? useQuestions()[0].data[questionId]: undefined;
+    const options = questionData?.question?.options
     
     return (
         <div className={styles.modal}>
@@ -19,7 +20,7 @@ const QuestionEditForm = ({questionId, setIsOpen}: {questionId?: string, setIsOp
             <Controls setIsOpen={setIsOpen} />
             <div className={styles.contentLayout}>
                 <LeftContent questionData={questionData}/>
-                <AnswerEditor initialChoices={questionData ? [""] : ["","","",""]}/>
+                <AnswerEditor initialChoices={options ? options : ["","","",""]}/>
             </div>
         </div>
     )
