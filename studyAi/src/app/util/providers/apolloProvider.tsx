@@ -1,6 +1,9 @@
 "use client";
 import { loadErrorMessages, loadDevMessages } from "@apollo/client/dev";
-import { createGraphQLClient, generateURL } from "../../api/graphql/apolloClient";
+import {
+  createGraphQLClient,
+  generateURL,
+} from "../../api/graphql/apolloClientClient";
 import { ApolloProvider } from "@apollo/client";
 const env = process.env.NODE_ENV;
 export const ClientSideApolloClient = createGraphQLClient(generateURL());

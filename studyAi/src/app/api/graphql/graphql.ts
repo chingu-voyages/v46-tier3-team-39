@@ -23,6 +23,7 @@ const canUserModify = (userId: string | undefined, creatorId: string) => {
 const main = startServerAndCreateNextHandler(server, {
   context: async (req: any, res: any) => {
     let session: Session | null = null;
+    const body = await req.graphQLbody
     try {
       res.getHeader = (name: string) => res.headers?.get(name);
       res.setHeader = (name: string, value: string) =>
@@ -49,7 +50,6 @@ const main = startServerAndCreateNextHandler(server, {
     // // if a user has access. If the route doesnt require access, do
     // // not call this function
     // canUserModify(session?.user?.id, actualId);
-
     const contextData = {
       req,
       res: res as NextApiResponse,

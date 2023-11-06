@@ -1,6 +1,8 @@
 import { loadErrorMessages, loadDevMessages } from "@apollo/client/dev";
-import { ApolloClient, InMemoryCache } from "@apollo/client";
-import { NextRequest } from "next/server";
+import {
+  ApolloClient,
+  InMemoryCache,
+} from "@apollo/client";
 const env = process.env.NODE_ENV;
 export const createGraphQLClient = (url: string) =>
   new ApolloClient({
@@ -22,9 +24,3 @@ if (env === "development") {
   loadDevMessages();
   loadErrorMessages();
 }
-const ServerGraphQLClient = createGraphQLClient(generateURL());
-const ServerGraphQLClientProvider = (req: NextRequest) => {
-  //req.cookies.set()
-  return ServerGraphQLClient;
-}
-export default ServerGraphQLClient;
