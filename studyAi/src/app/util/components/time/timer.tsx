@@ -11,7 +11,7 @@ const Timer = ({
 }: {
   updateTimeAction?: () => void;
   initialTimeLeft: number;
-  totalTimeGiven?: number;
+  totalTimeGiven?: number | null;
 }) => {
   const {
     time,

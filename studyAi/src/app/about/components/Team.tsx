@@ -12,7 +12,7 @@ export default function Team() {
                     <TeamMember name="Arky" role="Developer" avatarURL="/placeholderImages/squarePlaceholder.png" linkedInURL=""/>
                 </Grid>
                 <Grid item xs={6} sm={4}>
-                    <TeamMember name="Ihra" role="Developer" avatarURL="/placeholderImages/squarePlaceholder.png" linkedInURL=""/>
+                    <TeamMember name="Irha" role="Developer" avatarURL="/placeholderImages/squarePlaceholder.png" linkedInURL=""/>
                 </Grid>
                 <Grid item xs={6} sm={4}>
                     <TeamMember name="Tiffany" role="Developer" avatarURL="/placeholderImages/squarePlaceholder.png" linkedInURL=""/>

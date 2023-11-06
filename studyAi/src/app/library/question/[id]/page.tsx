@@ -1,18 +1,19 @@
 import NavigationWrapper from "@/app/util/components/navigation/navigationWrapper";
-import NavigationBtns from "../components/client/navigationBtns";
-import ServerGraphQLClient from "@/app/api/graphql/apolloClient";
-import { gql } from "@apollo/client";
+import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
+import QuestionPageContainer from "../components/client/questionPageContainer";
 import { Question } from "../../../../../prisma/generated/type-graphql";
 import { QuestionsContainer } from "@/app/stores/questionStore";
 import { QuestionTypes } from "@/app/util/types/UserData";
-import { QuestionWrapper } from "../components/client/questionWrapper";
+import { gql } from "../../../../../graphql/generated";
+import { getServerSession } from "next-auth";
+import { options } from "@/app/api/auth/[...nextauth]/options";
 const question: Partial<Question> & {
   id: string;
   questionType: (typeof QuestionTypes)[number];
 } = {
-  id: "653ad11c215e46561c12e643",
+  id: "65429fd993f2d4403eac75ec",
   creatorId: "6533f4c7489ef223ffc31a99",
-  questionType: "shortAnswer",
+  questionType: "Short Answer",
   tags: [
     "science",
     "science",
@@ -31,20 +32,20 @@ const question: Partial<Question> & {
     likes: 1500000000,
     dislikes: 100000,
   },
-  question: {
+  questionInfo: {
     title: "Question 1",
     description: "Question 2 is the world",
     options: ["the world", "the world", "the world", "the world"],
   },
 };
-const QuestionQueryById = gql`
-  query Question($id: String) {
+const QuestionQueryById = gql(`
+  query GetFullQuestion($id: String) {
     question(where: { id: $id }) {
       id
       creatorId
       questionType
       tags
-      question {
+      questionInfo {
         title
         description
         options
@@ -55,7 +56,7 @@ const QuestionQueryById = gql`
       }
     }
   }
-`;
+`);
 export default async function QuestionPage({
   params,
 }: {
@@ -66,22 +67,28 @@ export default async function QuestionPage({
     query: QuestionQueryById,
     variables: { id: questionId },
   };
-  const { data: result } = await ServerGraphQLClient.query(query);
-  // const data = result.question as (Partial<Question> & { id: string }) | null;
-  const data = question;
-  
-  return (
-    <NavigationWrapper
-      usePadding
-      appBars={{
-        footer: false,
-        navbar: true,
-      }}
-    >
-      <QuestionsContainer initialItems={data ? [data] : []}>
-        <NavigationBtns />
-        <QuestionWrapper />
-      </QuestionsContainer>
-    </NavigationWrapper>
-  );
+  try {
+    const session = await getServerSession(options)
+    const client = ServerGraphQLClient(session);
+    const { data: result } = await client.query(query);
+    const data = result.question as (Partial<Question> & { id: string }) | null;
+    // console.log(data)
+    // const data = question;
+    return (
+      <NavigationWrapper
+        usePadding
+        appBars={{
+          footer: false,
+          navbar: true,
+        }}
+      >
+        <QuestionsContainer initialItems={data ? [data] : []}>
+          <QuestionPageContainer />
+        </QuestionsContainer>
+      </NavigationWrapper>
+    );
+  } catch (err) {
+    console.log(err);
+    return <></>;
+  }
 }

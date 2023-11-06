@@ -35,6 +35,7 @@ const TimeControlsWrapper = ({
       {show && (
         <div className="flex justify-center items-center h-full">
           <Button
+            type="button"
             onClick={() => setShow(false)}
             className="flex items-center px-1 py-2 text-Black h-[80%] font-medium text-base break-words"
             sx={{
@@ -47,6 +48,7 @@ const TimeControlsWrapper = ({
         </div>
       )}
       <IconButton
+        type="button"
         size="large"
         className="flex justify-center items-center p-0 aspect-square h-[80%]"
         onClick={
@@ -82,6 +84,7 @@ const TimeControlsWrapper = ({
       </IconButton>
       <IconButton
         size="large"
+        type="button"
         // variant="text"
         onClick={resetTimer}
         className="flex justify-center items-center p-0 aspect-square h-[80%]"

@@ -42,7 +42,7 @@ const adjustScroll = (
 export const MultipleChoice = ({ options }: { options: string[] }) => {
   const { currOptions } = useOptionsWithId({ options });
   return (
-    <RadioGroup className="px-[5%] py-5">
+    <RadioGroup className="px-[5%] py-5 grow">
       {currOptions.map((val, idx) => (
         <FormControlLabel
           key={val.id}
@@ -57,7 +57,7 @@ export const MultipleChoice = ({ options }: { options: string[] }) => {
 export const SelectMultiple = ({ options }: { options: string[] }) => {
   const { currOptions } = useOptionsWithId({ options });
   return (
-    <FormGroup className="px-[5%] py-5">
+    <FormGroup className="px-[5%] py-5 grow">
       {currOptions.map((val, idx) => (
         <FormControlLabel
           key={val.id}
@@ -75,8 +75,8 @@ export const ShortAnswer = () => {
       minRows={8}
       onKeyDown={adjustScroll}
       onChange={adjustScroll}
-      style={{ height: "100%", resize:'none' }}
-      className="px-[4%] py-4 pb-6 text-sm"
+      style={{ height: "100%", resize: "none" }}
+      className="px-[4%] py-4 pb-6 text-sm grow"
       placeholder="Type answer here"
     />
   );
@@ -87,17 +87,17 @@ export const AnswerType = () => {
   const question =
     params.id && typeof params.id === "string" ? questions[params.id] : null;
   if (!question) return <></>;
-  if (!question.question) return <></>;
+  if (!question.questionInfo) return <></>;
   const {
     questionType,
-    question: { options: questionOptions },
+    questionInfo: { options: questionOptions },
   } = question;
   switch (questionType) {
     case "multipleChoice":
       return <MultipleChoice options={questionOptions} />;
     case "selectMultiple":
       return <SelectMultiple options={questionOptions} />;
-    case "shortAnswer":
+    case "Short Answer":
       return <ShortAnswer />;
     default:
       return <ShortAnswer />;

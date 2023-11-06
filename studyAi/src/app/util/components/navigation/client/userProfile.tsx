@@ -16,18 +16,18 @@ const userItemLinks = (userId?: string) => [
     text: "Dashboard",
     icon: <FontAwesomeIcon icon={faChartLine} className="aspect-square" />,
   },
-  {
-    href: `/${userId}/exams`,
-    text: "Your Exams",
-    icon: <FontAwesomeIcon icon={faFileLines} className="aspect-square" />,
-  },
-  {
-    href: `${userId}/profile`,
-    text: "Profile",
-    icon: <FontAwesomeIcon icon={faUserCircle} className="aspect-square" />,
-  },
+  // {
+  //   href: `/${userId}/exams`,
+  //   text: "Your Exams",
+  //   icon: <FontAwesomeIcon icon={faFileLines} className="aspect-square" />,
+  // },
+  // {
+  //   href: `${userId}/profile`,
+  //   text: "Profile",
+  //   icon: <FontAwesomeIcon icon={faUserCircle} className="aspect-square" />,
+  // },
 ];
-const UserProfile = ({
+export const UserProfile = ({
   showUserInfo = false,
   name,
   email,
@@ -52,9 +52,11 @@ const UserProfile = ({
       </Avatar>
       {showUserInfo && (
         <div ref={setRef} className="flex flex-col w-full ml-4 py-1 space-y-0">
-          <span className="text-Black font-bold tracking-tight text-lg">
-            {name && name}
-          </span>
+          {name && (
+            <span className="text-Black font-bold tracking-tight text-lg">
+              { name}
+            </span>
+          )}
           <span className="text-Black font-regular tracking-tight text-xs">
             {email}
           </span>

@@ -34,7 +34,7 @@ export const SelectAll = ({choices, setChoices} : {choices: string[], setChoices
 export const ShortAnswer = () => {
     return (
         <>
-            <textarea className={styles.input({isTextArea: true})}/>
+            <textarea className="mt-4 bg-gray-50 border border-light-on-secondary-container text-Black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 h-[215px] max-h-[215px]"/>
         </>
     )
 }

@@ -2,7 +2,7 @@
 import ContainerBar, { Container } from "../server/containerBar";
 import capitalizeEveryWord from "@/app/util/parsers/capitalizeEveryWord";
 import EditIcon from "@mui/icons-material/Edit";
-import { Button, IconButton, Tab, Tabs } from "@mui/material";
+import { IconButton, Tab, Tabs } from "@mui/material";
 import React, { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useQuestions } from "@/app/stores/questionStore";
@@ -56,6 +56,7 @@ const TopBar = ({
         question &&
         session.data.user.id === question.creatorId && (
           <IconButton
+            type="button"
             sx={btnStyles}
             className={btnClassNames + " aspect-square h-[70%]"}
           >
@@ -73,7 +74,11 @@ export const QuestionContainer = ({ height }: { height?: string | number }) => {
     newValue: (typeof containerTabs)[number]
   ) => setView(newValue);
   return (
-    <Container style={{ height: height ? height + "px" : undefined }} className="max-h-[30rem] md:max-h-none"border>
+    <Container
+      style={{ height: height ? height + "px" : undefined }}
+      className="max-h-[max(30rem,45vh)] md:max-h-none md:w-[calc(50%-0.5rem)] md:mr-2 grow"
+      border
+    >
       <TopBar view={view} handleChange={handleChange} />
       <InnerContainer view={view} />
     </Container>
