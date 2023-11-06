@@ -3,27 +3,29 @@ import styles from "../leftContent/leftContentStyles"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import React from 'react'
 
-export const MultipleChoice = () => {
+export const MultipleChoice = ({choices, setChoices} : {choices: string[], setChoices: React.Dispatch<React.SetStateAction<string[]>>}) => {
     return (
         <RadioGroup className="mt-2" defaultValue="outlined" name="radio-buttons-group">
-            <RadioInput id="1"/>
-            <RadioInput id="2"/>
-            <RadioInput id="3"/>
-            <RadioInput id="4"/>
-            <NewAnswer answerType="multipleChoice"/>
+            {choices.map((choice, index) => {
+                return (
+                    <RadioInput initialValue={choice} id={index.toString()}/>
+                )
+            })}
+            <NewAnswer choices={choices} setChoices={setChoices}/>
         </RadioGroup>
     )
 }
 
-export const SelectAll = () => {
+export const SelectAll = ({choices, setChoices} : {choices: string[], setChoices: React.Dispatch<React.SetStateAction<string[]>>}) => {
     return (
         <>
             <CheckboxInput id="1" />
             <CheckboxInput id="2" />
             <CheckboxInput id="3" />
             <CheckboxInput id="4" />
-            <NewAnswer answerType="answerType" />
+            <NewAnswer choices={choices} setChoices={setChoices} />
         </>
     )
 }
@@ -37,11 +39,11 @@ export const ShortAnswer = () => {
     )
 }
 
-const RadioInput = ({id}:{id: string}) => {
+const RadioInput = ({id, initialValue}:{initialValue: string, id: string}) => {
     return (
         <div className="flex my-2 px-4 items-center">
             <Radio value={id} />
-            <input type="text" id={id} className={styles.input({})} />
+            <input value={initialValue} type="text" id={id} className={styles.input({})} />
             <FontAwesomeIcon icon={faTrash} className="ml-2"/>
         </div>
     )
@@ -57,11 +59,15 @@ const CheckboxInput = ({id}:{id: string}) => {
     )
 }
 
-const NewAnswer = ({answerType}: {answerType: string}) => {
+const NewAnswer = ({choices, setChoices}: {choices: string[] ,setChoices: React.Dispatch<React.SetStateAction<string[]>>}) => {
+    const clickHandler = () => {
+        setChoices([...choices, ""])
+    }
+    
     return (
-        <div className="ml-4 my-2 px-4 items-center">
+        <button onClick={clickHandler} className="ml-4 my-2 px-4 items-center">
             <FontAwesomeIcon icon={faPlus} />
             <span className="ml-3 text-md font-semibold">New Answer</span>
-        </div>
+        </button>
     )
 }
