@@ -2,6 +2,7 @@ import TimeFormatDropdown from "./timeFormat"
 import styles from "./leftContentStyles"
 import type { Question } from "../../../../../../../prisma/generated/type-graphql"
 import { useState } from "react"
+import CreatableSelect from 'react-select/creatable';
 
 const LeftContent = ({questionData} : {questionData?: Partial<Question>}) => {
 
@@ -32,7 +33,7 @@ const LeftContent = ({questionData} : {questionData?: Partial<Question>}) => {
                 </div>
                 <div>
                     <label htmlFor="tags" className={styles.label}>Tags</label>
-                    <input id="tags" className={styles.input({})} />
+                    <CreatableSelect id="tags" className={styles.input({})} isMulti/>
                 </div>
                 <div>
                     <label htmlFor="description" className={styles.label}>Question Description</label>
