@@ -28,23 +28,30 @@ const createServerGraphQLClient = (
 
 class ServerGraphQLClientClass {
   client: ApolloClient<NormalizedCacheObject> | null;
-  hasCookieSet?: boolean;
+  hasCookieSet?: IncomingHttpHeaders["cookie"];
   constructor(cookie?: IncomingHttpHeaders["cookie"]) {
     this.client = cookie
       ? createServerGraphQLClient(cookie, generateURL())
       : null;
-    this.hasCookieSet = !!cookie;
+    this.hasCookieSet = cookie;
   }
   //determines if the cookie has been set.
   //If it has, no new client.
   //if it hasnt we will need
   setClient(session: Session | null, cookie: IncomingHttpHeaders["cookie"]) {
-    if (this.client && this.hasCookieSet) return this.client;
-    //get cookie
-    if ((this.hasCookieSet = !!cookie && !!session))
+    //return if cookie is the same
+    if (this.client && this.hasCookieSet && this.hasCookieSet === cookie)
+      return this.client;
+    //create new apollo client with new cookie
+    if (!!cookie && !!session) {
       this.client = createServerGraphQLClient(cookie, generateURL());
-    else this.client = createGraphQLClient(generateURL());
-    //ensure session is valid if not, we need a new client
+      this.hasCookieSet = cookie;
+    }
+    //this is a public client, since we are not authenticated, so no session
+    else {
+      this.client = createGraphQLClient(generateURL());
+      this.hasCookieSet = undefined;
+    }
     return this.client;
   }
 }
