@@ -1,10 +1,12 @@
 import NavigationWrapper from "@/app/util/components/navigation/navigationWrapper";
-import ServerGraphQLClient from "@/app/api/graphql/apolloClient";
+import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
 import QuestionPageContainer from "../components/client/questionPageContainer";
 import { Question } from "../../../../../prisma/generated/type-graphql";
 import { QuestionsContainer } from "@/app/stores/questionStore";
 import { QuestionTypes } from "@/app/util/types/UserData";
 import { gql } from "../../../../../graphql/generated";
+import { getServerSession } from "next-auth";
+import { options } from "@/app/api/auth/[...nextauth]/options";
 const question: Partial<Question> & {
   id: string;
   questionType: (typeof QuestionTypes)[number];
@@ -66,8 +68,11 @@ export default async function QuestionPage({
     variables: { id: questionId },
   };
   try {
-    const { data: result } = await ServerGraphQLClient.query(query);
+    const session = await getServerSession(options)
+    const client = ServerGraphQLClient(session);
+    const { data: result } = await client.query(query);
     const data = result.question as (Partial<Question> & { id: string }) | null;
+    // console.log(data)
     // const data = question;
     return (
       <NavigationWrapper

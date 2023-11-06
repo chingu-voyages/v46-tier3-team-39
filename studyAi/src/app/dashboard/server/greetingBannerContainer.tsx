@@ -2,10 +2,11 @@ import { options } from "@/app/api/auth/[...nextauth]/options";
 import { getServerSession } from "next-auth";
 import GreetingBanner from "./greetingBanner";
 import { sub } from "date-fns";
-import ServerGraphQLClient from "@/app/api/graphql/apolloClient";
+import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
 import { Question } from "../../../../prisma/generated/type-graphql";
 import { QuestionSubmission } from "@prisma/client";
 import { gql } from "../../../../graphql/generated";
+
 const QueryUserGeneratedQuestions = gql(`
   query QueryUserGeneratedQuestions(
     $id: String
@@ -42,6 +43,7 @@ const QueryQuestionSubmissions = gql(`
 `);
 const GreetingBannerContainer = async () => {
   const session = await getServerSession(options);
+  const client = ServerGraphQLClient(session);
   const userId = session?.user.id;
   const userName = session?.user.name;
   if (!userName || !userId) return <></>;
@@ -66,8 +68,8 @@ const GreetingBannerContainer = async () => {
       ...queryVariables,
     },
   };
-  const questionPromise = ServerGraphQLClient.query(questionQuery);
-  const submissionsPromise = ServerGraphQLClient.query(submissionsQuery);
+  const questionPromise = client.query(questionQuery);
+  const submissionsPromise = client.query(submissionsQuery);
   try {
     const [questionsResult, submissionsResult] = await Promise.all([
       questionPromise,
