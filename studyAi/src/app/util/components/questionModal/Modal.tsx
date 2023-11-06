@@ -19,7 +19,7 @@ const QuestionEditForm = ({questionId, setIsOpen}: {questionId?: string, setIsOp
             <Controls setIsOpen={setIsOpen} />
             <div className={styles.contentLayout}>
                 <LeftContent questionData={questionData}/>
-                <AnswerEditor initialChoices={questionData ? questionData?.choices : ["","","",""]}/>
+                <AnswerEditor initialChoices={questionData ? [""] : ["","","",""]}/>
             </div>
         </div>
     )
