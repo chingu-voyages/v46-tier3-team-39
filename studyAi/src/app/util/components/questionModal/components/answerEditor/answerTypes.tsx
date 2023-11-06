@@ -25,8 +25,8 @@ export const SelectAll = ({choices, setChoices} : {choices: string[], setChoices
     return (
         <>
             {choices.map((choice, index) => {
-                const handleChange = (event: React.ChangeEvent) => {
-                    setChoices(choices.slice(0, index).concat(event.target.nodeValue as string).concat(choices.slice(index+1)))
+                const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+                    setChoices(choices.slice(0, index).concat(event.target.value).concat(choices.slice(index+1)))
                 }
                 return (
                     <CheckboxInput initialValue={choice} id={index.toString()} choices={choices} setChoices={setChoices} onChange={(e) => handleChange(e)}/>
