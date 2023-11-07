@@ -58,7 +58,7 @@ const main = startServerAndCreateNextHandler(server, {
       public: !body.variables.private || null,
       take: body.variables.take || null
     };
-    const parsedQuery = getParsedQuery(body);
+    const parsedQuery = getParsedQuery(body.query);
     const resolverRequested = parsedQuery?.definitions[0].selectionSet.selections[0].name.value;
     const accessibleModels = ["question", "quiz"];
     const isQuery = parsedQuery?.definitions[0].operation.toLowerCase() === "query";
