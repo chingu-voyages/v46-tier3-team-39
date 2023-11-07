@@ -17,6 +17,7 @@ const questions: Omit<Question, "id" | "creatorId" | "dateCreated">[] = [
       likes: 1,
       dislikes: 0,
     },
+    private: false
   },
   {
     questionType: "Multiple Choice",
@@ -32,7 +33,8 @@ const questions: Omit<Question, "id" | "creatorId" | "dateCreated">[] = [
     likeCounter: {
       likes: 1,
       dislikes: 0
-    }
+    },
+    private: false
   },
   {
     questionType: "Checkbox",
@@ -48,7 +50,8 @@ const questions: Omit<Question, "id" | "creatorId" | "dateCreated">[] = [
     likeCounter: {
       likes: 1,
       dislikes: 0
-    }
+    },
+    private: true
   }
 ];
 

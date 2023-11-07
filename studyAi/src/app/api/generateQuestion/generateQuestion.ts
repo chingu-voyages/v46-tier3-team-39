@@ -7,15 +7,16 @@ const questionSchema = z.object({
   type: z.string(),
   tags: z.array(z.string()),
   question: z.string(),
-  answer: z.string()
+  answer: z.string(),
+  numberOfOptions: z.number()
 });
 
 export async function generateQuestion(req: Request) {
   try {
     const bodyPromise = req.json();    
     const body = await bodyPromise;
-    const { type, tags, question, answer } = questionSchema.parse(body);
-    const questionType = (type === "mcq") ?  "multiple choice with four different potential answers" : ("checkbox") ? "with four different potential answers some correct and some incorrect" : "short answer";
+    const { type, tags, question, answer, numberOfOptions } = questionSchema.parse(body);
+    const questionType = (type === "mcq") ?  `multiple choice with ${numberOfOptions} different potential answers` : ("checkbox") ? `with ${numberOfOptions} different potential answers some correct and some incorrect` : "short answer";
     
     const prompt = `Ask me a question, ${questionType}, similar to this question: ${question} and from the following subjects: ${tags}. Indicate which is the correct response, and Return your response in a JSON object, with the following format: {"question": "", "correct": ["",...], "incorrect": ["",...]}`;
     const model = "gpt-3.5-turbo";

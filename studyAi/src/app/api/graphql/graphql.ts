@@ -19,8 +19,8 @@ const main = startServerAndCreateNextHandler(server, {
   ) => {
     const body = await req.graphQLBody;
     const session: Session | null = await getSession(req, res);
-    //throw error if query requires authentication and user is not authenticated
-    //or does not have the proper read/write access rights
+    // throw error if query requires authentication and user is not authenticated
+    // or does not have the proper read/write access rights
     // validateAuthRequirementInQuery({ session, body });
     const contextData = {
       req,
