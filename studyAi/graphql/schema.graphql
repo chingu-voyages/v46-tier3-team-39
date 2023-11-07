@@ -1215,6 +1215,7 @@ type Question {
   dateCreated: DateTimeISO!
   id: String!
   likeCounter: LikeCounter!
+  private: Boolean!
   questionInfo: QuestionInfoData!
   questionType: String!
   tags: [String!]!
@@ -1225,6 +1226,7 @@ type QuestionCountAggregate {
   creatorId: Int!
   dateCreated: Int!
   id: Int!
+  private: Int!
   questionType: Int!
   tags: Int!
 }
@@ -1233,6 +1235,7 @@ input QuestionCountOrderByAggregateInput {
   creatorId: SortOrder
   dateCreated: SortOrder
   id: SortOrder
+  private: SortOrder
   questionType: SortOrder
   tags: SortOrder
 }
@@ -1243,6 +1246,7 @@ input QuestionCreateInput {
   dateCreated: DateTimeISO
   id: String
   likeCounter: LikeCounterCreateEnvelopeInput!
+  private: Boolean!
   questionInfo: QuestionInfoDataCreateEnvelopeInput!
   questionType: String!
   tags: QuestionCreatetagsInput
@@ -1254,6 +1258,7 @@ input QuestionCreateManyInput {
   dateCreated: DateTimeISO
   id: String
   likeCounter: LikeCounterCreateEnvelopeInput!
+  private: Boolean!
   questionInfo: QuestionInfoDataCreateEnvelopeInput!
   questionType: String!
   tags: QuestionCreatetagsInput
@@ -1270,6 +1275,7 @@ type QuestionGroupBy {
   creatorId: String!
   dateCreated: DateTimeISO!
   id: String!
+  private: Boolean!
   questionType: String!
   tags: [String!]
 }
@@ -1499,6 +1505,7 @@ type QuestionMaxAggregate {
   creatorId: String
   dateCreated: DateTimeISO
   id: String
+  private: Boolean
   questionType: String
 }
 
@@ -1506,6 +1513,7 @@ input QuestionMaxOrderByAggregateInput {
   creatorId: SortOrder
   dateCreated: SortOrder
   id: SortOrder
+  private: SortOrder
   questionType: SortOrder
 }
 
@@ -1513,6 +1521,7 @@ type QuestionMinAggregate {
   creatorId: String
   dateCreated: DateTimeISO
   id: String
+  private: Boolean
   questionType: String
 }
 
@@ -1520,6 +1529,7 @@ input QuestionMinOrderByAggregateInput {
   creatorId: SortOrder
   dateCreated: SortOrder
   id: SortOrder
+  private: SortOrder
   questionType: SortOrder
 }
 
@@ -1530,6 +1540,7 @@ input QuestionOrderByWithAggregationInput {
   creatorId: SortOrder
   dateCreated: SortOrder
   id: SortOrder
+  private: SortOrder
   questionType: SortOrder
   tags: SortOrder
 }
@@ -1540,6 +1551,7 @@ input QuestionOrderByWithRelationInput {
   dateCreated: SortOrder
   id: SortOrder
   likeCounter: LikeCounterOrderByInput
+  private: SortOrder
   questionInfo: QuestionInfoDataOrderByInput
   questionType: SortOrder
   tags: SortOrder
@@ -1549,6 +1561,7 @@ enum QuestionScalarFieldEnum {
   creatorId
   dateCreated
   id
+  private
   questionType
   tags
 }
@@ -1560,6 +1573,7 @@ input QuestionScalarWhereWithAggregatesInput {
   creatorId: StringWithAggregatesFilter
   dateCreated: DateTimeWithAggregatesFilter
   id: StringWithAggregatesFilter
+  private: BoolWithAggregatesFilter
   questionType: StringWithAggregatesFilter
   tags: StringNullableListFilter
 }
@@ -1748,6 +1762,7 @@ input QuestionUpdateInput {
   creatorId: StringFieldUpdateOperationsInput
   dateCreated: DateTimeFieldUpdateOperationsInput
   likeCounter: LikeCounterUpdateEnvelopeInput
+  private: BoolFieldUpdateOperationsInput
   questionInfo: QuestionInfoDataUpdateEnvelopeInput
   questionType: StringFieldUpdateOperationsInput
   tags: QuestionUpdatetagsInput
@@ -1758,6 +1773,7 @@ input QuestionUpdateManyMutationInput {
   creatorId: StringFieldUpdateOperationsInput
   dateCreated: DateTimeFieldUpdateOperationsInput
   likeCounter: LikeCounterUpdateEnvelopeInput
+  private: BoolFieldUpdateOperationsInput
   questionInfo: QuestionInfoDataUpdateEnvelopeInput
   questionType: StringFieldUpdateOperationsInput
   tags: QuestionUpdatetagsInput
@@ -1777,6 +1793,7 @@ input QuestionWhereInput {
   dateCreated: DateTimeFilter
   id: StringFilter
   likeCounter: LikeCounterCompositeFilter
+  private: BoolFilter
   questionInfo: QuestionInfoDataCompositeFilter
   questionType: StringFilter
   tags: StringNullableListFilter
@@ -1791,6 +1808,7 @@ input QuestionWhereUniqueInput {
   dateCreated: DateTimeFilter
   id: String
   likeCounter: LikeCounterCompositeFilter
+  private: BoolFilter
   questionInfo: QuestionInfoDataCompositeFilter
   questionType: StringFilter
   tags: StringNullableListFilter
@@ -1802,6 +1820,7 @@ type Quiz {
   id: String!
   likeCounter: LikeCounter!
   name: String!
+  private: Boolean!
   questionIds: [String!]!
   tags: [String!]!
 }
@@ -1812,6 +1831,7 @@ type QuizCountAggregate {
   dateCreated: Int!
   id: Int!
   name: Int!
+  private: Int!
   questionIds: Int!
   tags: Int!
 }
@@ -1821,6 +1841,7 @@ input QuizCountOrderByAggregateInput {
   dateCreated: SortOrder
   id: SortOrder
   name: SortOrder
+  private: SortOrder
   questionIds: SortOrder
   tags: SortOrder
 }
@@ -1831,6 +1852,7 @@ input QuizCreateInput {
   id: String
   likeCounter: LikeCounterCreateEnvelopeInput!
   name: String!
+  private: Boolean!
   questionIds: QuizCreatequestionIdsInput
   tags: QuizCreatetagsInput
 }
@@ -1841,6 +1863,7 @@ input QuizCreateManyInput {
   id: String
   likeCounter: LikeCounterCreateEnvelopeInput!
   name: String!
+  private: Boolean!
   questionIds: QuizCreatequestionIdsInput
   tags: QuizCreatetagsInput
 }
@@ -1861,6 +1884,7 @@ type QuizGroupBy {
   dateCreated: DateTimeISO!
   id: String!
   name: String!
+  private: Boolean!
   questionIds: [String!]
   tags: [String!]
 }
@@ -2028,6 +2052,7 @@ type QuizMaxAggregate {
   dateCreated: DateTimeISO
   id: String
   name: String
+  private: Boolean
 }
 
 input QuizMaxOrderByAggregateInput {
@@ -2035,6 +2060,7 @@ input QuizMaxOrderByAggregateInput {
   dateCreated: SortOrder
   id: SortOrder
   name: SortOrder
+  private: SortOrder
 }
 
 type QuizMinAggregate {
@@ -2042,6 +2068,7 @@ type QuizMinAggregate {
   dateCreated: DateTimeISO
   id: String
   name: String
+  private: Boolean
 }
 
 input QuizMinOrderByAggregateInput {
@@ -2049,6 +2076,7 @@ input QuizMinOrderByAggregateInput {
   dateCreated: SortOrder
   id: SortOrder
   name: SortOrder
+  private: SortOrder
 }
 
 input QuizOrderByWithAggregationInput {
@@ -2059,6 +2087,7 @@ input QuizOrderByWithAggregationInput {
   dateCreated: SortOrder
   id: SortOrder
   name: SortOrder
+  private: SortOrder
   questionIds: SortOrder
   tags: SortOrder
 }
@@ -2069,6 +2098,7 @@ input QuizOrderByWithRelationInput {
   id: SortOrder
   likeCounter: LikeCounterOrderByInput
   name: SortOrder
+  private: SortOrder
   questionIds: SortOrder
   tags: SortOrder
 }
@@ -2078,6 +2108,7 @@ enum QuizScalarFieldEnum {
   dateCreated
   id
   name
+  private
   questionIds
   tags
 }
@@ -2090,6 +2121,7 @@ input QuizScalarWhereWithAggregatesInput {
   dateCreated: DateTimeWithAggregatesFilter
   id: StringWithAggregatesFilter
   name: StringWithAggregatesFilter
+  private: BoolWithAggregatesFilter
   questionIds: StringNullableListFilter
   tags: StringNullableListFilter
 }
@@ -2255,6 +2287,7 @@ input QuizUpdateInput {
   dateCreated: DateTimeFieldUpdateOperationsInput
   likeCounter: LikeCounterUpdateEnvelopeInput
   name: StringFieldUpdateOperationsInput
+  private: BoolFieldUpdateOperationsInput
   questionIds: QuizUpdatequestionIdsInput
   tags: QuizUpdatetagsInput
 }
@@ -2264,6 +2297,7 @@ input QuizUpdateManyMutationInput {
   dateCreated: DateTimeFieldUpdateOperationsInput
   likeCounter: LikeCounterUpdateEnvelopeInput
   name: StringFieldUpdateOperationsInput
+  private: BoolFieldUpdateOperationsInput
   questionIds: QuizUpdatequestionIdsInput
   tags: QuizUpdatetagsInput
 }
@@ -2287,6 +2321,7 @@ input QuizWhereInput {
   id: StringFilter
   likeCounter: LikeCounterCompositeFilter
   name: StringFilter
+  private: BoolFilter
   questionIds: StringNullableListFilter
   tags: StringNullableListFilter
 }
@@ -2300,6 +2335,7 @@ input QuizWhereUniqueInput {
   id: String
   likeCounter: LikeCounterCompositeFilter
   name: StringFilter
+  private: BoolFilter
   questionIds: StringNullableListFilter
   tags: StringNullableListFilter
 }

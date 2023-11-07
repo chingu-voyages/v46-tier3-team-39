@@ -4,17 +4,33 @@ import { useMutation } from "@apollo/client";
 import { useSession } from "next-auth/react";
 import { useRef, useState } from "react";
 import { gql } from "../../../../graphql/generated";
+// # $location: {
+// #   locationType: String
+// #   coordinates: [Float!]!
+// # }
+// # location: $location
+
 const UpdateUserProfileInfo = gql(`
-  mutation UpdateUserProfileInfo(
-    $tags: [String!]!,
-    $name: String!,
-    $school: String, 
-    $location: {
-      locationType: String
-      coordinates: [Float!]!
+  mutation UpdateUserProfileInfo (
+    $id: String!,
+    $tags: UserUpdatetagsInput,
+    $name: StringFieldUpdateOperationsInput,
+    $school: NullableStringFieldUpdateOperationsInput, 
+    $location: LocationDataNullableUpdateEnvelopeInput
+  ) {
+    updateOneUser(
+      where: { id: $id },
+      data: {
+        tags: $tags,
+        name: $name,
+        school: $school
+        location: $location
+      }
+    ){
+      tags
+      name
+      school
     }
-  ){
-    updateUser()
   }
 `);
 const ProfileForm = async () => {
@@ -31,6 +47,7 @@ const ProfileForm = async () => {
     UpdateUserProfileInfo,
     {
       variables: {
+        id: session.data?.user.id,
         tags,
         name,
         school,

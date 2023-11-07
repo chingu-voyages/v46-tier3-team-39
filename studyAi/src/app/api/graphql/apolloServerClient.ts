@@ -35,9 +35,8 @@ class ServerGraphQLClientClass {
       : null;
     this.hasCookieSet = cookie;
   }
-  //determines if the cookie has been set.
-  //If it has, no new client.
-  //if it hasnt we will need
+  //determines if the cookie has been set, and determines if a new
+  //client is needed or not.
   setClient(session: Session | null, cookie: IncomingHttpHeaders["cookie"]) {
     //return if cookie is the same
     if (this.client && this.hasCookieSet && this.hasCookieSet === cookie)
