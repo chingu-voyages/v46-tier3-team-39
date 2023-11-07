@@ -29,7 +29,7 @@ export const SelectAll = ({choices, setChoices} : {choices: string[], setChoices
                     setChoices(choices.slice(0, index).concat(event.target.value).concat(choices.slice(index+1)))
                 }
                 return (
-                    <CheckboxInput initialValue={choice} id={index.toString()} choices={choices} setChoices={setChoices} onChange={(e) => handleChange(e)}/>
+                    <CheckboxInput key={index} initialValue={choice} id={index.toString()} choices={choices} setChoices={setChoices} onChange={(e) => handleChange(e)}/>
                 )
             })}
             <NewAnswer choices={choices} setChoices={setChoices} />

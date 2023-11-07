@@ -25,7 +25,7 @@ const QuestionEditForm = forwardRef((props: Props, ref: ForwardedRef<any>) => {
             <Controls setIsOpen={props.setIsOpen} />
             <div className={styles.contentLayout}>
                 <LeftContent questionData={props.questionData}/>
-                <AnswerEditor initialChoices={options ? options : ["","","",""]}/>
+                <AnswerEditor questionData={props.questionData} />
             </div>
         </div>
     )
