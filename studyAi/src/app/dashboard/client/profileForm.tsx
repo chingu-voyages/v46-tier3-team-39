@@ -4,12 +4,6 @@ import { useMutation } from "@apollo/client";
 import { useSession } from "next-auth/react";
 import { useRef, useState } from "react";
 import { gql } from "../../../../graphql/generated";
-// # $location: {
-// #   locationType: String
-// #   coordinates: [Float!]!
-// # }
-// # location: $location
-
 const UpdateUserProfileInfo = gql(`
   mutation UpdateUserProfileInfo (
     $id: String!,
@@ -26,7 +20,8 @@ const UpdateUserProfileInfo = gql(`
         school: $school
         location: $location
       }
-    ){
+    )
+    {
       tags
       name
       school
@@ -38,20 +33,37 @@ const ProfileForm = async () => {
   const [tags, setTags] = useState(session.data ? session.data.user.tags : []);
   const [name, setName] = useState(session.data ? session.data.user.name : "");
   const [location, setLocation] = useState(
-    session.data ? session.data.user.location : null
+    session.data && session.data.user.location
+      ? session.data.user.location
+      : {
+          locationType: "Point",
+          coordinates: [0, 0],
+        }
   );
   const [school, setSchool] = useState(
-    session.data ? session.data.user.school : ""
+    session.data && session.data.user.school ? session.data.user.school : ""
   );
+  const id = session.data ? session.data.user.id : "";
   const [mutationQuery, { loading, error, data }] = useMutation(
     UpdateUserProfileInfo,
     {
       variables: {
-        id: session.data?.user.id,
-        tags,
-        name,
-        school,
-        location,
+        id: id,
+        tags: {
+          set: tags,
+        },
+        name: {
+          set: name,
+        },
+        school: {
+          set: school,
+        },
+        location: {
+          set: {
+            locationType: location.locationType,
+            coordinates: { set: location.coordinates },
+          },
+        },
       },
     }
   );

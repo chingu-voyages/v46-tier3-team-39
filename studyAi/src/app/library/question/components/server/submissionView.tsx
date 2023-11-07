@@ -6,7 +6,7 @@ import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { gql } from "../../../../../../graphql/generated";
 const getSubmissionByQuestionId = gql(`
-  query GetQuestionSubmissionByQuestionId($questionId: String, $userId: String) {
+  query GetQuestionSubmissionByQuestionId($questionId: String, $userId: String ) {
     questionSubmissions(
       where: {
         userId: { equals: $userId }
@@ -32,11 +32,11 @@ export const SubmissionView = () => {
   const params = useParams();
   const { data: session } = useSession();
   if (!params?.id) return <></>;
-  if(!session) return <></>
+  const userId = session ? session.user.id : ''
   const queryOptions = {
     variables: {
       questionId: typeof params.id === 'string'? params.id : params.id[0],
-      userId: session.user.id,
+      userId: userId,
     },
   };
   const { data: result } = useQuery(getSubmissionByQuestionId, queryOptions);
@@ -51,7 +51,7 @@ export const SubmissionView = () => {
       No submissions found
     </label>
   );
-  if (!data) return noDataPlaceholder;
+  if (!session || !data) return noDataPlaceholder;
   return (
     <Container overflow className="px-[5%] py-5 grow">
       {Array.isArray(data.questionSubmissions) &&
