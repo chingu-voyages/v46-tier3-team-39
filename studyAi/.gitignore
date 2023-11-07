@@ -40,4 +40,3 @@ env*
 package-lock.json*
 
 generated
-package-lock.json
