@@ -1,7 +1,6 @@
 const styles = {
     layout: [
       "w-full",
-      "w-auto"
     ].join(" "),
     h2: [
       "text-3xl",
@@ -16,6 +15,12 @@ const styles = {
     tabLabel: [
       "text-2xs",
       "w-4/12",
+    ].join(" "),
+    customTabPanel: [
+      "bg-White", 
+      "sm:h-[365px]",
+      "p-3",
+      "overflow-y-auto",
     ].join(" "),
 }
 

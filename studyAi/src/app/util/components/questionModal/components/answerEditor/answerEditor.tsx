@@ -4,6 +4,7 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import { MultipleChoice, SelectAll, ShortAnswer } from './answerTypes';
 import styles from "./answerEditorStyles"
+import { Question } from '../../../../../../../prisma/generated/type-graphql/models/Question';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -23,7 +24,7 @@ function CustomTabPanel(props: TabPanelProps) {
       {...other}
     >
       {value === index && (
-        <Box className="bg-White sm:h-[365px] p-3">
+        <Box className={styles.customTabPanel}>
           {children}
         </Box>
       )}
@@ -38,8 +39,17 @@ function a11yProps(index: number) {
   };
 }
 
-export default function AnswerEditor() {
-  const [value, setValue] = React.useState(0);
+export default function AnswerEditor({questionData} : {questionData?: Partial<Question>}) {
+  const questionType = questionData?.questionType;
+  let initialTab = 0;
+  if (questionType == "checkbox") {
+    initialTab = 1;
+  }else if (questionType == "short answer") {
+    initialTab = 2;
+  }
+  const [value, setValue] = React.useState(initialTab);
+  const initialChoices = questionData?.questionInfo?.options;
+  const [choices, setChoices] = React.useState(initialChoices ? initialChoices: ["", "", "", ""])
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -59,10 +69,10 @@ export default function AnswerEditor() {
         </Tabs>
       </div>
       <CustomTabPanel value={value} index={0}>
-        <MultipleChoice />
+        <MultipleChoice choices={choices} setChoices={setChoices}/>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <SelectAll />
+        <SelectAll choices={choices} setChoices={setChoices}/>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
         <ShortAnswer/>

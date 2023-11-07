@@ -1,4 +1,4 @@
-const Controls = () => {
+const Controls = ({setIsOpen} : {setIsOpen: React.Dispatch<React.SetStateAction<boolean>>}) => {
 
     const styles = {
         layout: [
@@ -7,10 +7,6 @@ const Controls = () => {
             "sm:flex",
             "sm:items-center",
             "sm:w-[640px]",
-            "sm:absolute",
-            "sm:bottom-[10%]",
-            "sm:left-1/2",
-            "sm:-translate-x-1/2"
         ].join(" "),
         topButtonsLayout: [
             "flex",
@@ -39,7 +35,7 @@ const Controls = () => {
                 <button className={styles.button({})}>Upload Question</button>
                 <button className={styles.button({})}>Generate With Ai</button>
             </div>
-            <button className={styles.button({isCancel: true})}>Cancel</button>
+            <button className={styles.button({isCancel: true})} onClick={() => setIsOpen(false)}>Cancel</button>
         </div>
     )
 }
