@@ -1,4 +1,3 @@
-import "reflect-metadata";
 import { getServerSession } from "next-auth";
 import { options } from "../auth/[...nextauth]/options";
 import { Session } from "next-auth";
@@ -8,7 +7,8 @@ export const getSession = async (req: any, res: any) => {
     res.getHeader = (name: string) => res.headers?.get(name);
     res.setHeader = (name: string, value: string) =>
       res.headers?.set(name, value);
-    return await getServerSession(req, res, options);
+    const session = await getServerSession(req, res, options)
+    return session;
   } catch (e) {
     return null;
   }

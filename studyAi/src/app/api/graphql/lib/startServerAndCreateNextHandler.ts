@@ -26,7 +26,9 @@ function startServerAndCreateNextHandler<
   async function handler<HandlerReq extends NextRequest | Request>(req: HandlerReq, res?: undefined): Promise<Response>;
   async function handler(req: HandlerRequest, res: NextApiResponse | undefined) {
     const bodyAccessed = await getBody(req)
-    const newReq = {...req, graphQLBody: bodyAccessed}
+    //we add this value to request object
+    const newReq = req as any;
+    newReq.graphQLBody = bodyAccessed;
     const httpGraphQLResponse = await server.executeHTTPGraphQLRequest({
       context: () => contextFunction(newReq as unknown as Req, res as Req extends NextApiRequest ? NextApiResponse : undefined),
       httpGraphQLRequest: {
