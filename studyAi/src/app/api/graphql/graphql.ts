@@ -1,64 +1,101 @@
-
+import "reflect-metadata";
 import { ApolloServer } from "@apollo/server";
-import { startServerAndCreateNextHandler } from "@as-integrations/next";
+import { resolvers } from "../../../../prisma/generated/type-graphql";
+import { startServerAndCreateNextHandler } from "./lib/startServerAndCreateNextHandler";
 import { prismaDb } from "@/app/util/prisma/connection";
+import { buildSchema } from "type-graphql";
 import { getServerSession } from "next-auth";
 import { options } from "../auth/[...nextauth]/options";
 import { Session } from "next-auth";
-import { GraphQLError } from "graphql";
+import { NextApiRequest, NextApiResponse } from "next";
+import { GraphQLError, parse } from "graphql";
 import { createSchema } from "../../../../graphql/createSchema";
-import { NextApiResponse } from "next";
+
 const server = new ApolloServer({
   schema: await createSchema(),
 });
-const canUserModify = (userId: string | undefined, creatorId: string) => {
-  if (userId !== creatorId)
-    throw new GraphQLError("User is not authorized/authenticated", {
+
+const getSession = async (req: NextApiRequest, res: NextApiResponse) => {
+  try {
+    res.getHeader = (name: string) => res.headers?.get(name);
+    res.setHeader = (name: string, value: string) =>
+    res.headers?.set(name, value);
+    return await getServerSession(req, res, options);
+  } catch (e) {
+     return null;
+  }
+}
+
+const getParsedQuery = (queryString: string) => {
+  (!queryString.includes("where")) ? canUserModify(null, null, "Improper Query") : null;
+  try {
+    return parse(queryString);
+  } catch (e) {
+    canUserModify(null, null, "Improper Query");
+  }
+}
+
+ const canUserModify = (session: Session | null, actualId: string | null, message: string) => {
+  if (!session || session?.user?.id !== actualId)
+    throw new GraphQLError(message, {
       extensions: {
         code: "UNAUTHENTICATED",
         http: { status: 401 },
       },
     });
 };
+
+const validateVariables = (resolverRequested : string, variables: { public: boolean | null, actualId: string | null, take: number | null}, accessibleModels: string[]) => {
+  if ((accessibleModels.includes(resolverRequested) && variables.public === null) || !variables.actualId || !variables.take) {
+    canUserModify(null, null, "Improper Query");
+  }
+}
+
 const main = startServerAndCreateNextHandler(server, {
   context: async (req: any, res: any) => {
-    let session: Session | null = null;
-    const body = await req.graphQLbody
-    try {
-      res.getHeader = (name: string) => res.headers?.get(name);
-      res.setHeader = (name: string, value: string) =>
-        res.headers?.set(name, value);
-      session = await getServerSession(req, res, options);
-    } catch (e) {
-      session = null;
+    const body = await req.graphQLBody;
+    // Get all variables (actualId, take, public (only for quiz and question))
+    const variables: { actualId: string | null, public: boolean | null, take: number | null} = {
+      actualId: body.variables.id || null,
+      public: !body.variables.private || null,
+      take: body.variables.take || null
+    };
+    const parsedQuery = getParsedQuery(body);
+    const resolverRequested = parsedQuery?.definitions[0].selectionSet.selections[0].name.value;
+    const accessibleModels = ["question", "quiz"];
+    const isQuery = parsedQuery?.definitions[0].operation.toLowerCase() === "query";
+
+    const session: Session | null = await getSession(req, res);
+    req = req as NextApiRequest;
+    res = res as NextApiResponse;
+
+
+    // Validate if there is an id, take and [public (only for quiz and question)]
+    validateVariables(resolverRequested, variables, accessibleModels);
+
+    if (isQuery) {
+      switch (resolverRequested) {
+        case "questions": case "quizzes":
+          if (!variables.public) {
+            canUserModify(session, body.variables.actualId, "User is not authorized/authenticated");
+          }
+          break;
+        default:
+          canUserModify(session, variables.actualId, "User is not authorized/authenticated");
+      }
+    } else {
+      canUserModify(session, variables.actualId, "User is not authorized/authenticated");
     }
-    // let actualId = req.body.variables.creatorId
-    //   ? req.body.variables.creatorId
-    //   : req.body.variables.userId
-    //   ? req.body.variables.userId
-    //   : req.body.variables.id;
-    // let resolverRequested = req.body.query.split("{")[1].split("(")[0];
-    // // Cases to consider: queries where user doesn't need to be logged in (getAll type), question and quiz contains creatorId`
-    // // All mutations (add, update, delete) will have creatorId
 
-    // console.log("-----------------------------------");
-    // console.log(req.body);
-    // console.log("-----------------------------------");
-
-    // // Session may be null (eg. question library page)
-    // // use the following function when you want to explicity check
-    // // if a user has access. If the route doesnt require access, do
-    // // not call this function
-    // canUserModify(session?.user?.id, actualId);
     const contextData = {
       req,
-      res: res as NextApiResponse,
+      res,
       prisma: prismaDb,
-      session,
+      session
     };
 
     return contextData;
-  },
+  }
 });
 
 export default main;
