@@ -1,3 +1,5 @@
+import QuestionModalWrapper from "@/app/util/components/questionModal/questionModalWrapper"
+
 export default function Hero() {
     return (
         /* url for hero background goes in bg-[url(')] */
@@ -6,7 +8,9 @@ export default function Hero() {
             <h1 className="text-7xl sm:text-11xl font-bold">Preparing You Better</h1>
             <p className="text-lg sm:text-3xl my-2 font-light">Learn more about our story and mission.</p>
             <div className="flex m-auto my-6 justify-center">
-                <button className="bg-Black py-3 px-6 sm:px-8 sm:py-4 mx-2">Learn More</button>
+                <QuestionModalWrapper questionData={{questionInfo:{title: "Test Title", description: "Test Description", options: ["test option1", "test option2"]}, questionType: "checkbox", tags: ["science"]}}>
+                    <button className="bg-Black py-3 px-6 sm:px-8 sm:py-4 mx-2">Learn More</button>
+                </QuestionModalWrapper>
                 <button className="border-2 py-3 px-6 sm:px-8 sm:py-4">Sign Up</button>
             </div>
         </div>
