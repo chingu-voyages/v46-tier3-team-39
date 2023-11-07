@@ -1,9 +1,7 @@
 import "reflect-metadata";
 import { ApolloServer } from "@apollo/server";
-import { resolvers } from "../../../../prisma/generated/type-graphql";
 import { startServerAndCreateNextHandler } from "./lib/startServerAndCreateNextHandler";
 import { prismaDb } from "@/app/util/prisma/connection";
-import { buildSchema } from "type-graphql";
 import { getServerSession } from "next-auth";
 import { options } from "../auth/[...nextauth]/options";
 import { Session } from "next-auth";

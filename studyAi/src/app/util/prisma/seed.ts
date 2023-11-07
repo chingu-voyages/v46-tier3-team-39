@@ -57,13 +57,15 @@ async function main() {
       data: {
         name: "Chemistry Quiz",
         tags: question.tags,
+        creatorId: question.creatorId,
+        questionIds: [question.id],
         likeCounter: {
           likes: 1,
           dislikes: 0,
         },
-        creatorId: question.creatorId,
-        questionIds: [question.id],
+        private: false
       },
+
     })
   );
   const quizInfoPromise = Promise.all(quizItemsData);
