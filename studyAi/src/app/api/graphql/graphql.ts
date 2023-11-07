@@ -52,36 +52,7 @@ const validateVariables = (resolverRequested : string, variables: { public: bool
 }
 
 const getKey = (keyName: string, queryStr: string) => {
-  //   const queryStr = 'query QueryQuestionSubmissions($id: String, $startDate: DateTimeISO, $endDate: DateTimeISO) {\n' +
-  //   '  questionSubmissions(\n' +
-  //   '    where: {userId: {equals: $id}, dateCreated: {gte: $startDate, lte: $endDate}}\n' +
-  //   '    orderBy: {dateCreated: desc}\n' +
-  //   '  ) {\n' +
-  //   '    id\n' +
-  //   '    __typename\n' +
-  //   '  }\n' +
-  //   '}';
-
-  // `
-//   query GetFullQuestion($id: String) {
-//     question(where: { id: $id }) {
-//       id
-//       creatorId
-//       questionType
-//       tags
-//       questionInfo {
-//         title
-//         description
-//         options
-//       }
-//       likeCounter {
-//         likes
-//         dislikes
-//       }
-//     }
-//   }
-// `
-  //   const regex = new RegExp(keyName + ': {equals: \\$(.*?)},', 's');
+  const regex = new RegExp(keyName + ': {equals: \\$(.*?)},', 's');
   const regex = new RegExp(keyName + ': {equals: \\$(.*?)},', 's');
   const regex2 = new RegExp(keyName + ': \\$(\\w+)', 's');
   const match = queryStr.match(regex) || queryStr.match(regex2);
@@ -136,61 +107,3 @@ const main = startServerAndCreateNextHandler(server, {
 });
 
 export default main;
-    // const body = await req.graphQLBody;
-    // let parsedQuery;
-    // (!body.query.includes("where")) ? canUserModify(null, null, true, "Improper Query") : null;
-    // let session: Session | null = null;
-    // try {
-    //   parsedQuery = parse(body.query);
-    // } catch (e) {
-    //   canUserModify(null, null, true, "Improper Query");
-    // }
-    // try {
-    //   res.getHeader = (name: string) => res.headers?.get(name);
-    //   res.setHeader = (name: string, value: string) =>
-    //   res.headers?.set(name, value);
-    //   session = await getServerSession(req, res, options);
-    // } catch (e) {
-    //   session = null;
-    // }
-    // req = req as NextApiRequest;
-    // res = res as NextApiResponse;
-    // const acessibleModels = ["question", "quiz"];
-
-    // const resolverRequested = parsedQuery.definitions[0].selectionSet.selections[0].name.value;
-    // const variables = getAllVariables(parsedQuery, body, resolverRequested, acessibleModels);
-    // const actualId = variables.creatorId || variables.userId;
-    // const isQuery = parsedQuery.definitions[0].operation.toLowerCase() === "query";
-    // const sessionNeeded = isSessionNeeded(isQuery, variables.public, resolverRequested, acessibleModels);
-    // canUserModify(session, actualId, sessionNeeded, "User is not authorized/authenticated")
-
-    // const contextData = {
-    //   req,
-    //   res,
-    //   prisma: prismaDb,
-    //   session,
-    // };
-
-    // return contextData;
-
-    /**
-     *  // Switch Statements
-     // case IsQuery:
-     if (isQuery) {
-       switch (resolverRequested) {
-         // case Questions: case Quizzes:
-         case "questions": case "quizzes":
-           // if not -> canUserModify(actualId)
-           if (!variables.public) {
-             canUserModify(session, variables.actualId, true, "User is not authorized/authenticated");
-           }
-           break;
-         // default: Every other model
-         default:
-           canUserModify(session, variables.actualId, true, "User is not authorized/authenticated");
-        }
-     // default: isMutation
-     } else {
-       canUserModify(session, variables.actualId, true, "User is not authorized/authenticated");
-     }
-     */
