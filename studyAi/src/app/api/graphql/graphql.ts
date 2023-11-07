@@ -51,14 +51,6 @@ const validateVariables = (resolverRequested : string, variables: { public: bool
   }
 }
 
-const getKey = (keyName: string, queryStr: string) => {
-  const regex = new RegExp(keyName + ': {equals: \\$(.*?)},', 's');
-  const regex = new RegExp(keyName + ': {equals: \\$(.*?)},', 's');
-  const regex2 = new RegExp(keyName + ': \\$(\\w+)', 's');
-  const match = queryStr.match(regex) || queryStr.match(regex2);
-  return match ? match[1] : null;
-}
-
 const main = startServerAndCreateNextHandler(server, {
   context: async (req: any, res: any) => {
     const body = await req.graphQLBody;
