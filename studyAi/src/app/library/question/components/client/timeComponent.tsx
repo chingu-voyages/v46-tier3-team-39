@@ -5,6 +5,7 @@ import {
   FormEvent,
   SetStateAction,
   SyntheticEvent,
+  useEffect,
   useRef,
   useState,
 } from "react";
@@ -24,10 +25,9 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { TimeOptions } from "../../../../../../prisma/generated/type-graphql";
-import formatMilliseconds, {
-  extractTime,
-} from "@/app/util/parsers/formatMilliseconds";
 import removeNonIntegerChars from "@/app/util/parsers/removeNonIntegerChars";
+import { unstable_batchedUpdates } from "react-dom";
+import { extractTime } from "@/app/util/parsers/formatMilliseconds";
 //we can manage time on the frontend
 //because time measurements are only
 //for the user's benefit
@@ -36,8 +36,37 @@ import removeNonIntegerChars from "@/app/util/parsers/removeNonIntegerChars";
 type TimeProps = TimeOptions & {
   initialTime: number;
 };
-const defaultTime = formatMilliseconds(0) as string;
-const timeOrder = ["h", "m", "s"];
+const timeOrder: {
+  abbrev: "h" | "m" | "s";
+  label: "hours" | "minutes" | "seconds";
+}[] = [
+  { abbrev: "h", label: "hours" },
+  { abbrev: "m", label: "minutes" },
+  { abbrev: "s", label: "seconds" },
+];
+const determineNewVal = (
+  newValArr: string[],
+  name: string,
+  prevVal: string
+) => {
+  //determine new value from parsed arr
+  let newVal: string;
+  switch (name) {
+    case "hours":
+      newVal = newValArr[0];
+      break;
+    case "minutes":
+      newVal = newValArr[1];
+      break;
+    case "seconds":
+      newVal = newValArr[2];
+      break;
+    default:
+      newVal = prevVal;
+      break;
+  }
+  return newVal;
+};
 const splitTimeStrBy2 = (str: string) => {
   const arr = [];
   for (let i = 0; i < str.length; i += 2) {
@@ -46,74 +75,137 @@ const splitTimeStrBy2 = (str: string) => {
   }
   return arr;
 };
-function TimerInput() {
+const FieldInput = ({
+  onChange,
+  value,
+  name,
+  label,
+  abbrev,
+}: {
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  value: string;
+  name: string;
+  label: string;
+  abbrev: "h" | "m" | "s";
+}) => {
   const ref = useRef<HTMLInputElement | null>();
-  const [totalTime, setTotalTime] = useState(
-    defaultTime
-      .split(":")
-      .map((a, idx) => a + timeOrder[idx])
-      .reduce((a, b) => a + " " + b)
-  );
-  const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const target = e.target as HTMLInputElement;
-    const value = target.value;
-    const selectionEnd = target.selectionEnd;
-    setTotalTime((prevVal) => {
-      const prevIntegers = removeNonIntegerChars(prevVal);
-      let currIntegers = removeNonIntegerChars(value);
-      //this means that incorrect values were entered
-      //this is therefore not a correct input
-      if (prevIntegers.length < currIntegers.length) return prevVal;
-      const diff = currIntegers.length - prevIntegers.length;
-      //we remove the difference from the start of the string
-      //therefore maintaing the default string length
-      currIntegers = currIntegers.substring(diff, currIntegers.length);
-      if (currIntegers.length !== prevIntegers.length) return prevVal;
-      const newValArr = splitTimeStrBy2(currIntegers);
-      const newVal = newValArr.reduce((a, b, idx) => a + timeOrder[idx] + b);
-      console.log(newVal)
-      return newVal;
-    });
-
-    //every hour minute and second is represented with two digits
-    //therefore we return the new string parsed
-    // console.log(value, selectionEnd);
-    // setTotalTime((prevVal) => {
-    //   const currVal = target.value
-    //   let newVal = ""
-    //   if (prevVal < currVal) newVal = "0" + currVal.substring(1, currVal.length)
-    //   else
-    //   const { hours, minutes, seconds } = extractTime(currVal, false);
-
-    // })
-    // if (!(hours) || !(minutes) || !(seconds)) return;
-    // console.log(hours, minutes, seconds)
-
-    // const timeTotalSeconds =
-    //   parseInt(hours.toString().padStart(2, "0"), 10) * 3600 +
-    //   parseInt(minutes.toString().padStart(2, "0"), 10) * 60 +
-    //   parseInt(seconds.toString().padStart(2, "0"), 10);
-
-    // const timeInMilliseconds = timeTotalSeconds * 1000;
-    // const formattedTime = formatMilliseconds(timeInMilliseconds) as string;
-    // const userReadableTime = formattedTime
-    //   .split(":")
-    //   .map((a, idx) => a + timeOrder[idx])
-    //   .reduce((a, b) => a + " " + b);
-    // console.log(userReadableTime);
-    //setTotalTime(userReadableTime);
-  };
+  const [cursor, setCursor] = useState<number | null>(null);
+  useEffect(() => {
+    const input = ref.current;
+    if (input) input.setSelectionRange(cursor, cursor);
+  }, [ref, cursor, value]);
   return (
-    <div className="">
+    <div className="flex h-full">
       <TextField
         inputRef={ref}
         required
-        label={"Total Time"}
-        name="totalTime"
+        aria-label={label}
+        label={""}
+        variant="standard"
+        name={name}
         type="text"
-        sx={{ minHeight: "unset" }}
+        inputProps={{
+          className: "w-22 text-7xl tracking-wider",
+          style: { minHeight: "unset", minWidth: "unset", textAlign: "center" },
+        }}
+        sx={{ minHeight: "unset", minWidth: "unset" }}
         onChange={onChange}
+        onKeyDown={(e) => {
+          const target = e.target as HTMLInputElement;
+          const selectionEnd = target.selectionEnd;
+          setCursor(selectionEnd);
+        }}
+        value={value}
+      />
+      <label className="h-full text-4xl text-neutral-neutral40">{abbrev}</label>
+    </div>
+  );
+};
+function TimerInput() {
+  // const ref = useRef<HTMLInputElement | null>();
+  const [hours, setHours] = useState("00");
+  const [minutes, setMinutes] = useState("00");
+  const [seconds, setSeconds] = useState("00");
+  const [totalTime, setTotalTime] = useState("00h 00m 00s");
+  const timeVals: {
+    [key: string]: string;
+  } = {
+    hours,
+    minutes,
+    seconds,
+  };
+  const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const target = e.target as HTMLInputElement;
+    const { name, value } = target;
+    const dispatchVals: {
+      [key: string]: Dispatch<SetStateAction<string>>;
+    } = {
+      hours: setHours,
+      minutes: setMinutes,
+      seconds: setSeconds,
+      totalTime: setTotalTime,
+    };
+    let setAction = dispatchVals[name];
+    setAction((prevVal) => {
+      const maxLength = timeOrder.length * 2;
+      //set the current values
+      const parsedVal = removeNonIntegerChars(value);
+      timeVals[name] = parsedVal;
+      let currIntegers = removeNonIntegerChars(
+        `${timeVals.hours}${timeVals.minutes}${timeVals.seconds}`
+      );
+      //we remove the difference from the start of the string
+      //therefore maintaing the default string length
+      const diff = currIntegers.length - maxLength;
+      if (currIntegers.length > maxLength)
+        currIntegers = currIntegers.substring(diff, currIntegers.length);
+      //we pad the beginning with zeros in case of delete
+      if (currIntegers.length < maxLength)
+        currIntegers = currIntegers.padStart(maxLength, "0");
+      //this means that incorrect values were entered
+      //this is therefore not a correct input
+      if (currIntegers.length !== maxLength) return prevVal;
+      const newValArr = splitTimeStrBy2(currIntegers);
+      const newVal = determineNewVal(newValArr, name, prevVal);
+      //this creates the new total time string
+      const newTotalTime =
+        newValArr.reduce(
+          (a, b, idx) => a + timeOrder[idx - 1].abbrev + " " + b
+        ) + timeOrder[timeOrder.length - 1].abbrev;
+
+      unstable_batchedUpdates(() => {
+        //update new total time
+        if (name !== "hours") setHours(newValArr[0]);
+        if (name !== "minutes") setMinutes(newValArr[1]);
+        if (name !== "seconds") setSeconds(newValArr[2]);
+        setTotalTime(newTotalTime);
+      });
+      return newVal;
+    });
+  };
+  return (
+    <div className="flex w-full">
+      {timeOrder.map((a) => (
+        <FieldInput
+          key={a.label}
+          onChange={onChange}
+          name={a.label}
+          label={a.label}
+          value={timeVals[a.label]}
+          abbrev={a.abbrev}
+        />
+      ))}
+      <TextField
+        name={"totalTime"}
+        aria-readonly
         value={totalTime}
+        sx={{
+          visibility: "hidden",
+          minWidth: "unset",
+          minHeight: "unset",
+          width: 0,
+          height: 0,
+        }}
       />
     </div>
   );
