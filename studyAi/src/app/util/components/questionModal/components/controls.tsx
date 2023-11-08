@@ -1,66 +1,70 @@
 import { Question } from "../../../../../../prisma/generated/type-graphql";
 import axios from "axios";
 import { QuestionProps } from "../questionEditModal";
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import { gql } from "../../../../../../graphql/generated";
 import { useSession } from "next-auth/react";
+import { useMutation } from "@apollo/client";
 import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
+import Switch from '@mui/material/Switch';
+import { colors } from "@mui/material";
+import { getServerSession } from "next-auth";
+import { options } from "@/app/api/auth/[...nextauth]/options";
 
-
-const generateQuestion = async (questionData: Partial<Question>) => {
+const generateQuestion = async (
+  questionData: Partial<Question>,
+  isLoading: string,
+  setQuestionData: React.Dispatch<SetStateAction<Partial<Question> | null>>
+  ) => {
+  if (!questionData) return;
+  if (isLoading === "loading") return;
   try {
-    const questionInfo = { 
+    const questionProvided = { 
         type: questionData.questionType,
         tags: questionData.tags,
         question: questionData.questionInfo?.description,
         numberOfOptions: questionData.questionInfo?.options.length
-    }
-    const result = await axios({
-      url: "/api/generateQuestion",
-      method: "POST",
-      data: questionInfo,
+      }
+      const result = await axios({
+        url: "/api/generateQuestion",
+        method: "POST",
+        data: questionProvided,
     });
-    return result.data;
+    setQuestionData((prev) => ({
+      ...prev,
+      questionInfo: {
+        title: prev?.questionInfo?.title || "",
+        description: result?.data?.newQuestion?.question || "",
+        options: result?.data?.newQuestion?.incorrect || [""]
+      },
+      answer: {
+        correctAnswer: result?.data?.newQuestion?.correct || [""]
+      }}));
   } catch (err) {
     console.error(err);
     return null;
   }
 }
 
-/*
-  creatorId    String           @db.ObjectId
-  questionType String
-  tags         String[]
-  questionInfo 
-    title       String
-    description String
-    options     String[]
-  correctAnswer String[]
-  likeCounter
-    likes    Int
-    dislikes Int
-  private Boolean
-*/
-
 const AddQuestion = gql(`
   mutation CreateOneQuestionResolver(
-    $creatorId: string,
-    $questionType: string,
-    $tags: [string],
+    $creatorId: String,
+    $questionType: String,
+    $tags: [String],
     $questionInfo: {
-      title: string,
-      descriptin: string,
-      options: [string]
+      title: String,
+      descriptin: String,
+      options: [String]
     },
     $answer: {
       correctAnswer: [string]
     },
     $likeCounter: {
-      likes: 0,
-      dislikes: 0
+      likes: Int,
+      dislikes: Int
     },
     $private: boolean
-  ) {
+  ){
     createOneQuestion(
       data: {
         creatorId: $creatorId,
@@ -70,12 +74,10 @@ const AddQuestion = gql(`
         answer: $answerData,
         likeCounter: $likeCounter,
         private: $private
-      }
-    )
+      })
     {
       id
     }
-  }
 `);
 
 const styles = {
@@ -109,71 +111,116 @@ const styles = {
     ].join(" "),
 };
 
+const uploadQuestion = async (creatorId: string, questionData: Partial<Question>) => {
+  // Method 1
+  // const questionQuery = {
+  //   query: AddQuestion,
+  //   variables: {
+  //       creatorId,
+  //       ...questionData,
+  //   },
+  // };
+  //   const questionPromise = client.query(questionQuery);
+  //   try {
+  //     const [questionsResult] = await Promise.all([questionPromise]);
+  //     console.log(questionsResult)
+  //     // setQuestionData((prev) => ({...prev, questionsResult}))
+  //   } catch (err: any) {
+  //     console.log(err.networkError.result);
+  //   }
+
+    // METHOD 2
+    // const [mutationQuery, { loading, error, data }] = useMutation(
+    //   AddQuestion,
+    //   {
+    //     variables: {
+    //       creatorId,
+    //       likeCounter: {
+    //         likes: 0,
+    //         dislikes: 0
+    //       },
+    //       ...questionData,
+    //     },
+    //   }
+    // );
+}
+
 const Controls = ({
   setIsOpen,
   setQuestionData,
   questionData
 }: QuestionProps) => {
-
-  const session = useSession()
-  const client = ServerGraphQLClient(session);
-  const creatorId = session?.data?.user.id;
+  const label = { inputProps: { 'aria-label': 'Switch demo' } };
   const [isLoading, setIsLoading] = useState("success");
+  // METHOD 1
+  // const session = await getServerSession(options);
+  // const client = ServerGraphQLClient(session);
+  // const creatorId = session?.user.id;
 
-  const uploadQuestion = async () => {
-    console.log(questionData)
-    const questionQuery = {
-      query: AddQuestion,
-      variables: {
-          creatorId,
-          ...questionData,
-          answer: {
-            correctAnswer: "123"
-          },
-          private: false
-      },
-    };
-    const questionPromise = client.query(questionQuery);
-    try {
-      const [questionsResult] = await Promise.all([questionPromise]);
-      console.log(questionsResult)
-      setQuestionData((prev) => ({...prev, questionsResult}))
-    } catch (err: any) {
-      console.log(err.networkError.result);
-    }
-  }
+  // METHOD 2
+  const session = useSession()
+  const creatorId = session?.data?.user.id;
+  // const [mutationQuery, { loading, error, data }] = useMutation(
+  //   AddQuestion,
+  //   {
+  //     variables: {
+  //       creatorId,
+  //       likeCounter: {
+  //         likes: 0,
+  //         dislikes: 0
+  //       },
+  //       ...questionData
+  //       // questionType: "checkbox",
+  //       // tags: ["maths"],
+  //       // questionInfo: {
+  //       //   title: "Maths",
+  //       //   descriptin: "What is 1+1?",
+  //       //   options: ["5"]
+  //       // },
+  //       // answer: {
+  //       //   correctAnswer: ["2"]
+  //       // },
+  //       // private: false
+  //     },
+  //   }
+  // );
 
-  return (
-    <div className={styles.layout}>
-      <div className={styles.topButtonsLayout}>
-        <button className={styles.button({})}
-        onClick={async () => {
-          if (!questionData) return;
-          if (isLoading === "loading") return;
-          await uploadQuestion();
-        }}>
-          Upload Question
-          </button>
-        <button
-          className={styles.button({})}
-          onClick={async () => {
+  console.log(questionData)
+
+    return (
+      <div className={styles.layout}>
+        <div className={styles.topButtonsLayout}>
+          <button className={styles.button({})}
+          onClick={(e) => {
+            e.preventDefault();
             if (!questionData) return;
             if (isLoading === "loading") return;
-            const result = await generateQuestion(questionData);
-            setQuestionData((prev) => { return {...prev, question: result.newQuestion.question, options: [...result.newQuestion.incorrect], answer: { correctAnswer: [result.newQuestion.correct]}}});
-          }}
+            // mutationQuery();
+            // await uploadQuestion(creatorId || "", questionData);
+          }}>
+            Upload Question
+            </button>
+          <button
+            className={styles.button({})}
+            onClick={() => generateQuestion(questionData || {}, isLoading, setQuestionData)}
+          >
+            Generate With AI
+          </button>
+        </div>
+        <div>
+          <div style={{color: 'black'}}>Private</div>
+          <Switch
+            onChange={() => {setQuestionData((prev) => ({...prev, private: !prev?.private}))}} defaultChecked/>
+        </div>
+        <button
+          className={styles.button({ isCancel: true })}
+          onClick={() => setIsOpen(false)}
         >
-          Generate With Ai
+          Cancel
         </button>
       </div>
-      <button
-        className={styles.button({ isCancel: true })}
-        onClick={() => setIsOpen(false)}
-      >
-        Cancel
-      </button>
-    </div>
-  );
-};
+    );
+  }
+
 
 export default Controls;

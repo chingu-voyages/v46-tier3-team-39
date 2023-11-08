@@ -13,7 +13,7 @@ const QuestionModalWrapper = ({
   initialQuestionData?: Partial<Question>;
 }) => {
   const [questionData, setQuestionData] = useState<Partial<Question> | null>(
-    initialQuestionData ? initialQuestionData : null
+    initialQuestionData ? {...initialQuestionData, private: true, answer: {correctAnswer: ["2"]}} : null
   );
   const [isOpen, setIsOpen] = useState(false);
   const styles = {
