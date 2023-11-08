@@ -13,9 +13,10 @@ import { Carousel } from "@/app/util/components/carousel/carousel";
 const QuestionActionBtns = () => {
   return (
     <div className="flex items-center space-x-1">
-      <IconButton className="h-[70%]" type="button">
+      {/* this is for when a user can add the question to quiz */}
+      {/* <IconButton className="h-[70%]" type="button">
         <FontAwesomeIcon icon={faPlus} className="text-lg" />
-      </IconButton>
+      </IconButton> */}
       <IconButton className="h-[70%]" type="button">
         <Share className="text-lg" />
       </IconButton>
