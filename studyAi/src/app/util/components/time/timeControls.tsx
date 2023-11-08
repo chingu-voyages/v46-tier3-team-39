@@ -8,6 +8,15 @@ import {
 } from "@fortawesome/free-regular-svg-icons";
 import TimerIcon from "../../icons/timerIcon";
 import { MouseEvent, useEffect, useRef, useState } from "react";
+type TimeControlsWrapper = {
+  children: React.ReactNode;
+  startTimer: () => void;
+  resetTimer: () => void;
+  stopTimer: () => void;
+  paused: boolean;
+  showTimer?: boolean;
+  autoPlay?: boolean;
+}
 const TimeControlsWrapper = ({
   children,
   paused,
@@ -16,15 +25,7 @@ const TimeControlsWrapper = ({
   stopTimer,
   showTimer,
   autoPlay,
-}: {
-  children: React.ReactNode;
-  startTimer: () => void;
-  resetTimer: () => void;
-  stopTimer: () => void;
-  paused: boolean;
-  showTimer?: boolean;
-  autoPlay?: boolean;
-}) => {
+}:TimeControlsWrapper) => {
   const [show, setShow] = useState(showTimer);
   const playAuto = useRef(autoPlay);
   useEffect(() => {

@@ -336,6 +336,7 @@ export const TimeComponent = ({ props }: { props?: TimeProps }) => {
             totalTimeGiven={currTotalTimeGiven}
             showTimer
             autoPlay
+            updateTimeAction={(e) => {} }
           />
         );
       else return setCurrType("stopwatch");

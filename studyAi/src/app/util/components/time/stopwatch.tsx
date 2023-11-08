@@ -1,17 +1,17 @@
 "use client";
 import formatMilliseconds from "../../parsers/formatMilliseconds";
-import useTimeHook from "./hooks/useTimeHook";
+import useTimeHook, { TimeEventProps } from "./hooks/useTimeHook";
 import TimeControlsWrapper from "./timeControls";
-
+type StopWatchProps = {
+  updateTimeAction?: (props?: TimeEventProps) => void;
+  initialTimeUsed: number;
+  autoPlay?: boolean;
+};
 const StopWatch = ({
   initialTimeUsed,
   updateTimeAction,
   autoPlay,
-}: {
-  updateTimeAction?: () => void;
-  initialTimeUsed: number;
-  autoPlay?: boolean;
-}) => {
+}: StopWatchProps) => {
   const {
     time,
     stopTimer,
@@ -23,8 +23,8 @@ const StopWatch = ({
     setPause,
   } = useTimeHook({
     initialTime: initialTimeUsed,
-    callback: (time) => {
-      if (updateTimeAction) updateTimeAction();
+    callback: (event) => {
+      if (updateTimeAction) updateTimeAction(event);
     },
     autoPlay,
   });
@@ -42,8 +42,13 @@ const StopWatch = ({
       if (!intervalRef.current && updateTimeActionIntervalRef.current)
         clearInterval(updateTimeActionIntervalRef.current);
       //update below function with time value
-      if (updateTimeAction) updateTimeAction();
+      if (updateTimeAction)
+        updateTimeAction({
+          eventType: "interval",
+          time: time,
+        });
     }, 5000);
+    if (updateTimeAction) updateTimeAction({ eventType: "start", time: time });
   };
   const resetTimer = () => {
     setPause(true);
@@ -51,6 +56,8 @@ const StopWatch = ({
     if (updateTimeActionIntervalRef.current)
       clearInterval(updateTimeActionIntervalRef.current);
     setTime(0);
+    if (updateTimeAction)
+      updateTimeAction({ eventType: "reset", time: 0 });
   };
   const timeArr = formatMilliseconds(time, true);
   return (

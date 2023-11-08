@@ -1,12 +1,17 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+
+export type TimeEventProps = {
+  time: number;
+  eventType: "start" | "stop" | "reset" | "interval";
+};
 const useTimeHook = ({
   initialTime,
   callback,
   autoPlay,
 }: {
   initialTime: number;
-  callback?: (time: number) => void;
+  callback?: (props?: TimeEventProps) => void;
   autoPlay?: boolean;
 }) => {
   const playAuto = useRef(autoPlay);
@@ -37,7 +42,10 @@ const useTimeHook = ({
     if (intervalRef.current) clearInterval(intervalRef.current);
     if (updateTimeActionIntervalRef.current) {
       //update with curr time value
-      if (callback) callback(time);
+      if (callback) callback({
+        eventType: "stop",
+        time: time,
+      });
       clearInterval(updateTimeActionIntervalRef.current);
     }
   };
