@@ -11,23 +11,14 @@ import {
 } from "react";
 import StopWatch from "@/app/util/components/time/stopwatch";
 import Timer from "@/app/util/components/time/timer";
-import {
-  Box,
-  Button,
-  FormControlLabel,
-  Modal,
-  Radio,
-  RadioGroup,
-  SxProps,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Button, Modal, Tab, Tabs, TextField, Typography } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { TimeOptions } from "../../../../../../prisma/generated/type-graphql";
 import removeNonIntegerChars from "@/app/util/parsers/removeNonIntegerChars";
 import { unstable_batchedUpdates } from "react-dom";
 import { extractTime } from "@/app/util/parsers/formatMilliseconds";
+import useElementPosition from "@/app/util/hooks/useElementSize";
 //we can manage time on the frontend
 //because time measurements are only
 //for the user's benefit
@@ -36,6 +27,7 @@ import { extractTime } from "@/app/util/parsers/formatMilliseconds";
 type TimeProps = TimeOptions & {
   initialTime: number;
 };
+
 const timeOrder: {
   abbrev: "h" | "m" | "s";
   label: "hours" | "minutes" | "seconds";
@@ -95,7 +87,7 @@ const FieldInput = ({
     if (input) input.setSelectionRange(cursor, cursor);
   }, [ref, cursor, value]);
   return (
-    <div className="flex h-full">
+    <div className="flex h-full mx-2">
       <TextField
         inputRef={ref}
         required
@@ -104,22 +96,44 @@ const FieldInput = ({
         variant="standard"
         name={name}
         type="text"
-        inputProps={{
-          className: "w-22 text-7xl tracking-wider",
-          style: { minHeight: "unset", minWidth: "unset", textAlign: "center" },
-        }}
-        sx={{ minHeight: "unset", minWidth: "unset" }}
         onChange={onChange}
+        value={value}
+        sx={{ minHeight: "unset", minWidth: "unset" }}
         onKeyDown={(e) => {
           const target = e.target as HTMLInputElement;
           const selectionEnd = target.selectionEnd;
           setCursor(selectionEnd);
         }}
-        value={value}
+        inputProps={{
+          className: "text-5xl sm:text-7xl w-12 sm:w-18 tracking-wider",
+          style: {
+            minHeight: "unset",
+            minWidth: "unset",
+            textAlign: "center",
+            height: "inherit",
+          },
+        }}
       />
-      <label className="text-4xl text-neutral-neutral40 flex items-end">
+      <label className="text-2xl pb-1 sm:text-4xl text-neutral-neutral40 flex items-end">
         {abbrev}
       </label>
+    </div>
+  );
+};
+const StopWatchPlaceholder = () => {
+  return (
+    <div className="flex items-center justify-center h-full w-full text-Black p-5">
+      <div className="flex  border-b border-b-Black py-3 h-14">
+        <Typography className="flex text-5xl sm:text-7xl tracking-wider items-end leading-[0.7]">
+          {"0"}
+        </Typography>
+        <Typography className="text-2xl sm:text-4xl flex items-end leading-[0.7]">
+          {"s"}
+        </Typography>
+        <Typography className="text-3xl sm:text-5xl flex items-end leading-[0.7] ml-2">
+          {"00"}
+        </Typography>
+      </div>
     </div>
   );
 };
@@ -186,7 +200,7 @@ function TimerInput() {
     });
   };
   return (
-    <div className="flex w-full">
+    <div className="flex justify-center p-5 [&>*]:h-14">
       {timeOrder.map((a) => (
         <FieldInput
           key={a.label}
@@ -198,6 +212,7 @@ function TimerInput() {
         />
       ))}
       <TextField
+        id="totalTimeInput"
         name={"totalTime"}
         aria-readonly
         value={totalTime}
@@ -212,7 +227,12 @@ function TimerInput() {
     </div>
   );
 }
-
+const btnStyles = {
+  textTransform: "none",
+  padding: 0,
+  margin: 0,
+  minHeight: "unset",
+};
 const TimeForm = ({
   setCurrType,
   setCurrTotalTimeGiven,
@@ -220,10 +240,12 @@ const TimeForm = ({
   setCurrType: Dispatch<SetStateAction<string | undefined>>;
   setCurrTotalTimeGiven: Dispatch<SetStateAction<number | null | undefined>>;
 }) => {
-  const [timeType, setTimeType] = useState("timer");
-  const onTimeTypeChange = (e: SyntheticEvent<Element, Event>) => {
-    const target = e.target as HTMLInputElement;
-    setTimeType(target.value);
+  const [timeType, setTimeType] = useState("stopwatch");
+  const onTimeTypeChange = (
+    e: SyntheticEvent<Element, Event>,
+    newValue: string
+  ) => {
+    setTimeType(newValue);
   };
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -245,64 +267,50 @@ const TimeForm = ({
       setCurrTotalTimeGiven(timeTotalSeconds * 1000);
     });
   };
-
-  const borderStyle: SxProps = {
-    borderWidth: 1,
-    borderStyle: "solid",
-  };
   return (
-    <div className="max-h-[80%] flex flex-col items-center bg-White p-[6%] md:p-[3%] overflow-y">
-      <Typography variant="h6" component="h2" className="text-Black">
+    <div className="max-h-[80%] min-w-[90%] md:min-w-[60%] lg:min-w-[40%] xl:min-w-[30%] flex flex-col bg-White p-[6%] md:p-[3%] overflow-y-auto">
+      <Typography
+        variant="h6"
+        component="h2"
+        className="text-Black text-center"
+      >
         Track Your Time
       </Typography>
-      <form onSubmit={onSubmit} className="flex flex-col w-full mt-6">
-        <RadioGroup
-          name="time-tracking-group"
-          className="flex flex-row w-full text-Black space-x-5"
+      <form
+        onSubmit={onSubmit}
+        className="flex flex-col w-full mt-4 items-center border border-Black pb-4"
+      >
+        <Tabs
+          className="flex flex-row w-full text-Black h-12 [&_.MuiTabs-flexContainer]:h-full border-b border-Black"
+          value={timeType}
+          aria-label="time-options"
+          sx={{
+            minHeight: "unset",
+          }}
+          onChange={onTimeTypeChange}
         >
-          <Box
-            sx={{
-              ...borderStyle,
-              borderColor:
-                timeType === "stopwatch" ? "primary:main" : "transparent",
-            }}
-          >
-            <FormControlLabel
-              value="stopwatch"
-              control={<Radio />}
-              label="Stopwatch"
-              labelPlacement="bottom"
-              onChange={onTimeTypeChange}
-              checked={timeType === "stopwatch"}
-              className="flex items-center justify-center aspect-square h-[5rem] md:h-[10rem]"
-            />
-          </Box>
-          <Box
-            sx={{
-              ...borderStyle,
-              borderColor:
-                timeType === "timer" ? "primary:main" : "transparent",
-            }}
-          >
-            <FormControlLabel
-              value="timer"
-              control={<Radio />}
-              label="Timer"
-              labelPlacement="bottom"
-              onChange={onTimeTypeChange}
-              checked={timeType === "timer"}
-              className="flex items-center justify-center aspect-square h-[5rem] md:h-[10rem]"
-            />
-          </Box>
-        </RadioGroup>
+          <Tab
+            value={"stopwatch"}
+            label="Stopwatch"
+            className="flex items-center justify-center h-full w-3/6"
+            sx={btnStyles}
+          />
+          <Tab
+            className="flex items-center justify-center h-full w-3/6"
+            value={"timer"}
+            label="Timer"
+            sx={btnStyles}
+          />
+        </Tabs>
         {timeType === "timer" && <TimerInput />}
+        {timeType === "stopwatch" && <StopWatchPlaceholder />}
         <Button
           type="submit"
           sx={{ textTransform: "none" }}
-          className="mt-5"
+          className="mt-5 ml-5 self-start text-Black"
           variant="contained"
         >
-          Submit
+          {timeType === "stopwatch" ? "Start" : "Create Timer"}
         </Button>
       </form>
     </div>

@@ -68,12 +68,12 @@ export default async function QuestionPage({
     variables: { id: questionId },
   };
   try {
-    const session = await getServerSession(options)
-    const client = ServerGraphQLClient(session);
-    const { data: result } = await client.query(query);
-    const data = result.question as (Partial<Question> & { id: string }) | null;
+    // const session = await getServerSession(options)
+    // const client = ServerGraphQLClient(session);
+    // const { data: result } = await client.query(query);
+    // const data = result.question as (Partial<Question> & { id: string }) | null;
     // console.log(data)
-    // const data = question;
+    const data = question;
     return (
       <NavigationWrapper
         usePadding
