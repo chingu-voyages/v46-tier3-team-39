@@ -5,6 +5,7 @@ import {
   FormEvent,
   SetStateAction,
   SyntheticEvent,
+  useRef,
   useState,
 } from "react";
 import StopWatch from "@/app/util/components/time/stopwatch";
@@ -26,6 +27,7 @@ import { TimeOptions } from "../../../../../../prisma/generated/type-graphql";
 import formatMilliseconds, {
   extractTime,
 } from "@/app/util/parsers/formatMilliseconds";
+import removeNonIntegerChars from "@/app/util/parsers/removeNonIntegerChars";
 //we can manage time on the frontend
 //because time measurements are only
 //for the user's benefit
@@ -36,7 +38,16 @@ type TimeProps = TimeOptions & {
 };
 const defaultTime = formatMilliseconds(0) as string;
 const timeOrder = ["h", "m", "s"];
+const splitTimeStrBy2 = (str: string) => {
+  const arr = [];
+  for (let i = 0; i < str.length; i += 2) {
+    const chunk = str.slice(i, i + 2);
+    arr.push(chunk);
+  }
+  return arr;
+};
 function TimerInput() {
+  const ref = useRef<HTMLInputElement | null>();
   const [totalTime, setTotalTime] = useState(
     defaultTime
       .split(":")
@@ -45,23 +56,44 @@ function TimerInput() {
   );
   const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const target = e.target as HTMLInputElement;
+    const value = target.value;
+    const selectionEnd = target.selectionEnd;
+    setTotalTime((prevVal) => {
+      const prevIntegers = removeNonIntegerChars(prevVal);
+      let currIntegers = removeNonIntegerChars(value);
+      //this means that incorrect values were entered
+      //this is therefore not a correct input
+      if (prevIntegers.length < currIntegers.length) return prevVal;
+      const diff = currIntegers.length - prevIntegers.length;
+      //we remove the difference from the start of the string
+      //therefore maintaing the default string length
+      currIntegers = currIntegers.substring(diff, currIntegers.length);
+      if (currIntegers.length !== prevIntegers.length) return prevVal;
+      const newValArr = splitTimeStrBy2(currIntegers);
+      const newVal = newValArr.reduce((a, b, idx) => a + timeOrder[idx] + b);
+      console.log(newVal)
+      return newVal;
+    });
+
+    //every hour minute and second is represented with two digits
+    //therefore we return the new string parsed
+    // console.log(value, selectionEnd);
     // setTotalTime((prevVal) => {
     //   const currVal = target.value
     //   let newVal = ""
     //   if (prevVal < currVal) newVal = "0" + currVal.substring(1, currVal.length)
-    //   else 
+    //   else
     //   const { hours, minutes, seconds } = extractTime(currVal, false);
 
     // })
     // if (!(hours) || !(minutes) || !(seconds)) return;
     // console.log(hours, minutes, seconds)
-    
-    
+
     // const timeTotalSeconds =
     //   parseInt(hours.toString().padStart(2, "0"), 10) * 3600 +
     //   parseInt(minutes.toString().padStart(2, "0"), 10) * 60 +
     //   parseInt(seconds.toString().padStart(2, "0"), 10);
-    
+
     // const timeInMilliseconds = timeTotalSeconds * 1000;
     // const formattedTime = formatMilliseconds(timeInMilliseconds) as string;
     // const userReadableTime = formattedTime
@@ -74,6 +106,7 @@ function TimerInput() {
   return (
     <div className="">
       <TextField
+        inputRef={ref}
         required
         label={"Total Time"}
         name="totalTime"
