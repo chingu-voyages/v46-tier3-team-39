@@ -2,6 +2,10 @@ import { Question } from "../../../../../../prisma/generated/type-graphql";
 import axios from "axios";
 import { QuestionProps } from "../questionEditModal";
 import { useState } from "react";
+import { gql } from "../../../../../../graphql/generated";
+import { useSession } from "next-auth/react";
+import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
+
 
 const generateQuestion = async (questionData: Partial<Question>) => {
   try {
@@ -22,6 +26,57 @@ const generateQuestion = async (questionData: Partial<Question>) => {
     return null;
   }
 }
+
+/*
+  creatorId    String           @db.ObjectId
+  questionType String
+  tags         String[]
+  questionInfo 
+    title       String
+    description String
+    options     String[]
+  correctAnswer String[]
+  likeCounter
+    likes    Int
+    dislikes Int
+  private Boolean
+*/
+
+const AddQuestion = gql(`
+  mutation CreateOneQuestionResolver(
+    $creatorId: string,
+    $questionType: string,
+    $tags: [string],
+    $questionInfo: {
+      title: string,
+      descriptin: string,
+      options: [string]
+    },
+    $answer: {
+      correctAnswer: [string]
+    },
+    $likeCounter: {
+      likes: 0,
+      dislikes: 0
+    },
+    $private: boolean
+  ) {
+    createOneQuestion(
+      data: {
+        creatorId: $creatorId,
+        questionType: $questionType,
+        tags: $tags,
+        questionInfo: $questionInfoData,
+        answer: $answerData,
+        likeCounter: $likeCounter,
+        private: $private
+      }
+    )
+    {
+      id
+    }
+  }
+`);
 
 const styles = {
   layout: [
@@ -59,18 +114,53 @@ const Controls = ({
   setQuestionData,
   questionData
 }: QuestionProps) => {
+
+  const session = useSession()
+  const client = ServerGraphQLClient(session);
+  const creatorId = session?.data?.user.id;
   const [isLoading, setIsLoading] = useState("success");
+
+  const uploadQuestion = async () => {
+    console.log(questionData)
+    const questionQuery = {
+      query: AddQuestion,
+      variables: {
+          creatorId,
+          ...questionData,
+          answer: {
+            correctAnswer: "123"
+          },
+          private: false
+      },
+    };
+    const questionPromise = client.query(questionQuery);
+    try {
+      const [questionsResult] = await Promise.all([questionPromise]);
+      console.log(questionsResult)
+      setQuestionData((prev) => ({...prev, questionsResult}))
+    } catch (err: any) {
+      console.log(err.networkError.result);
+    }
+  }
+
   return (
     <div className={styles.layout}>
       <div className={styles.topButtonsLayout}>
-        <button className={styles.button({})}>Upload Question</button>
+        <button className={styles.button({})}
+        onClick={async () => {
+          if (!questionData) return;
+          if (isLoading === "loading") return;
+          await uploadQuestion();
+        }}>
+          Upload Question
+          </button>
         <button
           className={styles.button({})}
           onClick={async () => {
             if (!questionData) return;
             if (isLoading === "loading") return;
             const result = await generateQuestion(questionData);
-            setQuestionData((prev) => { return {...prev, question: result.newQuestion.question, options: [...result.newQuestion.correct, ...result.newQuestion.incorrect]}});
+            setQuestionData((prev) => { return {...prev, question: result.newQuestion.question, options: [...result.newQuestion.incorrect], answer: { correctAnswer: [result.newQuestion.correct]}}});
           }}
         >
           Generate With Ai
