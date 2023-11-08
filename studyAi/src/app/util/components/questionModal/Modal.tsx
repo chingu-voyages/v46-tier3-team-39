@@ -11,7 +11,8 @@ import { ForwardedRef, forwardRef } from 'react'
 
 interface Props {
     questionData?: Partial<Question>, 
-    setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
+    setIsOpen: React.Dispatch<React.SetStateAction<boolean>>,
+    uploadQuestion: (event: any) => void
 }
 
 const QuestionEditForm = forwardRef((props: Props, ref: ForwardedRef<any>) => {
@@ -22,7 +23,7 @@ const QuestionEditForm = forwardRef((props: Props, ref: ForwardedRef<any>) => {
         <div className={styles.modal}>
             <FontAwesomeIcon icon={faXmark} className={styles.closeIcon} onClick={() => props.setIsOpen(false)}/>
             <h1 className={styles.h1}>Question Editor</h1>
-            <Controls setIsOpen={props.setIsOpen} />
+            <Controls setIsOpen={props.setIsOpen} uploadQuestion={props.uploadQuestion} />
             <div className={styles.contentLayout}>
                 <LeftContent questionData={props.questionData}/>
                 <AnswerEditor questionData={props.questionData} />

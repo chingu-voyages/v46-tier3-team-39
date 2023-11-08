@@ -1,5 +1,4 @@
-const Controls = ({setIsOpen} : {setIsOpen: React.Dispatch<React.SetStateAction<boolean>>}) => {
-
+const Controls = ({setIsOpen} : {setIsOpen: React.Dispatch<React.SetStateAction<boolean>>}, uploadQuestion: (event: any) => void) => {
     const styles = {
         layout: [
             "mx-auto",
@@ -32,7 +31,7 @@ const Controls = ({setIsOpen} : {setIsOpen: React.Dispatch<React.SetStateAction<
     return (
         <div className={styles.layout}>
             <div className={styles.topButtonsLayout}>
-                <button className={styles.button({})}>Upload Question</button>
+                <button className={styles.button({})} onClick={(event) => uploadQuestion(event)}>Upload Question</button>
                 <button className={styles.button({})}>Generate With Ai</button>
             </div>
             <button className={styles.button({isCancel: true})} onClick={() => setIsOpen(false)}>Cancel</button>
