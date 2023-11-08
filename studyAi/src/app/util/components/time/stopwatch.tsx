@@ -6,9 +6,11 @@ import TimeControlsWrapper from "./timeControls";
 const StopWatch = ({
   initialTimeUsed,
   updateTimeAction,
+  autoPlay,
 }: {
   updateTimeAction?: () => void;
   initialTimeUsed: number;
+  autoPlay?: boolean;
 }) => {
   const {
     time,
@@ -24,6 +26,7 @@ const StopWatch = ({
     callback: (time) => {
       if (updateTimeAction) updateTimeAction();
     },
+    autoPlay,
   });
   const startTimer = () => {
     setPause(false);
@@ -56,6 +59,7 @@ const StopWatch = ({
       startTimer={startTimer}
       resetTimer={resetTimer}
       paused={paused}
+      autoPlay={autoPlay}
     >
       <div
         className="flex justify-center items-center leading-none tracking-wider"

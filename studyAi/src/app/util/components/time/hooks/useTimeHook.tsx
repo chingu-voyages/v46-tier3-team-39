@@ -3,10 +3,13 @@ import { useEffect, useRef, useState } from "react";
 const useTimeHook = ({
   initialTime,
   callback,
+  autoPlay,
 }: {
   initialTime: number;
   callback?: (time: number) => void;
+  autoPlay?: boolean;
 }) => {
+  const playAuto = useRef(autoPlay);
   const [time, setTime] = useState(initialTime);
   const [paused, setPause] = useState(true);
   const updateTimeActionIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -21,6 +24,13 @@ const useTimeHook = ({
         clearInterval(updateTimeActionIntervalRef.current);
       mounted.current = false;
     };
+  }, []);
+  useEffect(() => {
+    if (playAuto.current)
+      setPause((state) => {
+        if (state) return false;
+        else return state;
+      });
   }, []);
   const stopTimer = () => {
     setPause(true);

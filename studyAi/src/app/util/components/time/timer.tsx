@@ -8,10 +8,14 @@ const Timer = ({
   initialTimeLeft,
   updateTimeAction,
   totalTimeGiven,
+  showTimer,
+  autoPlay,
 }: {
   updateTimeAction?: () => void;
   initialTimeLeft: number;
   totalTimeGiven?: number | null;
+  showTimer?: boolean;
+  autoPlay?: boolean;
 }) => {
   const {
     time,
@@ -27,6 +31,7 @@ const Timer = ({
     callback: (time) => {
       if (updateTimeAction) updateTimeAction();
     },
+    autoPlay,
   });
   const startTimer = () => {
     setPause(false);
@@ -60,7 +65,7 @@ const Timer = ({
     if (intervalRef.current) clearInterval(intervalRef.current);
     if (updateTimeActionIntervalRef.current)
       clearInterval(updateTimeActionIntervalRef.current);
-    setTime(totalTimeGiven ? totalTimeGiven : 100000);
+    setTime(totalTimeGiven ? totalTimeGiven : 0);
   };
   const timeArr = formatMilliseconds(time, true);
   return (
@@ -70,6 +75,8 @@ const Timer = ({
         startTimer={startTimer}
         resetTimer={resetTimer}
         paused={paused}
+        showTimer={showTimer}
+        autoPlay={autoPlay}
       >
         <div
           className="flex justify-center items-center leading-none"

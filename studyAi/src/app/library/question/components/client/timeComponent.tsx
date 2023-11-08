@@ -117,7 +117,9 @@ const FieldInput = ({
         }}
         value={value}
       />
-      <label className="h-full text-4xl text-neutral-neutral40">{abbrev}</label>
+      <label className="text-4xl text-neutral-neutral40 flex items-end">
+        {abbrev}
+      </label>
     </div>
   );
 };
@@ -228,14 +230,22 @@ const TimeForm = ({
     //grab uncontrolled inputs here form
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData.entries());
+    if (timeType === "stopwatch") return setCurrType(timeType);
     const { totalTime } = data;
-    const { hours, minutes, seconds } = extractTime(totalTime.toString());
+    const { hours, minutes, seconds } = extractTime(
+      totalTime.toString(),
+      false
+    );
     const timeTotalSeconds =
       parseInt(hours.toString(), 10) * 3600 +
       parseInt(minutes.toString(), 10) * 60 +
       parseInt(seconds.toString(), 10);
-    console.log(data);
+    unstable_batchedUpdates(() => {
+      setCurrType(timeType);
+      setCurrTotalTimeGiven(timeTotalSeconds * 1000);
+    });
   };
+
   const borderStyle: SxProps = {
     borderWidth: 1,
     borderStyle: "solid",
@@ -307,16 +317,21 @@ export const TimeComponent = ({ props }: { props?: TimeProps }) => {
   const [currInitTime, setCurrInitTime] = useState(initialTime);
   const [currTotalTimeGiven, setCurrTotalTimeGiven] = useState(totalTimeGiven);
   const [modalOpen, setModalOpen] = useState(true);
+  console.log(currTotalTimeGiven, currType, "total time given");
   switch (currType) {
     case "stopwatch":
-      return <StopWatch initialTimeUsed={initialTime} />;
+      return <StopWatch initialTimeUsed={currInitTime} autoPlay />;
     case "timer":
-      return (
-        <Timer
-          initialTimeLeft={initialTime}
-          totalTimeGiven={currTotalTimeGiven}
-        />
-      );
+      if (typeof currTotalTimeGiven === "number")
+        return (
+          <Timer
+            initialTimeLeft={currTotalTimeGiven - currInitTime}
+            totalTimeGiven={currTotalTimeGiven}
+            showTimer
+            autoPlay
+          />
+        );
+      else return setCurrType("stopwatch");
     //create timer component
     default:
       return (

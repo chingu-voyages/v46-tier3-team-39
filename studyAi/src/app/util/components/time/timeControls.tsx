@@ -7,7 +7,7 @@ import {
   faCirclePlay,
 } from "@fortawesome/free-regular-svg-icons";
 import TimerIcon from "../../icons/timerIcon";
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useEffect, useRef, useState } from "react";
 const TimeControlsWrapper = ({
   children,
   paused,
@@ -15,6 +15,7 @@ const TimeControlsWrapper = ({
   resetTimer,
   stopTimer,
   showTimer,
+  autoPlay,
 }: {
   children: React.ReactNode;
   startTimer: () => void;
@@ -22,8 +23,14 @@ const TimeControlsWrapper = ({
   stopTimer: () => void;
   paused: boolean;
   showTimer?: boolean;
+  autoPlay?: boolean;
 }) => {
   const [show, setShow] = useState(showTimer);
+  const playAuto = useRef(autoPlay);
+  useEffect(() => {
+    if (playAuto.current) startTimer();
+    //es-lint-disable-next-line
+  }, []);
   const showTimeVisibility =
     (callback?: () => void) =>
     (e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => {
