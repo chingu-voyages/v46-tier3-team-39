@@ -71,7 +71,9 @@ const TimeControlsWrapper = ({
       >
         {!show && (
           <TimerIcon
-            className="fill-Black aspect-square text-lg svg-inline--fa"
+            className={`${
+              paused ? "fill-Black" : "fill-secondary-secondary35"
+            } aspect-square text-lg svg-inline--fa`}
             height={"1em"}
             width={"1em"}
           />
@@ -92,7 +94,6 @@ const TimeControlsWrapper = ({
       <IconButton
         size="large"
         type="button"
-        // variant="text"
         onClick={resetTimer}
         className="flex justify-center items-center p-0 aspect-square h-[80%]"
         sx={{ minWidth: "unset" }}

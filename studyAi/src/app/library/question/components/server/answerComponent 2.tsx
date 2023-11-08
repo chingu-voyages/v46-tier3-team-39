@@ -14,9 +14,9 @@ const determineAnswerTitle = (str?: string) => {
   switch (matchStr) {
     case "multipleChoice":
       return "Select the best answer";
-    case "selectMultiple":
+    case "Checkbox":
       return "Select all that apply";
-    case "shortAnswer":
+    case "Short Answer":
       return "Type your answer below";
     default:
       return str;

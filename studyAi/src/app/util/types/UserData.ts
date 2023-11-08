@@ -1,7 +1,7 @@
 import { User } from "@prisma/client";
 export const QuestionTypes = [
   "multipleChoice",
-  "selectMultiple",
+  "Checkbox",
   "Short Answer",
 ] as const;
 export type UserInfo = User

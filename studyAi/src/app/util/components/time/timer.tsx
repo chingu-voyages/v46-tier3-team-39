@@ -66,6 +66,7 @@ const Timer = ({
     if (updateTimeActionIntervalRef.current)
       clearInterval(updateTimeActionIntervalRef.current);
     setTime(totalTimeGiven ? totalTimeGiven : 0);
+    setPause(true)
   };
   const timeArr = formatMilliseconds(time, true);
   return (

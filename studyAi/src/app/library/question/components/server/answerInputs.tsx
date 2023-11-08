@@ -95,7 +95,7 @@ export const AnswerType = () => {
   switch (questionType) {
     case "multipleChoice":
       return <MultipleChoice options={questionOptions} />;
-    case "selectMultiple":
+    case "Checkbox":
       return <SelectMultiple options={questionOptions} />;
     case "Short Answer":
       return <ShortAnswer />;

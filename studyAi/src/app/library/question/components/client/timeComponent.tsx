@@ -317,7 +317,6 @@ export const TimeComponent = ({ props }: { props?: TimeProps }) => {
   const [currInitTime, setCurrInitTime] = useState(initialTime);
   const [currTotalTimeGiven, setCurrTotalTimeGiven] = useState(totalTimeGiven);
   const [modalOpen, setModalOpen] = useState(true);
-  console.log(currTotalTimeGiven, currType, "total time given");
   switch (currType) {
     case "stopwatch":
       return <StopWatch initialTimeUsed={currInitTime} autoPlay />;
