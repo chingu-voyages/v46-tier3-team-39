@@ -27,6 +27,7 @@ const QuestionEditForm = forwardRef(
         <h1 className={styles.h1}>Question Editor</h1>
         <Controls
           setIsOpen={props.setIsOpen}
+          questionData={props.questionData}
           setQuestionData={props.setQuestionData}
         />
         <div className={styles.contentLayout}>

@@ -2,11 +2,19 @@ import { Question } from "../../../../../../prisma/generated/type-graphql";
 import axios from "axios";
 import { QuestionProps } from "../questionEditModal";
 import { useState } from "react";
+
 const generateQuestion = async (questionData: Partial<Question>) => {
   try {
+    const questionInfo = { 
+        type: questionData.questionType,
+        tags: questionData.tags,
+        question: questionData.questionInfo?.description,
+        numberOfOptions: questionData.questionInfo?.options.length
+    }
     const result = await axios({
+      url: "/api/generateQuestion",
       method: "POST",
-      data: questionData,
+      data: questionInfo,
     });
     return result.data;
   } catch (err) {
@@ -14,6 +22,7 @@ const generateQuestion = async (questionData: Partial<Question>) => {
     return null;
   }
 }
+
 const styles = {
   layout: [
     "mx-auto",
@@ -44,10 +53,11 @@ const styles = {
       "sm:text-lg",
     ].join(" "),
 };
+
 const Controls = ({
   setIsOpen,
   setQuestionData,
-  questionData,
+  questionData
 }: QuestionProps) => {
   const [isLoading, setIsLoading] = useState("success");
   return (
@@ -56,11 +66,11 @@ const Controls = ({
         <button className={styles.button({})}>Upload Question</button>
         <button
           className={styles.button({})}
-          onClick={async (event) => {
+          onClick={async () => {
             if (!questionData) return;
             if (isLoading === "loading") return;
             const result = await generateQuestion(questionData);
-            setQuestionData(result);
+            setQuestionData((prev) => { return {...prev, question: result.newQuestion.question, options: [...result.newQuestion.correct, ...result.newQuestion.incorrect]}});
           }}
         >
           Generate With Ai
