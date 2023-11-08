@@ -1,10 +1,11 @@
-import * as React from 'react';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Box from '@mui/material/Box';
-import { MultipleChoice, SelectAll, ShortAnswer } from './answerTypes';
-import styles from "./answerEditorStyles"
-import { Question } from '../../../../../../../prisma/generated/type-graphql/models/Question';
+import * as React from "react";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Box from "@mui/material/Box";
+import { MultipleChoice, SelectAll, ShortAnswer } from "./answerTypes";
+import styles from "./answerEditorStyles";
+import { Question } from "../../../../../../../prisma/generated/type-graphql/models/Question";
+import { QuestionProps } from "../../questionEditModal";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -24,9 +25,7 @@ function CustomTabPanel(props: TabPanelProps) {
       {...other}
     >
       {value === index && (
-        <Box className={styles.customTabPanel}>
-          {children}
-        </Box>
+        <Box className={styles.customTabPanel}>{children}</Box>
       )}
     </div>
   );
@@ -35,21 +34,25 @@ function CustomTabPanel(props: TabPanelProps) {
 function a11yProps(index: number) {
   return {
     id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
   };
 }
 
-export default function AnswerEditor({questionData} : {questionData?: Partial<Question>}) {
+export default function AnswerEditor({
+  questionData,
+}: Pick<QuestionProps, "questionData">) {
   const questionType = questionData?.questionType;
   let initialTab = 0;
   if (questionType == "checkbox") {
     initialTab = 1;
-  }else if (questionType == "short answer") {
+  } else if (questionType == "short answer") {
     initialTab = 2;
   }
   const [value, setValue] = React.useState(initialTab);
   const initialChoices = questionData?.questionInfo?.options;
-  const [choices, setChoices] = React.useState(initialChoices ? initialChoices: ["", "", "", ""])
+  const [choices, setChoices] = React.useState(
+    initialChoices ? initialChoices : ["", "", "", ""]
+  );
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -58,24 +61,32 @@ export default function AnswerEditor({questionData} : {questionData?: Partial<Qu
     <Box className={styles.layout}>
       <h2 className={styles.h2}>Answer</h2>
       <div className={styles.tabsContainer}>
-        <Tabs 
-          value={value} 
-          onChange={handleChange} 
-          aria-label="answer types"
-        >
-          <Tab className={styles.tabLabel} label="Multiple Choice" {...a11yProps(0)} />
-          <Tab className={styles.tabLabel} label="Select All" {...a11yProps(1)} />
-          <Tab className={styles.tabLabel} label="Short Answer" {...a11yProps(2)} />
+        <Tabs value={value} onChange={handleChange} aria-label="answer types">
+          <Tab
+            className={styles.tabLabel}
+            label="Multiple Choice"
+            {...a11yProps(0)}
+          />
+          <Tab
+            className={styles.tabLabel}
+            label="Select All"
+            {...a11yProps(1)}
+          />
+          <Tab
+            className={styles.tabLabel}
+            label="Short Answer"
+            {...a11yProps(2)}
+          />
         </Tabs>
       </div>
       <CustomTabPanel value={value} index={0}>
-        <MultipleChoice choices={choices} setChoices={setChoices}/>
+        <MultipleChoice choices={choices} setChoices={setChoices} />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <SelectAll choices={choices} setChoices={setChoices}/>
+        <SelectAll choices={choices} setChoices={setChoices} />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
-        <ShortAnswer/>
+        <ShortAnswer />
       </CustomTabPanel>
     </Box>
   );
