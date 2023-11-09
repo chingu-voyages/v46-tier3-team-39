@@ -30,7 +30,7 @@ const LeftContent = ({ questionData, setQuestionData }: Pick<QuestionProps, "que
           <input
             id="title"
             className={styles.input({})}
-            defaultValue={questionData?.questionInfo?.title}
+            value={questionData?.questionInfo?.title}
             onChange={(e) => setQuestionData({...questionData, questionInfo: {...questionData.questionInfo as QuestionInfoData, title: e.target.value}})}
           />
         </div>
@@ -49,7 +49,7 @@ const LeftContent = ({ questionData, setQuestionData }: Pick<QuestionProps, "que
             id="tags"
             className={styles.input({})}
             options={tagOptions}
-            defaultValue={tagsDefault}
+            value={tagsDefault}
             onChange={(e) => setQuestionData({...questionData, tags: e.map((tag) => tag.value)})}
             isMulti
           />
@@ -61,7 +61,7 @@ const LeftContent = ({ questionData, setQuestionData }: Pick<QuestionProps, "que
           <textarea
             id="description"
             className={styles.input({ isTextArea: true })}
-            defaultValue={questionData?.questionInfo?.description}
+            value={questionData?.questionInfo?.description}
             onChange={(e) => setQuestionData({...questionData, questionInfo: {...questionData.questionInfo as QuestionInfoData, description: e.target.value}})}
           />
         </div>

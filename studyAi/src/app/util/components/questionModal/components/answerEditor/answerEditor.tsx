@@ -53,15 +53,17 @@ export default function AnswerEditor({
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
     let questionType = "";
+    let newAnswer = [""]
     if (newValue == 0) {
-      questionType = "mcq"
+      questionType = "mcq";
+      newAnswer = ["0"]
     }else if (newValue == 1) {
       questionType = "checkbox"
     }else {
       questionType = "short answer"
     }
 
-    setQuestionData({...questionData, questionType: questionType})
+    setQuestionData({...questionData, questionType: questionType, answer: {correctAnswer: newAnswer}})
   };
   return (
     <Box className={styles.layout}>
@@ -92,7 +94,7 @@ export default function AnswerEditor({
         <SelectAll questionData={questionData} setQuestionData={setQuestionData} />
       </CustomTabPanel>
       <CustomTabPanel value={tabValue} index={2}>
-        <ShortAnswer />
+        <ShortAnswer questionData={questionData} setQuestionData={setQuestionData}/>
       </CustomTabPanel>
     </Box>
   );

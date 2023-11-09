@@ -68,9 +68,12 @@ export const SelectAll = ({questionData, setQuestionData} : Pick<QuestionProps, 
 }
 
 
-export const ShortAnswer = () => {
+export const ShortAnswer = ({questionData, setQuestionData} : Pick<QuestionProps, "questionData" | "setQuestionData">) => {
+    const changeHandler = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setQuestionData({...questionData, answer: {correctAnswer: [event.target.value]}})
+    }
     return (
-        <textarea className={styles.input({isTextArea: true})}/>
+        <textarea className={styles.input({isTextArea: true})} value={questionData.answer?.correctAnswer} onChange={changeHandler} />
     )
 }
 
