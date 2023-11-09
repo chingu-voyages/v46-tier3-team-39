@@ -6,11 +6,15 @@ type StopWatchProps = {
   updateTimeAction?: (props?: TimeEventProps) => void;
   initialTimeUsed: number;
   autoPlay?: boolean;
+  customBtns?: React.ReactNode;
+  showTimer?: boolean;
 };
 const StopWatch = ({
   initialTimeUsed,
   updateTimeAction,
   autoPlay,
+  customBtns,
+  showTimer,
 }: StopWatchProps) => {
   const {
     time,
@@ -65,8 +69,10 @@ const StopWatch = ({
       stopTimer={stopTimer}
       startTimer={startTimer}
       resetTimer={resetTimer}
+      showTimer={showTimer}
       paused={paused}
       autoPlay={autoPlay}
+      customBtns={customBtns}
     >
       <div
         className="flex justify-center items-center leading-none tracking-wider"

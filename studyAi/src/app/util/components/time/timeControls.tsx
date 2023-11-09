@@ -16,6 +16,7 @@ type TimeControlsWrapper = {
   paused: boolean;
   showTimer?: boolean;
   autoPlay?: boolean;
+  customBtns?: React.ReactNode
 }
 const TimeControlsWrapper = ({
   children,
@@ -25,6 +26,7 @@ const TimeControlsWrapper = ({
   stopTimer,
   showTimer,
   autoPlay,
+  customBtns
 }:TimeControlsWrapper) => {
   const [show, setShow] = useState(showTimer);
   const playAuto = useRef(autoPlay);
@@ -101,6 +103,7 @@ const TimeControlsWrapper = ({
       >
         <FontAwesomeIcon icon={faArrowsRotate} className="text-lg" />
       </IconButton>
+      {customBtns}
     </div>
   );
 };

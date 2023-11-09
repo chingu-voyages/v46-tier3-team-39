@@ -1,6 +1,6 @@
 import { QuestionView } from "../client/questionsView";
 import SolutionView from "../client/solutionView";
-import { SubmissionView } from "./submissionView";
+import { SubmissionView } from "../client/submissionView";
 export const containerTabs = ["description", "solution", "attempts"] as const;
 export const InnerContainer = ({
   view,

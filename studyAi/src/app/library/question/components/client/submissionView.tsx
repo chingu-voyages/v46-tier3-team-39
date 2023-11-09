@@ -1,7 +1,7 @@
 "use client";
 import { QuestionSubmission } from "../../../../../../prisma/generated/type-graphql";
 import { useQuery } from "@apollo/client";
-import { Container } from "./containerBar";
+import { Container } from "../server/containerBar";
 import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { gql } from "../../../../../../graphql/generated";
@@ -32,10 +32,10 @@ export const SubmissionView = () => {
   const params = useParams();
   const { data: session } = useSession();
   if (!params?.id) return <></>;
-  const userId = session ? session.user.id : ''
+  const userId = session ? session.user.id : "";
   const queryOptions = {
     variables: {
-      questionId: typeof params.id === 'string'? params.id : params.id[0],
+      questionId: typeof params.id === "string" ? params.id : params.id[0],
       userId: userId,
     },
   };

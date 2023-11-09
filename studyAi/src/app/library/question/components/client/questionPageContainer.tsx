@@ -1,7 +1,7 @@
 "use client";
 import { NavigationBtns, PaginationOptions } from "./navigationBtns";
 import { QuestionWrapper } from "./questionWrapper";
-import { TimeComponent } from "./timeComponent";
+import { TimeComponent } from "./timeModal";
 const QuestionFormWrapper = ({ children }: { children: React.ReactNode }) => {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

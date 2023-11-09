@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 
 export type TimeEventProps = {
   time: number;
-  eventType: "start" | "stop" | "reset" | "interval";
+  eventType: "start" | "stop" | "reset" | "interval" | "finished";
 };
 const useTimeHook = ({
   initialTime,
@@ -20,6 +20,9 @@ const useTimeHook = ({
   const updateTimeActionIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const mounted = useRef(true);
+  // useEffect(() => {
+  //   setTime(initialTime);
+  // }, [initialTime]);
   useEffect(() => {
     mounted.current = true;
     //clean up any side effects so we dont cause a memory leak
@@ -42,10 +45,11 @@ const useTimeHook = ({
     if (intervalRef.current) clearInterval(intervalRef.current);
     if (updateTimeActionIntervalRef.current) {
       //update with curr time value
-      if (callback) callback({
-        eventType: "stop",
-        time: time,
-      });
+      if (callback)
+        callback({
+          eventType: "stop",
+          time: time,
+        });
       clearInterval(updateTimeActionIntervalRef.current);
     }
   };

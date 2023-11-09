@@ -1,6 +1,6 @@
 "use client";
 import QuestionComponent from "./questionComponents";
-import AnswerComponent from "../server/answerComponent";
+import AnswerComponent from "./answerComponent";
 import useElementPosition from "@/app/util/hooks/useElementSize";
 import useWindowWidth from "@/app/util/hooks/useWindowWidth";
 export const QuestionWrapper = () => {

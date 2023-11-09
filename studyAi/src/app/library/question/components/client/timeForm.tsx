@@ -9,25 +9,10 @@ import {
   useRef,
   useState,
 } from "react";
-import StopWatch from "@/app/util/components/time/stopwatch";
-import Timer from "@/app/util/components/time/timer";
-import { Button, Modal, Tab, Tabs, TextField, Typography } from "@mui/material";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { TimeOptions } from "../../../../../../prisma/generated/type-graphql";
+import { Button, Tab, Tabs, TextField, Typography } from "@mui/material";
 import removeNonIntegerChars from "@/app/util/parsers/removeNonIntegerChars";
 import { unstable_batchedUpdates } from "react-dom";
 import { extractTime } from "@/app/util/parsers/formatMilliseconds";
-import useElementPosition from "@/app/util/hooks/useElementSize";
-//we can manage time on the frontend
-//because time measurements are only
-//for the user's benefit
-//if we need to ensure compliance to time
-//we must manage it using a websocket connection
-type TimeProps = TimeOptions & {
-  initialTime: number;
-};
-
 const timeOrder: {
   abbrev: "h" | "m" | "s";
   label: "hours" | "minutes" | "seconds";
@@ -138,7 +123,6 @@ const StopWatchPlaceholder = () => {
   );
 };
 function TimerInput() {
-  // const ref = useRef<HTMLInputElement | null>();
   const [hours, setHours] = useState("00");
   const [minutes, setMinutes] = useState("00");
   const [seconds, setSeconds] = useState("00");
@@ -233,12 +217,14 @@ const btnStyles = {
   margin: 0,
   minHeight: "unset",
 };
-const TimeForm = ({
+export const TimeForm = ({
   setCurrType,
   setCurrTotalTimeGiven,
+  setModalOpen,
 }: {
   setCurrType: Dispatch<SetStateAction<string | undefined>>;
   setCurrTotalTimeGiven: Dispatch<SetStateAction<number | null | undefined>>;
+  setModalOpen: Dispatch<SetStateAction<boolean>>;
 }) => {
   const [timeType, setTimeType] = useState("stopwatch");
   const onTimeTypeChange = (
@@ -252,7 +238,11 @@ const TimeForm = ({
     //grab uncontrolled inputs here form
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData.entries());
-    if (timeType === "stopwatch") return setCurrType(timeType);
+    if (timeType === "stopwatch")
+      return unstable_batchedUpdates(() => {
+        setCurrType(timeType);
+        setModalOpen(false);
+      });
     const { totalTime } = data;
     const { hours, minutes, seconds } = extractTime(
       totalTime.toString(),
@@ -265,6 +255,7 @@ const TimeForm = ({
     unstable_batchedUpdates(() => {
       setCurrType(timeType);
       setCurrTotalTimeGiven(timeTotalSeconds * 1000);
+      setModalOpen(false);
     });
   };
   return (
@@ -316,61 +307,4 @@ const TimeForm = ({
     </div>
   );
 };
-
-export const TimeComponent = ({ props }: { props?: TimeProps }) => {
-  const { timeType, initialTime, totalTimeGiven } = props || {
-    initialTime: 0,
-  };
-  const [currType, setCurrType] = useState(timeType);
-  const [currInitTime, setCurrInitTime] = useState(initialTime);
-  const [currTotalTimeGiven, setCurrTotalTimeGiven] = useState(totalTimeGiven);
-  const [modalOpen, setModalOpen] = useState(true);
-  switch (currType) {
-    case "stopwatch":
-      return <StopWatch initialTimeUsed={currInitTime} autoPlay />;
-    case "timer":
-      if (typeof currTotalTimeGiven === "number")
-        return (
-          <Timer
-            initialTimeLeft={currTotalTimeGiven - currInitTime}
-            totalTimeGiven={currTotalTimeGiven}
-            showTimer
-            autoPlay
-            updateTimeAction={(e) => {} }
-          />
-        );
-      else return setCurrType("stopwatch");
-    //create timer component
-    default:
-      return (
-        <>
-          {!modalOpen && (
-            <Button
-              type="button"
-              onClick={() => setModalOpen(true)}
-              className="h-full"
-              sx={{ textTransform: "unset", minHeight: "unset" }}
-              aria-label="open-modal-to-attach-stopwatch-or-timer"
-            >
-              <FontAwesomeIcon icon={faPlus} />
-              <span className="ml-1">Add Time</span>
-            </Button>
-          )}
-          <Modal
-            open={modalOpen}
-            onClose={() => setModalOpen(false)}
-            aria-labelledby="track-your-time"
-            aria-describedby="attach-stopwatch-or-timer"
-            className="flex justify-center items-center"
-          >
-            <>
-              <TimeForm
-                setCurrType={setCurrType}
-                setCurrTotalTimeGiven={setCurrTotalTimeGiven}
-              />
-            </>
-          </Modal>
-        </>
-      );
-  }
-};
+export default TimeForm;

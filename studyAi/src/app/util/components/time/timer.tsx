@@ -11,6 +11,7 @@ type TimerProps = {
   totalTimeGiven?: number | null;
   showTimer?: boolean;
   autoPlay?: boolean;
+  customBtns?: React.ReactNode;
 };
 const Timer = ({
   initialTimeLeft,
@@ -18,6 +19,7 @@ const Timer = ({
   totalTimeGiven,
   showTimer,
   autoPlay,
+  customBtns
 }: TimerProps) => {
   const {
     time,
@@ -45,6 +47,11 @@ const Timer = ({
         if (newTime > 0) return newTime;
         if (newTime <= 0 && intervalRef.current) {
           setPause(true);
+          if (updateTimeAction)
+            updateTimeAction({
+              eventType: "finished",
+              time: 0,
+            });
           clearInterval(intervalRef.current);
         }
         return 0;
@@ -90,6 +97,7 @@ const Timer = ({
         paused={paused}
         showTimer={showTimer}
         autoPlay={autoPlay}
+        customBtns={customBtns}
       >
         <div
           className="flex justify-center items-center leading-none"

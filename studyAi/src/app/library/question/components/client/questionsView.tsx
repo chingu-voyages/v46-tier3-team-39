@@ -6,7 +6,6 @@ import { useParams } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Share } from "@mui/icons-material";
 import { faThumbsUp, faThumbsDown } from "@fortawesome/free-regular-svg-icons";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { parseInteger } from "@/app/util/parsers/parseInt";
 import { Carousel } from "@/app/util/components/carousel/carousel";
 

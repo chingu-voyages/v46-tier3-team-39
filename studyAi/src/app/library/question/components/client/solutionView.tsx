@@ -18,8 +18,11 @@ const getAnswerById = gql(`
 const SolutionView = () => {
   const params = useParams();
   const questions = useQuestions()[0].data;
-  const questionId = params?.id as string | undefined;
-  if (!questionId) return <></>;
+  const questionId = params
+    ? typeof params.id === "string"
+      ? params.id
+      : params.id[0]
+    : "";
   const {
     loading,
     error,
