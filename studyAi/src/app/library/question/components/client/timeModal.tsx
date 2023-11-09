@@ -41,9 +41,8 @@ export const TimerFinishedModal = ({
   const timeArr = splitTimeStrBy2(timeStr);
   //this creates the new total time string
   const parsedTimeElapsed =
-    timeArr.reduce(
-      (a, b, idx) => a + timeLabelData[idx - 1].abbrev + " " + b
-    ) + timeLabelData[timeLabelData.length - 1].abbrev;
+    timeArr.reduce((a, b, idx) => a + timeLabelData[idx - 1].abbrev + " " + b) +
+    timeLabelData[timeLabelData.length - 1].abbrev;
   return (
     <Modal
       open={modalOpen}
@@ -52,7 +51,7 @@ export const TimerFinishedModal = ({
       aria-describedby="timer-complete"
       className="flex justify-center items-center"
     >
-      <div className="p-10 flex flex-col items-center space-y-4 bg-White text-Black">
+      <div className="p-10 flex flex-col items-center space-y-4 bg-White text-Black min-w-[90%] md:min-w-[60%] lg:min-w-[40%] xl:min-w-[30%] max-h-[80%] overflow-y-auto">
         <Typography variant="h4">Your Time is Up!</Typography>
         <Typography variant="h6">Time Passed: {parsedTimeElapsed}</Typography>
         <Button
