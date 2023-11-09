@@ -1,5 +1,5 @@
 "use client";
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import StopWatch from "@/app/util/components/time/stopwatch";
 import Timer from "@/app/util/components/time/timer";
 import { Button, IconButton, Modal, Typography } from "@mui/material";
@@ -8,12 +8,11 @@ import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { TimeOptions } from "../../../../../../prisma/generated/type-graphql";
 import TimeForm from "./timeForm";
 import { unstable_batchedUpdates } from "react-dom";
-import { TimeEventProps } from "@/app/util/components/time/hooks/useTimeHook";
 import {
   getLocalStorageObj,
-  deleteLocalStorageObj,
-  addLocalStorageObj,
 } from "@/app/util/parsers/localStorageWrappers";
+import { TimeProvider } from "@/app/util/components/time/context/useTimeContext";
+import onTimeEventChangeHandler from "../eventHandlers/onTimeEventChangeHandler";
 //we can manage time on the frontend
 //because time measurements are only
 //for the user's benefit
@@ -23,58 +22,7 @@ type TimeProps = TimeOptions & {
   id?: string;
   initialTime: number;
 };
-const onChangeHandler =
-  ({
-    id,
-    currType,
-    setCurrInitTime,
-    setTimerCompleteModalOpen,
-  }: {
-    id?: string;
-    currType: string;
-    setCurrInitTime: Dispatch<SetStateAction<number>>;
-    setTimerCompleteModalOpen: Dispatch<SetStateAction<boolean>>;
-  }) =>
-  (e?: TimeEventProps) => {
-    if (!e) return;
-    const { eventType, time } = e;
-    const dataId = id ? `${id}-time-data` : null;
-    if (currType !== "stopwatch" && currType !== "timer") return;
-    //if we're dealing with timer
-    switch (eventType) {
-      case "start":
-        if (dataId)
-          addLocalStorageObj(dataId, {
-            time,
-            timeType: currType,
-          });
-        break;
-      case "interval":
-        if (dataId)
-          addLocalStorageObj(dataId, {
-            time,
-            timeType: currType,
-          });
-        break;
-      case "stop":
-        if (dataId)
-          addLocalStorageObj(dataId, {
-            time,
-            timeType: currType,
-          });
-        break;
-      case "reset":
-        if (dataId) deleteLocalStorageObj(dataId);
-        setCurrInitTime(0);
-        break;
-      case "finished":
-        if (dataId) deleteLocalStorageObj(dataId);
-        if (currType === "timer") setTimerCompleteModalOpen(true);
-        break;
-      default:
-        return;
-    }
-  };
+
 export const DeleteTimeBtn = ({
   setCurrTotalTimeGiven,
   setCurrType,
@@ -127,40 +75,46 @@ export const TimeComponent = ({ props }: { props?: TimeProps }) => {
   switch (currType) {
     case "stopwatch":
       return (
-        <StopWatch
-          initialTimeUsed={currInitTime}
+        <TimeProvider
+          timeType="stopwatch"
+          initialTime={currInitTime}
           autoPlay
-          showTimer
-          updateTimeAction={onChangeHandler({
+          callback={onTimeEventChangeHandler({
             id,
             currType,
             setCurrInitTime,
             setTimerCompleteModalOpen,
           })}
-          customBtns={
-            <DeleteTimeBtn
-              label={"remove-stopwatch"}
-              setCurrTotalTimeGiven={setCurrTotalTimeGiven}
-              setCurrType={setCurrType}
-            />
-          }
-        />
+        >
+          <StopWatch
+            showTimer
+            customBtns={
+              <DeleteTimeBtn
+                label={"remove-stopwatch"}
+                setCurrTotalTimeGiven={setCurrTotalTimeGiven}
+                setCurrType={setCurrType}
+              />
+            }
+          />
+        </TimeProvider>
       );
     case "timer":
       if (typeof currTotalTimeGiven === "number")
         return (
-          <>
+          <TimeProvider
+            timeType="timer"
+            totalTimeGiven={currTotalTimeGiven}
+            initialTime={currTotalTimeGiven - currInitTime}
+            autoPlay
+            callback={onTimeEventChangeHandler({
+              id,
+              currType,
+              setCurrInitTime,
+              setTimerCompleteModalOpen,
+            })}
+          >
             <Timer
-              initialTimeLeft={currTotalTimeGiven - currInitTime}
-              totalTimeGiven={currTotalTimeGiven}
               showTimer
-              autoPlay
-              updateTimeAction={onChangeHandler({
-                id,
-                currType,
-                setCurrInitTime,
-                setTimerCompleteModalOpen,
-              })}
               customBtns={
                 <DeleteTimeBtn
                   label={"remove-timer"}
@@ -190,14 +144,37 @@ export const TimeComponent = ({ props }: { props?: TimeProps }) => {
                 </div>
               </Modal>
             )}
-          </>
+          </TimeProvider>
         );
       else {
         unstable_batchedUpdates(() => {
           setCurrTotalTimeGiven(null);
           setCurrType("stopwatch");
         });
-        return <StopWatch initialTimeUsed={currInitTime} autoPlay />;
+        return (
+          <TimeProvider
+            timeType="stopwatch"
+            initialTime={currInitTime}
+            autoPlay
+            callback={onTimeEventChangeHandler({
+              id,
+              currType,
+              setCurrInitTime,
+              setTimerCompleteModalOpen,
+            })}
+          >
+            <StopWatch
+              showTimer
+              customBtns={
+                <DeleteTimeBtn
+                  label={"remove-stopwatch"}
+                  setCurrTotalTimeGiven={setCurrTotalTimeGiven}
+                  setCurrType={setCurrType}
+                />
+              }
+            />
+          </TimeProvider>
+        );
       }
     //create timer component
     default:

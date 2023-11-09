@@ -8,32 +8,25 @@ import {
 } from "@fortawesome/free-regular-svg-icons";
 import TimerIcon from "../../icons/timerIcon";
 import { MouseEvent, useEffect, useRef, useState } from "react";
+import { useTimeHook } from "./context/useTimeContext";
 type TimeControlsWrapper = {
   children: React.ReactNode;
-  startTimer: () => void;
-  resetTimer: () => void;
-  stopTimer: () => void;
-  paused: boolean;
   showTimer?: boolean;
-  autoPlay?: boolean;
-  customBtns?: React.ReactNode
-}
+  customBtns?: React.ReactNode;
+};
 const TimeControlsWrapper = ({
   children,
-  paused,
-  startTimer,
-  resetTimer,
-  stopTimer,
   showTimer,
-  autoPlay,
-  customBtns
-}:TimeControlsWrapper) => {
+  customBtns,
+}: TimeControlsWrapper) => {
+  const timeContext = useTimeHook();
   const [show, setShow] = useState(showTimer);
-  const playAuto = useRef(autoPlay);
+  const playAuto = useRef(timeContext && timeContext.autoPlay);
   useEffect(() => {
-    if (playAuto.current) startTimer();
+    if (playAuto.current && timeContext) timeContext.startTimer();
     //es-lint-disable-next-line
   }, []);
+
   const showTimeVisibility =
     (callback?: () => void) =>
     (e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => {
@@ -62,10 +55,10 @@ const TimeControlsWrapper = ({
         size="large"
         className="flex justify-center items-center p-0 aspect-square h-[80%]"
         onClick={
-          paused && show
-            ? showTimeVisibility(startTimer)
-            : !paused && show
-            ? showTimeVisibility(stopTimer)
+          timeContext && timeContext.paused && show
+            ? showTimeVisibility(timeContext.startTimer)
+            : timeContext && !timeContext.paused && show
+            ? showTimeVisibility(timeContext.stopTimer)
             : !show
             ? () => setShow(true)
             : () => setShow(false)
@@ -75,19 +68,21 @@ const TimeControlsWrapper = ({
         {!show && (
           <TimerIcon
             className={`${
-              paused ? "fill-Black" : "fill-secondary-secondary35"
+              timeContext && timeContext.paused
+                ? "fill-Black"
+                : "fill-secondary-secondary35"
             } aspect-square text-lg svg-inline--fa`}
             height={"1em"}
             width={"1em"}
           />
         )}
-        {paused && show && (
+        {timeContext && timeContext.paused && show && (
           <FontAwesomeIcon
             icon={faCirclePlay}
             className="aspect-square text-xl"
           />
         )}
-        {!paused && show && (
+        {timeContext && !timeContext.paused && show && (
           <FontAwesomeIcon
             icon={faCirclePause}
             className="aspect-square text-xl"
@@ -97,7 +92,7 @@ const TimeControlsWrapper = ({
       <IconButton
         size="large"
         type="button"
-        onClick={resetTimer}
+        onClick={timeContext ? timeContext.resetTimer : undefined}
         className="flex justify-center items-center p-0 aspect-square h-[80%]"
         sx={{ minWidth: "unset" }}
       >
