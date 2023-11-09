@@ -2,7 +2,7 @@
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import StopWatch from "@/app/util/components/time/stopwatch";
 import Timer from "@/app/util/components/time/timer";
-import { Button, IconButton, Modal } from "@mui/material";
+import { Button, IconButton, Modal, Typography } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { TimeOptions } from "../../../../../../prisma/generated/type-graphql";
@@ -111,6 +111,12 @@ export const TimeComponent = ({ props }: { props?: TimeProps }) => {
   const [currTotalTimeGiven, setCurrTotalTimeGiven] = useState(totalTimeGiven);
   const [modalOpen, setModalOpen] = useState(false);
   const [timerCompleteModalOpen, setTimerCompleteModalOpen] = useState(false);
+  //every time we modify the time component we should ensure this is false
+  //because that means that the timer has been added with new values, or
+  //we no longer have a timer
+  useEffect(() => {
+    setTimerCompleteModalOpen(false);
+  }, [currType]);
   //update initial time with stored values
   useEffect(() => {
     const storedData = getLocalStorageObj<
@@ -143,25 +149,48 @@ export const TimeComponent = ({ props }: { props?: TimeProps }) => {
     case "timer":
       if (typeof currTotalTimeGiven === "number")
         return (
-          <Timer
-            initialTimeLeft={currTotalTimeGiven - currInitTime}
-            totalTimeGiven={currTotalTimeGiven}
-            showTimer
-            autoPlay
-            updateTimeAction={onChangeHandler({
-              id,
-              currType,
-              setCurrInitTime,
-              setTimerCompleteModalOpen,
-            })}
-            customBtns={
-              <DeleteTimeBtn
-                label={"remove-timer"}
-                setCurrTotalTimeGiven={setCurrTotalTimeGiven}
-                setCurrType={setCurrType}
-              />
-            }
-          />
+          <>
+            <Timer
+              initialTimeLeft={currTotalTimeGiven - currInitTime}
+              totalTimeGiven={currTotalTimeGiven}
+              showTimer
+              autoPlay
+              updateTimeAction={onChangeHandler({
+                id,
+                currType,
+                setCurrInitTime,
+                setTimerCompleteModalOpen,
+              })}
+              customBtns={
+                <DeleteTimeBtn
+                  label={"remove-timer"}
+                  setCurrTotalTimeGiven={setCurrTotalTimeGiven}
+                  setCurrType={setCurrType}
+                />
+              }
+            />
+            {timerCompleteModalOpen && (
+              <Modal
+                open={modalOpen}
+                onClose={() => setTimerCompleteModalOpen(false)}
+                aria-labelledby="timer-complete-modal"
+                aria-describedby="timer-complete"
+                className="flex justify-center items-center"
+              >
+                <div className="p-5 flex justify-center space-y-3">
+                  <Typography>Your Time is Up!</Typography>
+                  <Typography>Time Elapsed: {totalTimeGiven}</Typography>
+                  <Button
+                    type="button"
+                    aria-label="reset-timer"
+                    onClick={() => setTimerCompleteModalOpen(false)}
+                  >
+                    Start Over!
+                  </Button>
+                </div>
+              </Modal>
+            )}
+          </>
         );
       else {
         unstable_batchedUpdates(() => {
