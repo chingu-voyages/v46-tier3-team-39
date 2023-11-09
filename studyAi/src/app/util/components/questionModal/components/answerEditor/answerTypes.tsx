@@ -3,36 +3,51 @@ import styles from "../leftContent/leftContentStyles"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
-import React from 'react'
+import React, { useEffect } from 'react'
+import { QuestionProps } from '../../questionEditModal'
+import { QuestionInfoData } from '@prisma/client'
 
-export const MultipleChoice = ({choices, setChoices} : {choices: string[], setChoices: React.Dispatch<React.SetStateAction<string[]>>}) => {
+export const MultipleChoice = ({questionData, setQuestionData} : Pick<QuestionProps, "questionData" | "setQuestionData">) => {
+    const options = questionData.questionInfo?.options as string[];
+
     return (
         <RadioGroup className="mt-2" defaultValue="outlined" name="radio-buttons-group">
-            {choices.map((choice, index) => {
+            {options.map((option, index) => {
                 const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-                    setChoices(choices.slice(0, index).concat(event.target.value).concat(choices.slice(index+1)))
+                    const newOptions = options.slice(0, index).concat(event.target.value).concat(options.slice(index+1)) 
+                    setQuestionData({...questionData, questionInfo: {...questionData.questionInfo as QuestionInfoData, options: newOptions}})
                 }
                 return (
-                    <RadioInput key={index} initialValue={choice} id={index.toString()} choices={choices} setChoices={setChoices} onChange={(e) => handleChange(e)} />
+                    <div key={`radio-${index}`} className="flex my-2 px-4 items-center">
+                        <Radio value={index} />
+                        <input value={options[index]} type="text" className={styles.input({})} onChange={handleChange} />
+                        <FontAwesomeIcon icon={faTrash} className="ml-2 hover:cursor-pointer" onClick={() => deleteChoice(Number(index), {questionData, setQuestionData} )}/>
+                    </div>
                 )
             })}
-            <NewAnswer choices={choices} setChoices={setChoices}/>
+            <NewAnswer questionData={questionData} setQuestionData={setQuestionData} />
         </RadioGroup>
     )
 }
 
-export const SelectAll = ({choices, setChoices} : {choices: string[], setChoices: React.Dispatch<React.SetStateAction<string[]>>}) => {
+export const SelectAll = ({questionData, setQuestionData} : Pick<QuestionProps, "questionData" | "setQuestionData">) => {
+    const options = questionData.questionInfo?.options as string[];
     return (
         <>
-            {choices.map((choice, index) => {
+            {questionData.questionInfo?.options.map((option, index) => {
                 const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-                    setChoices(choices.slice(0, index).concat(event.target.value).concat(choices.slice(index+1)))
+                    const newOptions = options.slice(0, index).concat(event.target.value).concat(options.slice(index+1)) 
+                    setQuestionData({...questionData, questionInfo: {...questionData.questionInfo as QuestionInfoData, options: newOptions}})
                 }
                 return (
-                    <CheckboxInput key={index} initialValue={choice} id={index.toString()} choices={choices} setChoices={setChoices} onChange={(e) => handleChange(e)}/>
+                    <div key={`select-${index}`} className="flex my-4 px-4 items-center">
+                        <Checkbox value={index} />
+                        <input type="text" className={styles.input({})} value={options[index]} onChange={handleChange} />
+                        <FontAwesomeIcon icon={faTrash} className="ml-2 hover:cursor-pointer" onClick={() => deleteChoice(Number(index), {questionData, setQuestionData})}/>
+                    </div>
                 )
             })}
-            <NewAnswer choices={choices} setChoices={setChoices} />
+            <NewAnswer questionData={questionData} setQuestionData={setQuestionData} />
         </>
     )
 }
@@ -44,29 +59,9 @@ export const ShortAnswer = () => {
     )
 }
 
-const RadioInput = ({id, initialValue, choices, setChoices, onChange}:{initialValue: string, id: string, choices: string[], setChoices: React.Dispatch<React.SetStateAction<string[]>>, onChange: React.ChangeEventHandler<HTMLInputElement>}) => {
-    return (
-        <div className="flex my-2 px-4 items-center">
-            <Radio value={id} />
-            <input value={initialValue} type="text" id={id} className={styles.input({})} onChange={onChange} />
-            <FontAwesomeIcon icon={faTrash} className="ml-2 hover:cursor-pointer" onClick={() => deleteChoice(Number(id), choices, setChoices)}/>
-        </div>
-    )
-}
-
-const CheckboxInput = ({id, initialValue, choices, setChoices, onChange}:{initialValue: string, id: string, choices: string[], setChoices: React.Dispatch<React.SetStateAction<string[]>>, onChange: React.ChangeEventHandler<HTMLInputElement>}) => {
-    return (
-        <div className="flex my-4 px-4 items-center">
-            <Checkbox value={id} />
-            <input type="text" id={id} className={styles.input({})} value={initialValue} onChange={onChange} />
-            <FontAwesomeIcon icon={faTrash} className="ml-2 hover:cursor-pointer" onClick={() => deleteChoice(Number(id), choices, setChoices)}/>
-        </div>
-    )
-}
-
-const NewAnswer = ({choices, setChoices}: {choices: string[] ,setChoices: React.Dispatch<React.SetStateAction<string[]>>}) => {
+const NewAnswer = ({questionData, setQuestionData} : Pick<QuestionProps, "questionData" | "setQuestionData">) => {
     const clickHandler = () => {
-        setChoices([...choices, ""])
+        setQuestionData({...questionData, questionInfo: {...questionData.questionInfo as QuestionInfoData, options: [...questionData.questionInfo?.options as string[], ""]}})
     }
     
     return (
@@ -77,6 +72,8 @@ const NewAnswer = ({choices, setChoices}: {choices: string[] ,setChoices: React.
     )
 }
 
-const deleteChoice = (index: number, choices: string[], setChoices: React.Dispatch<React.SetStateAction<string[]>>) => {
-    setChoices(choices.toSpliced(index, 1));
+const deleteChoice = (index: number, {questionData, setQuestionData} : Pick<QuestionProps, "questionData" | "setQuestionData">) => {
+    const options = questionData.questionInfo?.options as string[]
+    
+    setQuestionData({...questionData, questionInfo: {...questionData.questionInfo as QuestionInfoData, options: options.toSpliced(index, 1)}})
 }

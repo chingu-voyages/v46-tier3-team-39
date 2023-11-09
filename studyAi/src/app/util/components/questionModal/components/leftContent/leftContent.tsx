@@ -1,10 +1,11 @@
 import TimeFormatDropdown from "./timeFormat";
 import styles from "./leftContentStyles";
-import type { Question } from "../../../../../../../prisma/generated/type-graphql";
 import CreatableSelect from "react-select/creatable";
 import { QuestionProps } from "../../questionEditModal";
-const LeftContent = ({ questionData }: Pick<QuestionProps, "questionData">) => {
-  // need to update tagOptions with actaul options from DB
+import { QuestionInfoData } from "../../../../../../../prisma/generated/type-graphql";
+const LeftContent = ({ questionData, setQuestionData }: Pick<QuestionProps, "questionData" | "setQuestionData">) => {
+  
+    // need to update tagOptions with actaul options from DB
   const tagOptions = [
     { value: "science", label: "science" },
     { value: "math", label: "math" },
@@ -30,6 +31,7 @@ const LeftContent = ({ questionData }: Pick<QuestionProps, "questionData">) => {
             id="title"
             className={styles.input({})}
             defaultValue={questionData?.questionInfo?.title}
+            onChange={(e) => setQuestionData({...questionData, questionInfo: {...questionData.questionInfo as QuestionInfoData, title: e.target.value}})}
           />
         </div>
         <div className={styles.estTimeLayout}>
@@ -48,6 +50,7 @@ const LeftContent = ({ questionData }: Pick<QuestionProps, "questionData">) => {
             className={styles.input({})}
             options={tagOptions}
             defaultValue={tagsDefault}
+            onChange={(e) => setQuestionData({...questionData, tags: e.map((tag) => tag.value)})}
             isMulti
           />
         </div>
@@ -59,6 +62,7 @@ const LeftContent = ({ questionData }: Pick<QuestionProps, "questionData">) => {
             id="description"
             className={styles.input({ isTextArea: true })}
             defaultValue={questionData?.questionInfo?.description}
+            onChange={(e) => setQuestionData({...questionData, questionInfo: {...questionData.questionInfo as QuestionInfoData, description: e.target.value}})}
           />
         </div>
       </form>

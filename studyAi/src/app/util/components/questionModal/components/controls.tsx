@@ -14,7 +14,7 @@ import { options } from "@/app/api/auth/[...nextauth]/options";
 const generateQuestion = async (
   questionData: Partial<Question>,
   isLoading: string,
-  setQuestionData: React.Dispatch<SetStateAction<Partial<Question> | null>>
+  setQuestionData: React.Dispatch<SetStateAction<Partial<Question>>>
   ) => {
   if (!questionData) return;
   if (isLoading === "loading") return;
@@ -112,92 +112,74 @@ const styles = {
 };
 
 const uploadQuestion = async (creatorId: string, questionData: Partial<Question>) => {
-  // Method 1
-  // const questionQuery = {
-  //   query: AddQuestion,
-  //   variables: {
-  //       creatorId,
-  //       ...questionData,
-  //   },
-  // };
-  //   const questionPromise = client.query(questionQuery);
-  //   try {
-  //     const [questionsResult] = await Promise.all([questionPromise]);
-  //     console.log(questionsResult)
-  //     // setQuestionData((prev) => ({...prev, questionsResult}))
-  //   } catch (err: any) {
-  //     console.log(err.networkError.result);
-  //   }
 
-    // METHOD 2
-    // const [mutationQuery, { loading, error, data }] = useMutation(
-    //   AddQuestion,
-    //   {
-    //     variables: {
-    //       creatorId,
-    //       likeCounter: {
-    //         likes: 0,
-    //         dislikes: 0
-    //       },
-    //       ...questionData,
-    //     },
-    //   }
-    // );
+    const [mutationQuery, { loading, error, data }] = useMutation(
+      AddQuestion,
+      {
+        variables: {
+          creatorId,
+          likeCounter: {
+            likes: 0,
+            dislikes: 0
+          },
+          ...questionData,
+        },
+      }
+    );
 }
 
 const Controls = ({
-  setIsOpen,
+  closeHandler,
   setQuestionData,
   questionData
 }: QuestionProps) => {
   const label = { inputProps: { 'aria-label': 'Switch demo' } };
   const [isLoading, setIsLoading] = useState("success");
-  // METHOD 1
-  // const session = await getServerSession(options);
-  // const client = ServerGraphQLClient(session);
-  // const creatorId = session?.user.id;
+
 
   // METHOD 2
-  const session = useSession()
+  /* const session = useSession()
   const creatorId = session?.data?.user.id;
-  // const [mutationQuery, { loading, error, data }] = useMutation(
-  //   AddQuestion,
-  //   {
-  //     variables: {
-  //       creatorId,
-  //       likeCounter: {
-  //         likes: 0,
-  //         dislikes: 0
-  //       },
-  //       ...questionData
-  //       // questionType: "checkbox",
-  //       // tags: ["maths"],
-  //       // questionInfo: {
-  //       //   title: "Maths",
-  //       //   descriptin: "What is 1+1?",
-  //       //   options: ["5"]
-  //       // },
-  //       // answer: {
-  //       //   correctAnswer: ["2"]
-  //       // },
-  //       // private: false
-  //     },
-  //   }
-  // );
+  const [mutationQuery, { loading, error, data }] = useMutation(
+    AddQuestion,
+    {
+      variables: {
+        creatorId,
+        likeCounter: {
+          likes: 0,
+          dislikes: 0
+        },
+        ...questionData
+        // questionType: "checkbox",
+        // tags: ["maths"],
+        // questionInfo: {
+        //   title: "Maths",
+        //   descriptin: "What is 1+1?",
+        //   options: ["5"]
+        // },
+        // answer: {
+        //   correctAnswer: ["2"]
+        // },
+        // private: false
+      },
+    }
+  ); */
 
-  console.log(questionData)
+  const uploadClickHandler = () => {
+    /* e.preventDefault();
+    if (!questionData) return;
+    if (isLoading === "loading") return;
+    mutationQuery();
+    await uploadQuestion(creatorId || "", questionData); */
+    
+    console.log(questionData)
+  }
 
     return (
       <div className={styles.layout}>
         <div className={styles.topButtonsLayout}>
           <button className={styles.button({})}
-          onClick={(e) => {
-            e.preventDefault();
-            if (!questionData) return;
-            if (isLoading === "loading") return;
-            // mutationQuery();
-            // await uploadQuestion(creatorId || "", questionData);
-          }}>
+          onClick={uploadClickHandler}>
             Upload Question
             </button>
           <button
@@ -214,7 +196,7 @@ const Controls = ({
         </div>
         <button
           className={styles.button({ isCancel: true })}
-          onClick={() => setIsOpen(false)}
+          onClick={closeHandler}
         >
           Cancel
         </button>

@@ -12,8 +12,16 @@ const QuestionModalWrapper = ({
   children: React.ReactNode;
   initialQuestionData?: Partial<Question>;
 }) => {
-  const [questionData, setQuestionData] = useState<Partial<Question> | null>(
-    initialQuestionData ? {...initialQuestionData, private: true, answer: {correctAnswer: ["2"]}} : null
+  const blankQuestion: Partial<Question> = {
+    questionInfo: {
+        title:"",
+        description: "",
+        options: ["", "", "", ""]
+    },
+    tags: []
+  }
+  const [questionData, setQuestionData] = useState<Partial<Question>>(
+    initialQuestionData ? {...initialQuestionData, private: true} : blankQuestion
   );
   const [isOpen, setIsOpen] = useState(false);
   const styles = {
@@ -26,16 +34,20 @@ const QuestionModalWrapper = ({
       "m-auto",
     ].join(" "),
   };
+  const closeHandler = () => {
+    setIsOpen(false);
+    setQuestionData(initialQuestionData ? {...initialQuestionData, private: true} : blankQuestion);
+  }
   return (
     <div>
       <div onClick={() => setIsOpen(true)}>{children}</div>
       <Modal
         open={isOpen}
         className={styles.modal}
-        onClose={() => setIsOpen(false)}
+        onClose={closeHandler}
       >
         <QuestionEditForm
-          setIsOpen={setIsOpen}
+          closeHandler={closeHandler}
           questionData={questionData}
           setQuestionData={setQuestionData}
         />

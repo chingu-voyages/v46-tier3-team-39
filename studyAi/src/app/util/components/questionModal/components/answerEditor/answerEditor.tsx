@@ -4,7 +4,6 @@ import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import { MultipleChoice, SelectAll, ShortAnswer } from "./answerTypes";
 import styles from "./answerEditorStyles";
-import { Question } from "../../../../../../../prisma/generated/type-graphql/models/Question";
 import { QuestionProps } from "../../questionEditModal";
 
 interface TabPanelProps {
@@ -40,7 +39,8 @@ function a11yProps(index: number) {
 
 export default function AnswerEditor({
   questionData,
-}: Pick<QuestionProps, "questionData">) {
+  setQuestionData
+}: Pick<QuestionProps, "questionData" | "setQuestionData">) {
   const questionType = questionData?.questionType;
   let initialTab = 0;
   if (questionType == "checkbox") {
@@ -80,10 +80,10 @@ export default function AnswerEditor({
         </Tabs>
       </div>
       <CustomTabPanel value={value} index={0}>
-        <MultipleChoice choices={choices} setChoices={setChoices} />
+        <MultipleChoice questionData={questionData} setQuestionData={setQuestionData} />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <SelectAll choices={choices} setChoices={setChoices} />
+        <SelectAll questionData={questionData} setQuestionData={setQuestionData} />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
         <ShortAnswer />
