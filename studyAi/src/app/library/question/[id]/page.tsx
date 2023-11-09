@@ -1,4 +1,3 @@
-import NavigationWrapper from "@/app/util/components/navigation/navigationWrapper";
 import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
 import QuestionPageContainer from "../components/client/questionPageContainer";
 import { Question } from "../../../../../prisma/generated/type-graphql";
@@ -75,17 +74,10 @@ export default async function QuestionPage({
     // console.log(data)
     const data = question;
     return (
-      <NavigationWrapper
-        usePadding
-        appBars={{
-          footer: false,
-          navbar: true,
-        }}
-      >
         <QuestionsContainer initialItems={data ? [data] : []}>
           <QuestionPageContainer />
         </QuestionsContainer>
-      </NavigationWrapper>
+
     );
   } catch (err) {
     console.log(err);

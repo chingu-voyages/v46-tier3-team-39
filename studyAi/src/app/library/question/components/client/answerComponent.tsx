@@ -10,6 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { QuestionTypes } from "@/app/util/types/UserData";
 import { AnswerType } from "./answerInputs";
+import { useFullscreen } from "@/app/util/providers/FullscreenProvider";
 const determineAnswerTitle = (str?: string) => {
   const matchStr = str as (typeof QuestionTypes)[number];
   switch (matchStr) {
@@ -26,6 +27,7 @@ const determineAnswerTitle = (str?: string) => {
 const TopBar = () => {
   const params = useParams();
   const questions = useQuestions()[0].data;
+  const { isFullscreen, toggleFullscreen } = useFullscreen();
   const question =
     params.id && typeof params.id === "string" ? questions[params.id] : null;
   const btnClassNames = "flex items-center justify-center h-[70%]";
@@ -54,6 +56,8 @@ const TopBar = () => {
           sx={btnStyle}
           className={btnClassNames}
           type="button"
+          aria-label={`toggle fullscreen ${isFullscreen ? "off" : "on"}`}
+          onClick={toggleFullscreen}
         >
           <FontAwesomeIcon
             icon={faUpRightAndDownLeftFromCenter}
@@ -71,6 +75,7 @@ const AnswerContainer = ({ height }: { height?: string | number }) => {
       overflow
       className="max-h-[max(30rem,45vh)] md:max-h-none md:w-3/6 md:ml-2 grow"
       style={{ height: height ? height + "px" : undefined }}
+      fullHeight={false}
     >
       <TopBar />
       <Container overflow className="grow">

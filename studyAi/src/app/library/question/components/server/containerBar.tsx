@@ -5,23 +5,25 @@ export const Container = (
     overflow?: boolean;
     border?: boolean;
     fullWidth?: boolean;
+    fullHeight?: boolean;
   } & DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>
 ) => {
   const copyProps = { ...props };
-  const { children, overflow, border, fullWidth } = props;
+  const { children, overflow, border, fullWidth, fullHeight } = props;
   const borderClasses = " border-Black border border-solid";
-  if (copyProps.children) delete copyProps.children;
-  if (copyProps.overflow) delete copyProps.overflow;
-  if (copyProps.border) delete copyProps.border;
+  if ("children" in copyProps) delete copyProps.children;
+  if ("border" in copyProps) delete copyProps.border;
   if ("overflow" in copyProps) delete copyProps.overflow;
-  if (copyProps.fullWidth) delete copyProps.fullWidth;
+  if ("fullWidth" in copyProps) delete copyProps.fullWidth;
+  if ("fullHeight" in copyProps) delete copyProps.fullHeight;
   return (
     <div
       {...copyProps}
       className={
-        "flex flex-col h-full" +
+        "flex flex-col " +
+        (fullHeight === false ? "" : " h-full") +
         (fullWidth === false ? "" : " w-full") +
-        (border ? borderClasses : "") +
+        (border ? " " + borderClasses : "") +
         (overflow ? " overflow-y-auto" : "") +
         (props.className ? " " + props.className : "")
       }
