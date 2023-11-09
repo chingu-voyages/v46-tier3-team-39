@@ -8,10 +8,11 @@ import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { TimeOptions } from "../../../../../../prisma/generated/type-graphql";
 import TimeForm from "./timeForm";
 import { unstable_batchedUpdates } from "react-dom";
+import { getLocalStorageObj } from "@/app/util/parsers/localStorageWrappers";
 import {
-  getLocalStorageObj,
-} from "@/app/util/parsers/localStorageWrappers";
-import { TimeProvider } from "@/app/util/components/time/context/useTimeContext";
+  TimeProvider,
+  useTimeHook,
+} from "@/app/util/components/time/context/useTimeContext";
 import onTimeEventChangeHandler from "../eventHandlers/onTimeEventChangeHandler";
 //we can manage time on the frontend
 //because time measurements are only
@@ -22,7 +23,45 @@ type TimeProps = TimeOptions & {
   id?: string;
   initialTime: number;
 };
-
+export const TimerFinishedModal = ({
+  setTimerCompleteModalOpen,
+  modalOpen,
+  totalTimeGiven,
+}: {
+  totalTimeGiven: number;
+  modalOpen: boolean;
+  setTimerCompleteModalOpen: Dispatch<SetStateAction<boolean>>;
+}) => {
+  const timeContext = useTimeHook();
+  return (
+    <Modal
+      open={modalOpen}
+      onClose={() => setTimerCompleteModalOpen(false)}
+      aria-labelledby="timer-complete-modal"
+      aria-describedby="timer-complete"
+      className="flex justify-center items-center"
+    >
+      <div className="p-5 flex justify-center space-y-3">
+        <Typography>Your Time is Up!</Typography>
+        <Typography>Time Elapsed: {totalTimeGiven}</Typography>
+        <Button
+          type="button"
+          aria-label="reset-timer"
+          onClick={() => {
+            setTimerCompleteModalOpen(false);
+            if (timeContext) {
+              //reset and start timer again
+              timeContext.resetTimer();
+              timeContext.startTimer();
+            }
+          }}
+        >
+          Start Over!
+        </Button>
+      </div>
+    </Modal>
+  );
+};
 export const DeleteTimeBtn = ({
   setCurrTotalTimeGiven,
   setCurrType,
@@ -124,25 +163,11 @@ export const TimeComponent = ({ props }: { props?: TimeProps }) => {
               }
             />
             {timerCompleteModalOpen && (
-              <Modal
-                open={modalOpen}
-                onClose={() => setTimerCompleteModalOpen(false)}
-                aria-labelledby="timer-complete-modal"
-                aria-describedby="timer-complete"
-                className="flex justify-center items-center"
-              >
-                <div className="p-5 flex justify-center space-y-3">
-                  <Typography>Your Time is Up!</Typography>
-                  <Typography>Time Elapsed: {totalTimeGiven}</Typography>
-                  <Button
-                    type="button"
-                    aria-label="reset-timer"
-                    onClick={() => setTimerCompleteModalOpen(false)}
-                  >
-                    Start Over!
-                  </Button>
-                </div>
-              </Modal>
+              <TimerFinishedModal
+                totalTimeGiven={currTotalTimeGiven}
+                modalOpen={timerCompleteModalOpen}
+                setTimerCompleteModalOpen={setTimerCompleteModalOpen}
+              />
             )}
           </TimeProvider>
         );

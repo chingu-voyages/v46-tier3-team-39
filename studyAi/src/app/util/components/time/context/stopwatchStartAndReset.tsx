@@ -4,9 +4,9 @@ const stopwatchStartAndReset = ({
   time,
   setPause,
   setTime,
-  updateTimeAction,
+  callback,
   intervalRef,
-  updateTimeActionIntervalRef,
+  callbackIntervalRef,
   mounted,
 }: TimeStartAndResetProps) => {
   const startTimer = () => {
@@ -17,27 +17,27 @@ const stopwatchStartAndReset = ({
         return prevTime + 1000;
       });
     }, 1000);
-    updateTimeActionIntervalRef.current = setInterval(() => {
+    callbackIntervalRef.current = setInterval(() => {
       if (!mounted.current) return;
       //keep this slower occuring action in sync with locally changing one
-      if (!intervalRef.current && updateTimeActionIntervalRef.current)
-        clearInterval(updateTimeActionIntervalRef.current);
+      if (!intervalRef.current && callbackIntervalRef.current)
+        clearInterval(callbackIntervalRef.current);
       //update below function with time value
-      if (updateTimeAction)
-        updateTimeAction({
+      if (callback)
+        callback({
           eventType: "interval",
           time: time,
         });
     }, 5000);
-    if (updateTimeAction) updateTimeAction({ eventType: "start", time: time });
+    if (callback) callback({ eventType: "start", time: time });
   };
   const resetTimer = () => {
     setPause(true);
     if (intervalRef.current) clearInterval(intervalRef.current);
-    if (updateTimeActionIntervalRef.current)
-      clearInterval(updateTimeActionIntervalRef.current);
+    if (callbackIntervalRef.current)
+      clearInterval(callbackIntervalRef.current);
     setTime(0);
-    if (updateTimeAction) updateTimeAction({ eventType: "reset", time: 0 });
+    if (callback) callback({ eventType: "reset", time: 0 });
   };
   return [startTimer, resetTimer];
 };

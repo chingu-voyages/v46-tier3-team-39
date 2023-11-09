@@ -2,21 +2,20 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
 import timerStartAndReset from "./timerStartAndReset";
 import stopwatchStartAndReset from "./stopwatchStartAndReset";
-
+import { unstable_batchedUpdates } from "react-dom";
 export type TimeEventProps = {
   time: number;
   eventType: "start" | "stop" | "reset" | "interval" | "finished";
 };
-
 export type TimeStartAndResetProps = {
   time: number;
   initialTimeLeft: number;
   totalTimeGiven?: number | null;
   setPause: React.Dispatch<React.SetStateAction<boolean>>;
   setTime: React.Dispatch<React.SetStateAction<number>>;
-  updateTimeAction?: (props?: TimeEventProps) => void;
+  callback?: (props?: TimeEventProps) => void;
   intervalRef: React.MutableRefObject<NodeJS.Timeout | null>;
-  updateTimeActionIntervalRef: React.MutableRefObject<NodeJS.Timeout | null>;
+  callbackIntervalRef: React.MutableRefObject<NodeJS.Timeout | null>;
   mounted: React.MutableRefObject<boolean>;
 };
 export type TimeContextProps = {
@@ -28,7 +27,7 @@ export type TimeContextProps = {
   resetTimer: () => void;
   stopTimer: () => void;
   setTime: React.Dispatch<React.SetStateAction<number>>;
-  updateTimeActionIntervalRef: React.MutableRefObject<NodeJS.Timeout | null>;
+  callbackIntervalRef: React.MutableRefObject<NodeJS.Timeout | null>;
   intervalRef: React.MutableRefObject<NodeJS.Timeout | null>;
   mounted: React.MutableRefObject<boolean>;
 };
@@ -52,7 +51,7 @@ const TimeProvider = ({
 }) => {
   const [time, setTime] = useState(initialTime);
   const [paused, setPause] = useState(true);
-  const updateTimeActionIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const callbackIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const mounted = useRef(true);
   //every context is re-rendered clear the interval and restart it
@@ -60,32 +59,48 @@ const TimeProvider = ({
     mounted.current = true;
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
-      if (updateTimeActionIntervalRef.current)
-        clearInterval(updateTimeActionIntervalRef.current);
+      if (callbackIntervalRef.current)
+        clearInterval(callbackIntervalRef.current);
       mounted.current = false;
     };
   }, []);
+  //handle timer side effects, by reseting time
+  //if timer has ended. This is a non-issue on stopwatch
+  useEffect(() => {
+    if (timeType !== "timer") return;
+    if (!paused && time <= 0 && intervalRef.current) {
+      if (callback)
+        callback({
+          eventType: "finished",
+          time: 0,
+        });
+      unstable_batchedUpdates(() => {
+        setPause(true);
+        if (totalTimeGiven) setTime(totalTimeGiven);
+      });
+    }
+  }, [paused, timeType, time, totalTimeGiven, callback]);
   //every time timeType changes, clear the interval and restart it
   useEffect(() => {
     mounted.current = true;
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
-      if (updateTimeActionIntervalRef.current)
-        clearInterval(updateTimeActionIntervalRef.current);
+      if (callbackIntervalRef.current)
+        clearInterval(callbackIntervalRef.current);
       mounted.current = false;
-      };
+    };
   }, [timeType]);
   const stopTimer = () => {
     setPause(true);
     if (intervalRef.current) clearInterval(intervalRef.current);
-    if (updateTimeActionIntervalRef.current) {
+    if (callbackIntervalRef.current) {
       if (callback) {
         callback({
           eventType: "stop",
           time: time,
         });
       }
-      clearInterval(updateTimeActionIntervalRef.current);
+      clearInterval(callbackIntervalRef.current);
     }
   };
   const [startTimer, resetTimer] =
@@ -95,9 +110,9 @@ const TimeProvider = ({
           initialTimeLeft: initialTime,
           setPause,
           setTime,
-          updateTimeAction: callback,
+          callback: callback,
           intervalRef,
-          updateTimeActionIntervalRef,
+          callbackIntervalRef,
           mounted,
           totalTimeGiven,
         })
@@ -105,9 +120,9 @@ const TimeProvider = ({
           time,
           setPause,
           setTime,
-          updateTimeAction: callback,
+          callback: callback,
           intervalRef,
-          updateTimeActionIntervalRef,
+          callbackIntervalRef,
           mounted,
           initialTimeLeft: initialTime,
         });
@@ -120,7 +135,7 @@ const TimeProvider = ({
     resetTimer,
     stopTimer,
     setTime,
-    updateTimeActionIntervalRef,
+    callbackIntervalRef,
     intervalRef,
     mounted,
   };

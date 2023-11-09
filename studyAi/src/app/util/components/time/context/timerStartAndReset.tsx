@@ -1,15 +1,14 @@
 import { unstable_batchedUpdates } from "react-dom";
 import { TimeStartAndResetProps } from "./useTimeContext";
-
 const timerStartAndReset = ({
   time,
   initialTimeLeft,
   totalTimeGiven,
   setPause,
   setTime,
-  updateTimeAction,
+  callback,
   intervalRef,
-  updateTimeActionIntervalRef,
+  callbackIntervalRef,
   mounted,
 }: TimeStartAndResetProps) => {
   const startTimer = () => {
@@ -21,47 +20,41 @@ const timerStartAndReset = ({
         const newTime = prevTime - 1000;
         if (newTime > 0) return newTime;
         if (newTime <= 0 && intervalRef.current) {
-          setPause(true);
-          if (updateTimeAction)
-            updateTimeAction({
-              eventType: "finished",
-              time: 0,
-            });
           clearInterval(intervalRef.current);
         }
         return 0;
       });
     }, 1000);
-    updateTimeActionIntervalRef.current = setInterval(
+    callbackIntervalRef.current = setInterval(
       () => {
         if (!mounted.current) return;
         //keep this slower occuring action in sync with locally changing one
-        if (!intervalRef.current && updateTimeActionIntervalRef.current)
-          clearInterval(updateTimeActionIntervalRef.current);
+        if (!intervalRef.current && callbackIntervalRef.current)
+          clearInterval(callbackIntervalRef.current);
         //update below function with time value
-        if (updateTimeAction)
-          updateTimeAction({
+        if (callback)
+          callback({
             eventType: "interval",
             time: time,
           });
       },
-      //we update every 5 second to local state (as updating local storage is a costly computation due to stringification)
+      //we update every 5 second as this can be costly computation (i.e writing to local state)
       initialTimeLeft < 5000 ? initialTimeLeft : 5000
     );
-    if (updateTimeAction) updateTimeAction({ eventType: "start", time: time });
+    if (callback) callback({ eventType: "start", time: time });
   };
   const resetTimer = () => {
     if (intervalRef.current) clearInterval(intervalRef.current);
-    if (updateTimeActionIntervalRef.current)
-      clearInterval(updateTimeActionIntervalRef.current);
+    if (callbackIntervalRef.current)
+      clearInterval(callbackIntervalRef.current);
     const newTime = totalTimeGiven ? totalTimeGiven : 0;
     unstable_batchedUpdates(() => {
       setTime(newTime);
       setPause(true);
-      if (updateTimeAction)
-        updateTimeAction({ eventType: "reset", time: newTime });
+      if (callback)
+        callback({ eventType: "reset", time: newTime });
     });
   };
   return [startTimer, resetTimer];
 };
-export default timerStartAndReset
+export default timerStartAndReset;

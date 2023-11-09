@@ -1,9 +1,9 @@
 import { Dispatch, SetStateAction } from "react";
-import { TimeEventProps } from "@/app/util/components/time/hooks/useTimeHook";
 import {
   deleteLocalStorageObj,
   addLocalStorageObj,
 } from "@/app/util/parsers/localStorageWrappers";
+import { TimeEventProps } from "@/app/util/components/time/context/useTimeContext";
 const onTimeEventChangeHandler =
   ({
     id,
