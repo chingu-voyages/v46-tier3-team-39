@@ -6,7 +6,7 @@ import { Button, IconButton, Modal, Typography } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { TimeOptions } from "../../../../../../prisma/generated/type-graphql";
-import TimeForm from "./timeForm";
+import TimeForm, { splitTimeStrBy2 } from "./timeForm";
 import { unstable_batchedUpdates } from "react-dom";
 import { getLocalStorageObj } from "@/app/util/parsers/localStorageWrappers";
 import {
@@ -14,6 +14,9 @@ import {
   useTimeHook,
 } from "@/app/util/components/time/context/useTimeContext";
 import onTimeEventChangeHandler from "../eventHandlers/onTimeEventChangeHandler";
+import formatMilliseconds from "@/app/util/parsers/formatMilliseconds";
+import { timeLabelData } from "./timeForm";
+import removeNonIntegerChars from "@/app/util/parsers/removeNonIntegerChars";
 //we can manage time on the frontend
 //because time measurements are only
 //for the user's benefit
@@ -33,6 +36,14 @@ export const TimerFinishedModal = ({
   setTimerCompleteModalOpen: Dispatch<SetStateAction<boolean>>;
 }) => {
   const timeContext = useTimeHook();
+  const timeElapsed = formatMilliseconds(totalTimeGiven) as string;
+  const timeStr = removeNonIntegerChars(timeElapsed);
+  const timeArr = splitTimeStrBy2(timeStr);
+  //this creates the new total time string
+  const parsedTimeElapsed =
+    timeArr.reduce(
+      (a, b, idx) => a + timeLabelData[idx - 1].abbrev + " " + b
+    ) + timeLabelData[timeLabelData.length - 1].abbrev;
   return (
     <Modal
       open={modalOpen}
@@ -41,12 +52,16 @@ export const TimerFinishedModal = ({
       aria-describedby="timer-complete"
       className="flex justify-center items-center"
     >
-      <div className="p-5 flex justify-center space-y-3">
-        <Typography>Your Time is Up!</Typography>
-        <Typography>Time Elapsed: {totalTimeGiven}</Typography>
+      <div className="p-10 flex flex-col items-center space-y-4 bg-White text-Black">
+        <Typography variant="h4">Your Time is Up!</Typography>
+        <Typography variant="h6">Time Passed: {parsedTimeElapsed}</Typography>
         <Button
+          size="large"
           type="button"
           aria-label="reset-timer"
+          sx={{
+            textTransform: "none",
+          }}
           onClick={() => {
             setTimerCompleteModalOpen(false);
             if (timeContext) {

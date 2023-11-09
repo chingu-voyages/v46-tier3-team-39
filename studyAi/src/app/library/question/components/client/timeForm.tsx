@@ -13,7 +13,7 @@ import { Button, Tab, Tabs, TextField, Typography } from "@mui/material";
 import removeNonIntegerChars from "@/app/util/parsers/removeNonIntegerChars";
 import { unstable_batchedUpdates } from "react-dom";
 import { extractTime } from "@/app/util/parsers/formatMilliseconds";
-const timeOrder: {
+export const timeLabelData: {
   abbrev: "h" | "m" | "s";
   label: "hours" | "minutes" | "seconds";
 }[] = [
@@ -44,7 +44,7 @@ const determineNewVal = (
   }
   return newVal;
 };
-const splitTimeStrBy2 = (str: string) => {
+export const splitTimeStrBy2 = (str: string) => {
   const arr = [];
   for (let i = 0; i < str.length; i += 2) {
     const chunk = str.slice(i, i + 2);
@@ -147,7 +147,7 @@ function TimerInput() {
     };
     let setAction = dispatchVals[name];
     setAction((prevVal) => {
-      const maxLength = timeOrder.length * 2;
+      const maxLength = timeLabelData.length * 2;
       //set the current values
       const parsedVal = removeNonIntegerChars(value);
       timeVals[name] = parsedVal;
@@ -170,9 +170,10 @@ function TimerInput() {
       //this creates the new total time string
       const newTotalTime =
         newValArr.reduce(
-          (a, b, idx) => a + timeOrder[idx - 1].abbrev + " " + b
-        ) + timeOrder[timeOrder.length - 1].abbrev;
-
+          (a, b, idx) => a + timeLabelData[idx - 1].abbrev + " " + b
+        ) + timeLabelData[timeLabelData.length - 1].abbrev;
+      //we can do this because we are using 
+      //updating from the same component
       unstable_batchedUpdates(() => {
         //update new total time
         if (name !== "hours") setHours(newValArr[0]);
@@ -185,7 +186,7 @@ function TimerInput() {
   };
   return (
     <div className="flex justify-center p-5 [&>*]:h-14">
-      {timeOrder.map((a) => (
+      {timeLabelData.map((a) => (
         <FieldInput
           key={a.label}
           onChange={onChange}
