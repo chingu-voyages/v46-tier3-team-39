@@ -16,12 +16,12 @@ const QuestionModalWrapper = ({
     questionInfo: {
         title:"",
         description: "",
-        options: ["", "", "", ""]
+        options: ["Answer 1", "Answer 2", "Answer 3", "Answer 4"]
     },
     questionType: "mcq",
     tags: [],
     answer: {
-      correctAnswer: ["0"]
+      correctAnswer: ["Answer 1"]
     }
   }
   const [questionData, setQuestionData] = useState<Partial<Question>>(

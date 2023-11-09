@@ -51,14 +51,16 @@ export default function AnswerEditor({
   const [tabValue, setTabValue] = React.useState(initialTab);
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
+    const options = questionData.questionInfo?.options as string[]
     setTabValue(newValue);
     let questionType = "";
     let newAnswer = [""]
     if (newValue == 0) {
       questionType = "mcq";
-      newAnswer = ["0"]
+      newAnswer = [options[0]]
     }else if (newValue == 1) {
       questionType = "checkbox"
+      newAnswer = []
     }else {
       questionType = "short answer"
     }

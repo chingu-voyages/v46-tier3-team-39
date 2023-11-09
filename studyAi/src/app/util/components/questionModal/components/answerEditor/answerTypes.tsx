@@ -13,7 +13,7 @@ export const MultipleChoice = ({questionData, setQuestionData} : Pick<QuestionPr
     const [radioValue, setRadioValue] = useState(Number(answer.correctAnswer[0]));
     const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setRadioValue(Number((e.target as HTMLInputElement).value));
-        setQuestionData({...questionData, answer: {correctAnswer: [(e.target as HTMLInputElement).value]}})
+        setQuestionData({...questionData, answer: {correctAnswer: [options[Number((e.target as HTMLInputElement).value)]]}})
     }
 
     return (
@@ -25,7 +25,7 @@ export const MultipleChoice = ({questionData, setQuestionData} : Pick<QuestionPr
                 }
                 return (
                     <div key={`radio-${index}`} className="flex my-2 px-4 items-center">
-                        <Radio value={index} />
+                        <Radio value={options[index]} />
                         <input value={options[index]} type="text" className={styles.input({})} onChange={handleInputChange} />
                         <FontAwesomeIcon icon={faTrash} className="ml-2 hover:cursor-pointer" onClick={() => deleteChoice(Number(index), {questionData, setQuestionData} )}/>
                     </div>
@@ -41,7 +41,7 @@ export const SelectAll = ({questionData, setQuestionData} : Pick<QuestionProps, 
     const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const currentAnswer = questionData.answer as AnswerData
         if (event.target.checked) {
-            setQuestionData({...questionData, answer: {correctAnswer: currentAnswer.correctAnswer.concat([event.target.value])}})
+            setQuestionData({...questionData, answer: {correctAnswer: currentAnswer.correctAnswer.concat(event.target.value)}})
         }else {
             const index = currentAnswer.correctAnswer.indexOf(event.target.value)
             setQuestionData({...questionData, answer: {correctAnswer: currentAnswer.correctAnswer.toSpliced(index, 1)}})
@@ -56,7 +56,7 @@ export const SelectAll = ({questionData, setQuestionData} : Pick<QuestionProps, 
                 }
                 return (
                     <div key={`select-${index}`} className="flex my-4 px-4 items-center">
-                        <Checkbox value={index} checked={questionData.answer?.correctAnswer.includes(String(index))} onChange={handleCheckboxChange} />
+                        <Checkbox value={options[index]} checked={questionData.answer?.correctAnswer.includes(options[index])} onChange={handleCheckboxChange} />
                         <input type="text" className={styles.input({})} value={options[index]} onChange={handleInputChange} />
                         <FontAwesomeIcon icon={faTrash} className="ml-2 hover:cursor-pointer" onClick={() => deleteChoice(Number(index), {questionData, setQuestionData})}/>
                     </div>
