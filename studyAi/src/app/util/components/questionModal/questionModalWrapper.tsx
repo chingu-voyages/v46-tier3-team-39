@@ -18,7 +18,11 @@ const QuestionModalWrapper = ({
         description: "",
         options: ["", "", "", ""]
     },
-    tags: []
+    questionType: "mcq",
+    tags: [],
+    answer: {
+      correctAnswer: ["0"]
+    }
   }
   const [questionData, setQuestionData] = useState<Partial<Question>>(
     initialQuestionData ? {...initialQuestionData, private: true} : blankQuestion

@@ -48,20 +48,26 @@ export default function AnswerEditor({
   } else if (questionType == "short answer") {
     initialTab = 2;
   }
-  const [value, setValue] = React.useState(initialTab);
-  const initialChoices = questionData?.questionInfo?.options;
-  const [choices, setChoices] = React.useState(
-    initialChoices ? initialChoices : ["", "", "", ""]
-  );
+  const [tabValue, setTabValue] = React.useState(initialTab);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
+  const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
+    setTabValue(newValue);
+    let questionType = "";
+    if (newValue == 0) {
+      questionType = "mcq"
+    }else if (newValue == 1) {
+      questionType = "checkbox"
+    }else {
+      questionType = "short answer"
+    }
+
+    setQuestionData({...questionData, questionType: questionType})
   };
   return (
     <Box className={styles.layout}>
       <h2 className={styles.h2}>Answer</h2>
       <div className={styles.tabsContainer}>
-        <Tabs value={value} onChange={handleChange} aria-label="answer types">
+        <Tabs value={tabValue} onChange={handleChange} aria-label="answer types">
           <Tab
             className={styles.tabLabel}
             label="Multiple Choice"
@@ -79,13 +85,13 @@ export default function AnswerEditor({
           />
         </Tabs>
       </div>
-      <CustomTabPanel value={value} index={0}>
+      <CustomTabPanel value={tabValue} index={0}>
         <MultipleChoice questionData={questionData} setQuestionData={setQuestionData} />
       </CustomTabPanel>
-      <CustomTabPanel value={value} index={1}>
+      <CustomTabPanel value={tabValue} index={1}>
         <SelectAll questionData={questionData} setQuestionData={setQuestionData} />
       </CustomTabPanel>
-      <CustomTabPanel value={value} index={2}>
+      <CustomTabPanel value={tabValue} index={2}>
         <ShortAnswer />
       </CustomTabPanel>
     </Box>
