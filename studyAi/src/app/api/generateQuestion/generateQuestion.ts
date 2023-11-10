@@ -113,8 +113,7 @@ export async function generateQuestion(req: Request) {
       ", "
     )}
     
-    Then, store the new question description as a string called 'QuestionDescription', the new question title as a string
-    'QuestionTitle', ${determineVariableTypeTemplateStr(type, numberOfOptions)}
+    Then, store the new question description as a string called 'QuestionDescription', the new question title as a string 'QuestionTitle', ${determineVariableTypeTemplateStr(type, numberOfOptions)}
 
     Finally, return the new generated question data as a JSON object, in the following format:
     ${determinePromptTemplateStr(type)}`;
