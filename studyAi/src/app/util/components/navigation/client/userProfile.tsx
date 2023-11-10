@@ -10,6 +10,7 @@ import { faCaretDown, faChartLine } from "@fortawesome/free-solid-svg-icons";
 import { faFileLines, faUserCircle } from "@fortawesome/free-regular-svg-icons";
 import NextLink from "next/link";
 import { useSession } from "next-auth/react";
+import { unstable_batchedUpdates } from "react-dom";
 const userItemLinks = (userId?: string) => [
   {
     href: `/dashboard`,
@@ -54,7 +55,7 @@ export const UserProfile = ({
         <div ref={setRef} className="flex flex-col w-full ml-4 py-1 space-y-0">
           {name && (
             <span className="text-Black font-bold tracking-tight text-lg">
-              { name}
+              {name}
             </span>
           )}
           <span className="text-Black font-regular tracking-tight text-xs">
@@ -71,8 +72,10 @@ export const ProfileDropdown = ({
   userDropdownPos,
   handleClose,
   userId,
+  open,
 }: {
   anchorEl: HTMLElement | null;
+  open: boolean;
   userDropdownPos: { x: number; y: number; width: number; height: number };
   handleClose: () => void;
   userId: Partial<UserInfo>["id"];
@@ -82,7 +85,7 @@ export const ProfileDropdown = ({
     <Menu
       anchorEl={anchorEl}
       keepMounted
-      open={Boolean(anchorEl)}
+      open={open}
       anchorReference="anchorPosition"
       anchorOrigin={{
         vertical: "top",
@@ -158,14 +161,20 @@ export const UserProfileNav = ({
 }) => {
   const session = useSession();
   const { setRef, position: userDropdownPos } = useElementPosition();
-  const { anchorEl, handleClick, handleClose } = useDropdown();
+  const { anchorEl, setAnchorEl, handleClick, handleClose, open } =
+    useDropdown();
   const userProfileProps = session.data?.user;
   if (!userProfileProps) return <></>;
   return (
     <>
       {dropdown && (
         <Link
-          ref={setRef}
+          ref={(ref) => {
+            unstable_batchedUpdates(() => {
+              setRef(ref);
+              setAnchorEl(ref);
+            });
+          }}
           className="flex items-center h-5/6"
           component={"button"}
           aria-label="open-user-navigation"
@@ -180,6 +189,7 @@ export const UserProfileNav = ({
       {dropdown && (
         <ProfileDropdown
           anchorEl={anchorEl}
+          open={open}
           userDropdownPos={userDropdownPos}
           handleClose={handleClose}
           userId={userProfileProps.id}
