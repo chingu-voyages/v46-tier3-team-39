@@ -5,7 +5,7 @@ import Timer from "@/app/util/components/time/timer";
 import { Button, IconButton, Modal, Typography } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { TimeOptions } from "../../../../../../prisma/generated/type-graphql";
+import { TimeOptions } from "../../../../../../../prisma/generated/type-graphql";
 import TimeForm, { splitTimeStrBy2 } from "./timeForm";
 import { unstable_batchedUpdates } from "react-dom";
 import { getLocalStorageObj } from "@/app/util/parsers/localStorageWrappers";
@@ -13,7 +13,7 @@ import {
   TimeProvider,
   useTimeHook,
 } from "@/app/util/components/time/context/useTimeContext";
-import onTimeEventChangeHandler from "../eventHandlers/onTimeEventChangeHandler";
+import onTimeEventChangeHandler from "../../../eventHandlers/onTimeEventChangeHandler";
 import formatMilliseconds from "@/app/util/parsers/formatMilliseconds";
 import { timeLabelData } from "./timeForm";
 import removeNonIntegerChars from "@/app/util/parsers/removeNonIntegerChars";

@@ -1,5 +1,5 @@
 "use client";
-import { Container } from "../server/containerBar";
+import { Container } from "../../page/server/containerBar";
 import {
   Button,
   Chip,

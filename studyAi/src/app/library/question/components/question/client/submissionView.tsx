@@ -1,10 +1,10 @@
 "use client";
-import { QuestionSubmission } from "../../../../../../prisma/generated/type-graphql";
+import { QuestionSubmission } from "../../../../../../../prisma/generated/type-graphql";
 import { useQuery } from "@apollo/client";
-import { Container } from "../server/containerBar";
+import { Container } from "../../page/server/containerBar";
 import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { gql } from "../../../../../../graphql/generated";
+import { gql } from "../../../../../../../graphql/generated";
 const getSubmissionByQuestionId = gql(`
   query GetQuestionSubmissionByQuestionId($questionId: String, $userId: String ) {
     questionSubmissions(

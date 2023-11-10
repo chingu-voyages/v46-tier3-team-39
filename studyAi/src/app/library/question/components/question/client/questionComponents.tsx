@@ -1,5 +1,5 @@
 "use client";
-import ContainerBar, { Container } from "../server/containerBar";
+import ContainerBar, { Container } from "../../page/server/containerBar";
 import capitalizeEveryWord from "@/app/util/parsers/capitalizeEveryWord";
 import EditIcon from "@mui/icons-material/Edit";
 import {
@@ -14,7 +14,7 @@ import React, { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useQuestions } from "@/app/stores/questionStore";
 import { useParams } from "next/navigation";
-import { containerTabs, InnerContainer } from "../server/questionComponents";
+import { containerTabs, InnerContainer } from "../server/questionViewContainer";
 import BtnLabelDropdown from "@/app/util/components/btnLabelDropdown/btnLabelDropdown";
 const EditBtn = ({
   btnStyles,

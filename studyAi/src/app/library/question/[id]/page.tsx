@@ -1,5 +1,5 @@
 import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
-import QuestionPageContainer from "../components/client/questionPageContainer";
+import QuestionPageContainer from "../components/page/client/questionPageContainer";
 import { Question } from "../../../../../prisma/generated/type-graphql";
 import { QuestionsContainer } from "@/app/stores/questionStore";
 import { QuestionTypes } from "@/app/util/types/UserData";
@@ -133,11 +133,11 @@ export async function generateMetadata(
       url: origin,
       images: [
         {
-          url: '/logo/logo.png',
+          url: "/logo/logo.png",
           width: 800,
           height: 800,
-        }
-      ]
+        },
+      ],
     },
   };
 }

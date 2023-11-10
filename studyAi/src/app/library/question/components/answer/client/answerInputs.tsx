@@ -10,7 +10,7 @@ import {
   RadioGroup,
 } from "@mui/material";
 import { ChangeEvent, KeyboardEvent } from "react";
-import { Question } from "../../../../../../graphql/generated/graphql";
+import { Question } from "../../../../../../../graphql/generated/graphql";
 const adjustScroll = (
   event: ChangeEvent<HTMLTextAreaElement> | KeyboardEvent<HTMLTextAreaElement>
 ) => {
@@ -39,7 +39,11 @@ const adjustScroll = (
     return (element.scrollTop = newScrollPos <= 0 ? 0 : newScrollPos);
   }
 };
-export const MultipleChoice = ({ options }: { options: Question['questionInfo']['options'] }) => {
+export const MultipleChoice = ({
+  options,
+}: {
+  options: Question["questionInfo"]["options"];
+}) => {
   return (
     <RadioGroup className="px-[5%] py-5 grow">
       {options.map((val) => (
@@ -53,7 +57,11 @@ export const MultipleChoice = ({ options }: { options: Question['questionInfo'][
     </RadioGroup>
   );
 };
-export const SelectMultiple = ({ options }: { options: Question['questionInfo']['options'] }) => {
+export const SelectMultiple = ({
+  options,
+}: {
+  options: Question["questionInfo"]["options"];
+}) => {
   return (
     <FormGroup className="px-[5%] py-5 grow">
       {options.map((val) => (

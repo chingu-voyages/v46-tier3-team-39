@@ -2,7 +2,7 @@
 import React from "react";
 import { NavigationBtns, PaginationOptions } from "./navigationBtns";
 import { QuestionWrapper } from "../server/questionWrapper";
-import { TimeComponent } from "./timeModal";
+import { TimeComponent } from "../../time/client/timeModal";
 import NavigationWrapper from "@/app/util/components/navigation/navigationWrapper";
 import FullscreenProvider, {
   useFullscreen,

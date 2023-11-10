@@ -1,7 +1,7 @@
 "use client";
 import { useParams } from "next/navigation";
 import { useQuestions } from "@/app/stores/questionStore";
-import ContainerBar, { Container } from "../server/containerBar";
+import ContainerBar, { Container } from "../../page/server/containerBar";
 import { Button, IconButton } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {

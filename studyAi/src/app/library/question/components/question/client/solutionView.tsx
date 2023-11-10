@@ -1,10 +1,10 @@
 "use client";
 import { useQuery } from "@apollo/client";
-import { Question } from "../../../../../../prisma/generated/type-graphql";
+import { Question } from "../../../../../../../prisma/generated/type-graphql";
 import { useParams } from "next/navigation";
 import { useQuestions } from "@/app/stores/questionStore";
-import { Container } from "../server/containerBar";
-import { gql } from "../../../../../../graphql/generated";
+import { Container } from "../../page/server/containerBar";
+import { gql } from "../../../../../../../graphql/generated";
 const getAnswerById = gql(`
   query GetAnswerById($id: String) {
     question(where: { id: $id }) {
@@ -40,7 +40,7 @@ const SolutionView = () => {
   return (
     <Container overflow className="px-[5%] py-5 grow">
       {question?.answer?.correctAnswer.map((e) => {
-        return( e.value )
+        return e.value;
       })}
     </Container>
   );
