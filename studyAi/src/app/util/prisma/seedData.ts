@@ -48,7 +48,7 @@ const questions: Omit<Question, "id" | "creatorId" | "dateCreated">[] = [
     private: false,
   },
   {
-    questionType: "Checkbox",
+    questionType: "Select Multiple",
     tags: ["Science", "Chemistry"],
     questionInfo: {
       title: "Molecular Compound",

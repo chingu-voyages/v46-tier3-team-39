@@ -5,75 +5,69 @@ import { SetStateAction, useState } from "react";
 import { gql } from "../../../../../../graphql/generated";
 import { useSession } from "next-auth/react";
 import { useMutation } from "@apollo/client";
-import Switch from '@mui/material/Switch';
+import Switch from "@mui/material/Switch";
 
 const generateQuestion = async (
   questionData: Partial<Question>,
   isLoading: string,
   setQuestionData: React.Dispatch<SetStateAction<Partial<Question> | null>>
-  ) => {
+) => {
   if (!questionData) return;
   if (isLoading === "loading") return;
   try {
-    const questionProvided = { 
-        type: questionData.questionType,
-        tags: questionData.tags,
-        question: questionData.questionInfo?.description,
-        numberOfOptions: questionData.questionInfo?.options.length
-      }
-      const result = await axios({
-        url: "/api/generateQuestion",
-        method: "POST",
-        data: questionProvided,
+    const questionProvided = {
+      type: questionData.questionType,
+      tags: questionData.tags,
+      question: questionData.questionInfo?.description,
+      numberOfOptions: questionData.questionInfo?.options.length,
+    };
+    const result = await axios({
+      url: "/api/generateQuestion",
+      method: "POST",
+      data: questionProvided,
     });
     setQuestionData((prev) => ({
       ...prev,
       questionInfo: {
         title: prev?.questionInfo?.title || "",
         description: result?.data?.newQuestion?.question || "",
-        options: result?.data?.newQuestion?.options || [""]
+        options: result?.data?.newQuestion?.options || [""],
       },
       answer: {
-        correctAnswer: result?.data?.newQuestion?.correct || [""]
-      }}));
+        correctAnswer: result?.data?.newQuestion?.correct || [""],
+      },
+    }));
   } catch (err) {
     console.error(err);
     return null;
   }
-}
+};
 
 const AddQuestion = gql(`
   mutation CreateOneQuestionResolver(
-    $creatorId: String,
-    $questionType: String,
-    $tags: [String],
-    $questionInfo: {
-      title: String,
-      descriptin: String,
-      options: [String]
-    },
-    $answer: {
-      correctAnswer: [string]
-    },
-    $likeCounter: {
-      likes: Int,
-      dislikes: Int
-    },
-    $private: boolean
+    $creatorId: String!,
+    $questionType: String!,
+    $tags: QuestionCreatetagsInput,
+    $questionInfo: QuestionInfoDataCreateEnvelopeInput!,
+    $answer: AnswerDataCreateEnvelopeInput!,
+    $likeCounter: LikeCounterCreateEnvelopeInput!,
+    $private: Boolean!
   ){
     createOneQuestion(
       data: {
         creatorId: $creatorId,
         questionType: $questionType,
         tags: $tags,
-        questionInfo: $questionInfoData,
-        answer: $answerData,
+        questionInfo: $questionInfo,
+        answer: $answer,
         likeCounter: $likeCounter,
         private: $private
-      })
+      }
+      )
     {
       id
     }
+  }
 `);
 
 const styles = {
@@ -107,57 +101,88 @@ const styles = {
     ].join(" "),
 };
 
-const uploadQuestion = async (mutationQuery: any, isLoading: string, e: any) => {
+const uploadQuestion = async (
+  mutationQuery: any,
+  isLoading: string,
+  e: any
+) => {
   e.preventDefault();
   if (isLoading === "loading") return;
-    mutationQuery()
-    
-}
+  mutationQuery();
+};
 
 const Controls = ({
   setIsOpen,
   setQuestionData,
-  questionData
+  questionData,
 }: QuestionProps) => {
-  const label = { inputProps: { 'aria-label': 'Switch demo' } };
+  const label = { inputProps: { "aria-label": "Switch demo" } };
   const [isLoading, setIsLoading] = useState("success");
 
-  // const session = useSession()
-  // const creatorId = session?.data?.user.id;
-  // const [mutationQuery, { loading, error, data }] = useMutation(
-  //   AddQuestion,
-  //   {
-  //     variables: {
-  //       creatorId,
-  //       likeCounter: {
-  //         likes: 0,
-  //         dislikes: 0
-  //       },
-  //       ...questionData
-  //     },
-  //   }
-  // );
-  console.log(questionData)
-
+  const session = useSession();
+  const creatorId = session?.data?.user.id;
+  const [mutationQuery, { loading, error, data }] = useMutation(AddQuestion, {
+    variables: {
+      questionType: questionData?.questionType
+        ? questionData.questionType
+        : "Short Answer",
+      tags: {
+        set: questionData?.tags ? questionData.tags : [],
+      },
+      questionInfo: {
+        set: questionData?.questionInfo
+          ? {
+              ...questionData.questionInfo,
+            }
+          : {
+              title: "",
+              description: "",
+              options: [],
+            },
+      },
+      creatorId: creatorId ? creatorId : "",
+      likeCounter: {
+        set: {
+          likes: 0,
+          dislikes: 0,
+        },
+      },
+      answer: {
+        set: {
+          correctAnswer: questionData?.answer?.correctAnswer
+            ? questionData?.answer?.correctAnswer
+            : [],
+        },
+      },
+      private: !!questionData?.private,
+    },
+  });
   return (
     <div className={styles.layout}>
       <div className={styles.topButtonsLayout}>
-        <button className={styles.button({})}
-        // onClick={AddQuestion}
-        >
-          Upload Question
-          </button>
         <button
           className={styles.button({})}
-          onClick={() => generateQuestion(questionData || {}, isLoading, setQuestionData)}
+          // onClick={AddQuestion}
+        >
+          Upload Question
+        </button>
+        <button
+          className={styles.button({})}
+          onClick={() =>
+            generateQuestion(questionData || {}, isLoading, setQuestionData)
+          }
         >
           Generate With AI
         </button>
       </div>
       <div>
-        <div style={{color: 'black'}}>Private</div>
+        <div style={{ color: "black" }}>Private</div>
         <Switch
-          onChange={() => {setQuestionData((prev) => ({...prev, private: !prev?.private}))}} defaultChecked/>
+          onChange={() => {
+            setQuestionData((prev) => ({ ...prev, private: !prev?.private }));
+          }}
+          defaultChecked
+        />
       </div>
       <button
         className={styles.button({ isCancel: true })}
@@ -167,7 +192,6 @@ const Controls = ({
       </button>
     </div>
   );
-  }
-
+};
 
 export default Controls;
