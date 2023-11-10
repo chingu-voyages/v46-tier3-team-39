@@ -5,6 +5,7 @@ import ContainerBar, { Container } from "../server/containerBar";
 import { Button, IconButton } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faDownLeftAndUpRightToCenter,
   faRefresh,
   faUpRightAndDownLeftFromCenter,
 } from "@fortawesome/free-solid-svg-icons";
@@ -14,7 +15,7 @@ import { useFullscreen } from "@/app/util/providers/FullscreenProvider";
 const determineAnswerTitle = (str?: string) => {
   const matchStr = str as (typeof QuestionTypes)[number];
   switch (matchStr) {
-    case "multipleChoice":
+    case "Multiple Choice":
       return "Select the best answer";
     case "Checkbox":
       return "Select all that apply";
@@ -59,10 +60,17 @@ const TopBar = () => {
           aria-label={`toggle fullscreen ${isFullscreen ? "off" : "on"}`}
           onClick={toggleFullscreen}
         >
-          <FontAwesomeIcon
-            icon={faUpRightAndDownLeftFromCenter}
-            className="text-xs"
-          />
+          {!isFullscreen ? (
+            <FontAwesomeIcon
+              icon={faUpRightAndDownLeftFromCenter}
+              className="text-xs"
+            />
+          ) : (
+            <FontAwesomeIcon
+              icon={faDownLeftAndUpRightToCenter}
+              className="text-xs"
+            />
+          )}
         </IconButton>
       </div>
     </ContainerBar>

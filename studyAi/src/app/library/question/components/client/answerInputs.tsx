@@ -93,7 +93,7 @@ export const AnswerType = () => {
     questionInfo: { options: questionOptions },
   } = question;
   switch (questionType) {
-    case "multipleChoice":
+    case "Multiple Choice":
       return <MultipleChoice options={questionOptions} />;
     case "Checkbox":
       return <SelectMultiple options={questionOptions} />;
