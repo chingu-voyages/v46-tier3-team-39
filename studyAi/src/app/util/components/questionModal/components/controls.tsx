@@ -5,11 +5,7 @@ import { SetStateAction, useState } from "react";
 import { gql } from "../../../../../../graphql/generated";
 import { useSession } from "next-auth/react";
 import { useMutation } from "@apollo/client";
-import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
 import Switch from '@mui/material/Switch';
-import { colors } from "@mui/material";
-import { getServerSession } from "next-auth";
-import { options } from "@/app/api/auth/[...nextauth]/options";
 
 const generateQuestion = async (
   questionData: Partial<Question>,
@@ -35,7 +31,7 @@ const generateQuestion = async (
       questionInfo: {
         title: prev?.questionInfo?.title || "",
         description: result?.data?.newQuestion?.question || "",
-        options: result?.data?.newQuestion?.incorrect || [""]
+        options: result?.data?.newQuestion?.options || [""]
       },
       answer: {
         correctAnswer: result?.data?.newQuestion?.correct || [""]
@@ -111,38 +107,11 @@ const styles = {
     ].join(" "),
 };
 
-const uploadQuestion = async (creatorId: string, questionData: Partial<Question>) => {
-  // Method 1
-  // const questionQuery = {
-  //   query: AddQuestion,
-  //   variables: {
-  //       creatorId,
-  //       ...questionData,
-  //   },
-  // };
-  //   const questionPromise = client.query(questionQuery);
-  //   try {
-  //     const [questionsResult] = await Promise.all([questionPromise]);
-  //     console.log(questionsResult)
-  //     // setQuestionData((prev) => ({...prev, questionsResult}))
-  //   } catch (err: any) {
-  //     console.log(err.networkError.result);
-  //   }
-
-    // METHOD 2
-    // const [mutationQuery, { loading, error, data }] = useMutation(
-    //   AddQuestion,
-    //   {
-    //     variables: {
-    //       creatorId,
-    //       likeCounter: {
-    //         likes: 0,
-    //         dislikes: 0
-    //       },
-    //       ...questionData,
-    //     },
-    //   }
-    // );
+const uploadQuestion = async (mutationQuery: any, isLoading: string, e: any) => {
+  e.preventDefault();
+  if (isLoading === "loading") return;
+    mutationQuery()
+    
 }
 
 const Controls = ({
@@ -152,14 +121,9 @@ const Controls = ({
 }: QuestionProps) => {
   const label = { inputProps: { 'aria-label': 'Switch demo' } };
   const [isLoading, setIsLoading] = useState("success");
-  // METHOD 1
-  // const session = await getServerSession(options);
-  // const client = ServerGraphQLClient(session);
-  // const creatorId = session?.user.id;
 
-  // METHOD 2
-  const session = useSession()
-  const creatorId = session?.data?.user.id;
+  // const session = useSession()
+  // const creatorId = session?.data?.user.id;
   // const [mutationQuery, { loading, error, data }] = useMutation(
   //   AddQuestion,
   //   {
@@ -170,56 +134,39 @@ const Controls = ({
   //         dislikes: 0
   //       },
   //       ...questionData
-  //       // questionType: "checkbox",
-  //       // tags: ["maths"],
-  //       // questionInfo: {
-  //       //   title: "Maths",
-  //       //   descriptin: "What is 1+1?",
-  //       //   options: ["5"]
-  //       // },
-  //       // answer: {
-  //       //   correctAnswer: ["2"]
-  //       // },
-  //       // private: false
   //     },
   //   }
   // );
-
   console.log(questionData)
 
-    return (
-      <div className={styles.layout}>
-        <div className={styles.topButtonsLayout}>
-          <button className={styles.button({})}
-          onClick={(e) => {
-            e.preventDefault();
-            if (!questionData) return;
-            if (isLoading === "loading") return;
-            // mutationQuery();
-            // await uploadQuestion(creatorId || "", questionData);
-          }}>
-            Upload Question
-            </button>
-          <button
-            className={styles.button({})}
-            onClick={() => generateQuestion(questionData || {}, isLoading, setQuestionData)}
-          >
-            Generate With AI
-          </button>
-        </div>
-        <div>
-          <div style={{color: 'black'}}>Private</div>
-          <Switch
-            onChange={() => {setQuestionData((prev) => ({...prev, private: !prev?.private}))}} defaultChecked/>
-        </div>
-        <button
-          className={styles.button({ isCancel: true })}
-          onClick={() => setIsOpen(false)}
+  return (
+    <div className={styles.layout}>
+      <div className={styles.topButtonsLayout}>
+        <button className={styles.button({})}
+        // onClick={AddQuestion}
         >
-          Cancel
+          Upload Question
+          </button>
+        <button
+          className={styles.button({})}
+          onClick={() => generateQuestion(questionData || {}, isLoading, setQuestionData)}
+        >
+          Generate With AI
         </button>
       </div>
-    );
+      <div>
+        <div style={{color: 'black'}}>Private</div>
+        <Switch
+          onChange={() => {setQuestionData((prev) => ({...prev, private: !prev?.private}))}} defaultChecked/>
+      </div>
+      <button
+        className={styles.button({ isCancel: true })}
+        onClick={() => setIsOpen(false)}
+      >
+        Cancel
+      </button>
+    </div>
+  );
   }
 
 
