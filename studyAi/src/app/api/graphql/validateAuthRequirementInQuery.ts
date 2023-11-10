@@ -21,13 +21,14 @@ const validateVariables = (
     actualId: string | null;
     take: number | null;
   },
-  accessibleModels: string[]
+  accessibleModels: string[],
+  isQuery: boolean
 ) => {
   if (
     (accessibleModels.includes(resolverRequested) &&
       variables.public === null) ||
-    !variables.actualId ||
-    !variables.take
+    (isQuery && !variables.take) ||
+    !variables.actualId
   ) {
     canUserModify(null, null, "Improper Query");
   }
@@ -77,20 +78,22 @@ const validateAuthRequirementInQuery = ({
   };
   // Validation of the syntax and necessary clause(s) for the query
   const parsedQuery = getParsedQuery(body.query) as any;
-  const resolverRequested =
+  let resolverRequested =
     parsedQuery?.definitions[0].selectionSet.selections[0].name.value;
-  const accessibleModels = ["question", "quiz"];
-  // Validate of presence of all required variables in the query
-  validateVariables(resolverRequested, variables, accessibleModels);
-  
+    const accessibleModels = ["question", "quiz"];
+  resolverRequested = (resolverRequested.includes(accessibleModels[0])) ? accessibleModels[0] : (resolverRequested.includes(accessibleModels[1])) ? accessibleModels[1] : accessibleModels;
   const isQuery =
     parsedQuery?.definitions[0].operation.toLowerCase() === "query";
+
+  // Validate of presence of all required variables in the query
+  validateVariables(resolverRequested, variables, accessibleModels, isQuery);
+  
 
   // Validation of session for relevant models
   if (isQuery) {
     switch (resolverRequested) {
-      case "questions":
-      case "quizzes":
+      case accessibleModels[0]:
+      case accessibleModels[1]:
         if (!variables.public) {
           canUserModify(
             session,
