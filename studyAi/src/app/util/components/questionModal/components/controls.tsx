@@ -19,7 +19,7 @@ const generateQuestion = async (
         type: questionData.questionType,
         tags: questionData.tags,
         question: questionData.questionInfo?.description,
-        numberOfOptions: questionData.questionInfo?.options.length,
+        numberOfOptions: questionData.questionInfo?.options.length
       }
       const result = await axios({
         url: "/api/generateQuestion",
@@ -31,8 +31,7 @@ const generateQuestion = async (
       questionInfo: {
         title: prev?.questionInfo?.title || "",
         description: result?.data?.newQuestion?.question || "",
-        options: result?.data?.newQuestion?.options || [""],
-        answer: result?.data?.newQuestion?.correct || [""]
+        options: result?.data?.newQuestion?.options || [""]
       },
       answer: {
         correctAnswer: result?.data?.newQuestion?.correct || [""]
