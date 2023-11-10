@@ -9,8 +9,8 @@ import {
   Radio,
   RadioGroup,
 } from "@mui/material";
-import useOptionsWithId from "../hooks/useOptionsWithId";
 import { ChangeEvent, KeyboardEvent } from "react";
+import { Question } from "../../../../../../graphql/generated/graphql";
 const adjustScroll = (
   event: ChangeEvent<HTMLTextAreaElement> | KeyboardEvent<HTMLTextAreaElement>
 ) => {
@@ -39,14 +39,13 @@ const adjustScroll = (
     return (element.scrollTop = newScrollPos <= 0 ? 0 : newScrollPos);
   }
 };
-export const MultipleChoice = ({ options }: { options: string[] }) => {
-  const { currOptions } = useOptionsWithId({ options });
+export const MultipleChoice = ({ options }: { options: Question['questionInfo']['options'] }) => {
   return (
     <RadioGroup className="px-[5%] py-5 grow">
-      {currOptions.map((val, idx) => (
+      {options.map((val) => (
         <FormControlLabel
           key={val.id}
-          value={val.value + "--idx--" + idx}
+          value={val.value}
           control={<Radio />}
           label={val.value}
         />
@@ -54,14 +53,13 @@ export const MultipleChoice = ({ options }: { options: string[] }) => {
     </RadioGroup>
   );
 };
-export const SelectMultiple = ({ options }: { options: string[] }) => {
-  const { currOptions } = useOptionsWithId({ options });
+export const SelectMultiple = ({ options }: { options: Question['questionInfo']['options'] }) => {
   return (
     <FormGroup className="px-[5%] py-5 grow">
-      {currOptions.map((val, idx) => (
+      {options.map((val) => (
         <FormControlLabel
           key={val.id}
-          value={val.value + "--idx--" + idx}
+          value={val.value}
           control={<Checkbox />}
           label={val.value}
         />

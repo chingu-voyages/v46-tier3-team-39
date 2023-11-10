@@ -1,6 +1,13 @@
 import { PrismaClient } from "@prisma/client";
 import { Question } from "../../../../prisma/generated/type-graphql";
+import { ObjectId } from "bson";
 export const prismaDb = new PrismaClient();
+const createOptions = <T>(e: T[]) => {
+  return e.map((val) => ({
+    id: new ObjectId().toString(),
+    value: val,
+  }));
+};
 const questions: Omit<Question, "id" | "creatorId" | "dateCreated">[] = [
   {
     questionType: "Short Answer",
@@ -11,48 +18,53 @@ const questions: Omit<Question, "id" | "creatorId" | "dateCreated">[] = [
       options: [],
     },
     answer: {
-      correctAnswer: ["H20"],
+      correctAnswer: createOptions(["H20"]),
     },
     likeCounter: {
       likes: 1,
       dislikes: 0,
     },
-    private: false
+    private: false,
   },
   {
     questionType: "Multiple Choice",
-    tags: ['Maths', 'Technology'],
+    tags: ["Maths", "Technology"],
     questionInfo: {
-      title: 'Recursion',
-      description: 'When does recursion end?',
-      options: ['When the loop ends.', 'When the loop starts.', 'At the second iteration.']
+      title: "Recursion",
+      description: "When does recursion end?",
+      options: createOptions([
+        "When the loop ends.",
+        "When the loop starts.",
+        "At the second iteration.",
+      ]),
     },
     answer: {
-      correctAnswer: ['When we reach base case.'],
+      correctAnswer: createOptions(["When we reach base case."]),
     },
     likeCounter: {
       likes: 1,
-      dislikes: 0
+      dislikes: 0,
     },
-    private: false
+    private: false,
   },
   {
     questionType: "Checkbox",
-    tags: ['Science', 'Chemistry'],
+    tags: ["Science", "Chemistry"],
     questionInfo: {
-      title: 'Molecular Compound',
-      description: 'Which of the following elements are found in the molecular formula H2O (water)?',
-      options: ['Carbon', 'Nitrogen']
+      title: "Molecular Compound",
+      description:
+        "Which of the following elements are found in the molecular formula H2O (water)?",
+      options: createOptions(["Carbon", "Nitrogen", "Hydrogen", "Oxygen"]),
     },
     answer: {
-      correctAnswer: ['Hydrogen', 'Oxygen'],
+      correctAnswer: createOptions(["Hydrogen", "Oxygen"]),
     },
     likeCounter: {
       likes: 1,
-      dislikes: 0
+      dislikes: 0,
     },
-    private: true
-  }
+    private: true,
+  },
 ];
 
 export const allQuestions = async () => {

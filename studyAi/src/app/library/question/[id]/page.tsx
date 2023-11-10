@@ -36,7 +36,16 @@ const question: Partial<Question> & {
   questionInfo: {
     title: "Question 1",
     description: "Question 2 is the world",
-    options: ["the world", "the world", "the world", "the world"],
+    options: [
+      {
+        id: "1",
+        value: "Option 1",
+      },
+      {
+        id: "2",
+        value: "Option 1",
+      },
+    ],
   },
 };
 const QuestionQueryById = gql(`
@@ -49,7 +58,10 @@ const QuestionQueryById = gql(`
       questionInfo {
         title
         description
-        options
+        options {
+          id
+          value
+        }
       }
       likeCounter {
         likes

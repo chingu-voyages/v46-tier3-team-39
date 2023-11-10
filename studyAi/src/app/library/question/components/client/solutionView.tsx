@@ -10,7 +10,10 @@ const getAnswerById = gql(`
     question(where: { id: $id }) {
       id
       answer {
-        correctAnswer
+        correctAnswer {
+          id
+          value
+        }
       }
     }
   }
@@ -36,7 +39,9 @@ const SolutionView = () => {
   const question = questions[questionId];
   return (
     <Container overflow className="px-[5%] py-5 grow">
-      {question?.answer?.correctAnswer}
+      {question?.answer?.correctAnswer.map((e) => {
+        return( e.value )
+      })}
     </Container>
   );
 };

@@ -15,7 +15,10 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
-
+type AnswerOption {
+  id String @db.ObjectId
+  value String 
+}
 type LocationData {
   locationType String
   //latitude and longitude
@@ -32,7 +35,7 @@ type QuestionInfoData {
   title       String
   description String
   //for mc and select multiple. short answer will contain empty arr
-  options     String[]
+  options     AnswerOption[]
 }
 
 type UserQuestionData {
@@ -41,7 +44,7 @@ type UserQuestionData {
 }
 
 type AnswerData {
-  correctAnswer String[]
+  correctAnswer AnswerOption[]
 }
 
 type LikeCounter {
