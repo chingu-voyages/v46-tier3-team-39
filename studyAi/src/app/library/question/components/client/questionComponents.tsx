@@ -28,8 +28,12 @@ const EditBtn = ({
       {(props) => (
         <IconButton
           ref={props.setAnchorEl}
-          onMouseEnter={props.handleClick}
-          onMouseLeave={() => props.handleClose()}
+          onPointerEnter={(e) => {
+            if (e.pointerType === "mouse") props.handleClick(e);
+          }}
+          onPointerLeave={(e) => {
+            if (e.pointerType === "mouse") props.handleClose();
+          }}
           type="button"
           sx={btnStyles}
           className={btnClassNames + " aspect-square h-[70%]"}

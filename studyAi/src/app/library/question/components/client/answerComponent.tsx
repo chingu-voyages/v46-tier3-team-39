@@ -43,8 +43,12 @@ const FullScreenBtn = ({
       {(props) => (
         <IconButton
           ref={props.setAnchorEl}
-          onMouseEnter={props.handleClick}
-          onMouseLeave={() => props.handleClose()}
+          onPointerEnter={(e) => {
+            if (e.pointerType === "mouse") props.handleClick(e);
+          }}
+          onPointerLeave={(e) => {
+            if (e.pointerType === "mouse") props.handleClose();
+          }}
           size="small"
           sx={btnStyle}
           className={btnClassNames}
@@ -80,8 +84,12 @@ const ResetAnswerBtn = ({
       {(props) => (
         <IconButton
           ref={props.setAnchorEl}
-          onMouseEnter={props.handleClick}
-          onMouseLeave={() => props.handleClose()}
+          onPointerEnter={(e) => {
+            if (e.pointerType === "mouse") props.handleClick(e);
+          }}
+          onPointerLeave={(e) => {
+            if (e.pointerType === "mouse") props.handleClose();
+          }}
           size="small"
           sx={btnStyle}
           className={btnClassNames}

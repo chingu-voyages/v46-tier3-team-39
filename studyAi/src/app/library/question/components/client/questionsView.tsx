@@ -7,7 +7,6 @@ import {
   Menu,
   MenuProps,
   Typography,
-  setRef,
 } from "@mui/material";
 import { useQuestions } from "@/app/stores/questionStore";
 import { useParams, usePathname } from "next/navigation";
@@ -16,7 +15,7 @@ import { Share } from "@mui/icons-material";
 import { faThumbsUp, faThumbsDown } from "@fortawesome/free-regular-svg-icons";
 import { parseInteger } from "@/app/util/parsers/parseInt";
 import { Carousel } from "@/app/util/components/carousel/carousel";
-import { MouseEvent, useRef, useState } from "react";
+import { MouseEvent, useState } from "react";
 import useOrigin from "@/app/util/hooks/useOrigin";
 import {
   faFacebook,
@@ -130,8 +129,12 @@ const ShareBtn = () => {
               setAnchorEl(ref);
               props.setAnchorEl(ref);
             }}
-            onMouseEnter={props.handleClick}
-            onMouseLeave={() => props.handleClose()}
+            onPointerEnter={(e) => {
+              if (e.pointerType === "mouse") props.handleClick(e);
+            }}
+            onPointerLeave={(e) => {
+              if (e.pointerType === "mouse") props.handleClose();
+            }}
             className="h-[70%]"
             type="button"
             onClick={(e) => {
