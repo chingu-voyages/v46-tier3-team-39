@@ -110,24 +110,6 @@ const styles = {
 const uploadQuestion = async (mutationQuery: any, isLoading: string, e: any) => {
   e.preventDefault();
   if (isLoading === "loading") return;
-  // Method 1
-  // const questionQuery = {
-  //   query: AddQuestion,
-  //   variables: {
-  //       creatorId,
-  //       ...questionData,
-  //   },
-  // };
-  //   const questionPromise = client.query(questionQuery);
-  //   try {
-  //     const [questionsResult] = await Promise.all([questionPromise]);
-  //     console.log(questionsResult)
-  //     // setQuestionData((prev) => ({...prev, questionsResult}))
-  //   } catch (err: any) {
-  //     console.log(err.networkError.result);
-  //   }
-
-    // METHOD 2
     mutationQuery()
     
 }
@@ -140,29 +122,29 @@ const Controls = ({
   const label = { inputProps: { 'aria-label': 'Switch demo' } };
   const [isLoading, setIsLoading] = useState("success");
 
-  // METHOD 2
-  const session = useSession()
-  const creatorId = session?.data?.user.id;
-  const [mutationQuery, { loading, error, data }] = useMutation(
-    AddQuestion,
-    {
-      variables: {
-        creatorId,
-        likeCounter: {
-          likes: 0,
-          dislikes: 0
-        },
-        ...questionData
-      },
-    }
-  );
+  // const session = useSession()
+  // const creatorId = session?.data?.user.id;
+  // const [mutationQuery, { loading, error, data }] = useMutation(
+  //   AddQuestion,
+  //   {
+  //     variables: {
+  //       creatorId,
+  //       likeCounter: {
+  //         likes: 0,
+  //         dislikes: 0
+  //       },
+  //       ...questionData
+  //     },
+  //   }
+  // );
   console.log(questionData)
 
   return (
     <div className={styles.layout}>
       <div className={styles.topButtonsLayout}>
         <button className={styles.button({})}
-        onClick={(e) => (questionData) ? uploadQuestion(mutationQuery, isLoading, e) : null}>
+        // onClick={AddQuestion}
+        >
           Upload Question
           </button>
         <button

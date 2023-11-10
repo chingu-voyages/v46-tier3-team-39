@@ -21,6 +21,7 @@ export async function generateQuestion(req: Request) {
     const model = "gpt-3.5-turbo";
     const questionGenerated = await generatePrompts(model, prompt) || "";
     const newQuestion = JSON.parse(questionGenerated);
+    newQuestion.options = [...newQuestion.correct, ...newQuestion.incorrect];
 
     return NextResponse.json({
       newQuestion,
