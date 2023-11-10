@@ -12,7 +12,7 @@ const question: Partial<Question> & {
   id: string;
   questionType: (typeof QuestionTypes)[number];
 } = {
-  id: "6549b35d98536604d74f3b22",
+  id: "654e89ad8cd9123e2353ab1b",
   creatorId: "6533f4c7489ef223ffc31a99",
   questionType: "Short Answer",
   tags: [
@@ -114,9 +114,9 @@ export async function generateMetadata(
   const client = ServerGraphQLClient(session);
   const { data: result } = await client.query(query);
   const data = result.question as (Partial<Question> & { id: string }) | null;
-  const title =
-    `${data?.questionInfo?.title} - Study AI` ??
-    "Question title is not found - Study AI";
+  const title = data?.questionInfo?.title
+    ? `${data.questionInfo.title} - Study AI`
+    : "Question title is not found - Study AI";
   const description =
     data?.questionInfo?.description ?? "Question description is not available";
   const origin = determineOriginUrl() as string;
