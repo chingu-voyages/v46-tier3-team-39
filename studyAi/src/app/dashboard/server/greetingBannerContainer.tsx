@@ -83,11 +83,13 @@ const GreetingBannerContainer = async () => {
     ) as QuestionSubmission["id"][];
     const uniqueSubmissions = [...new Set(submissions)];
     return (
-      <GreetingBanner
-        name={userName}
-        questionCount={questions.length}
-        submissionCount={uniqueSubmissions.length}
-      />
+      <div className="flex w-full border-2 border-blue-500">
+        <GreetingBanner
+          name={userName}
+          questionCount={questions.length}
+          submissionCount={uniqueSubmissions.length}
+        />
+      </div>
     );
   } catch (err: any) {
     console.log(err.networkError.result);

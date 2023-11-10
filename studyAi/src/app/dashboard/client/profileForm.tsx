@@ -4,12 +4,15 @@ import { useMutation } from "@apollo/client";
 import { useSession } from "next-auth/react";
 import { useRef, useState } from "react";
 import { gql } from "../../../../graphql/generated";
+
+import { FaLocationDot, FaTag, FaGraduationCap } from "react-icons/fa6";
+
 const UpdateUserProfileInfo = gql(`
   mutation UpdateUserProfileInfo (
     $id: String!,
     $tags: UserUpdatetagsInput,
     $name: StringFieldUpdateOperationsInput,
-    $school: NullableStringFieldUpdateOperationsInput, 
+    $school: NullableStringFieldUpdateOperationsInput,
     $location: LocationDataNullableUpdateEnvelopeInput
   ) {
     updateOneUser(
@@ -28,7 +31,7 @@ const UpdateUserProfileInfo = gql(`
     }
   }
 `);
-const ProfileForm = async () => {
+const ProfileForm = () => {
   const session = useSession();
   const [tags, setTags] = useState(session.data ? session.data.user.tags : []);
   const [name, setName] = useState(session.data ? session.data.user.name : "");
@@ -44,8 +47,10 @@ const ProfileForm = async () => {
     session.data && session.data.user.school ? session.data.user.school : ""
   );
   const id = session.data ? session.data.user.id : "";
+  console.log('1. session: ' + JSON.stringify(session , null, 1))
+  console.log('2. session.data.user.id: ' + session?.data?.user.id)
   const [mutationQuery, { loading, error, data }] = useMutation(
-    UpdateUserProfileInfo,
+    UpdateUserProfileInfo as any,
     {
       variables: {
         id: id,
@@ -67,6 +72,7 @@ const ProfileForm = async () => {
       },
     }
   );
+  console.log(data);
   const submitted = useRef(false);
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -86,14 +92,45 @@ const ProfileForm = async () => {
     // }
   };
   return (
-    <form className="w-full">
-      {/* <UserProfile
+    <div>
+      {/* Button */}
+      <div className=" border rounded-lg border-primary-primary60 text-primary-primary60 flex w-full py-3 justify-center mb-5">
+        Edit Profile
+      </div>
+      {/* Form */}
+      <form className="w-full">
+        {/* <UserProfile
         showUserInfo
         name={session.data.user.name}
         email={session.data.user.email}
         image={session.data.user.image}
       /> */}
-    </form>
+
+        <div className="mb-5 flex flex-col">
+          {/* 1.Location */}
+          <div className="flex">
+            <div className="mr-4">
+              <FaLocationDot />
+            </div>
+            <div className="">Location</div>
+          </div>
+          {/* 2. Hat */}
+          <div className="flex">
+            <div className="mr-4">
+              <FaGraduationCap />
+            </div>
+            <div className="">School:{school}</div>
+          </div>
+          {/* 3. Tags */}
+          <div className="flex">
+            <div className="mr-4">
+              <FaTag />
+            </div>
+            <div className="">Tags</div>
+          </div>
+        </div>
+      </form>
+    </div>
   );
 };
 export default ProfileForm;
