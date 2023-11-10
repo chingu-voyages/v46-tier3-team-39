@@ -5,11 +5,7 @@ import { SetStateAction, useState } from "react";
 import { gql } from "../../../../../../graphql/generated";
 import { useSession } from "next-auth/react";
 import { useMutation } from "@apollo/client";
-import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
 import Switch from '@mui/material/Switch';
-import { colors } from "@mui/material";
-import { getServerSession } from "next-auth";
-import { options } from "@/app/api/auth/[...nextauth]/options";
 
 const generateQuestion = async (
   questionData: Partial<Question>,
@@ -35,7 +31,7 @@ const generateQuestion = async (
       questionInfo: {
         title: prev?.questionInfo?.title || "",
         description: result?.data?.newQuestion?.question || "",
-        options: result?.data?.newQuestion?.incorrect || [""]
+        options: result?.data?.newQuestion?.options || [""]
       },
       answer: {
         correctAnswer: result?.data?.newQuestion?.correct || [""]
@@ -111,21 +107,11 @@ const styles = {
     ].join(" "),
 };
 
-const uploadQuestion = async (creatorId: string, questionData: Partial<Question>) => {
-
-    const [mutationQuery, { loading, error, data }] = useMutation(
-      AddQuestion,
-      {
-        variables: {
-          creatorId,
-          likeCounter: {
-            likes: 0,
-            dislikes: 0
-          },
-          ...questionData,
-        },
-      }
-    );
+const uploadQuestion = async (mutationQuery: any, isLoading: string, e: any) => {
+  e.preventDefault();
+  if (isLoading === "loading") return;
+    mutationQuery()
+    
 }
 
 const Controls = ({
@@ -136,44 +122,22 @@ const Controls = ({
   const label = { inputProps: { 'aria-label': 'Switch demo' } };
   const [isLoading, setIsLoading] = useState("success");
 
-
-  // METHOD 2
-  /* const session = useSession()
-  const creatorId = session?.data?.user.id;
-  const [mutationQuery, { loading, error, data }] = useMutation(
-    AddQuestion,
-    {
-      variables: {
-        creatorId,
-        likeCounter: {
-          likes: 0,
-          dislikes: 0
-        },
-        ...questionData
-        // questionType: "checkbox",
-        // tags: ["maths"],
-        // questionInfo: {
-        //   title: "Maths",
-        //   descriptin: "What is 1+1?",
-        //   options: ["5"]
-        // },
-        // answer: {
-        //   correctAnswer: ["2"]
-        // },
-        // private: false
-      },
-    }
-  ); */
-
-  const uploadClickHandler = () => {
-    /* e.preventDefault();
-    if (!questionData) return;
-    if (isLoading === "loading") return;
-    mutationQuery();
-    await uploadQuestion(creatorId || "", questionData); */
-    
-    console.log(questionData)
-  }
+  // const session = useSession()
+  // const creatorId = session?.data?.user.id;
+  // const [mutationQuery, { loading, error, data }] = useMutation(
+  //   AddQuestion,
+  //   {
+  //     variables: {
+  //       creatorId,
+  //       likeCounter: {
+  //         likes: 0,
+  //         dislikes: 0
+  //       },
+  //       ...questionData
+  //     },
+  //   }
+  // );
+  console.log(questionData)
 
     return (
       <div className={styles.layout}>
