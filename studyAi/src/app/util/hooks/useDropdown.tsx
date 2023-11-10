@@ -1,4 +1,3 @@
-import { PopoverVirtualElement } from "@mui/material";
 import { MouseEvent, useState } from "react";
 import { unstable_batchedUpdates } from "react-dom";
 const useDropdown = () => {
@@ -21,7 +20,6 @@ const useDropdown = () => {
   };
 
   const handleClose = () => {
-    // setAnchorEl(null);
     setIsOpen(false);
   };
   return {

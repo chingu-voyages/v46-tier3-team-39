@@ -27,6 +27,7 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import { faCheck, faLink } from "@fortawesome/free-solid-svg-icons";
 import useDropdown from "@/app/util/hooks/useDropdown";
+import BtnLabelDropdown from "@/app/util/components/btnLabelDropdown/btnLabelDropdown";
 const platformsToShare = [
   {
     platform: "link",
@@ -122,20 +123,29 @@ const ShareBtn = () => {
   };
   return (
     <>
-      <IconButton
-        ref={setAnchorEl}
-        className="h-[70%]"
-        type="button"
-        onClick={(e) => {
-          handleClick(e);
-        }}
-      >
-        <Share className="text-lg" />
-      </IconButton>
+      <BtnLabelDropdown text="Share" pointerEvents={false}>
+        {(props) => (
+          <IconButton
+            ref={(ref) => {
+              setAnchorEl(ref);
+              props.setAnchorEl(ref);
+            }}
+            onMouseEnter={props.handleClick}
+            onMouseLeave={() => props.handleClose()}
+            className="h-[70%]"
+            type="button"
+            onClick={(e) => {
+              handleClick(e);
+            }}
+          >
+            <Share className="text-lg" />
+          </IconButton>
+        )}
+      </BtnLabelDropdown>
       <Menu {...shareMenuProps} open={copied}>
-        <div className="flex px-3 py-2 justify-center items-center space-x-2">
-          <FontAwesomeIcon icon={faCheck} />{" "}
-          <Typography className="text-sm">Link Copied!</Typography>
+        <div className="flex px-3 py-1 justify-center items-center space-x-2">
+          <FontAwesomeIcon icon={faCheck} className="text-xs" />{" "}
+          <Typography className="text-xs">Link Copied!</Typography>
         </div>
       </Menu>
       <Menu
@@ -153,7 +163,7 @@ const ShareBtn = () => {
                 ? (e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => {
                     onShareClick(e);
                     setCopied(true);
-                    setTimeout(() => setCopied(false), 3000);
+                    setTimeout(() => setCopied(false), 5000);
                   }
                 : onShareClick;
             return (

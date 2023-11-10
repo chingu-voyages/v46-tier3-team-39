@@ -12,6 +12,8 @@ import {
 import { QuestionTypes } from "@/app/util/types/UserData";
 import { AnswerType } from "./answerInputs";
 import { useFullscreen } from "@/app/util/providers/FullscreenProvider";
+import React from "react";
+import BtnLabelDropdown from "@/app/util/components/btnLabelDropdown/btnLabelDropdown";
 const determineAnswerTitle = (str?: string) => {
   const matchStr = str as (typeof QuestionTypes)[number];
   switch (matchStr) {
@@ -25,34 +27,24 @@ const determineAnswerTitle = (str?: string) => {
       return str;
   }
 };
-const TopBar = () => {
-  const params = useParams();
-  const questions = useQuestions()[0].data;
+const FullScreenBtn = ({
+  btnClassNames,
+  btnStyle,
+}: {
+  btnClassNames?: string;
+  btnStyle?: React.CSSProperties;
+}) => {
   const { isFullscreen, toggleFullscreen } = useFullscreen();
-  const question =
-    params.id && typeof params.id === "string" ? questions[params.id] : null;
-  const btnClassNames = "flex items-center justify-center h-[70%]";
-  const btnStyle = {
-    minHeight: "unset",
-    padding: 0,
-    aspectRatio: 1,
-  };
-
   return (
-    <ContainerBar border>
-      <h3 className="flex items-center h-full text-sm">
-        {determineAnswerTitle(question?.questionType)}
-      </h3>
-      <div className="flex items-center h-full grow justify-end">
+    <BtnLabelDropdown
+      text={`Fullscreen ${isFullscreen ? "Off" : "On"}`}
+      pointerEvents={false}
+    >
+      {(props) => (
         <IconButton
-          size="small"
-          sx={btnStyle}
-          className={btnClassNames}
-          type="button"
-        >
-          <FontAwesomeIcon icon={faRefresh} className="text-base" />
-        </IconButton>
-        <IconButton
+          ref={props.setAnchorEl}
+          onMouseEnter={props.handleClick}
+          onMouseLeave={() => props.handleClose()}
           size="small"
           sx={btnStyle}
           className={btnClassNames}
@@ -72,6 +64,55 @@ const TopBar = () => {
             />
           )}
         </IconButton>
+      )}
+    </BtnLabelDropdown>
+  );
+};
+const ResetAnswerBtn = ({
+  btnClassNames,
+  btnStyle,
+}: {
+  btnClassNames?: string;
+  btnStyle?: React.CSSProperties;
+}) => {
+  return (
+    <BtnLabelDropdown text="Reset" pointerEvents={false}>
+      {(props) => (
+        <IconButton
+          ref={props.setAnchorEl}
+          onMouseEnter={props.handleClick}
+          onMouseLeave={() => props.handleClose()}
+          size="small"
+          sx={btnStyle}
+          className={btnClassNames}
+          type="button"
+        >
+          <FontAwesomeIcon icon={faRefresh} className="text-base" />
+        </IconButton>
+      )}
+    </BtnLabelDropdown>
+  );
+};
+const TopBar = () => {
+  const params = useParams();
+  const questions = useQuestions()[0].data;
+  const question =
+    params.id && typeof params.id === "string" ? questions[params.id] : null;
+  const btnClassNames = "flex items-center justify-center h-[70%]";
+  const btnStyle: React.CSSProperties = {
+    minHeight: "unset",
+    padding: 0,
+    aspectRatio: 1,
+  };
+
+  return (
+    <ContainerBar border>
+      <h3 className="flex items-center h-full text-sm">
+        {determineAnswerTitle(question?.questionType)}
+      </h3>
+      <div className="flex items-center h-full grow justify-end">
+        <ResetAnswerBtn btnClassNames={btnClassNames} btnStyle={btnStyle} />
+        <FullScreenBtn btnClassNames={btnClassNames} btnStyle={btnStyle} />
       </div>
     </ContainerBar>
   );

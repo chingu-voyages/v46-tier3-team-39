@@ -2,12 +2,45 @@
 import ContainerBar, { Container } from "../server/containerBar";
 import capitalizeEveryWord from "@/app/util/parsers/capitalizeEveryWord";
 import EditIcon from "@mui/icons-material/Edit";
-import { IconButton, Tab, Tabs } from "@mui/material";
+import {
+  IconButton,
+  Menu,
+  MenuProps,
+  Tab,
+  Tabs,
+  Typography,
+} from "@mui/material";
 import React, { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useQuestions } from "@/app/stores/questionStore";
 import { useParams } from "next/navigation";
 import { containerTabs, InnerContainer } from "../server/questionComponents";
+import BtnLabelDropdown from "@/app/util/components/btnLabelDropdown/btnLabelDropdown";
+const EditBtn = ({
+  btnStyles,
+  btnClassNames,
+}: {
+  btnStyles: React.CSSProperties;
+  btnClassNames: string;
+}) => {
+  return (
+    <BtnLabelDropdown text="Edit Question" pointerEvents={false}>
+      {(props) => (
+        <IconButton
+          ref={props.setAnchorEl}
+          onMouseEnter={props.handleClick}
+          onMouseLeave={() => props.handleClose()}
+          type="button"
+          sx={btnStyles}
+          className={btnClassNames + " aspect-square h-[70%]"}
+        >
+          <EditIcon className="text-base" />
+        </IconButton>
+      )}
+    </BtnLabelDropdown>
+  );
+};
+
 const TopBar = ({
   view,
   handleChange,
@@ -23,7 +56,7 @@ const TopBar = ({
   const questions = useQuestions()[0].data;
   const question =
     params.id && typeof params.id === "string" ? questions[params.id] : null;
-  const btnStyles = {
+  const btnStyles: React.CSSProperties = {
     textTransform: "none",
     padding: 0,
     margin: 0,
@@ -55,13 +88,7 @@ const TopBar = ({
       {session.data &&
         question &&
         session.data.user.id === question.creatorId && (
-          <IconButton
-            type="button"
-            sx={btnStyles}
-            className={btnClassNames + " aspect-square h-[70%]"}
-          >
-            <EditIcon className="text-base" />
-          </IconButton>
+          <EditBtn btnClassNames={btnClassNames} btnStyles={btnStyles} />
         )}
     </ContainerBar>
   );
