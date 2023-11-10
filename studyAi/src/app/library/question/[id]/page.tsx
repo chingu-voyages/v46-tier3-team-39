@@ -6,6 +6,8 @@ import { QuestionTypes } from "@/app/util/types/UserData";
 import { gql } from "../../../../../graphql/generated";
 import { getServerSession } from "next-auth";
 import { options } from "@/app/api/auth/[...nextauth]/options";
+import { Metadata, ResolvingMetadata } from "next";
+import determineOriginUrl from "@/app/util/parsers/determineOriginUrl";
 const question: Partial<Question> & {
   id: string;
   questionType: (typeof QuestionTypes)[number];
@@ -74,13 +76,54 @@ export default async function QuestionPage({
     // console.log(data)
     const data = question;
     return (
-        <QuestionsContainer initialItems={data ? [data] : []}>
-          <QuestionPageContainer />
-        </QuestionsContainer>
-
+      <QuestionsContainer initialItems={data ? [data] : []}>
+        <QuestionPageContainer />
+      </QuestionsContainer>
     );
   } catch (err) {
     console.log(err);
     return <></>;
   }
+}
+type Props = {
+  params: { id: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const questionId = params.id;
+  const query = {
+    query: QuestionQueryById,
+    variables: { id: questionId },
+  };
+  const session = await getServerSession(options);
+  const client = ServerGraphQLClient(session);
+  const { data: result } = await client.query(query);
+  const data = result.question as (Partial<Question> & { id: string }) | null;
+  const title =
+    `${data?.questionInfo?.title} - Study AI` ??
+    "Question title is not found - Study AI";
+  const description =
+    data?.questionInfo?.description ?? "Question description is not available";
+  const origin = determineOriginUrl() as string;
+  return {
+    title,
+    description,
+    metadataBase: new URL(origin),
+    openGraph: {
+      title,
+      description,
+      locale: "en_US",
+      type: "website",
+      siteName: "Study AI",
+      url: origin,
+      images: [
+        
+      ]
+    },
+    // 'og:title': data?.questionInfo?.title ?? "Question",
+    // 'og:description': data?.questionInfo?.description ?? "Question",
+  };
 }

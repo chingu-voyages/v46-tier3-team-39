@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { NavigationBtns, PaginationOptions } from "./navigationBtns";
-import { QuestionWrapper } from "./questionWrapper";
+import { QuestionWrapper } from "../server/questionWrapper";
 import { TimeComponent } from "./timeModal";
 import NavigationWrapper from "@/app/util/components/navigation/navigationWrapper";
 import FullscreenProvider, {
