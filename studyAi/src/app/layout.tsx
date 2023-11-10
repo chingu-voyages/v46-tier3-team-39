@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import AuthProvider from "./util/providers/AuthContext";
 import GraphQLProvider from "./util/providers/apolloProvider";
 import { IsClientCtxProvider } from "./util/providers/isClientProvider";
-import Head from "next/head";
 
 export const metadata: Metadata = {
   title: "StudyAI",

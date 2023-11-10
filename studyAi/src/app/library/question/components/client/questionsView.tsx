@@ -1,6 +1,14 @@
 "use client";
 import { Container } from "../server/containerBar";
-import { Button, Chip, IconButton, Menu } from "@mui/material";
+import {
+  Button,
+  Chip,
+  IconButton,
+  Menu,
+  MenuProps,
+  Typography,
+  setRef,
+} from "@mui/material";
 import { useQuestions } from "@/app/stores/questionStore";
 import { useParams, usePathname } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -17,9 +25,8 @@ import {
   faTwitter,
   faWhatsapp,
 } from "@fortawesome/free-brands-svg-icons";
-import { faLink } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faLink } from "@fortawesome/free-solid-svg-icons";
 import useDropdown from "@/app/util/hooks/useDropdown";
-import useElementPosition from "@/app/util/hooks/useElementSize";
 const platformsToShare = [
   {
     platform: "link",
@@ -64,7 +71,13 @@ const determineShareUrl = (url: string, platform?: string) => {
 const ShareBtn = () => {
   const origin = useOrigin();
   const pathName = usePathname();
-  const { anchorEl: shareBtnEl, handleClick, handleClose } = useDropdown();
+  const {
+    anchorEl: shareBtnEl,
+    setAnchorEl,
+    handleClick,
+    handleClose,
+    open,
+  } = useDropdown();
   const [copied, setCopied] = useState(false);
   const fullUrl = origin + pathName;
   const onShareClick = (
@@ -76,14 +89,41 @@ const ShareBtn = () => {
     const platform = dataset["platformId"];
     // Get the URL of the current page
     const shareUrl = determineShareUrl(fullUrl, platform);
-    console.log(shareUrl)
     if (platform !== "link") window.open(shareUrl, "_blank");
     //when user wants to only copy url/link
     else navigator.clipboard.writeText(shareUrl).then(() => setCopied(true));
+    handleClose();
+  };
+  const shareMenuProps: Omit<MenuProps, "open"> = {
+    anchorEl: shareBtnEl,
+    onClose: () => {
+      setCopied(false);
+      handleClose();
+    },
+    anchorOrigin: {
+      horizontal: "center",
+      vertical: "bottom",
+    },
+    transformOrigin: {
+      vertical: "top",
+      horizontal: "center",
+    },
+    MenuListProps: {
+      disablePadding: true,
+    },
+    slotProps: {
+      paper: {
+        sx: { minHeight: "unset" },
+      },
+    },
+    sx: {
+      minHeight: "unset",
+    },
   };
   return (
     <>
       <IconButton
+        ref={setAnchorEl}
         className="h-[70%]"
         type="button"
         onClick={(e) => {
@@ -92,44 +132,43 @@ const ShareBtn = () => {
       >
         <Share className="text-lg" />
       </IconButton>
+      <Menu {...shareMenuProps} open={copied}>
+        <div className="flex px-3 py-2 justify-center items-center space-x-2">
+          <FontAwesomeIcon icon={faCheck} />{" "}
+          <Typography className="text-sm">Link Copied!</Typography>
+        </div>
+      </Menu>
       <Menu
-        anchorEl={shareBtnEl}
-        open={Boolean(shareBtnEl)}
-        onClose={() => handleClose()}
-        anchorOrigin={{
-          horizontal: "center",
-          vertical: "bottom",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "center",
-        }}
+        {...shareMenuProps}
+        open={open}
         MenuListProps={{
           className: "w-36 sm:w-auto",
           disablePadding: true,
         }}
-        slotProps={{
-          paper: {
-            sx: { minHeight: "unset" },
-          },
-        }}
-        sx={{
-          minHeight: "unset",
-        }}
       >
-        <div className="flex flex-wrap justify-center px-4 py-0">
-          {platformsToShare.map((platform) => (
-            <IconButton
-              className="h-[50%] text-lg aspect-square my-2"
-              type="button"
-              key={platform.platform}
-              onClick={onShareClick}
-              aria-label={`Share on ${platform.platform}`}
-              data-platform-id={platform.platform }
-            >
-              {platform.icon}
-            </IconButton>
-          ))}
+        <div className="flex flex-wrap justify-center px-2 py-0">
+          {platformsToShare.map((platform) => {
+            const onClick =
+              platform.platform === "link"
+                ? (e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => {
+                    onShareClick(e);
+                    setCopied(true);
+                    setTimeout(() => setCopied(false), 3000);
+                  }
+                : onShareClick;
+            return (
+              <IconButton
+                className="w-8 h-8 text-lg my-2"
+                type="button"
+                key={platform.platform}
+                onClick={onClick}
+                aria-label={`Share on ${platform.platform}`}
+                data-platform-id={platform.platform}
+              >
+                {platform.icon}
+              </IconButton>
+            );
+          })}
         </div>
       </Menu>
     </>

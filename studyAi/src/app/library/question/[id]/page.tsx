@@ -120,10 +120,12 @@ export async function generateMetadata(
       siteName: "Study AI",
       url: origin,
       images: [
-        
+        {
+          url: '/logo/logo.png',
+          width: 800,
+          height: 800,
+        }
       ]
     },
-    // 'og:title': data?.questionInfo?.title ?? "Question",
-    // 'og:description': data?.questionInfo?.description ?? "Question",
   };
 }
