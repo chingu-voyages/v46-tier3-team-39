@@ -42,7 +42,7 @@ const generateQuestion = async (
   }
 }
 
-const AddQuestion = gql(`
+const AddQuestion: any = gql(`
   mutation CreateOneQuestionResolver(
     $creatorId: String,
     $questionType: String,
@@ -137,18 +137,17 @@ const Controls = ({
   //     },
   //   }
   // );
-  console.log(questionData)
 
     return (
       <div className={styles.layout}>
         <div className={styles.topButtonsLayout}>
           <button className={styles.button({})}
-          onClick={uploadClickHandler}>
+            onClick={() => console.log(questionData)}>
             Upload Question
-            </button>
+          </button>
           <button
             className={styles.button({})}
-            onClick={() => generateQuestion(questionData || {}, isLoading, setQuestionData)}
+            onClick={() => generateQuestion(questionData, isLoading, setQuestionData)}
           >
             Generate With AI
           </button>
