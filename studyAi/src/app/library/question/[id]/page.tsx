@@ -12,7 +12,7 @@ const question: Partial<Question> & {
   id: string;
   questionType: (typeof QuestionTypes)[number];
 } = {
-  id: "654e89ad8cd9123e2353ab1b",
+  id: "6533f4c8489ef223ffc31a9b",
   creatorId: "6533f4c7489ef223ffc31a99",
   questionType: "Short Answer",
   tags: [
@@ -93,7 +93,7 @@ export default async function QuestionPage({
       </QuestionsContainer>
     );
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return <></>;
   }
 }
