@@ -4,7 +4,7 @@ import { Session } from "next-auth";
 import { GraphQLError, parse } from "graphql";
 
 const getParsedQuery = (queryString: string) => {
-  !queryString.includes("where")
+  (queryString.includes("query") && !queryString.includes("where"))
     ? canUserModify(null, null, "Improper Query")
     : null;
   try {
@@ -69,25 +69,23 @@ const validateAuthRequirementInQuery = ({
 }) => {
   const variables: {
     actualId: string | null;
-    public: boolean | null;
+    public: boolean;
     take: number | null;
   } = {
     actualId: body.variables.creatorId || body.variables.userId || null,
-    public: !body.variables.private || null,
+    public: !body.variables.private,
     take: body.variables.take || null
   };
   // Validation of the syntax and necessary clause(s) for the query
-  const parsedQuery = getParsedQuery(body.query) as any;
-  let resolverRequested =
-    parsedQuery?.definitions[0].selectionSet.selections[0].name.value;
+  const parsedQuery: any = getParsedQuery(body.query);
+  let resolverRequested: string =
+    parsedQuery?.definitions[0].selectionSet.selections[0].name.value.toLowerCase();
     const accessibleModels = ["question", "quiz"];
-  resolverRequested = (resolverRequested.includes(accessibleModels[0])) ? accessibleModels[0] : (resolverRequested.includes(accessibleModels[1])) ? accessibleModels[1] : accessibleModels;
+  resolverRequested = (resolverRequested.includes(accessibleModels[0])) ? accessibleModels[0] : (resolverRequested.includes(accessibleModels[1])) ? accessibleModels[1] : resolverRequested;
   const isQuery =
     parsedQuery?.definitions[0].operation.toLowerCase() === "query";
-
   // Validate of presence of all required variables in the query
   validateVariables(resolverRequested, variables, accessibleModels, isQuery);
-  
 
   // Validation of session for relevant models
   if (isQuery) {
