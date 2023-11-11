@@ -101,7 +101,7 @@ const styles = {
     ].join(" "),
 };
 
-const uploadQuestion = async (
+const uploadQuestion = (
   mutationQuery: any,
   isLoading: string,
   e: any
@@ -118,51 +118,52 @@ const Controls = ({
 }: QuestionProps) => {
   const label = { inputProps: { "aria-label": "Switch demo" } };
   const [isLoading, setIsLoading] = useState("success");
-
   const session = useSession();
   const creatorId = session?.data?.user.id;
-  const [mutationQuery, { loading, error, data }] = useMutation(AddQuestion, {
-    variables: {
-      questionType: questionData?.questionType
-        ? questionData.questionType
-        : "Short Answer",
-      tags: {
-        set: questionData?.tags ? questionData.tags : [],
-      },
-      questionInfo: {
-        set: questionData?.questionInfo
-          ? {
-              ...questionData.questionInfo,
-            }
-          : {
-              title: "",
-              description: "",
-              options: [],
-            },
-      },
-      creatorId: creatorId ? creatorId : "",
-      likeCounter: {
-        set: {
-          likes: 0,
-          dislikes: 0,
-        },
-      },
-      answer: {
-        set: {
-          correctAnswer: questionData?.answer?.correctAnswer
-            ? questionData?.answer?.correctAnswer
-            : [],
-        },
-      },
-      private: !!questionData?.private,
+  const variables = {
+    questionType: questionData?.questionType
+      ? questionData.questionType
+      : "Short Answer",
+    tags: {
+      set: questionData?.tags ? questionData.tags : [],
     },
+    questionInfo: {
+      set: questionData?.questionInfo
+        ? {
+            ...questionData.questionInfo,
+          }
+        : {
+            title: "",
+            description: "",
+            options: [],
+          },
+    },
+    creatorId: creatorId ? creatorId : "",
+    likeCounter: {
+      set: {
+        likes: 0,
+        dislikes: 0,
+      },
+    },
+    answer: {
+      set: {
+        correctAnswer: questionData?.answer?.correctAnswer
+          ? questionData?.answer?.correctAnswer
+          : [],
+      },
+    },
+    private: !!questionData?.private
+  }
+  const [mutationQuery, { loading, error, data }] = useMutation(AddQuestion, {
+    variables
   });
+
   return (
     <div className={styles.layout}>
       <div className={styles.topButtonsLayout}>
         <button
           className={styles.button({})}
-          // onClick={AddQuestion}
+          onClick={(e) => uploadQuestion(mutationQuery, isLoading, e)}
         >
           Upload Question
         </button>
