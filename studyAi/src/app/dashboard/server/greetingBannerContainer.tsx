@@ -92,7 +92,7 @@ const GreetingBannerContainer = async () => {
       </div>
     );
   } catch (err: any) {
-    console.log(err.networkError.result);
+    console.log(err.networkError?.result);
     return <></>;
   }
 };

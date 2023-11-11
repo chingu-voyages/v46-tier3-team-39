@@ -8,6 +8,7 @@ import { LogoutBtn } from "./authentication";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown, faChartLine } from "@fortawesome/free-solid-svg-icons";
 import { faFileLines, faUserCircle } from "@fortawesome/free-regular-svg-icons";
+import TextField from "@mui/material/TextField";
 import NextLink from "next/link";
 import { useSession } from "next-auth/react";
 const userItemLinks = (userId?: string) => [
@@ -28,14 +29,33 @@ const userItemLinks = (userId?: string) => [
   // },
 ];
 export const UserProfile = ({
-  showUserInfo = false,
+  setFormData,
+  isEditable,
   name,
   email,
   image,
+  showUserInfo = false,
 }: {
+  setFormData?: any;
+  isEditable?: boolean;
   showUserInfo?: boolean;
 } & Partial<UserInfo>) => {
   const { setRef, position: infoPos } = useElementPosition();
+
+  const changeName = (e: any) => {
+    name = e.target.value
+    if (setFormData) {
+      setFormData((prevFormData: any) => ({...prevFormData, name: name}))
+    }
+  }
+
+  const nameElement = isEditable
+    ? (<TextField variant="outlined" defaultValue={name}
+    onChange={changeName}/>)
+    : (<span className="text-Black font-bold tracking-tight text-lg">
+          { name}
+      </span>)
+
   return (
     <div className="flex items-center h-full">
       <Avatar
@@ -52,11 +72,7 @@ export const UserProfile = ({
       </Avatar>
       {showUserInfo && (
         <div ref={setRef} className="flex flex-col w-full ml-4 py-1 space-y-0">
-          {name && (
-            <span className="text-Black font-bold tracking-tight text-lg">
-              { name}
-            </span>
-          )}
+          {name && nameElement}
           <span className="text-Black font-regular tracking-tight text-xs">
             {email}
           </span>

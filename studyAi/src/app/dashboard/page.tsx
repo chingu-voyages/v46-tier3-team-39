@@ -25,7 +25,6 @@ export default async function DashboardPage() {
         <div className="col-span-1 border p-5 m-5">
           {/* 1 */}
           <Profile />
-          
         </div>
         <div className="col-span-2 ">
           <div className="grid grid-rows-2 ">
