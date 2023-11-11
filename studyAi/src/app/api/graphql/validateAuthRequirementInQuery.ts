@@ -27,7 +27,7 @@ const validateVariables = (
   if (
     (accessibleModels.includes(resolverRequested) &&
       variables.public === null) ||
-    (isQuery && !variables.take) ||
+    (isQuery && variables.take == null) ||
     !variables.actualId
   ) {
     canUserModify(null, null, "Improper Query");
