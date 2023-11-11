@@ -4,7 +4,10 @@ import { Session } from "next-auth";
 import { GraphQLError, parse } from "graphql";
 
 const getParsedQuery = (queryString: string) => {
-  queryString.includes("query") && !queryString.includes("where")
+  (queryString.toLowerCase().includes("query") ||
+    queryString.toLowerCase().includes("update") ||
+    queryString.toLowerCase().includes("delete")) &&
+  !queryString.includes("where")
     ? canUserModify(null, null, "Need to include the where clause")
     : null;
   try {
