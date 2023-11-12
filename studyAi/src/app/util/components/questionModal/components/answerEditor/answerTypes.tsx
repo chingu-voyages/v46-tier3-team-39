@@ -12,14 +12,12 @@ import { v4 as uuid } from "uuid";
 export const MultipleChoice = ({questionData, setQuestionData} : Pick<QuestionProps, "questionData" | "setQuestionData">) => {
     const options = questionData.questionInfo?.options as AnswerOption[];
     const answer = questionData.answer?.correctAnswer;
-    const [radioValue, setRadioValue] = answer && answer[0] ? useState(answer[0].id) : useState("");
     const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setRadioValue((e.target as HTMLInputElement).value);
         setQuestionData({...questionData, answer: {correctAnswer: [options[Number((e.target as HTMLInputElement).value)]]}})
     }
 
     return (
-        <RadioGroup className="mt-2" defaultValue="outlined" name="radio-buttons-group" value={radioValue} onChange={handleRadioChange}>
+        <RadioGroup className="mt-2" defaultValue="outlined" name="radio-buttons-group" value={questionData.answer?.correctAnswer[0]?.id} onChange={handleRadioChange}>
             {options.map((_option, index) => {
                 const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
                     const newOptions = options.slice(0, index).concat({id: options[index].id, value: event.target.value}).concat(options.slice(index+1)) 

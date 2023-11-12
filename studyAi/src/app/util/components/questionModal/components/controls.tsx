@@ -1,4 +1,4 @@
-import { Question } from "../../../../../../prisma/generated/type-graphql";
+import { AnswerOption, Question } from "../../../../../../prisma/generated/type-graphql";
 import axios from "axios";
 import { QuestionProps } from "../questionEditModal";
 import { SetStateAction, useState } from "react";
@@ -6,6 +6,7 @@ import { gql } from "../../../../../../graphql/generated";
 import { useSession } from "next-auth/react";
 import { useMutation } from "@apollo/client";
 import Switch from "@mui/material/Switch";
+import {v4 as uuid} from "uuid"
 
 const generateQuestion = async (
   questionData: Partial<Question>,
@@ -18,23 +19,33 @@ const generateQuestion = async (
     const questionProvided = {
       type: questionData.questionType,
       tags: questionData.tags,
+      title: [questionData.questionInfo?.title],
       question: questionData.questionInfo?.description,
       numberOfOptions: questionData.questionInfo?.options.length,
+      answers: questionData.questionInfo?.options
     };
     const result = await axios({
       url: "/api/generateQuestion",
       method: "POST",
       data: questionProvided,
     });
+    let newAnswers: AnswerOption[] = [];
+    const newOptions = result?.data?.newQuestion?.options.map((option: string) => {
+      const newOption = {id: uuid(), value: option}
+      if (result?.data?.newQuestion?.answer.includes(option)) {
+        newAnswers.push(newOption)
+      }
+      return newOption
+    })
     setQuestionData((prev) => ({
       ...prev,
       questionInfo: {
         title: prev?.questionInfo?.title || "",
-        description: result?.data?.newQuestion?.question || "",
-        options: result?.data?.newQuestion?.options || [],
+        description: result?.data?.newQuestion?.description || "",
+        options: newOptions || [],
       },
       answer: {
-        correctAnswer: result?.data?.newQuestion?.correct || [],
+        correctAnswer: newAnswers || [],
       },
     }));
   } catch (err) {
