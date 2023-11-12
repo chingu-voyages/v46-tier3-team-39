@@ -77,8 +77,8 @@ const ProfileForm = (
   //     console.log(err);
   //   }
   // };
-  console.log('location', location)
-  console.log('tags', tags)
+  // console.log('location', location)
+  // console.log('tags', tags)
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -101,7 +101,7 @@ const ProfileForm = (
             location: {
               set: {
                 locationType: formData?.location.locationType || location.locationType,
-                coordinates: { push: formData?.location.coordinates || location.coordinates},
+                coordinates: { set: formData?.location.coordinates || location.coordinates},
                 locationName: formData?.locationName || location.locationName,
               },
             },
@@ -134,13 +134,23 @@ const ProfileForm = (
     onChange={changeForm} />)
   : (<div>{school? school : 'NA'}</div>)
 
+  const removeTag = (e: any) => {
+    const { name } = e.target;
+    if (setFormData) {
+      setFormData((prevFormData: any) => (
+        {...prevFormData,
+          tags: formData.tags?.filter((tag: any) => tag !== name)}
+      ))
+    }
+  }
+
   const tagsEditElement =
     <div className="flex flex-col gap-1">
       <div>Dropdown</div>
-      {tags?.map((tag: any, index: number) => (
+      {formData.tags?.map((tag: any, index: number) => (
           <div key={index} className="text-sm border rounded-full px-2 py-[0.2rem] flex flex-row gap-1 flex-wrap">
             <span>{tag}</span>
-            <button><RxCross2 /></button>
+            <button name={tag} onClick={removeTag}><RxCross2 /></button>
           </div>
       ))}
   </div>
