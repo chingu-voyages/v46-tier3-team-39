@@ -24,7 +24,7 @@ const UpdateUserProfileInfo = gql(`
         name: $name,
         school: $school
         location: $location
-      }
+      },
     )
     {
       tags
@@ -123,19 +123,21 @@ const ProfileForm = (
   }
 
   const locationElement = isEditable
-  ? (<TextField name="location" variant="outlined"
+  ? (<TextField size="small" name="location" variant="outlined"
     defaultValue={location.locationName}
-    onChange={changeForm} />)
+    onChange={changeForm}/>)
   : (<div>{location.locationName? location.locationName : 'NA'}</div>)
 
   const schoolElement = isEditable
-  ? (<TextField name="school" variant="outlined"
+  ? (<TextField size="small" name="school" variant="outlined"
     defaultValue={school}
     onChange={changeForm} />)
   : (<div>{school? school : 'NA'}</div>)
 
   const removeTag = (e: any) => {
-    const { name } = e.target;
+    e.preventDefault();
+    const { name } = e.currentTarget;
+    console.log('remove tag', name);
     if (setFormData) {
       setFormData((prevFormData: any) => (
         {...prevFormData,
@@ -145,7 +147,7 @@ const ProfileForm = (
   }
 
   const tagsEditElement =
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-1 w-full">
       <div>Dropdown</div>
       {formData.tags?.map((tag: any, index: number) => (
           <div key={index} className="text-sm border rounded-full px-2 py-[0.2rem] flex flex-row gap-1 flex-wrap">
@@ -172,27 +174,29 @@ const ProfileForm = (
 
       {/* Form */}
       <form className="w-full" onSubmit={handleSubmit}>
-        <div className="mb-5 flex flex-col">
+        <div className="mb-5 flex flex-col gap-2">
           {/* 1.Location */}
-          <div className="flex">
-            <div className="mr-4">
+          <div className="flex items-center">
+            <div className="mr-2">
               <FaLocationDot />
             </div>
-            <div className="flex flex-row gap-1"><span>Location: </span>{locationElement}</div>
+            <div className="flex flex-row gap-1 items-center">
+              <span>Location: </span>
+              {locationElement}</div>
           </div>
           {/* 2. Hat */}
-          <div className="flex">
-            <div className="mr-4">
+          <div className="flex items-center">
+            <div className="mr-2">
               <FaGraduationCap />
             </div>
-            <div className="flex flex-row gap-1"><span>School: </span>{schoolElement}</div>
+            <div className="flex flex-row gap-1 items-center"><span>School: </span>{schoolElement}</div>
           </div>
           {/* 3. Tags */}
-          <div className="flex">
-            <div className="mr-4">
+          <div className="flex w-full gap-1">
+            <div className="mr-2">
               <FaTag />
             </div>
-            <div className="flex flex-row items-center gap-2">
+            <div className="flex flex-row items-center gap- w-full">
               <span className="self-start">Tags: </span>
               {tagsElement}</div>
           </div>

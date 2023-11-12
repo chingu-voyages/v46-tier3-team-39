@@ -3,7 +3,6 @@ import { protectRouteSSR } from "../api/utils/sessionFuncs";
 import NavigationWrapper from "../util/components/navigation/navigationWrapper";
 import GreetingBannerContainer from "./server/greetingBannerContainer";
 import Profile from "./server/profile";
-import Blah from "./blah";
 
 import { BsStars } from "react-icons/bs";
 import { FaFileCircleQuestion } from "react-icons/fa6"
@@ -21,20 +20,20 @@ export default async function DashboardPage() {
     >
       {/* <Blah /> */}
       {/* <QuestionEditor /> */}
-      <div className="grid grid-cols-3 border p-5 m-5">
-        <div className="col-span-1 border p-5 m-5">
+      <div className="grid grid-cols-1 sm:grid-cols-3 border p-5 m-5">
+        <div className="col-span-1 border p-5 m-5 ">
           {/* 1 */}
           <Profile />
         </div>
         <div className="col-span-2 ">
           <div className="grid grid-rows-2 ">
-            <div className=" row-span-1 border-8 p-5 m-5 flex w-full">
+            <div className=" row-span-1 border-8 p-5 m-5 flex ">
               {/* 2.1 */}
               <GreetingBannerContainer />
             </div>
             <div className=" row-span-1 ">
-              <div className=" grid grid-cols-2 ">
-                <div className=" col-span-1 border p-5 m-5 flex">
+              <div className=" grid grid-cols-1 sm:grid-cols-2 ">
+                <div className=" col-span-1 border m-1 p-5 sm:m-5 flex flex-col sm:flex-row">
                   {/* 2.2.1 */}
                   <div className="me-2 ">
                     <BsStars size={34} />
@@ -49,7 +48,7 @@ export default async function DashboardPage() {
                     </div>
                   </div>
                 </div>
-                <div className=" col-span-1 border p-5 m-5 flex">
+                <div className=" col-span-1 border m-1 p-5 sm:m-5 flex flex-col sm:flex-row">
                   {/* 2.2.2 */}
                   <div className="me-2 ">
                     <FaFileCircleQuestion size={34} />

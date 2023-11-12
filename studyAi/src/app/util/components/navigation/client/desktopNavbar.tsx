@@ -2,14 +2,13 @@
 import React from "react";
 import { MenuItem, Menu, Link } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCaretDown,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import useRemToPixel from "@/app/util/hooks/useRemToPixel";
 import useElementPosition from "@/app/util/hooks/useElementSize";
 import { faWandMagicSparkles } from "@fortawesome/free-solid-svg-icons/faWandMagicSparkles";
 import { faFileLines } from "@fortawesome/free-regular-svg-icons";
 import useDropdown from "@/app/util/hooks/useDropdown";
+import { unstable_batchedUpdates } from "react-dom";
 export const menuItemLinks = [
   {
     href: "/",
@@ -29,11 +28,17 @@ export const menuItemLinks = [
 export const GenerateDropdown = () => {
   const currRemToPixelVal = useRemToPixel("1rem");
   const { setRef, position: dropdownButtonPos } = useElementPosition();
-  const { anchorEl, handleClick, handleClose } = useDropdown();
+  const { anchorEl, setAnchorEl, handleClick, handleClose, open } =
+    useDropdown();
   return (
     <div className="relative flex items-center m-0 p-0">
       <Link
-        ref={setRef}
+        ref={(ref) => {
+          unstable_batchedUpdates(() => {
+            setRef(ref);
+            setAnchorEl(ref);
+          });
+        }}
         component="button"
         aria-controls="dropdown-menu"
         aria-haspopup="true"
@@ -47,7 +52,7 @@ export const GenerateDropdown = () => {
       <Menu
         anchorEl={anchorEl}
         keepMounted
-        open={Boolean(anchorEl)}
+        open={open}
         anchorReference="anchorPosition"
         anchorOrigin={{
           vertical: "top",
@@ -84,5 +89,3 @@ export const GenerateDropdown = () => {
     </div>
   );
 };
-
-
