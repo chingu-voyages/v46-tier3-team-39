@@ -10,7 +10,7 @@ import Switch from "@mui/material/Switch";
 const generateQuestion = async (
   questionData: Partial<Question>,
   isLoading: string,
-  setQuestionData: React.Dispatch<SetStateAction<Partial<Question> | null>>
+  setQuestionData: React.Dispatch<SetStateAction<Partial<Question>>>
 ) => {
   if (!questionData) return;
   if (isLoading === "loading") return;
@@ -187,7 +187,7 @@ const Controls = ({
       </div>
       <button
         className={styles.button({ isCancel: true })}
-        onClick={() => setIsOpen(false)}
+        onClick={closeHandler}
       >
         Cancel
       </button>

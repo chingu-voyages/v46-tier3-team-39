@@ -16,18 +16,19 @@ const QuestionModalWrapper = ({
     questionInfo: {
         title:"",
         description: "",
-        options: ["Answer 1", "Answer 2", "Answer 3", "Answer 4"]
+        options: [{id: "1", value: "Answer 1"}, {id: "2", value: "Answer 2"}, {id: "3", value: "Answer 3"}, {id: "4", value: "Answer 4"}]
     },
-    questionType: "mcq",
+    questionType: "Multiple Choice",
     tags: [],
     answer: {
-      correctAnswer: ["Answer 1"]
+      correctAnswer: [{id: "1", value: "A"}]
     }
   }
   const [questionData, setQuestionData] = useState<Partial<Question>>(
     initialQuestionData ? {...initialQuestionData, private: true} : blankQuestion
   );
   const [isOpen, setIsOpen] = useState(false);
+  console.log(questionData);
   const styles = {
     modal: [
       "flex",

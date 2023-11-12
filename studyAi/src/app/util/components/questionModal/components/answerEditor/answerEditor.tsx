@@ -5,6 +5,7 @@ import Box from "@mui/material/Box";
 import { MultipleChoice, SelectAll, ShortAnswer } from "./answerTypes";
 import styles from "./answerEditorStyles";
 import { QuestionProps } from "../../questionEditModal";
+import type { AnswerOption } from "../../../../../../../prisma/generated/type-graphql";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -43,26 +44,25 @@ export default function AnswerEditor({
 }: Pick<QuestionProps, "questionData" | "setQuestionData">) {
   const questionType = questionData?.questionType;
   let initialTab = 0;
-  if (questionType == "checkbox") {
+  if (questionType == "Select Multiple") {
     initialTab = 1;
-  } else if (questionType == "short answer") {
+  } else if (questionType == "Short Answer") {
     initialTab = 2;
   }
   const [tabValue, setTabValue] = React.useState(initialTab);
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
-    const options = questionData.questionInfo?.options as string[]
+    const options = questionData.questionInfo?.options
     setTabValue(newValue);
     let questionType = "";
-    let newAnswer = [""]
+    let newAnswer: AnswerOption[] = []
     if (newValue == 0) {
-      questionType = "mcq";
-      newAnswer = [options[0]]
+      questionType = "Multiple Choice";
+      newAnswer = options ? [options[0]] : []
     }else if (newValue == 1) {
-      questionType = "checkbox"
-      newAnswer = []
+      questionType = "Select Multiple"
     }else {
-      questionType = "short answer"
+      questionType = "Short Answer"
     }
 
     setQuestionData({...questionData, questionType: questionType, answer: {correctAnswer: newAnswer}})
