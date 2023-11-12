@@ -31,10 +31,10 @@ const generateQuestion = async (
       questionInfo: {
         title: prev?.questionInfo?.title || "",
         description: result?.data?.newQuestion?.question || "",
-        options: result?.data?.newQuestion?.options || [""],
+        options: result?.data?.newQuestion?.options || [],
       },
       answer: {
-        correctAnswer: result?.data?.newQuestion?.correct || [""],
+        correctAnswer: result?.data?.newQuestion?.correct || [],
       },
     }));
   } catch (err) {

@@ -6,6 +6,7 @@ import { MultipleChoice, SelectAll, ShortAnswer } from "./answerTypes";
 import styles from "./answerEditorStyles";
 import { QuestionProps } from "../../questionEditModal";
 import type { AnswerOption } from "../../../../../../../prisma/generated/type-graphql";
+import {v4 as uuid} from 'uuid'
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -63,6 +64,7 @@ export default function AnswerEditor({
       questionType = "Select Multiple"
     }else {
       questionType = "Short Answer"
+      newAnswer = [{id: uuid(), value: ""}]
     }
 
     setQuestionData({...questionData, questionType: questionType, answer: {correctAnswer: newAnswer}})
