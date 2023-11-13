@@ -79,20 +79,20 @@ const validateAuthRequirementInQuery = ({
     public: boolean;
     take: number | null;
   } = {
-    actualId: body.variables.creatorId || body.variables.userId || null,
+    actualId: body.variables.creatorId || body.variables.userId || body.variables.id || null,
     public: !body.variables.private,
     take: body.variables.take || null,
   };
   // Validation of the syntax and necessary clause(s) for the query
   const parsedQuery: any = getParsedQuery(body.query);
+  const accessibleModels = ["question", "quiz"];
   let resolverRequested: string =
     parsedQuery?.definitions[0].selectionSet.selections[0].name.value.toLowerCase();
-  const accessibleModels = ["question", "quiz"];
-  resolverRequested = resolverRequested.includes(accessibleModels[0])
-    ? accessibleModels[0]
-    : resolverRequested.includes(accessibleModels[1])
-    ? accessibleModels[1]
-    : resolverRequested;
+  for (const model of accessibleModels) {
+    if (resolverRequested.includes(model)) {
+      resolverRequested = (resolverRequested.includes("submission") || resolverRequested.includes("like")) ? resolverRequested : model
+    }
+  }
   const isQuery =
     parsedQuery?.definitions[0].operation.toLowerCase() === "query";
   // Validate of presence of all required variables in the query
