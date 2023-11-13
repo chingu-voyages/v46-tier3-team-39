@@ -1580,7 +1580,7 @@ input QuestionScalarWhereWithAggregatesInput {
 }
 
 type QuestionSubmission {
-  answerProvided: [String!]!
+  answerProvided: [AnswerOption!]!
   dateCreated: DateTimeISO!
   id: String!
   questionId: String!
@@ -1591,7 +1591,6 @@ type QuestionSubmission {
 
 type QuestionSubmissionCountAggregate {
   _all: Int!
-  answerProvided: Int!
   dateCreated: Int!
   id: Int!
   questionId: Int!
@@ -1599,7 +1598,6 @@ type QuestionSubmissionCountAggregate {
 }
 
 input QuestionSubmissionCountOrderByAggregateInput {
-  answerProvided: SortOrder
   dateCreated: SortOrder
   id: SortOrder
   questionId: SortOrder
@@ -1607,7 +1605,7 @@ input QuestionSubmissionCountOrderByAggregateInput {
 }
 
 input QuestionSubmissionCreateInput {
-  answerProvided: QuestionSubmissionCreateanswerProvidedInput
+  answerProvided: [AnswerOptionCreateInput!]
   dateCreated: DateTimeISO
   id: String
   questionId: String!
@@ -1617,7 +1615,7 @@ input QuestionSubmissionCreateInput {
 }
 
 input QuestionSubmissionCreateManyInput {
-  answerProvided: QuestionSubmissionCreateanswerProvidedInput
+  answerProvided: [AnswerOptionCreateInput!]
   dateCreated: DateTimeISO
   id: String
   questionId: String!
@@ -1626,15 +1624,10 @@ input QuestionSubmissionCreateManyInput {
   userId: String!
 }
 
-input QuestionSubmissionCreateanswerProvidedInput {
-  set: [String!]!
-}
-
 type QuestionSubmissionGroupBy {
   _count: QuestionSubmissionCountAggregate
   _max: QuestionSubmissionMaxAggregate
   _min: QuestionSubmissionMinAggregate
-  answerProvided: [String!]
   dateCreated: DateTimeISO!
   id: String!
   questionId: String!
@@ -1673,7 +1666,6 @@ input QuestionSubmissionOrderByWithAggregationInput {
   _count: QuestionSubmissionCountOrderByAggregateInput
   _max: QuestionSubmissionMaxOrderByAggregateInput
   _min: QuestionSubmissionMinOrderByAggregateInput
-  answerProvided: SortOrder
   dateCreated: SortOrder
   id: SortOrder
   questionId: SortOrder
@@ -1681,7 +1673,7 @@ input QuestionSubmissionOrderByWithAggregationInput {
 }
 
 input QuestionSubmissionOrderByWithRelationInput {
-  answerProvided: SortOrder
+  answerProvided: AnswerOptionOrderByCompositeAggregateInput
   dateCreated: SortOrder
   id: SortOrder
   questionId: SortOrder
@@ -1691,7 +1683,6 @@ input QuestionSubmissionOrderByWithRelationInput {
 }
 
 enum QuestionSubmissionScalarFieldEnum {
-  answerProvided
   dateCreated
   id
   questionId
@@ -1702,7 +1693,6 @@ input QuestionSubmissionScalarWhereWithAggregatesInput {
   AND: [QuestionSubmissionScalarWhereWithAggregatesInput!]
   NOT: [QuestionSubmissionScalarWhereWithAggregatesInput!]
   OR: [QuestionSubmissionScalarWhereWithAggregatesInput!]
-  answerProvided: StringNullableListFilter
   dateCreated: DateTimeWithAggregatesFilter
   id: StringWithAggregatesFilter
   questionId: StringWithAggregatesFilter
@@ -1710,7 +1700,7 @@ input QuestionSubmissionScalarWhereWithAggregatesInput {
 }
 
 input QuestionSubmissionUpdateInput {
-  answerProvided: QuestionSubmissionUpdateanswerProvidedInput
+  answerProvided: [AnswerOptionCreateInput!]
   dateCreated: DateTimeFieldUpdateOperationsInput
   questionId: StringFieldUpdateOperationsInput
   score: ScoreUpdateEnvelopeInput
@@ -1719,7 +1709,7 @@ input QuestionSubmissionUpdateInput {
 }
 
 input QuestionSubmissionUpdateManyMutationInput {
-  answerProvided: QuestionSubmissionUpdateanswerProvidedInput
+  answerProvided: [AnswerOptionCreateInput!]
   dateCreated: DateTimeFieldUpdateOperationsInput
   questionId: StringFieldUpdateOperationsInput
   score: ScoreUpdateEnvelopeInput
@@ -1727,16 +1717,11 @@ input QuestionSubmissionUpdateManyMutationInput {
   userId: StringFieldUpdateOperationsInput
 }
 
-input QuestionSubmissionUpdateanswerProvidedInput {
-  push: [String!]
-  set: [String!]
-}
-
 input QuestionSubmissionWhereInput {
   AND: [QuestionSubmissionWhereInput!]
   NOT: [QuestionSubmissionWhereInput!]
   OR: [QuestionSubmissionWhereInput!]
-  answerProvided: StringNullableListFilter
+  answerProvided: [AnswerOptionObjectEqualityInput!]
   dateCreated: DateTimeFilter
   id: StringFilter
   questionId: StringFilter
@@ -1749,7 +1734,7 @@ input QuestionSubmissionWhereUniqueInput {
   AND: [QuestionSubmissionWhereInput!]
   NOT: [QuestionSubmissionWhereInput!]
   OR: [QuestionSubmissionWhereInput!]
-  answerProvided: StringNullableListFilter
+  answerProvided: [AnswerOptionObjectEqualityInput!]
   dateCreated: DateTimeFilter
   id: String
   questionId: StringFilter

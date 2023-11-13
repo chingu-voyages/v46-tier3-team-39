@@ -14,7 +14,7 @@ const question: Partial<Question> & {
 } = {
   id: "6533f4c8489ef223ffc31a9b",
   creatorId: "6533f4c7489ef223ffc31a99",
-  questionType: "Short Answer",
+  questionType: "Select Multiple",
   tags: [
     "science",
     "science",

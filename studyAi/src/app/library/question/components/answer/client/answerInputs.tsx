@@ -9,7 +9,13 @@ import {
   Radio,
   RadioGroup,
 } from "@mui/material";
-import { ChangeEvent, KeyboardEvent } from "react";
+import {
+  ChangeEvent,
+  InputHTMLAttributes,
+  KeyboardEvent,
+  SyntheticEvent,
+  useState,
+} from "react";
 import { Question } from "../../../../../../../graphql/generated/graphql";
 const adjustScroll = (
   event: ChangeEvent<HTMLTextAreaElement> | KeyboardEvent<HTMLTextAreaElement>
@@ -62,16 +68,55 @@ export const SelectMultiple = ({
 }: {
   options: Question["questionInfo"]["options"];
 }) => {
+  const [currSelection, setCurrSelection] = useState<
+    Question["questionInfo"]["options"]
+  >([]);
+  const onChange = (e: SyntheticEvent<Element, Event>) => {
+    const target = e.currentTarget as HTMLInputElement;
+    const { value, checked } = target;
+    const data = target.dataset;
+    const id = data.id;
+    if (!id) return;
+    setCurrSelection((prev) => {
+      const newState = [...prev];
+      //exists in curr state
+      const currEl = prev
+        .map((e, idx) => ({ ...e, idx }))
+        .filter((e) => e.id === id);
+      if (currEl.length > 0 && !checked) newState.splice(currEl[0].idx, 1);
+      else if (currEl.length <= 0 && checked) newState.push({ id, value });
+      return newState;
+    });
+  };
   return (
     <FormGroup className="px-[5%] py-5 grow">
-      {options.map((val) => (
-        <FormControlLabel
-          key={val.id}
-          value={val.value}
-          control={<Checkbox />}
-          label={val.value}
-        />
-      ))}
+      {options.map((val) => {
+        const dataProps = {
+          "data-id": val.id,
+        } as InputHTMLAttributes<HTMLInputElement>;
+        return (
+          <FormControlLabel
+            key={val.id}
+            value={val.value}
+            control={<Checkbox inputProps={dataProps} />}
+            label={val.value}
+            onChange={onChange}
+          />
+        );
+      })}
+      {/*Hidden input that we'll use to grab data upon submission*/}
+      <input
+        name={"selectMultipleSelections"}
+        value={JSON.stringify(currSelection)}
+        readOnly
+        style={{
+          visibility: "hidden",
+          minWidth: "unset",
+          minHeight: "unset",
+          width: 0,
+          height: 0,
+        }}
+      />
     </FormGroup>
   );
 };
