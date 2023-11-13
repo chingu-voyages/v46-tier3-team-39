@@ -54,7 +54,7 @@ const generateQuestion = async (
   }
 };
 
-const AddQuestion: any = gql(`
+const AddQuestion = gql(`
   mutation CreateOneQuestionResolver(
     $creatorId: String!,
     $questionType: String!,
