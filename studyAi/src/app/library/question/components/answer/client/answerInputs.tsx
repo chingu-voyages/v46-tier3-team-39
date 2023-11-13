@@ -16,7 +16,9 @@ import {
   SyntheticEvent,
   useState,
 } from "react";
+import { ObjectId } from "bson";
 import { Question } from "../../../../../../../graphql/generated/graphql";
+import { QuestionSubmission } from "../../../../../../../prisma/generated/type-graphql";
 const adjustScroll = (
   event: ChangeEvent<HTMLTextAreaElement> | KeyboardEvent<HTMLTextAreaElement>
 ) => {
@@ -47,29 +49,56 @@ const adjustScroll = (
 };
 export const MultipleChoice = ({
   options,
+  initialValues,
 }: {
   options: Question["questionInfo"]["options"];
+  initialValues?: QuestionSubmission["answerProvided"];
 }) => {
+  const [currAnswer, setCurrAnswer] = useState(
+    initialValues ? initialValues : []
+  );
+  const onChange = (e: SyntheticEvent<Element, Event>) => {
+    const target = e.currentTarget as HTMLInputElement;
+    const { value } = target;
+    const data = target.dataset;
+    const id = data.id;
+    if (!id) return;
+    setCurrAnswer([
+      {
+        id,
+        value,
+      },
+    ]);
+  };
   return (
-    <RadioGroup className="px-[5%] py-5 grow">
-      {options.map((val) => (
-        <FormControlLabel
-          key={val.id}
-          value={val.value}
-          control={<Radio />}
-          label={val.value}
-        />
-      ))}
+    <RadioGroup className="px-[5%] py-5 grow" name="multipleChoiceAnswer">
+      {options.map((val) => {
+        const dataProps = {
+          "data-id": val.id,
+        } as InputHTMLAttributes<HTMLInputElement>;
+        return (
+          <FormControlLabel
+            key={val.id}
+            value={val.value}
+            control={<Radio inputProps={dataProps} />}
+            label={val.value}
+            onChange={onChange}
+            checked={currAnswer.length > 0 && currAnswer[0].value === val.value}
+          />
+        );
+      })}
     </RadioGroup>
   );
 };
 export const SelectMultiple = ({
   options,
+  initialValues,
 }: {
   options: Question["questionInfo"]["options"];
+  initialValues?: QuestionSubmission["answerProvided"];
 }) => {
   const [currSelection, setCurrSelection] = useState<
-    Question["questionInfo"]["options"]
+    QuestionSubmission["answerProvided"]
   >([]);
   const onChange = (e: SyntheticEvent<Element, Event>) => {
     const target = e.currentTarget as HTMLInputElement;
@@ -120,12 +149,42 @@ export const SelectMultiple = ({
     </FormGroup>
   );
 };
-export const ShortAnswer = () => {
+export const ShortAnswer = ({
+  initialValues,
+}: {
+  initialValues?: QuestionSubmission["answerProvided"];
+}) => {
+  const [currAnswer, setCurrAnswer] = useState(
+    initialValues ? initialValues : []
+  );
+  const onChange = (e: SyntheticEvent<Element, Event>) => {
+    const target = e.currentTarget as HTMLInputElement;
+    const { value } = target;
+    const data = target.dataset;
+    const id = data.id;
+    if (!id) return;
+    setCurrAnswer([
+      {
+        id,
+        value,
+      },
+    ]);
+  };
   return (
     <TextareaAutosize
       minRows={8}
+      name="shortAnswer"
       onKeyDown={adjustScroll}
-      onChange={adjustScroll}
+      data-id={
+        currAnswer.length > 0 ? currAnswer[0].id : new ObjectId().toString()
+      }
+      onChange={(e) => {
+        //modify scroll cursor pos
+        adjustScroll(e);
+        //update state
+        onChange(e);
+      }}
+      value={currAnswer.length > 0 ? currAnswer[0].value : ""}
       style={{ height: "100%", resize: "none" }}
       className="px-[4%] py-4 pb-6 text-sm grow"
       placeholder="Type answer here"

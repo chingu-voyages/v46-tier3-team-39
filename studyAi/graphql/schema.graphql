@@ -1584,7 +1584,7 @@ type QuestionSubmission {
   dateCreated: DateTimeISO!
   id: String!
   questionId: String!
-  score: Score!
+  score: Score
   time: TimeOptions
   userId: String!
 }
@@ -1609,7 +1609,7 @@ input QuestionSubmissionCreateInput {
   dateCreated: DateTimeISO
   id: String
   questionId: String!
-  score: ScoreCreateEnvelopeInput!
+  score: ScoreNullableCreateEnvelopeInput
   time: TimeOptionsNullableCreateEnvelopeInput
   userId: String!
 }
@@ -1619,7 +1619,7 @@ input QuestionSubmissionCreateManyInput {
   dateCreated: DateTimeISO
   id: String
   questionId: String!
-  score: ScoreCreateEnvelopeInput!
+  score: ScoreNullableCreateEnvelopeInput
   time: TimeOptionsNullableCreateEnvelopeInput
   userId: String!
 }
@@ -1703,7 +1703,7 @@ input QuestionSubmissionUpdateInput {
   answerProvided: [AnswerOptionCreateInput!]
   dateCreated: DateTimeFieldUpdateOperationsInput
   questionId: StringFieldUpdateOperationsInput
-  score: ScoreUpdateEnvelopeInput
+  score: ScoreNullableUpdateEnvelopeInput
   time: TimeOptionsNullableUpdateEnvelopeInput
   userId: StringFieldUpdateOperationsInput
 }
@@ -1712,7 +1712,7 @@ input QuestionSubmissionUpdateManyMutationInput {
   answerProvided: [AnswerOptionCreateInput!]
   dateCreated: DateTimeFieldUpdateOperationsInput
   questionId: StringFieldUpdateOperationsInput
-  score: ScoreUpdateEnvelopeInput
+  score: ScoreNullableUpdateEnvelopeInput
   time: TimeOptionsNullableUpdateEnvelopeInput
   userId: StringFieldUpdateOperationsInput
 }
@@ -1725,7 +1725,7 @@ input QuestionSubmissionWhereInput {
   dateCreated: DateTimeFilter
   id: StringFilter
   questionId: StringFilter
-  score: ScoreCompositeFilter
+  score: ScoreNullableCompositeFilter
   time: TimeOptionsNullableCompositeFilter
   userId: StringFilter
 }
@@ -1738,7 +1738,7 @@ input QuestionSubmissionWhereUniqueInput {
   dateCreated: DateTimeFilter
   id: String
   questionId: StringFilter
-  score: ScoreCompositeFilter
+  score: ScoreNullableCompositeFilter
   time: TimeOptionsNullableCompositeFilter
   userId: StringFilter
 }
@@ -2346,6 +2346,23 @@ input ScoreCreateInput {
   maxScore: Int!
 }
 
+input ScoreNullableCompositeFilter {
+  equals: ScoreObjectEqualityInput
+  is: ScoreWhereInput
+  isNot: ScoreWhereInput
+  isSet: Boolean
+}
+
+input ScoreNullableCreateEnvelopeInput {
+  set: ScoreCreateInput
+}
+
+input ScoreNullableUpdateEnvelopeInput {
+  set: ScoreCreateInput
+  unset: Boolean
+  upsert: ScoreUpsertInput
+}
+
 input ScoreObjectEqualityInput {
   actualScore: Int!
   maxScore: Int!
@@ -2364,6 +2381,11 @@ input ScoreUpdateEnvelopeInput {
 input ScoreUpdateInput {
   actualScore: IntFieldUpdateOperationsInput
   maxScore: IntFieldUpdateOperationsInput
+}
+
+input ScoreUpsertInput {
+  set: ScoreCreateInput!
+  update: ScoreUpdateInput!
 }
 
 input ScoreWhereInput {
