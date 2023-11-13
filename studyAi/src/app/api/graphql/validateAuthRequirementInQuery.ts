@@ -30,7 +30,7 @@ const validateVariables = (
   if (
     (accessibleModels.includes(resolverRequested) &&
       variables.public === null) ||
-    // (isQuery && variables.take == null) ||
+    (isQuery && variables.take == null) ||
     !variables.actualId
   ) {
     canUserModify(
