@@ -16,7 +16,7 @@ export default function Process(){
                 <div className="sm:w-1/3 max-w-md mx-auto my-2 sm:my-0 sm:mx-2 bg-gray-200 p-5 border-2">
                     <CubeIcon size="xl"/>
                     <h1 className="text-3xl sm:text-5xl font-bold my-4">Why It Works</h1>
-                    <p>Discover the power of Ai technology</p>
+                    <p>Discover the power of AI technology</p>
                     <button className="mt-2">Learn more <CubeIcon /></button>
 
                 </div>

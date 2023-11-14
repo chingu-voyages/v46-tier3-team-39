@@ -10,7 +10,6 @@ export const AuthImg = ({
       style={style}
       className={"bg-Black w-full" + " " + containerClassNames}
     >
-      hello
     </div>
   );
 };
