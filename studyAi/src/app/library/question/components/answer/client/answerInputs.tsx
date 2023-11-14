@@ -62,11 +62,14 @@ export const MultipleChoice = ({
   //therefore we'll generate one
   useEffect(() => {
     if (submission) return;
-    addOrUpdateItems([
-      {
-        questionId,
-      },
-    ]);
+    addOrUpdateItems(
+      [
+        {
+          questionId,
+        },
+      ],
+      "ongoing"
+    );
   }, [submission, addOrUpdateItems]);
   const value =
     submission &&
@@ -80,13 +83,16 @@ export const MultipleChoice = ({
     const data = target.dataset;
     const id = data.id;
     if (!id) return;
-    addOrUpdateItems([
-      {
-        ...submission,
-        questionId,
-        answerProvided: [{ id, value }],
-      },
-    ]);
+    addOrUpdateItems(
+      [
+        {
+          ...submission,
+          questionId,
+          answerProvided: [{ id, value }],
+        },
+      ],
+      "ongoing"
+    );
   };
   return (
     <>
@@ -95,6 +101,7 @@ export const MultipleChoice = ({
           const dataProps = {
             "data-id": val.id,
           } as InputHTMLAttributes<HTMLInputElement>;
+
           return (
             <FormControlLabel
               key={val.id}
@@ -121,15 +128,18 @@ export const MultipleChoice = ({
 export const ShortAnswer = ({ questionId }: { questionId: string }) => {
   const [currSubmissions, { addOrUpdateItems }] = useQuestionSubmissions();
   const submission = currSubmissions.ongoingData[questionId];
-  //sometimes no ongoing submission will exist.
+   //sometimes no ongoing submission will exist.
   //therefore we'll generate one
   useEffect(() => {
     if (submission) return;
-    addOrUpdateItems([
-      {
-        questionId,
-      },
-    ]);
+    addOrUpdateItems(
+      [
+        {
+          questionId,
+        },
+      ],
+      "ongoing"
+    );
   }, [submission, addOrUpdateItems]);
   const value =
     submission &&
@@ -148,13 +158,16 @@ export const ShortAnswer = ({ questionId }: { questionId: string }) => {
     const data = target.dataset;
     const id = data.id;
     if (!id) return;
-    addOrUpdateItems([
-      {
-        ...submission,
-        questionId,
-        answerProvided: [{ id, value }],
-      },
-    ]);
+    addOrUpdateItems(
+      [
+        {
+          ...submission,
+          questionId,
+          answerProvided: [{ id, value }],
+        },
+      ],
+      "ongoing"
+    );
   };
   return (
     <>
@@ -192,6 +205,19 @@ export const SelectMultiple = ({
     submission.answerProvided.length > 0
       ? submission.answerProvided
       : [];
+  //sometimes no ongoing submission will exist.
+  //therefore we'll generate one
+  useEffect(() => {
+    if (submission) return;
+    addOrUpdateItems(
+      [
+        {
+          questionId,
+        },
+      ],
+      "ongoing"
+    );
+  }, [submission, addOrUpdateItems]);
   const onChange = (e: SyntheticEvent<Element, Event>) => {
     const target = e.currentTarget as HTMLInputElement;
     const { value, checked } = target;
@@ -205,13 +231,16 @@ export const SelectMultiple = ({
       .filter((e) => e.id === id);
     if (currEl.length > 0 && !checked) newState.splice(currEl[0].idx, 1);
     else if (currEl.length <= 0 && checked) newState.push({ id, value });
-    addOrUpdateItems([
-      {
-        ...submission,
-        questionId,
-        answerProvided: newState,
-      },
-    ]);
+    addOrUpdateItems(
+      [
+        {
+          ...submission,
+          questionId,
+          answerProvided: newState,
+        },
+      ],
+      "ongoing"
+    );
   };
   return (
     <FormGroup className="px-[5%] py-5 grow">
@@ -219,11 +248,17 @@ export const SelectMultiple = ({
         const dataProps = {
           "data-id": val.id,
         } as InputHTMLAttributes<HTMLInputElement>;
+        const isCheckedArr = currValue.filter((e) => e.id === val.id);
         return (
           <FormControlLabel
             key={val.id}
             value={val.value}
-            control={<Checkbox inputProps={dataProps} />}
+            control={
+              <Checkbox
+                inputProps={dataProps}
+                checked={isCheckedArr.length > 0}
+              />
+            }
             label={val.value}
             onChange={onChange}
           />

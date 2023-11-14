@@ -29,13 +29,15 @@ const Store = createStore({
         items: (Partial<QuestionSubmission> & {
           questionId: string;
           id?: string;
-        })[]
+        })[],
+        submissionType: "ongoing" | "submitted"
       ) =>
       async ({ setState, getState }) =>
         addOrUpdateSubmissionsFunc({
           items,
           setState,
           getState,
+          submissionType,
         }),
     deleteItems:
       (
@@ -56,6 +58,7 @@ const Store = createStore({
           items: initialItems,
           setState,
           getState,
+          submissionType: "submitted",
         }),
   },
   // optional, unique, mostly used for easy debugging

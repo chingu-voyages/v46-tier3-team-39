@@ -91,10 +91,12 @@ export const addOrUpdateSubmissionsFunc = <T>({
   items,
   getState,
   setState,
+  submissionType,
 }: {
   items: (T & { id?: string; questionId?: string; quizId?: string })[];
   getState: GetState<SubmissionsData<T>>;
   setState: SetState<SubmissionsData<T>>;
+  submissionType: "ongoing" | "submitted";
 }) => {
   const currState = getState();
   const copiedData = cloneDeep(currState) as SubmissionsData<T>;
@@ -102,8 +104,11 @@ export const addOrUpdateSubmissionsFunc = <T>({
   items.forEach((item) => {
     const { id, questionId, quizId } = item;
     const submissionTypeId = questionId ? questionId : (quizId as string);
-    const inOngoing = submissionTypeId in currState.ongoingData;
-    const inSubmitted = submissionTypeId in currState.submittedData;
+    const inOngoing =
+      submissionType === "ongoing" || submissionTypeId in currState.ongoingData;
+    const inSubmitted =
+      submissionType === "submitted" ||
+      submissionTypeId in currState.submittedData;
     if (inSubmitted && id) {
       let submissionMap = currState.submittedData.map[submissionTypeId];
       if (!submissionMap) {
