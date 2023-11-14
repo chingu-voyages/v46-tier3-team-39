@@ -4,8 +4,9 @@ import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import { MultipleChoice, SelectAll, ShortAnswer } from "./answerTypes";
 import styles from "./answerEditorStyles";
-import { Question } from "../../../../../../../prisma/generated/type-graphql/models/Question";
 import { QuestionProps } from "../../questionEditModal";
+import type { AnswerOption } from "../../../../../../../prisma/generated/type-graphql";
+import {v4 as uuid} from 'uuid'
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -40,28 +41,39 @@ function a11yProps(index: number) {
 
 export default function AnswerEditor({
   questionData,
-}: Pick<QuestionProps, "questionData">) {
+  setQuestionData
+}: Pick<QuestionProps, "questionData" | "setQuestionData">) {
   const questionType = questionData?.questionType;
   let initialTab = 0;
-  if (questionType == "checkbox") {
+  if (questionType == "Select Multiple") {
     initialTab = 1;
-  } else if (questionType == "short answer") {
+  } else if (questionType == "Short Answer") {
     initialTab = 2;
   }
-  const [value, setValue] = React.useState(initialTab);
-  const initialChoices = questionData?.questionInfo?.options;
-  const [choices, setChoices] = React.useState(
-    initialChoices ? initialChoices : ["", "", "", ""]
-  );
+  const [tabValue, setTabValue] = React.useState(initialTab);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
+  const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
+    const options = questionData.questionInfo?.options
+    setTabValue(newValue);
+    let questionType = "";
+    let newAnswer: AnswerOption[] = []
+    if (newValue == 0) {
+      questionType = "Multiple Choice";
+      newAnswer = options ? [options[0]] : []
+    }else if (newValue == 1) {
+      questionType = "Select Multiple"
+    }else {
+      questionType = "Short Answer"
+      newAnswer = [{id: uuid(), value: ""}]
+    }
+
+    setQuestionData({...questionData, questionType: questionType, answer: {correctAnswer: newAnswer}})
   };
   return (
     <Box className={styles.layout}>
       <h2 className={styles.h2}>Answer</h2>
       <div className={styles.tabsContainer}>
-        <Tabs value={value} onChange={handleChange} aria-label="answer types">
+        <Tabs value={tabValue} onChange={handleChange} aria-label="answer types">
           <Tab
             className={styles.tabLabel}
             label="Multiple Choice"
@@ -79,14 +91,14 @@ export default function AnswerEditor({
           />
         </Tabs>
       </div>
-      <CustomTabPanel value={value} index={0}>
-        <MultipleChoice choices={choices} setChoices={setChoices} />
+      <CustomTabPanel value={tabValue} index={0}>
+        <MultipleChoice questionData={questionData} setQuestionData={setQuestionData} />
       </CustomTabPanel>
-      <CustomTabPanel value={value} index={1}>
-        <SelectAll choices={choices} setChoices={setChoices} />
+      <CustomTabPanel value={tabValue} index={1}>
+        <SelectAll questionData={questionData} setQuestionData={setQuestionData} />
       </CustomTabPanel>
-      <CustomTabPanel value={value} index={2}>
-        <ShortAnswer />
+      <CustomTabPanel value={tabValue} index={2}>
+        <ShortAnswer questionData={questionData} setQuestionData={setQuestionData}/>
       </CustomTabPanel>
     </Box>
   );

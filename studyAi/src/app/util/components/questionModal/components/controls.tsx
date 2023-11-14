@@ -1,4 +1,4 @@
-import { Question } from "../../../../../../prisma/generated/type-graphql";
+import { AnswerOption, Question } from "../../../../../../prisma/generated/type-graphql";
 import axios from "axios";
 import { QuestionProps } from "../questionEditModal";
 import { SetStateAction, useState } from "react";
@@ -6,11 +6,12 @@ import { gql } from "../../../../../../graphql/generated";
 import { useSession } from "next-auth/react";
 import { useMutation } from "@apollo/client";
 import Switch from "@mui/material/Switch";
+import {v4 as uuid} from "uuid"
 
 const generateQuestion = async (
   questionData: Partial<Question>,
   isLoading: string,
-  setQuestionData: React.Dispatch<SetStateAction<Partial<Question> | null>>
+  setQuestionData: React.Dispatch<SetStateAction<Partial<Question>>>
 ) => {
   if (!questionData) return;
   if (isLoading === "loading") return;
@@ -18,23 +19,33 @@ const generateQuestion = async (
     const questionProvided = {
       type: questionData.questionType,
       tags: questionData.tags,
+      title: [questionData.questionInfo?.title],
       question: questionData.questionInfo?.description,
       numberOfOptions: questionData.questionInfo?.options.length,
+      answers: questionData.questionInfo?.options
     };
     const result = await axios({
       url: "/api/generateQuestion",
       method: "POST",
       data: questionProvided,
     });
+    let newAnswers: AnswerOption[] = [];
+    const newOptions = result?.data?.newQuestion?.options.map((option: string) => {
+      const newOption = {id: uuid(), value: option}
+      if (result?.data?.newQuestion?.answer.includes(option)) {
+        newAnswers.push(newOption)
+      }
+      return newOption
+    })
     setQuestionData((prev) => ({
       ...prev,
       questionInfo: {
         title: prev?.questionInfo?.title || "",
-        description: result?.data?.newQuestion?.question || "",
-        options: result?.data?.newQuestion?.options || [""],
+        description: result?.data?.newQuestion?.description || "",
+        options: newOptions || [],
       },
       answer: {
-        correctAnswer: result?.data?.newQuestion?.correct || [""],
+        correctAnswer: newAnswers || [],
       },
     }));
   } catch (err) {
@@ -43,7 +54,7 @@ const generateQuestion = async (
   }
 };
 
-const AddQuestion = gql(`
+const AddQuestion: any = gql(`
   mutation CreateOneQuestionResolver(
     $creatorId: String!,
     $questionType: String!,
@@ -112,7 +123,7 @@ const uploadQuestion = (
 };
 
 const Controls = ({
-  setIsOpen,
+  closeHandler,
   setQuestionData,
   questionData,
 }: QuestionProps) => {
@@ -187,7 +198,7 @@ const Controls = ({
       </div>
       <button
         className={styles.button({ isCancel: true })}
-        onClick={() => setIsOpen(false)}
+        onClick={closeHandler}
       >
         Cancel
       </button>

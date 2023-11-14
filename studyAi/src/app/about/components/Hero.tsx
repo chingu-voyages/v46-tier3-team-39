@@ -2,6 +2,7 @@ import QuestionModalWrapper from "@/app/util/components/questionModal/questionMo
 import { ObjectId } from "bson";
 
 export default function Hero() {
+  const correctAnswer = { id: new ObjectId().toString(), value: "2" }
   return (
     /* url for hero background goes in bg-[url(')] */
     <div className="w-full py-16 px-5 sm:py-28 sm:px-16 text-center text-White bg-[url('/placeholderImages/heroMobile.png')] bg-no-repeat bg-center bg-cover sm:bg-[url('/placeholderImages/heroDesktop.png')]">
@@ -17,15 +18,15 @@ export default function Hero() {
               title: "Math Arithmetic",
               description: "What is 1+1?",
               options: [
-                { id: new ObjectId().toString(), value: "2" },
+                correctAnswer,
                 { id: new ObjectId().toString(), value: "5" },
               ],
             },
-            questionType: "Select Multiple",
+            questionType: "Multiple Choice",
             tags: ["Maths"],
             private: true,
             answer: {
-              correctAnswer: [{ id: new ObjectId().toString(), value: "2" }],
+              correctAnswer: [correctAnswer],
             },
           }}
         >

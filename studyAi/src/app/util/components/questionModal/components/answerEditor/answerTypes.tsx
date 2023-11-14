@@ -3,70 +3,101 @@ import styles from "../leftContent/leftContentStyles"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
-import React from 'react'
+import React, { useState } from 'react'
+import { QuestionProps } from '../../questionEditModal'
+import type { AnswerOption } from '../../../../../../../prisma/generated/type-graphql'
+import {ObjectId} from 'bson'
+import { v4 as uuid } from "uuid";
 
-export const MultipleChoice = ({choices, setChoices} : {choices: string[], setChoices: React.Dispatch<React.SetStateAction<string[]>>}) => {
+export const MultipleChoice = ({questionData, setQuestionData} : Pick<QuestionProps, "questionData" | "setQuestionData">) => {
+    const options = questionData.questionInfo?.options as AnswerOption[];
+    const answer = questionData.answer?.correctAnswer;
+    const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setQuestionData({...questionData, answer: {correctAnswer: [options[Number((e.target as HTMLInputElement).value)]]}})
+    }
+
     return (
-        <RadioGroup className="mt-2" defaultValue="outlined" name="radio-buttons-group">
-            {choices.map((choice, index) => {
-                const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-                    setChoices(choices.slice(0, index).concat(event.target.value).concat(choices.slice(index+1)))
+        <RadioGroup className="mt-2" defaultValue="outlined" name="radio-buttons-group" value={questionData.answer?.correctAnswer[0]?.id} onChange={handleRadioChange}>
+            {options.map((_option, index) => {
+                const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+                    const newOptions = options.slice(0, index).concat({id: options[index].id, value: event.target.value}).concat(options.slice(index+1)) 
+                    setQuestionData(questionData.questionInfo ? {...questionData, questionInfo: {...questionData.questionInfo, options: newOptions}}: questionData)
                 }
                 return (
-                    <RadioInput key={index} initialValue={choice} id={index.toString()} choices={choices} setChoices={setChoices} onChange={(e) => handleChange(e)} />
+                    <div key={`radio-${index}`} className="flex my-2 px-4 items-center">
+                        <Radio value={options[index].id} />
+                        <input value={options[index].value} type="text" className={styles.input({})} onChange={handleInputChange} />
+                        <FontAwesomeIcon icon={faTrash} className="ml-2 hover:cursor-pointer" onClick={() => deleteChoice(Number(index), {questionData, setQuestionData} )}/>
+                    </div>
                 )
             })}
-            <NewAnswer choices={choices} setChoices={setChoices}/>
+            <NewAnswer questionData={questionData} setQuestionData={setQuestionData} />
         </RadioGroup>
     )
 }
 
-export const SelectAll = ({choices, setChoices} : {choices: string[], setChoices: React.Dispatch<React.SetStateAction<string[]>>}) => {
+export const SelectAll = ({questionData, setQuestionData} : Pick<QuestionProps, "questionData" | "setQuestionData">) => {
+    const options = questionData.questionInfo?.options as AnswerOption[];
+    
     return (
         <>
-            {choices.map((choice, index) => {
-                const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-                    setChoices(choices.slice(0, index).concat(event.target.value).concat(choices.slice(index+1)))
+            {questionData.questionInfo?.options.map((option, index) => {
+                const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+                    const newOptions = options.slice(0, index).concat({id: option.id, value: event.target.value}).concat(options.slice(index+1)) 
+                    setQuestionData(questionData.questionInfo ? {...questionData, questionInfo: {...questionData.questionInfo, options: newOptions}}: questionData);
+                }
+                const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+                    const currentAnswer = questionData.answer
+                    if (!isChecked(option.id)) {
+                        setQuestionData(currentAnswer ? {...questionData, answer: {correctAnswer: currentAnswer.correctAnswer.concat({id: option.id, value: event.target.value})}}: questionData)
+                    }else {
+                        const newCorrectAnswers: AnswerOption[] = [];
+                        questionData?.answer?.correctAnswer.forEach((answer) => {
+                            if (answer.id != option.id) {
+                                newCorrectAnswers.push(answer)
+                            }
+                        })
+                        setQuestionData(newCorrectAnswers ? {...questionData, answer: {correctAnswer: newCorrectAnswers}}: questionData)
+                    }
+                };
+                const isChecked = (id: string) => {
+                    let checked = false;
+                    questionData.answer?.correctAnswer.forEach((answer) => {
+                        if (answer.id == id) {
+                            checked = true;
+                        }
+                    })
+                    return checked;
                 }
                 return (
-                    <CheckboxInput key={index} initialValue={choice} id={index.toString()} choices={choices} setChoices={setChoices} onChange={(e) => handleChange(e)}/>
+                    <div key={`select-${index}`} className="flex my-4 px-4 items-center">
+                        <Checkbox value={options[index].value} checked={isChecked(options[index].id)} onChange={handleCheckboxChange} />
+                        <input type="text" className={styles.input({})} value={options[index].value} onChange={handleInputChange} />
+                        <FontAwesomeIcon icon={faTrash} className="ml-2 hover:cursor-pointer" onClick={() => deleteChoice(Number(index), {questionData, setQuestionData})}/>
+                    </div>
                 )
             })}
-            <NewAnswer choices={choices} setChoices={setChoices} />
+            <NewAnswer questionData={questionData} setQuestionData={setQuestionData} />
         </>
     )
 }
 
 
-export const ShortAnswer = () => {
+export const ShortAnswer = ({questionData, setQuestionData} : Pick<QuestionProps, "questionData" | "setQuestionData">) => {
+    const changeHandler = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+        const newAnswer = {id: questionData.answer?.correctAnswer[0].id as string, value: event.target.value}
+        setQuestionData({...questionData, answer: {correctAnswer: [newAnswer]}})
+    }
     return (
-        <textarea className={styles.input({isTextArea: true})}/>
+        <textarea className={styles.input({isTextArea: true})} value={questionData.answer?.correctAnswer[0]?.value} onChange={changeHandler} />
     )
 }
 
-const RadioInput = ({id, initialValue, choices, setChoices, onChange}:{initialValue: string, id: string, choices: string[], setChoices: React.Dispatch<React.SetStateAction<string[]>>, onChange: React.ChangeEventHandler<HTMLInputElement>}) => {
-    return (
-        <div className="flex my-2 px-4 items-center">
-            <Radio value={id} />
-            <input value={initialValue} type="text" id={id} className={styles.input({})} onChange={onChange} />
-            <FontAwesomeIcon icon={faTrash} className="ml-2 hover:cursor-pointer" onClick={() => deleteChoice(Number(id), choices, setChoices)}/>
-        </div>
-    )
-}
-
-const CheckboxInput = ({id, initialValue, choices, setChoices, onChange}:{initialValue: string, id: string, choices: string[], setChoices: React.Dispatch<React.SetStateAction<string[]>>, onChange: React.ChangeEventHandler<HTMLInputElement>}) => {
-    return (
-        <div className="flex my-4 px-4 items-center">
-            <Checkbox value={id} />
-            <input type="text" id={id} className={styles.input({})} value={initialValue} onChange={onChange} />
-            <FontAwesomeIcon icon={faTrash} className="ml-2 hover:cursor-pointer" onClick={() => deleteChoice(Number(id), choices, setChoices)}/>
-        </div>
-    )
-}
-
-const NewAnswer = ({choices, setChoices}: {choices: string[] ,setChoices: React.Dispatch<React.SetStateAction<string[]>>}) => {
+const NewAnswer = ({questionData, setQuestionData} : Pick<QuestionProps, "questionData" | "setQuestionData">) => {
     const clickHandler = () => {
-        setChoices([...choices, ""])
+        const options = questionData.questionInfo?.options
+        const questionInfo = questionData.questionInfo
+        setQuestionData(options && questionInfo ? {...questionData, questionInfo: {...questionInfo, options: options.concat({id: uuid(), value: ""})}} : questionData)
     }
     
     return (
@@ -77,6 +108,13 @@ const NewAnswer = ({choices, setChoices}: {choices: string[] ,setChoices: React.
     )
 }
 
-const deleteChoice = (index: number, choices: string[], setChoices: React.Dispatch<React.SetStateAction<string[]>>) => {
-    setChoices(choices.toSpliced(index, 1));
+const deleteChoice = (index: number, {questionData, setQuestionData} : Pick<QuestionProps, "questionData" | "setQuestionData">) => {
+    const options = questionData.questionInfo?.options
+    const currentOption = options ? options[index] : undefined
+    const answerIndex = currentOption && questionData.answer ? questionData.answer.correctAnswer.indexOf(currentOption) : -1
+    let newAnswer = questionData.answer
+    if (newAnswer && answerIndex != -1) {
+        newAnswer.correctAnswer = newAnswer.correctAnswer.toSpliced(answerIndex, 1)
+    } 
+    setQuestionData(questionData.questionInfo && options ? {...questionData, questionInfo: {...questionData.questionInfo, options: options.toSpliced(index, 1)}, answer: newAnswer}: questionData)
 }
