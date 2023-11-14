@@ -3,7 +3,6 @@
 import { Question } from '../../../../../../prisma/generated/type-graphql';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { useState } from "react";
 import QuestionModalWrapper from '@/app/util/components/questionModal/questionModalWrapper';
@@ -30,7 +29,8 @@ export default function QuestionList({questions} : {questions: Partial<Question>
             "flex",
             "w-full",
             "justify-between",
-            "items-center"
+            "items-center",
+            "sm: px-4"
         ].join(" "),
         createButton: [
             "bg-light-primary",
@@ -40,6 +40,14 @@ export default function QuestionList({questions} : {questions: Partial<Question>
         ].join(" "),
         h2: [
             "text-[#5C5F60]"
+        ].join(" "),
+        titlesLayout: [
+            "flex",
+            "justify-between",
+            "py-4",
+            "px-2",
+            "bg-LightGrey",
+            "sm:px-16"
         ].join(" ")
     }
 
@@ -53,7 +61,7 @@ export default function QuestionList({questions} : {questions: Partial<Question>
                     <button className={styles.createButton}>+</button>
                 </QuestionModalWrapper>
             </Box>
-            <div className="flex justify-between py-4 px-2 bg-LightGrey">
+            <div className={styles.titlesLayout}>
                 <h2 className={styles.h2}>Question</h2>
                 <h2 className={styles.h2}>Shared With</h2>
             </div>
@@ -62,6 +70,7 @@ export default function QuestionList({questions} : {questions: Partial<Question>
             <CustomTabPanel value={tabValue} index={0}>
                 <List questions={questions}/>
             </CustomTabPanel>
+            {/*add more panels under here wrapped in CustomTabPanel and pass questions needed into <List>*/}
         </Box>
     );
 }
@@ -84,9 +93,9 @@ function CustomTabPanel(props: TabPanelProps) {
         {...other}
       >
         {value === index && (
-          <Box sx={{ p: 3 }}>
-            <Typography>{children}</Typography>
-          </Box>
+          <div className='mb-[-1px]'>
+            {children}
+          </div>
         )}
       </div>
     );
@@ -104,7 +113,11 @@ function List({questions}: {questions: Partial<Question>[]}) {
         layout: [
             "flex",
             "items-center",
-            "justify-between"
+            "justify-between",
+            "p-4",
+            "border-b",
+            "border-[#5C5F60]",
+            "sm:px-16"
         ].join(" "),
         h3: [
             "text-xl",
@@ -115,10 +128,10 @@ function List({questions}: {questions: Partial<Question>[]}) {
             "text-[#5C5F60]"
         ].join(" "),
         tag: [
-            "p-2",
+            "p-1",
             "bg-[#CDCDCD]",
             "mx-2",
-            "rounded-[100%]",
+            "rounded-full",
             "mt-4"
         ].join(" ")
     }
@@ -138,7 +151,7 @@ function List({questions}: {questions: Partial<Question>[]}) {
                                 })}
                             </Carousel>
                         </div>
-                        <FontAwesomeIcon icon={faEarthAmericas}/>
+                        <FontAwesomeIcon icon={faEarthAmericas} width="16" />
                     </Link>
                 )
             })}

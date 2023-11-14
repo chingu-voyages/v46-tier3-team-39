@@ -130,6 +130,5 @@ const deleteChoice = (index: number, {questionData, setQuestionData} : Pick<Ques
     if (newAnswer.length === 0 && questionData.questionType === "Multiple Choice") {
         newAnswer = [newOptions[0]]
     }
-    console.log(newAnswer);
     setQuestionData(questionData.questionInfo && options ? {...questionData, questionInfo: {...questionData.questionInfo, options: newOptions}, answer: {correctAnswer: newAnswer}}: questionData)
 }

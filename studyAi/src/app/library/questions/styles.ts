@@ -8,6 +8,7 @@ const styles = {
     h1: [
         "text-3xl",
         "font-bold",
+        "sm:text-5xl"
     ].join(" "),
 }
 
