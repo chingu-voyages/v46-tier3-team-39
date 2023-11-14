@@ -3,21 +3,26 @@ import styles from "../leftContent/leftContentStyles"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
-import React, { useState } from 'react'
+import React from 'react'
 import { QuestionProps } from '../../questionEditModal'
 import type { AnswerOption } from '../../../../../../../prisma/generated/type-graphql'
-import {ObjectId} from 'bson'
 import { v4 as uuid } from "uuid";
 
 export const MultipleChoice = ({questionData, setQuestionData} : Pick<QuestionProps, "questionData" | "setQuestionData">) => {
     const options = questionData.questionInfo?.options as AnswerOption[];
-    const answer = questionData.answer?.correctAnswer;
     const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setQuestionData({...questionData, answer: {correctAnswer: [options[Number((e.target as HTMLInputElement).value)]]}})
+        const id = (e.target as HTMLInputElement).value
+        let value = "";
+        questionData?.questionInfo?.options.forEach((option) => {
+            if (option.id === id) {
+                value = option.value
+            }
+        })
+        setQuestionData({...questionData, answer: {correctAnswer: [{id: id, value: value}]}})
     }
 
     return (
-        <RadioGroup className="mt-2" defaultValue="outlined" name="radio-buttons-group" value={questionData.answer?.correctAnswer[0]?.id} onChange={handleRadioChange}>
+        <RadioGroup className="mt-2" defaultValue="outlined" name="radio-buttons-group" value={questionData.answer?.correctAnswer[0].id} onChange={handleRadioChange}>
             {options.map((_option, index) => {
                 const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
                     const newOptions = options.slice(0, index).concat({id: options[index].id, value: event.target.value}).concat(options.slice(index+1)) 
