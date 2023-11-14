@@ -7,19 +7,45 @@ import {
   getLocalStorageObj,
 } from "@/app/util/parsers/localStorageWrappers";
 import { QuestionSubmission } from "@prisma/client";
-export const saveAnswerToLocalStorage = (
-  id: string,
-  submission: Partial<QuestionSubmission>
-) => {
-  const key = `question-submission-${id}`;
+export const saveAnswerToLocalStorage = ({
+  id,
+  submission,
+  submissionType,
+}: {
+  id: string;
+  submission: Partial<QuestionSubmission>;
+  submissionType: "question" | "quiz";
+}) => {
+  const key =
+    submissionType === "question"
+      ? `question-submission-${id}`
+      : `quiz-submission-${id}`;
   addLocalStorageObj(key, submission);
 };
-export const deleteAnswerToLocalStorage = (id: string) => {
-  const key = `question-submission-${id}`;
+export const deleteAnswerToLocalStorage = ({
+  id,
+  submissionType,
+}: {
+  id: string;
+  submissionType: "question" | "quiz";
+}) => {
+  const key =
+    submissionType === "question"
+      ? `question-submission-${id}`
+      : `quiz-submission-${id}`;
   deleteLocalStorageObj(key);
 };
-export const getAnswerFromLocalStorage = (id: string) => {
-  const key = `question-submission-${id}`;
+export const getAnswerFromLocalStorage = ({
+  id,
+  submissionType,
+}: {
+  id: string;
+  submissionType: "question" | "quiz";
+}) => {
+  const key =
+    submissionType === "question"
+      ? `question-submission-${id}`
+      : `quiz-submission-${id}`;
   return getLocalStorageObj<Partial<QuestionSubmission>>(key);
 };
 export const findById = <T>(arr: (T & { id: string })[], id: string) => {
