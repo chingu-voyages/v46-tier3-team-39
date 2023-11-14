@@ -1,6 +1,27 @@
 import { GetState, SetState } from "react-sweet-state";
 import { cloneDeep } from "lodash";
 import { SubmissionsData } from "../util/types/SubmissionsData";
+import {
+  addLocalStorageObj,
+  deleteLocalStorageObj,
+  getLocalStorageObj,
+} from "@/app/util/parsers/localStorageWrappers";
+import { QuestionSubmission } from "@prisma/client";
+export const saveAnswerToLocalStorage = (
+  id: string,
+  submission: Partial<QuestionSubmission>
+) => {
+  const key = `question-submission-${id}`;
+  addLocalStorageObj(key, submission);
+};
+export const deleteAnswerToLocalStorage = (id: string) => {
+  const key = `question-submission-${id}`;
+  deleteLocalStorageObj(key);
+};
+export const getAnswerFromLocalStorage = (id: string) => {
+  const key = `question-submission-${id}`;
+  return getLocalStorageObj<Partial<QuestionSubmission>>(key);
+};
 export const findById = <T>(arr: (T & { id: string })[], id: string) => {
   let idx = 0;
   for (let i in arr) {

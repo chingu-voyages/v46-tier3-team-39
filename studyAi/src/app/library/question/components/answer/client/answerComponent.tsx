@@ -14,27 +14,7 @@ import { AnswerType } from "./answerInputs";
 import { useFullscreen } from "@/app/util/providers/FullscreenProvider";
 import React from "react";
 import BtnLabelDropdown from "@/app/util/components/btnLabelDropdown/btnLabelDropdown";
-import {
-  addLocalStorageObj,
-  deleteLocalStorageObj,
-  getLocalStorageObj,
-} from "@/app/util/parsers/localStorageWrappers";
-import { QuestionSubmission } from "@prisma/client";
-const saveAnswerToLocalStorage = (
-  id: string,
-  answer: QuestionSubmission["answerProvided"]
-) => {
-  const key = `question-${id}-answer`;
-  addLocalStorageObj(key, answer);
-};
-const deleteAnswerToLocalStorage = (id: string) => {
-  const key = `question-${id}-answer`;
-  deleteLocalStorageObj(key);
-};
-const getAnswerFromLocalStorage = (id: string) => {
-  const key = `question-${id}-answer`;
-  return getLocalStorageObj<QuestionSubmission["answerProvided"]>(key);
-};
+import { useQuestionSubmissions } from "@/app/stores/questionSubmissionsStore";
 const determineAnswerTitle = (str?: string) => {
   const matchStr = str as (typeof QuestionTypes)[number];
   switch (matchStr) {
@@ -96,10 +76,14 @@ const FullScreenBtn = ({
 const ResetAnswerBtn = ({
   btnClassNames,
   btnStyle,
+  questionId,
 }: {
+  questionId: string;
   btnClassNames?: string;
   btnStyle?: React.CSSProperties;
 }) => {
+  const [currSubmissions, { deleteItems }] = useQuestionSubmissions();
+  const submission = currSubmissions.ongoingData[questionId];
   return (
     <BtnLabelDropdown text="Reset" pointerEvents={false}>
       {(props) => (
@@ -110,6 +94,14 @@ const ResetAnswerBtn = ({
           }}
           onPointerLeave={(e) => {
             if (e.pointerType === "mouse") props.handleClose();
+          }}
+          onClick={() => {
+            if (submission && submission.questionId)
+              deleteItems([
+                {
+                  questionId: submission.questionId,
+                },
+              ]);
           }}
           size="small"
           sx={btnStyle}
@@ -133,14 +125,19 @@ const TopBar = () => {
     padding: 0,
     aspectRatio: 1,
   };
-
   return (
     <ContainerBar border>
       <h3 className="flex items-center h-full text-sm">
         {determineAnswerTitle(question?.questionType)}
       </h3>
       <div className="flex items-center h-full grow justify-end">
-        <ResetAnswerBtn btnClassNames={btnClassNames} btnStyle={btnStyle} />
+        {question && (
+          <ResetAnswerBtn
+            questionId={question.id}
+            btnClassNames={btnClassNames}
+            btnStyle={btnStyle}
+          />
+        )}
         <FullScreenBtn btnClassNames={btnClassNames} btnStyle={btnStyle} />
       </div>
     </ContainerBar>
