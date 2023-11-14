@@ -181,11 +181,11 @@ export const deleteSubmissionItems = <T>({
   items.forEach((item) => {
     const { id, questionId, quizId } = item;
     const submissionTypeId = questionId ? questionId : (quizId as string);
-    const inOngoing = submissionTypeId in currState.ongoingData;
-    const inSubmitted = submissionTypeId in currState.submittedData;
+    const inOngoing = submissionTypeId in copiedData.ongoingData;
+    const inSubmitted = submissionTypeId in copiedData.submittedData;
     const submissionMap = copiedData.submittedData.map[submissionTypeId];
-    if (inOngoing && submissionTypeId in currState.ongoingData)
-      delete currState.ongoingData[submissionTypeId];
+    if (inOngoing)
+      delete copiedData.ongoingData[submissionTypeId];
     if (inSubmitted && id && submissionMap && id in submissionMap) {
       delete submissionMap[id];
       let arr = copiedData.submittedData.arr[submissionTypeId];
