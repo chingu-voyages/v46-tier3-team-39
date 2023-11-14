@@ -1,6 +1,6 @@
 import { GetState, SetState } from "react-sweet-state";
 import { cloneDeep } from "lodash";
-import { SubmissionsData } from "./submissionsStore";
+import { SubmissionsData } from "../util/types/SubmissionsData";
 export const findById = <T>(arr: (T & { id: string })[], id: string) => {
   let idx = 0;
   for (let i in arr) {
@@ -45,7 +45,7 @@ export const addOrUpdateSubmissionsFunc = <T>({
   getState,
   setState,
 }: {
-  items: (T & { id: string; questionId?: string; quizId?: string })[];
+  items: (T & { id?: string; questionId?: string; quizId?: string })[];
   getState: GetState<SubmissionsData<T>>;
   setState: SetState<SubmissionsData<T>>;
 }) => {
@@ -57,31 +57,41 @@ export const addOrUpdateSubmissionsFunc = <T>({
     const submissionTypeId = questionId ? questionId : (quizId as string);
     const inOngoing = submissionTypeId in currState.ongoingData;
     const inSubmitted = submissionTypeId in currState.submittedData;
-    if (inSubmitted) {
+    if (inSubmitted && id) {
+      let submissionMap = currState.submittedData.map[submissionTypeId];
+      if (!submissionMap) {
+        currState.submittedData.map[submissionTypeId] = {};
+        submissionMap = currState.submittedData.map[submissionTypeId];
+      }
       //check if we need to update
-      const currItem = currState.submittedData.map[submissionTypeId][id];
+      const currItem = submissionMap[id];
       const newItem = currItem
         ? {
             ...currItem,
             ...item,
+            id: id,
           }
-        : item;
-      copiedData.submittedData.map[submissionTypeId][newItem.id] = newItem;
+        : { ...item, id };
+      submissionMap[id] = newItem;
       //grab index of id in arr
-      const arr = copiedData.submittedData.arr[submissionTypeId];
+      let arr = copiedData.submittedData.arr[submissionTypeId];
+      if (!arr) {
+        copiedData.submittedData.arr[submissionTypeId] = [];
+        arr = copiedData.submittedData.arr[submissionTypeId];
+      }
       let idx = findById(arr, newItem.id);
       copiedData.submittedData.arr[submissionTypeId][idx] = newItem;
     }
     if (inOngoing) {
       //check if we need to update
-      const currItem = currState.ongoingData[id];
+      const currItem = currState.ongoingData[submissionTypeId];
       const newItem = currItem
         ? {
             ...currItem,
             ...item,
           }
         : item;
-      copiedData.ongoingData[newItem.id] = newItem;
+      copiedData.ongoingData[submissionTypeId] = newItem;
     }
   });
   setState(copiedData);
@@ -110,7 +120,7 @@ export const deleteSubmissionItems = <T>({
   getState,
   setState,
 }: {
-  items: (T & { id: string; questionId?: string; quizId?: string })[];
+  items: (T & { id?: string; questionId?: string; quizId?: string })[];
   getState: GetState<SubmissionsData<T>>;
   setState: SetState<SubmissionsData<T>>;
 }) => {
@@ -121,11 +131,16 @@ export const deleteSubmissionItems = <T>({
     const submissionTypeId = questionId ? questionId : (quizId as string);
     const inOngoing = submissionTypeId in currState.ongoingData;
     const inSubmitted = submissionTypeId in currState.submittedData;
-    if (inOngoing && id in currState.ongoingData)
-      delete currState.ongoingData[id];
-    if (inSubmitted && id in copiedData.submittedData.map[submissionTypeId]) {
-      delete copiedData.submittedData.map[submissionTypeId][id];
-      const arr = copiedData.submittedData.arr[submissionTypeId];
+    const submissionMap = copiedData.submittedData.map[submissionTypeId];
+    if (inOngoing && submissionTypeId in currState.ongoingData)
+      delete currState.ongoingData[submissionTypeId];
+    if (inSubmitted && id && submissionMap && id in submissionMap) {
+      delete submissionMap[id];
+      let arr = copiedData.submittedData.arr[submissionTypeId];
+      if (!arr) {
+        copiedData.submittedData.arr[submissionTypeId] = [];
+        arr = copiedData.submittedData.arr[submissionTypeId];
+      }
       let idx = findById(arr, id);
       //remove element
       arr.splice(idx, 1);

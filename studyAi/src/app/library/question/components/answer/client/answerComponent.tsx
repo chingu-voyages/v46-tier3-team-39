@@ -14,6 +14,27 @@ import { AnswerType } from "./answerInputs";
 import { useFullscreen } from "@/app/util/providers/FullscreenProvider";
 import React from "react";
 import BtnLabelDropdown from "@/app/util/components/btnLabelDropdown/btnLabelDropdown";
+import {
+  addLocalStorageObj,
+  deleteLocalStorageObj,
+  getLocalStorageObj,
+} from "@/app/util/parsers/localStorageWrappers";
+import { QuestionSubmission } from "@prisma/client";
+const saveAnswerToLocalStorage = (
+  id: string,
+  answer: QuestionSubmission["answerProvided"]
+) => {
+  const key = `question-${id}-answer`;
+  addLocalStorageObj(key, answer);
+};
+const deleteAnswerToLocalStorage = (id: string) => {
+  const key = `question-${id}-answer`;
+  deleteLocalStorageObj(key);
+};
+const getAnswerFromLocalStorage = (id: string) => {
+  const key = `question-${id}-answer`;
+  return getLocalStorageObj<QuestionSubmission["answerProvided"]>(key);
+};
 const determineAnswerTitle = (str?: string) => {
   const matchStr = str as (typeof QuestionTypes)[number];
   switch (matchStr) {

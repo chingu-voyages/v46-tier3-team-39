@@ -4,19 +4,21 @@ import FullscreenProvider from "@/app/util/providers/FullscreenProvider";
 import QuestionPageNavigation, {
   OngoingQuestionBar,
 } from "@/app/library/question/components/page/client/questionNavigationBtns";
-// import QuestionWrapper from "@/app/library/question/components/page/server/questionWrapper";
+import QuestionWrapper from "@/app/library/question/components/page/server/questionWrapper";
 import QuestionFormWrapper from "@/app/library/question/components/page/client/questionSubmissionForm";
-
+import { QuestionSubmissionsContainer } from "@/app/stores/questionSubmissionsStore";
 const QuestionPageContainer = () => {
   return (
     <FullscreenProvider>
       <QuestionPageNavigation>
-        <QuestionFormWrapper>
-        <OngoingQuestionBar
-          pagination={{ onPrev: () => {}, onNext: () => {} }}
-        />
-        {/* <QuestionWrapper /> */}
-        </QuestionFormWrapper>
+        <QuestionSubmissionsContainer initialItems={[]}>
+          <QuestionFormWrapper>
+            <OngoingQuestionBar
+              pagination={{ onPrev: () => {}, onNext: () => {} }}
+            />
+            <QuestionWrapper />
+          </QuestionFormWrapper>
+        </QuestionSubmissionsContainer>
       </QuestionPageNavigation>
     </FullscreenProvider>
   );

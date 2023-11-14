@@ -14,11 +14,12 @@ import {
   InputHTMLAttributes,
   KeyboardEvent,
   SyntheticEvent,
-  useState,
+  useEffect,
 } from "react";
-import { ObjectId } from "bson";
 import { Question } from "../../../../../../../graphql/generated/graphql";
-import { QuestionSubmission } from "../../../../../../../prisma/generated/type-graphql";
+import ReadOnlyInput from "@/app/util/components/inputs/ReadOnlyInput";
+import { useQuestionSubmissions } from "@/app/stores/questionSubmissionsStore";
+import ObjectId from "bson-objectid";
 const adjustScroll = (
   event: ChangeEvent<HTMLTextAreaElement> | KeyboardEvent<HTMLTextAreaElement>
 ) => {
@@ -47,75 +48,170 @@ const adjustScroll = (
     return (element.scrollTop = newScrollPos <= 0 ? 0 : newScrollPos);
   }
 };
+
 export const MultipleChoice = ({
   options,
-  initialValues,
+  questionId,
 }: {
   options: Question["questionInfo"]["options"];
-  initialValues?: QuestionSubmission["answerProvided"];
+  questionId: string;
 }) => {
-  const [currAnswer, setCurrAnswer] = useState(
-    initialValues ? initialValues : []
-  );
+  const [currSubmissions, { addOrUpdateItems }] = useQuestionSubmissions();
+  const submission = currSubmissions.ongoingData[questionId];
+  //sometimes no ongoing submission will exist.
+  //therefore we'll generate one
+  useEffect(() => {
+    if (submission) return;
+    addOrUpdateItems([
+      {
+        questionId,
+      },
+    ]);
+  }, [submission, addOrUpdateItems]);
+  const value =
+    submission &&
+    submission.answerProvided &&
+    submission.answerProvided.length > 0
+      ? submission.answerProvided
+      : [];
   const onChange = (e: SyntheticEvent<Element, Event>) => {
     const target = e.currentTarget as HTMLInputElement;
     const { value } = target;
     const data = target.dataset;
     const id = data.id;
     if (!id) return;
-    setCurrAnswer([
+    addOrUpdateItems([
       {
-        id,
-        value,
+        ...submission,
+        questionId,
+        answerProvided: [{ id, value }],
       },
     ]);
   };
   return (
-    <RadioGroup className="px-[5%] py-5 grow" name="multipleChoiceAnswer">
-      {options.map((val) => {
-        const dataProps = {
-          "data-id": val.id,
-        } as InputHTMLAttributes<HTMLInputElement>;
-        return (
-          <FormControlLabel
-            key={val.id}
-            value={val.value}
-            control={<Radio inputProps={dataProps} />}
-            label={val.value}
-            onChange={onChange}
-            checked={currAnswer.length > 0 && currAnswer[0].value === val.value}
-          />
-        );
-      })}
-    </RadioGroup>
+    <>
+      <RadioGroup className="px-[5%] py-5 grow">
+        {options.map((val) => {
+          const dataProps = {
+            "data-id": val.id,
+          } as InputHTMLAttributes<HTMLInputElement>;
+          return (
+            <FormControlLabel
+              key={val.id}
+              value={val.value}
+              control={
+                <Radio
+                  inputProps={dataProps}
+                  checked={value.length > 0 && value[0].id === val.id}
+                />
+              }
+              label={val.value}
+              onChange={onChange}
+            />
+          );
+        })}
+      </RadioGroup>
+      <ReadOnlyInput
+        name={"multipleChoiceAnswer"}
+        value={JSON.stringify(value)}
+      />
+    </>
+  );
+};
+export const ShortAnswer = ({ questionId }: { questionId: string }) => {
+  const [currSubmissions, { addOrUpdateItems }] = useQuestionSubmissions();
+  const submission = currSubmissions.ongoingData[questionId];
+  //sometimes no ongoing submission will exist.
+  //therefore we'll generate one
+  useEffect(() => {
+    if (submission) return;
+    addOrUpdateItems([
+      {
+        questionId,
+      },
+    ]);
+  }, [submission, addOrUpdateItems]);
+  const value =
+    submission &&
+    submission.answerProvided &&
+    submission.answerProvided.length > 0
+      ? submission.answerProvided
+      : [
+          {
+            id: ObjectId().toString(),
+            value: "",
+          },
+        ];
+  const onChange = (e: SyntheticEvent<Element, Event>) => {
+    const target = e.currentTarget as HTMLInputElement;
+    const { value } = target;
+    const data = target.dataset;
+    const id = data.id;
+    if (!id) return;
+    addOrUpdateItems([
+      {
+        ...submission,
+        questionId,
+        answerProvided: [{ id, value }],
+      },
+    ]);
+  };
+  return (
+    <>
+      <TextareaAutosize
+        minRows={8}
+        onKeyDown={adjustScroll}
+        data-id={value[0].id}
+        value={value[0].value}
+        style={{ height: "100%", resize: "none" }}
+        className="px-[4%] py-4 pb-6 text-sm grow"
+        placeholder="Type answer here"
+        onChange={(e) => {
+          //modify scroll cursor pos
+          adjustScroll(e);
+          //update state
+          onChange(e);
+        }}
+      />
+      <ReadOnlyInput name={"shortAnswer"} value={JSON.stringify(value)} />
+    </>
   );
 };
 export const SelectMultiple = ({
   options,
-  initialValues,
+  questionId,
 }: {
   options: Question["questionInfo"]["options"];
-  initialValues?: QuestionSubmission["answerProvided"];
+  questionId: string;
 }) => {
-  const [currSelection, setCurrSelection] = useState<
-    QuestionSubmission["answerProvided"]
-  >([]);
+  const [currSubmissions, { addOrUpdateItems }] = useQuestionSubmissions();
+  const submission = currSubmissions.ongoingData[questionId];
+  const currValue =
+    submission &&
+    submission.answerProvided &&
+    submission.answerProvided.length > 0
+      ? submission.answerProvided
+      : [];
   const onChange = (e: SyntheticEvent<Element, Event>) => {
     const target = e.currentTarget as HTMLInputElement;
     const { value, checked } = target;
     const data = target.dataset;
     const id = data.id;
     if (!id) return;
-    setCurrSelection((prev) => {
-      const newState = [...prev];
-      //exists in curr state
-      const currEl = prev
-        .map((e, idx) => ({ ...e, idx }))
-        .filter((e) => e.id === id);
-      if (currEl.length > 0 && !checked) newState.splice(currEl[0].idx, 1);
-      else if (currEl.length <= 0 && checked) newState.push({ id, value });
-      return newState;
-    });
+    const newState = [...currValue];
+    //exists in curr state
+    const currEl = currValue
+      .map((e, idx) => ({ ...e, idx }))
+      .filter((e) => e.id === id);
+    if (currEl.length > 0 && !checked) newState.splice(currEl[0].idx, 1);
+    else if (currEl.length <= 0 && checked) newState.push({ id, value });
+    addOrUpdateItems([
+      {
+        ...submission,
+        questionId,
+        answerProvided: newState,
+      },
+    ]);
   };
   return (
     <FormGroup className="px-[5%] py-5 grow">
@@ -134,63 +230,10 @@ export const SelectMultiple = ({
         );
       })}
       {/*Hidden input that we'll use to grab data upon submission*/}
-      <input
-        name={"selectMultipleSelections"}
-        value={JSON.stringify(currSelection)}
-        readOnly
-        style={{
-          visibility: "hidden",
-          minWidth: "unset",
-          minHeight: "unset",
-          width: 0,
-          height: 0,
-        }}
-      />
     </FormGroup>
   );
 };
-export const ShortAnswer = ({
-  initialValues,
-}: {
-  initialValues?: QuestionSubmission["answerProvided"];
-}) => {
-  const [currAnswer, setCurrAnswer] = useState(
-    initialValues ? initialValues : []
-  );
-  const onChange = (e: SyntheticEvent<Element, Event>) => {
-    const target = e.currentTarget as HTMLInputElement;
-    const { value } = target;
-    const data = target.dataset;
-    const id = data.id;
-    if (!id) return;
-    setCurrAnswer([
-      {
-        id,
-        value,
-      },
-    ]);
-  };
-  return (
-    <TextareaAutosize
-      minRows={8}
-      name="shortAnswer"
-      onKeyDown={adjustScroll}
-      data-id={
-        currAnswer.length > 0 ? currAnswer[0].id : new ObjectId().toString()
-      }
-      onChange={(e) => {
-        //modify scroll cursor pos
-        adjustScroll(e);
-        //update state
-        onChange(e);
-      }}
-      value={currAnswer.length > 0 ? currAnswer[0].value : ""}
-      style={{ height: "100%", resize: "none" }}
-      className="px-[4%] py-4 pb-6 text-sm grow"
-      placeholder="Type answer here"
-    />
-  );
-};
+
 export const AnswerType = () => {
   const params = useParams();
   const questions = useQuestions()[0].data;
@@ -204,12 +247,16 @@ export const AnswerType = () => {
   } = question;
   switch (questionType) {
     case "Multiple Choice":
-      return <MultipleChoice options={questionOptions} />;
+      return (
+        <MultipleChoice options={questionOptions} questionId={question.id} />
+      );
     case "Select Multiple":
-      return <SelectMultiple options={questionOptions} />;
+      return (
+        <SelectMultiple options={questionOptions} questionId={question.id} />
+      );
     case "Short Answer":
-      return <ShortAnswer />;
+      return <ShortAnswer questionId={question.id} />;
     default:
-      return <ShortAnswer />;
+      return <ShortAnswer questionId={question.id} />;
   }
 };

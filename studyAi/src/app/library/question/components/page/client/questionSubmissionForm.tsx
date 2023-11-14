@@ -4,11 +4,9 @@ import { useQuestions } from "@/app/stores/questionStore";
 import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { gql } from "../../../../../../../graphql/generated";
-import { ObjectId } from "bson";
-import { Question } from "@prisma/client";
-import { Session } from "next-auth";
 import { useMutation } from "@apollo/client";
-import { QuestionSubmissionCreateInput } from "../../../../../../../graphql/generated/graphql";
+import createQuestionSubmissionDoc from "../utils/createQuestionSubmission";
+import { useQuestionSubmissions } from "@/app/stores/questionSubmissionsStore";
 const UploadNewQuestionSubmissionQuery = gql(`
   mutation UploadNewQuestionSubmission($questionSubmission: QuestionSubmissionCreateInput!){
     createOneQuestionSubmission(
@@ -18,85 +16,7 @@ const UploadNewQuestionSubmissionQuery = gql(`
     }
   }
 `);
-const createQuestionSubmissionDoc = ({
-  event,
-  session,
-  question,
-}: {
-  event: React.FormEvent<HTMLFormElement>;
-  session: Session | null;
-  question: Partial<Question>;
-}) => {
-  //grab uncontrolled inputs here form
-  const formData = new FormData(event.currentTarget);
-  const data = Object.fromEntries(formData.entries());
-  const questionType = question.questionType;
-  const {
-    selectMultipleSelections,
-    shortAnswer,
-    multipleChoiceAnswer,
-    timeInputType,
-    timeTaken,
-    totalTimeGiven,
-  } = data;
-  //we can't save a question submission if there is no session
-  if (!session) return;
-  const newSubmission: QuestionSubmissionCreateInput = {
-    userId: session.user.id,
-    questionId: question.id as string,
-    dateCreated: new Date(),
-    time:
-      typeof timeInputType === "string" && typeof timeTaken === "string"
-        ? {
-            set: {
-              timeType: timeInputType.toString(),
-              timeTaken: parseInt(timeTaken),
-              totalTimeGiven:
-                typeof totalTimeGiven === "string"
-                  ? parseInt(totalTimeGiven)
-                  : null,
-            },
-          }
-        : null,
-  };
-  switch (questionType) {
-    case "Multiple Choice":
-      newSubmission.answerProvided = [
-        {
-          id: new ObjectId().toString(),
-          value: multipleChoiceAnswer.toString(),
-        },
-      ];
-      break;
-    case "Short Answer":
-      newSubmission.answerProvided = [
-        {
-          id: new ObjectId().toString(),
-          value: shortAnswer.toString(),
-        },
-      ];
-      break;
-    case "Select Multiple":
-      try {
-        let parsedArr = JSON.parse(
-          selectMultipleSelections.toString()
-        ) as string[];
-        if (!parsedArr) return;
-        newSubmission.answerProvided = parsedArr.map((val) => {
-          return {
-            id: new ObjectId().toString(),
-            value: val.toString(),
-          };
-        });
-      } catch (err) {
-        console.error(err);
-      }
-      break;
-    default:
-      return null;
-  }
-  return newSubmission;
-};
+
 const QuestionFormWrapper = ({ children }: { children: React.ReactNode }) => {
   // define hooks
   const session = useSession();
@@ -108,7 +28,9 @@ const QuestionFormWrapper = ({ children }: { children: React.ReactNode }) => {
   const [mutationQuery, { loading, error, data }] = useMutation(
     UploadNewQuestionSubmissionQuery
   );
+  const currSubmissions = useQuestionSubmissions()[0].ongoingData;
   if (!question) return <></>;
+  const submission = currSubmissions[question.id];
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     e.stopPropagation();
@@ -117,8 +39,8 @@ const QuestionFormWrapper = ({ children }: { children: React.ReactNode }) => {
     isSubmitting.current = true;
     const doc = createQuestionSubmissionDoc({
       session: session.data,
-      question,
       event: e,
+      submission,
     });
     if (!doc) return (isSubmitting.current = false);
     try {
