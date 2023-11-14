@@ -115,11 +115,21 @@ const NewAnswer = ({questionData, setQuestionData} : Pick<QuestionProps, "questi
 
 const deleteChoice = (index: number, {questionData, setQuestionData} : Pick<QuestionProps, "questionData" | "setQuestionData">) => {
     const options = questionData.questionInfo?.options
+    if (options?.length == 1) {
+        return;
+    }
+    const newOptions = options?.toSpliced(index, 1) as AnswerOption[];
     const currentOption = options ? options[index] : undefined
-    const answerIndex = currentOption && questionData.answer ? questionData.answer.correctAnswer.indexOf(currentOption) : -1
-    let newAnswer = questionData.answer
-    if (newAnswer && answerIndex != -1) {
-        newAnswer.correctAnswer = newAnswer.correctAnswer.toSpliced(answerIndex, 1)
-    } 
-    setQuestionData(questionData.questionInfo && options ? {...questionData, questionInfo: {...questionData.questionInfo, options: options.toSpliced(index, 1)}, answer: newAnswer}: questionData)
+    const currentAnswer = questionData.answer?.correctAnswer;
+    let newAnswer: AnswerOption[] = []
+    currentAnswer?.forEach((answer) => {
+        if (answer.id != currentOption?.id) {
+            newAnswer.push(answer);
+        }
+    });
+    if (newAnswer.length === 0 && questionData.questionType === "Multiple Choice") {
+        newAnswer = [newOptions[0]]
+    }
+    console.log(newAnswer);
+    setQuestionData(questionData.questionInfo && options ? {...questionData, questionInfo: {...questionData.questionInfo, options: newOptions}, answer: {correctAnswer: newAnswer}}: questionData)
 }
