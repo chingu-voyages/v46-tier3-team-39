@@ -10,11 +10,11 @@ import {
   faUpRightAndDownLeftFromCenter,
 } from "@fortawesome/free-solid-svg-icons";
 import { QuestionTypes } from "@/app/util/types/UserData";
-import { AnswerType } from "./answerInputs";
 import { useFullscreen } from "@/app/util/providers/FullscreenProvider";
 import React from "react";
 import BtnLabelDropdown from "@/app/util/components/btnLabelDropdown/btnLabelDropdown";
 import { useQuestionSubmissions } from "@/app/stores/questionSubmissionsStore";
+import { AnswerType } from "./answerTypeContainer";
 const determineAnswerTitle = (str?: string) => {
   const matchStr = str as (typeof QuestionTypes)[number];
   switch (matchStr) {

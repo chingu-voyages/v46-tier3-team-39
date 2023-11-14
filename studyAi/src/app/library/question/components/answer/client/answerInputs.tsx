@@ -1,6 +1,4 @@
 "use client";
-import { useParams } from "next/navigation";
-import { useQuestions } from "@/app/stores/questionStore";
 import { TextareaAutosize } from "@mui/base/TextareaAutosize";
 import {
   Checkbox,
@@ -15,6 +13,7 @@ import {
   KeyboardEvent,
   SyntheticEvent,
   useEffect,
+  useRef,
 } from "react";
 import { Question } from "../../../../../../../graphql/generated/graphql";
 import ReadOnlyInput from "@/app/util/components/inputs/ReadOnlyInput";
@@ -126,9 +125,10 @@ export const MultipleChoice = ({
   );
 };
 export const ShortAnswer = ({ questionId }: { questionId: string }) => {
+  const defaultId = useRef(ObjectId().toString());
   const [currSubmissions, { addOrUpdateItems }] = useQuestionSubmissions();
   const submission = currSubmissions.ongoingData[questionId];
-   //sometimes no ongoing submission will exist.
+  //sometimes no ongoing submission will exist.
   //therefore we'll generate one
   useEffect(() => {
     if (submission) return;
@@ -148,7 +148,7 @@ export const ShortAnswer = ({ questionId }: { questionId: string }) => {
       ? submission.answerProvided
       : [
           {
-            id: ObjectId().toString(),
+            id: defaultId.current,
             value: "",
           },
         ];
@@ -269,29 +269,3 @@ export const SelectMultiple = ({
   );
 };
 
-export const AnswerType = () => {
-  const params = useParams();
-  const questions = useQuestions()[0].data;
-  const question =
-    params.id && typeof params.id === "string" ? questions[params.id] : null;
-  if (!question) return <></>;
-  if (!question.questionInfo) return <></>;
-  const {
-    questionType,
-    questionInfo: { options: questionOptions },
-  } = question;
-  switch (questionType) {
-    case "Multiple Choice":
-      return (
-        <MultipleChoice options={questionOptions} questionId={question.id} />
-      );
-    case "Select Multiple":
-      return (
-        <SelectMultiple options={questionOptions} questionId={question.id} />
-      );
-    case "Short Answer":
-      return <ShortAnswer questionId={question.id} />;
-    default:
-      return <ShortAnswer questionId={question.id} />;
-  }
-};
