@@ -7,11 +7,11 @@ import QuestionPageNavigation, {
 import QuestionWrapper from "@/app/library/question/components/page/server/questionWrapper";
 import QuestionFormWrapper from "@/app/library/question/components/page/client/questionSubmissionForm";
 import { QuestionSubmissionsContainer } from "@/app/stores/questionSubmissionsStore";
-const QuestionPageContainer = () => {
+const QuestionPageContainer = ({ questionId }: { questionId: string }) => {
   return (
     <FullscreenProvider>
       <QuestionPageNavigation>
-        <QuestionSubmissionsContainer initialItems={[]}>
+        <QuestionSubmissionsContainer initialItems={[]} questionId={questionId}>
           <QuestionFormWrapper>
             <OngoingQuestionBar
               pagination={{ onPrev: () => {}, onNext: () => {} }}

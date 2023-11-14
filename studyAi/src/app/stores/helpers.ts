@@ -1,5 +1,5 @@
 import { GetState, SetState } from "react-sweet-state";
-import { cloneDeep } from "lodash";
+import { cloneDeep, debounce } from "lodash";
 import { SubmissionsData } from "../util/types/SubmissionsData";
 import {
   addLocalStorageObj,
@@ -7,6 +7,15 @@ import {
   getLocalStorageObj,
 } from "@/app/util/parsers/localStorageWrappers";
 import { QuestionSubmission } from "@prisma/client";
+export type SubmissionTypeMap = {
+  question: Partial<QuestionSubmission>;
+  quiz: Partial<QuestionSubmission>;
+};
+export type SubmissionTypeMapAsGeneric<
+  K extends keyof SubmissionTypeMap = keyof SubmissionTypeMap
+> = {
+  [P in K]: SubmissionTypeMap[P];
+}[K];
 export const saveAnswerToLocalStorage = ({
   id,
   submission,
@@ -22,6 +31,10 @@ export const saveAnswerToLocalStorage = ({
       : `quiz-submission-${id}`;
   addLocalStorageObj(key, submission);
 };
+export const debouncedSaveAnswerToLocalStorage = debounce(
+  saveAnswerToLocalStorage,
+  500
+);
 export const deleteAnswerToLocalStorage = ({
   id,
   submissionType,
@@ -35,18 +48,18 @@ export const deleteAnswerToLocalStorage = ({
       : `quiz-submission-${id}`;
   deleteLocalStorageObj(key);
 };
-export const getAnswerFromLocalStorage = ({
+export const getAnswerFromLocalStorage = <K extends keyof SubmissionTypeMap>({
   id,
   submissionType,
 }: {
   id: string;
-  submissionType: "question" | "quiz";
+  submissionType: K;
 }) => {
   const key =
     submissionType === "question"
       ? `question-submission-${id}`
       : `quiz-submission-${id}`;
-  return getLocalStorageObj<Partial<QuestionSubmission>>(key);
+  return getLocalStorageObj<SubmissionTypeMapAsGeneric<K>>(key);
 };
 export const findById = <T>(arr: (T & { id: string })[], id: string) => {
   let idx = 0;
@@ -92,11 +105,13 @@ export const addOrUpdateSubmissionsFunc = <T>({
   getState,
   setState,
   submissionType,
+  submissionTimeType,
 }: {
   items: (T & { id?: string; questionId?: string; quizId?: string })[];
   getState: GetState<SubmissionsData<T>>;
   setState: SetState<SubmissionsData<T>>;
-  submissionType: "ongoing" | "submitted";
+  submissionTimeType: "ongoing" | "submitted";
+  submissionType?: "question" | "quiz";
 }) => {
   const currState = getState();
   const copiedData = cloneDeep(currState) as SubmissionsData<T>;
@@ -105,9 +120,10 @@ export const addOrUpdateSubmissionsFunc = <T>({
     const { id, questionId, quizId } = item;
     const submissionTypeId = questionId ? questionId : (quizId as string);
     const inOngoing =
-      submissionType === "ongoing" || submissionTypeId in currState.ongoingData;
+      submissionTimeType === "ongoing" ||
+      submissionTypeId in currState.ongoingData;
     const inSubmitted =
-      submissionType === "submitted" ||
+      submissionTimeType === "submitted" ||
       submissionTypeId in currState.submittedData;
     if (inSubmitted && id) {
       let submissionMap = currState.submittedData.map[submissionTypeId];
@@ -144,9 +160,16 @@ export const addOrUpdateSubmissionsFunc = <T>({
           }
         : item;
       copiedData.ongoingData[submissionTypeId] = newItem;
+      if (submissionType)
+        debouncedSaveAnswerToLocalStorage({
+          id: submissionTypeId,
+          submission: newItem,
+          submissionType,
+        });
     }
   });
   setState(copiedData);
+  return copiedData;
 };
 export const deleteItems = <T>({
   items,
@@ -162,7 +185,7 @@ export const deleteItems = <T>({
     data: { [key: string]: T & { id: string } };
   };
   items.forEach((itemId) => {
-    if (itemId in currData.data) delete copyData.data["id"];
+    if (itemId in copyData.data) delete copyData.data["id"];
   });
   setState(copyData);
   return copyData;
@@ -171,10 +194,12 @@ export const deleteSubmissionItems = <T>({
   items,
   getState,
   setState,
+  submissionType,
 }: {
   items: (T & { id?: string; questionId?: string; quizId?: string })[];
   getState: GetState<SubmissionsData<T>>;
   setState: SetState<SubmissionsData<T>>;
+  submissionType?: "question" | "quiz";
 }) => {
   const currState = getState();
   const copiedData = cloneDeep(currState) as SubmissionsData<T>;
@@ -184,8 +209,14 @@ export const deleteSubmissionItems = <T>({
     const inOngoing = submissionTypeId in copiedData.ongoingData;
     const inSubmitted = submissionTypeId in copiedData.submittedData;
     const submissionMap = copiedData.submittedData.map[submissionTypeId];
-    if (inOngoing)
+    if (inOngoing) {
       delete copiedData.ongoingData[submissionTypeId];
+      if (submissionType)
+        deleteAnswerToLocalStorage({
+          id: submissionTypeId,
+          submissionType,
+        });
+    }
     if (inSubmitted && id && submissionMap && id in submissionMap) {
       delete submissionMap[id];
       let arr = copiedData.submittedData.arr[submissionTypeId];

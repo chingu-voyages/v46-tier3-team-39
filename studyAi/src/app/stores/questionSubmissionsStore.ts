@@ -1,6 +1,10 @@
 "use client";
 import { createStore, createHook, createContainer } from "react-sweet-state";
-import { addOrUpdateSubmissionsFunc, deleteSubmissionItems } from "./helpers";
+import {
+  addOrUpdateSubmissionsFunc,
+  deleteSubmissionItems,
+  getAnswerFromLocalStorage,
+} from "./helpers";
 import { QuestionSubmission } from "@prisma/client";
 import { SubmissionsData } from "../util/types/SubmissionsData";
 export type QuestionSubmissionsData = SubmissionsData<QuestionSubmission>;
@@ -14,8 +18,9 @@ const initialState: QuestionSubmissionsData = {
 export const QuestionSubmissionsContainer = createContainer<{
   initialItems: (Partial<QuestionSubmission> & {
     questionId: string;
-    id: string;
+    id?: string;
   })[];
+  questionId?: string;
   children: React.ReactNode;
 }>();
 const Store = createStore({
@@ -37,7 +42,8 @@ const Store = createStore({
           items,
           setState,
           getState,
-          submissionType,
+          submissionType: "question",
+          submissionTimeType: submissionType,
         }),
     deleteItems:
       (
@@ -53,13 +59,34 @@ const Store = createStore({
   handlers: {
     onInit:
       () =>
-      ({ setState, getState }, { initialItems, children }) =>
+      ({ setState, getState }, { initialItems, questionId, children }) => {
+        //grab local state submission
+        let initial = initialItems;
+        const savedSubmission = questionId
+          ? getAnswerFromLocalStorage({
+              id: questionId,
+              submissionType: "question",
+            })
+          : null;
+        if (initialItems.length <= 0) {
+          initial =
+            savedSubmission && questionId
+              ? [
+                  {
+                    ...savedSubmission,
+                    questionId,
+                  },
+                ]
+              : [];
+        }
         addOrUpdateSubmissionsFunc({
-          items: initialItems,
+          items: initial,
           setState,
           getState,
-          submissionType: "submitted",
-        }),
+          submissionType: "question",
+          submissionTimeType: "submitted",
+        });
+      },
   },
   // optional, unique, mostly used for easy debugging
   name: "questionSubmissions",

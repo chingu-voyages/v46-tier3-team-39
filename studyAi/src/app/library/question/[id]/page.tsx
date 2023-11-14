@@ -89,7 +89,7 @@ export default async function QuestionPage({
     const data = question;
     return (
       <QuestionsContainer initialItems={data ? [data] : []}>
-        <QuestionPageContainer />
+        <QuestionPageContainer questionId={data.id} />
       </QuestionsContainer>
     );
   } catch (err) {
