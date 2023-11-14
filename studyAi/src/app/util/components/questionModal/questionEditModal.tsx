@@ -10,29 +10,34 @@ import { Question } from "../../../../../prisma/generated/type-graphql";
 import { ForwardedRef, SetStateAction, forwardRef, useState } from "react";
 
 export interface QuestionProps {
-  questionData?: Partial<Question> | null;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setQuestionData: React.Dispatch<SetStateAction<Partial<Question> | null>>;
+  questionData: Partial<Question>;
+  closeHandler: () => void;
+  setQuestionData: React.Dispatch<SetStateAction<Partial<Question>>>;
 }
 const QuestionEditForm = forwardRef(
   (props: QuestionProps, ref: ForwardedRef<any>) => {
-    const options = props.questionData?.questionInfo?.options;
     return (
       <div className={styles.modal}>
         <FontAwesomeIcon
           icon={faXmark}
           className={styles.closeIcon}
-          onClick={() => props.setIsOpen(false)}
+          onClick={props.closeHandler}
         />
         <h1 className={styles.h1}>Question Editor</h1>
         <Controls
-          setIsOpen={props.setIsOpen}
+          closeHandler={props.closeHandler}
           questionData={props.questionData}
           setQuestionData={props.setQuestionData}
         />
         <div className={styles.contentLayout}>
-          <LeftContent questionData={props.questionData} />
-          <AnswerEditor questionData={props.questionData} />
+          <LeftContent 
+            questionData={props.questionData} 
+            setQuestionData={props.setQuestionData}
+            />
+          <AnswerEditor 
+            questionData={props.questionData} 
+            setQuestionData={props.setQuestionData}
+            />
         </div>
       </div>
     );
