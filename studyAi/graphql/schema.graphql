@@ -505,7 +505,7 @@ type AggregateVerificationToken {
 }
 
 type AnswerData {
-  correctAnswer: [String!]!
+  correctAnswer: [AnswerOption!]!
 }
 
 input AnswerDataCompositeFilter {
@@ -519,19 +519,15 @@ input AnswerDataCreateEnvelopeInput {
 }
 
 input AnswerDataCreateInput {
-  correctAnswer: AnswerDataCreatecorrectAnswerInput
-}
-
-input AnswerDataCreatecorrectAnswerInput {
-  set: [String!]!
+  correctAnswer: [AnswerOptionCreateInput!]
 }
 
 input AnswerDataObjectEqualityInput {
-  correctAnswer: [String!]
+  correctAnswer: [AnswerOptionObjectEqualityInput!]
 }
 
 input AnswerDataOrderByInput {
-  correctAnswer: SortOrder
+  correctAnswer: AnswerOptionOrderByCompositeAggregateInput
 }
 
 input AnswerDataUpdateEnvelopeInput {
@@ -540,19 +536,33 @@ input AnswerDataUpdateEnvelopeInput {
 }
 
 input AnswerDataUpdateInput {
-  correctAnswer: AnswerDataUpdatecorrectAnswerInput
-}
-
-input AnswerDataUpdatecorrectAnswerInput {
-  push: [String!]
-  set: [String!]
+  correctAnswer: [AnswerOptionCreateInput!]
 }
 
 input AnswerDataWhereInput {
   AND: [AnswerDataWhereInput!]
   NOT: [AnswerDataWhereInput!]
   OR: [AnswerDataWhereInput!]
-  correctAnswer: StringNullableListFilter
+  correctAnswer: [AnswerOptionObjectEqualityInput!]
+}
+
+type AnswerOption {
+  id: String!
+  value: String!
+}
+
+input AnswerOptionCreateInput {
+  id: String!
+  value: String!
+}
+
+input AnswerOptionObjectEqualityInput {
+  id: String!
+  value: String!
+}
+
+input AnswerOptionOrderByCompositeAggregateInput {
+  _count: SortOrder
 }
 
 input BoolFieldUpdateOperationsInput {
@@ -1288,7 +1298,7 @@ type QuestionGroupBy {
 
 type QuestionInfoData {
   description: String!
-  options: [String!]!
+  options: [AnswerOption!]!
   title: String!
 }
 
@@ -1304,23 +1314,19 @@ input QuestionInfoDataCreateEnvelopeInput {
 
 input QuestionInfoDataCreateInput {
   description: String!
-  options: QuestionInfoDataCreateoptionsInput
+  options: [AnswerOptionCreateInput!]
   title: String!
-}
-
-input QuestionInfoDataCreateoptionsInput {
-  set: [String!]!
 }
 
 input QuestionInfoDataObjectEqualityInput {
   description: String!
-  options: [String!]
+  options: [AnswerOptionObjectEqualityInput!]
   title: String!
 }
 
 input QuestionInfoDataOrderByInput {
   description: SortOrder
-  options: SortOrder
+  options: AnswerOptionOrderByCompositeAggregateInput
   title: SortOrder
 }
 
@@ -1331,13 +1337,8 @@ input QuestionInfoDataUpdateEnvelopeInput {
 
 input QuestionInfoDataUpdateInput {
   description: StringFieldUpdateOperationsInput
-  options: QuestionInfoDataUpdateoptionsInput
+  options: [AnswerOptionCreateInput!]
   title: StringFieldUpdateOperationsInput
-}
-
-input QuestionInfoDataUpdateoptionsInput {
-  push: [String!]
-  set: [String!]
 }
 
 input QuestionInfoDataWhereInput {
@@ -1345,7 +1346,7 @@ input QuestionInfoDataWhereInput {
   NOT: [QuestionInfoDataWhereInput!]
   OR: [QuestionInfoDataWhereInput!]
   description: StringFilter
-  options: StringNullableListFilter
+  options: [AnswerOptionObjectEqualityInput!]
   title: StringFilter
 }
 
