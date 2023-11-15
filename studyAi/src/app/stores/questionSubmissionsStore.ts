@@ -60,32 +60,44 @@ const Store = createStore({
     onInit:
       () =>
       ({ setState, getState }, { initialItems, questionId, children }) => {
-        //grab local state submission
-        let initial = initialItems;
         const savedSubmission = questionId
           ? getAnswerFromLocalStorage({
               id: questionId,
               submissionType: "question",
             })
           : null;
-        console.log(savedSubmission, 'saved');
-        if (initialItems.length <= 0) {
-          initial =
-            savedSubmission && questionId
-              ? [
-                  {
-                    ...savedSubmission,
-                    questionId,
-                  },
-                ]
-              : [];
-        }
-        addOrUpdateSubmissionsFunc({
+        //grab local state submission
+        const initial =
+          savedSubmission && questionId
+            ? [
+                {
+                  ...savedSubmission,
+                  questionId,
+                },
+              ]
+            : [];
+
+        //these also set states, but their end result doesn't
+        //matter, except that we will be updating state twice
+        //unneccesarily
+        const ongoingData = addOrUpdateSubmissionsFunc({
           items: initial,
           setState,
           getState,
           submissionType: "question",
+          submissionTimeType: "ongoing",
+        });
+        const submittedData = addOrUpdateSubmissionsFunc({
+          items: initialItems,
+          setState,
+          getState,
+          submissionType: "question",
           submissionTimeType: "submitted",
+        });
+        //this sets correct state at the end
+        setState({
+          ongoingData: ongoingData.ongoingData,
+          submittedData: submittedData.submittedData,
         });
       },
   },
