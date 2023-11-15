@@ -9,7 +9,7 @@ import { gql } from "../../../../../../graphql/generated";
 import { useSession } from "next-auth/react";
 import { useMutation } from "@apollo/client";
 import Switch from "@mui/material/Switch";
-import {v4 as uuid} from "uuid"
+import ObjectId from "bson-objectid";
 
 const generateQuestion = async (
   questionData: Partial<Question>,
@@ -35,7 +35,7 @@ const generateQuestion = async (
     let newAnswers: AnswerOption[] = [];
     const newOptions = result?.data?.newQuestion?.options.map(
       (option: string) => {
-        const newOption = { id: uuid(), value: option };
+        const newOption = { id: ObjectId().toString(), value: option };
         if (result?.data?.newQuestion?.answer.includes(option)) {
           newAnswers.push(newOption);
         }
@@ -118,10 +118,7 @@ const styles = {
     ].join(" "),
 };
 
-const uploadQuestion = (
-  mutationQuery: any,
-  e: any
-) => {
+const uploadQuestion = (mutationQuery: any, e: any) => {
   e.preventDefault();
   mutationQuery();
 };
@@ -172,16 +169,13 @@ const Controls = ({
   const [mutationQuery, { loading, error, data }] = useMutation(AddQuestion, {
     variables,
   });
-  console.log(questionData)
 
   return (
     <div className={styles.layout}>
       <div className={styles.topButtonsLayout}>
         <button
           className={styles.button({})}
-          onClick={(e) =>
-            uploadQuestion(mutationQuery, e)
-          }
+          onClick={(e) => uploadQuestion(mutationQuery, e)}
           disabled={loading || isGenerating}
         >
           {loading ? "Uploading..........." : "Upload Question"}
