@@ -202,7 +202,7 @@ const LikeCounterBtns = () => {
   const params = useParams();
   const questions = useQuestions()[0].data;
   const question =
-    params.id && typeof params.id === "string" ? questions[params.id] : null;
+    params.id && typeof params.id === "string" ? questions.map[params.id] : null;
   return (
     <div className="flex items-center mr-1">
       <Button
@@ -238,7 +238,7 @@ export const QuestionView = () => {
   const params = useParams();
   const questions = useQuestions()[0].data;
   const question =
-    params.id && typeof params.id === "string" ? questions[params.id] : null;
+    params.id && typeof params.id === "string" ? questions.map[params.id] : null;
 
   if (!question) return <></>;
   return (

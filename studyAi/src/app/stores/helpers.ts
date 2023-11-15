@@ -77,24 +77,39 @@ export const addOrUpdateFunc = <T>({
   setState,
 }: {
   items: (T & { id: string })[];
-  getState: GetState<{ data: { [key: string]: T & { id: string } } }>;
-  setState: SetState<{ data: { [key: string]: T & { id: string } } }>;
+  getState: GetState<{
+    data: {
+      map: { [key: string]: T & { id: string } };
+      arr: (T & { id: string })[];
+    };
+  }>;
+  setState: SetState<{
+    data: {
+      map: { [key: string]: T & { id: string } };
+      arr: (T & { id: string })[];
+    };
+  }>;
 }) => {
   const currState = getState();
+  const newArr = [...currState.data.arr];
   const arr = items.map((item) => {
-    if (item.id in currState.data)
-      return [
-        item.id,
-        {
-          ...currState.data[item.id],
-          ...item,
-        },
-      ];
+    if (item.id in currState.data.map) {
+      const newItem = {
+        ...currState.data.map[item.id],
+        ...item,
+      };
+      //replace element in arr
+      newArr.splice(findById(newArr, item.id), 1, newItem);
+      return [item.id, newItem];
+    }
     return [item.id, item];
   });
   const data = {
-    ...currState.data,
-    ...Object.assign({}, Object.fromEntries(arr)),
+    map: {
+      ...currState.data.map,
+      ...Object.assign({}, Object.fromEntries(arr)),
+    },
+    arr: newArr,
   };
   setState({
     data,
@@ -178,15 +193,31 @@ export const deleteItems = <T>({
   setState,
 }: {
   items: string[];
-  getState: GetState<{ data: { [key: string]: T & { id: string } } }>;
-  setState: SetState<{ data: { [key: string]: T & { id: string } } }>;
+  getState: GetState<{
+    data: {
+      map: { [key: string]: T & { id: string } };
+      arr: (T & { id: string })[];
+    };
+  }>;
+  setState: SetState<{
+    data: {
+      map: { [key: string]: T & { id: string } };
+      arr: (T & { id: string })[];
+    };
+  }>;
 }) => {
   const currData = getState();
   const copyData = cloneDeep(currData) as {
-    data: { [key: string]: T & { id: string } };
+    data: {
+      map: { [key: string]: T & { id: string } };
+      arr: (T & { id: string })[];
+    };
   };
   items.forEach((itemId) => {
-    if (itemId in copyData.data) delete copyData.data["id"];
+    if (itemId in copyData.data) {
+      delete copyData.data.map[itemId];
+      copyData.data.arr.splice(findById(copyData.data.arr, itemId), 1);
+    }
   });
   setState(copyData);
   return copyData;
