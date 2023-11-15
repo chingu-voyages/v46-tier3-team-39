@@ -34,6 +34,7 @@ const UpdateUserProfileInfo = gql(`
     }
   }
 `);
+
 const ProfileForm = (
   {isEditable, formData, setFormData, toggleEditable}:
   {isEditable?: boolean, formData: any, setFormData?: any, toggleEditable: any}) => {
@@ -142,6 +143,7 @@ const ProfileForm = (
                             options={tags}
                             isClearable
                             name="tags"
+                            value={tags}
                             className="w-full"
                             onChange={(e) => {
                               if (setFormData) {
