@@ -6,24 +6,21 @@ import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
 import { Question } from "../../../../prisma/generated/type-graphql";
 import { QuestionSubmission } from "@prisma/client";
 import { gql } from "../../../../graphql/generated";
-
 export const QueryUserGeneratedQuestions = gql(`
   query QueryUserGeneratedQuestions(
-    $id: String
+    $userId: String
     $dateQuery: DateTimeFilter
-    $cursor: String
+    $cursor: QuestionWhereUniqueInput
     $skip: Int
   ) {
     questions(
       where: {
-        creatorId: { equals: $id }
+        creatorId: { equals: $userId }
         dateCreated: $dateQuery
       }
       orderBy: { dateCreated: desc }
       take: 1000
-      cursor: {
-        id: $cursor
-      }
+      cursor: $cursor
       skip: $skip
     ) {
       id
@@ -38,12 +35,12 @@ export const QueryUserGeneratedQuestions = gql(`
 `);
 const QueryQuestionSubmissions = gql(`
   query QueryQuestionSubmissions(
-    $id: String
+    $userId: String
     $dateQuery: DateTimeFilter
   ) {
     questionSubmissions(
       where: {
-        userId: { equals: $id }
+        userId: { equals: $userId }
         dateCreated: $dateQuery
       }
       orderBy: { dateCreated: desc }
@@ -63,7 +60,7 @@ const GreetingBannerContainer = async () => {
     weeks: 1,
   });
   const queryVariables = {
-    id: userId,
+    userId,
     dateQuery: {
       gte: weekPriorDate.toISOString(),
       lte: currDate.toISOString(),
@@ -103,7 +100,7 @@ const GreetingBannerContainer = async () => {
       />
     );
   } catch (err: any) {
-    console.log(err.networkError.result);
+    console.error(err?.networkError?.result);
     return <></>;
   }
 };
