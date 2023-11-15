@@ -1,23 +1,25 @@
-import Link from "next/link";
-import NavigationWrapper from "./util/components/navigation/navigationWrapper";
-export default function Home() {
-  return (
-    <NavigationWrapper
-      appBars={{
-        navbar: true,
-        footer: true,
-      }}
-    >
-      <Link href={"/about"}>About</Link>
-      <Link href={"/auth/login"}>Login</Link>
-      <Link href={"/auth/signup"}>Sign Up</Link>
-      <Link href={"/dashboard"}>Dashboard</Link>
-      <Link href={"/library/exams"}>Exams Library</Link>
-      <Link href={"/library/questions"}>Questions Library</Link>
-      <Link href={"/library/question/65429fd993f2d4403eac75ec"}>
-        Questions Page
-      </Link>
-      <Link href={"/library/exam"}>Exam Page</Link>
-    </NavigationWrapper>
-  );
+import NavigationWrapper from "../app/util/components/navigation/navigationWrapper";
+import Hero from "../app/about/components/Hero";
+import Video from "../app/about/components/Video";
+import Team from "../app/about/components/Team";
+import Process from "../app/about/components/Process";
+import ExamPrep from "../app/about/components/ExamPrep";
+
+export default function AboutPage() {
+    return (
+        <div className="bg-White">
+            <NavigationWrapper
+                appBars={{
+                    navbar: true,
+                    footer: true,
+                }}
+            >
+                <Hero/>
+                <Video/>
+                <Team/>
+                <Process/>
+                <ExamPrep/>
+            </NavigationWrapper>
+        </div>
+    )
 }

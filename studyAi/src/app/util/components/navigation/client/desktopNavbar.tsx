@@ -22,7 +22,7 @@ export const menuItemLinks = [
   //   href: "/",
   //   text: "Create Exam",
   //   icon: <FontAwesomeIcon icon={faFileLines} className="aspect-square" />,
-  // },
+  // }
 ];
 
 export const GenerateDropdown = () => {

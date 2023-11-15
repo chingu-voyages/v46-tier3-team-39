@@ -12,28 +12,9 @@ export default function Hero() {
         Learn more about our story and mission.
       </p>
       <div className="flex m-auto my-6 justify-center">
-        <QuestionModalWrapper
-          initialQuestionData={{
-            questionInfo: {
-              title: "Math Arithmetic",
-              description: "What is 1+1?",
-              options: [
-                correctAnswer,
-                { id: new ObjectId().toString(), value: "5" },
-              ],
-            },
-            questionType: "Multiple Choice",
-            tags: ["Maths"],
-            private: true,
-            answer: {
-              correctAnswer: [correctAnswer],
-            },
-          }}
-        >
           <button className="bg-Black py-3 px-6 sm:px-8 sm:py-4 mx-2">
             Learn More
           </button>
-        </QuestionModalWrapper>
         <button className="border-2 py-3 px-6 sm:px-8 sm:py-4">Sign Up</button>
       </div>
     </div>
