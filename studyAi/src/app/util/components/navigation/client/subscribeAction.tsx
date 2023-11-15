@@ -76,7 +76,7 @@ export const SubscribeAction = () => {
         }}
         size="large"
         className="rounded-none w-full ml-0 sm:ml-4 sm:w-auto"
-        variant={"contained"}
+        variant={"outlined"}
         aria-label={"subscribe"}
         disabled={loading}
       >
