@@ -59,7 +59,7 @@ const TopBar = ({
   const session = useSession();
   const questions = useQuestions()[0].data;
   const question =
-    params.id && typeof params.id === "string" ? questions[params.id] : null;
+    params.id && typeof params.id === "string" ? questions.map[params.id] : null;
   const btnStyles: React.CSSProperties = {
     textTransform: "none",
     padding: 0,

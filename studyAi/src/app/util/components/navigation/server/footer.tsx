@@ -14,11 +14,7 @@ export const footerServiceLinks = [
 ];
 export const footerContactLinks = [
   {
-    href: "/about",
-    name: "About Us",
-  },
-  {
-    href: "mailto:XXXXXXXXXXXXXXXXXXX",
+    href: "mailto:studyai210@gmail.com",
     name: "Contact Us",
   },
   {

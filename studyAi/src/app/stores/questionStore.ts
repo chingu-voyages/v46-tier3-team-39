@@ -3,10 +3,16 @@ import { Question } from "@prisma/client";
 import { createStore, createHook, createContainer } from "react-sweet-state";
 import { addOrUpdateFunc, deleteItems } from "./helpers";
 type QuestionsData = {
-  data: { [key: string]: Partial<Question> & { id: string } };
+  data: {
+    map: { [key: string]: Partial<Question> & { id: string } };
+    arr: (Partial<Question> & { id: string })[];
+  };
 };
 const initialState: QuestionsData = {
-  data: {},
+  data: {
+    map: {},
+    arr: [],
+  },
 };
 export const QuestionsContainer = createContainer<{
   initialItems: (Partial<Question> & { id: string })[];

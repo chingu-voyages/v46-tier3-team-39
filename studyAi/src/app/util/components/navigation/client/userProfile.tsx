@@ -13,21 +13,21 @@ import NextLink from "next/link";
 import { useSession } from "next-auth/react";
 import { unstable_batchedUpdates } from "react-dom";
 const userItemLinks = (userId?: string) => [
-  {
-    href: `/dashboard`,
-    text: "Dashboard",
-    icon: <FontAwesomeIcon icon={faChartLine} className="aspect-square" />,
-  },
+  // {
+  //   href: `/dashboard`,
+  //   text: "Dashboard",
+  //   icon: <FontAwesomeIcon icon={faChartLine} className="aspect-square" />,
+  // },
   // {
   //   href: `/${userId}/exams`,
   //   text: "Your Exams",
   //   icon: <FontAwesomeIcon icon={faFileLines} className="aspect-square" />,
   // },
-  // {
-  //   href: `${userId}/profile`,
-  //   text: "Profile",
-  //   icon: <FontAwesomeIcon icon={faUserCircle} className="aspect-square" />,
-  // },
+  {
+    href: `/profile`,
+    text: "Profile",
+    icon: <FontAwesomeIcon icon={faUserCircle} className="aspect-square" />,
+  }
 ];
 export const UserProfile = ({
   setFormData,
