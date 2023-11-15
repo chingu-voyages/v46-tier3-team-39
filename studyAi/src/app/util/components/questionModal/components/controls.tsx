@@ -1,4 +1,7 @@
-import { AnswerOption, Question } from "../../../../../../prisma/generated/type-graphql";
+import {
+  AnswerOption,
+  Question,
+} from "../../../../../../prisma/generated/type-graphql";
 import axios from "axios";
 import { QuestionProps } from "../questionEditModal";
 import { SetStateAction, useState } from "react";
@@ -10,11 +13,11 @@ import {v4 as uuid} from "uuid"
 
 const generateQuestion = async (
   questionData: Partial<Question>,
-  isLoading: string,
+  setIsGenerating: React.Dispatch<SetStateAction<boolean>>,
   setQuestionData: React.Dispatch<SetStateAction<Partial<Question>>>
 ) => {
+  setIsGenerating(true);
   if (!questionData) return;
-  if (isLoading === "loading") return;
   try {
     const questionProvided = {
       type: questionData.questionType,
@@ -22,7 +25,7 @@ const generateQuestion = async (
       title: [questionData.questionInfo?.title],
       question: questionData.questionInfo?.description,
       numberOfOptions: questionData.questionInfo?.options.length,
-      answers: questionData.questionInfo?.options
+      answers: questionData.questionInfo?.options,
     };
     const result = await axios({
       url: "/api/generateQuestion",
@@ -30,13 +33,15 @@ const generateQuestion = async (
       data: questionProvided,
     });
     let newAnswers: AnswerOption[] = [];
-    const newOptions = result?.data?.newQuestion?.options.map((option: string) => {
-      const newOption = {id: uuid(), value: option}
-      if (result?.data?.newQuestion?.answer.includes(option)) {
-        newAnswers.push(newOption)
+    const newOptions = result?.data?.newQuestion?.options.map(
+      (option: string) => {
+        const newOption = { id: uuid(), value: option };
+        if (result?.data?.newQuestion?.answer.includes(option)) {
+          newAnswers.push(newOption);
+        }
+        return newOption;
       }
-      return newOption
-    })
+    );
     setQuestionData((prev) => ({
       ...prev,
       questionInfo: {
@@ -52,6 +57,7 @@ const generateQuestion = async (
     console.error(err);
     return null;
   }
+  setIsGenerating(false);
 };
 
 const AddQuestion: any = gql(`
@@ -114,11 +120,9 @@ const styles = {
 
 const uploadQuestion = (
   mutationQuery: any,
-  isLoading: string,
   e: any
 ) => {
   e.preventDefault();
-  if (isLoading === "loading") return;
   mutationQuery();
 };
 
@@ -128,7 +132,7 @@ const Controls = ({
   questionData,
 }: QuestionProps) => {
   const label = { inputProps: { "aria-label": "Switch demo" } };
-  const [isLoading, setIsLoading] = useState("success");
+  const [isGenerating, setIsGenerating] = useState(false);
   const session = useSession();
   const creatorId = session?.data?.user.id;
   const variables = {
@@ -163,28 +167,37 @@ const Controls = ({
           : [],
       },
     },
-    private: !!questionData?.private
-  }
+    private: !!questionData?.private,
+  };
   const [mutationQuery, { loading, error, data }] = useMutation(AddQuestion, {
-    variables
+    variables,
   });
+  console.log(questionData)
 
   return (
     <div className={styles.layout}>
       <div className={styles.topButtonsLayout}>
         <button
           className={styles.button({})}
-          onClick={(e) => uploadQuestion(mutationQuery, isLoading, e)}
+          onClick={(e) =>
+            uploadQuestion(mutationQuery, e)
+          }
+          disabled={loading || isGenerating}
         >
-          Upload Question
+          {loading ? "Uploading..........." : "Upload Question"}
         </button>
         <button
           className={styles.button({})}
           onClick={() =>
-            generateQuestion(questionData || {}, isLoading, setQuestionData)
+            generateQuestion(
+              questionData || {},
+              setIsGenerating,
+              setQuestionData
+            )
           }
+          disabled={isGenerating || loading}
         >
-          Generate With AI
+          {isGenerating ? "Generating.........." : "Generate With AI"}
         </button>
       </div>
       <div>
