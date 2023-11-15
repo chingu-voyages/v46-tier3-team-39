@@ -6,34 +6,42 @@ import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
 import { Question } from "../../../../prisma/generated/type-graphql";
 import { QuestionSubmission } from "@prisma/client";
 import { gql } from "../../../../graphql/generated";
-
-const QueryUserGeneratedQuestions = gql(`
+export const QueryUserGeneratedQuestions = gql(`
   query QueryUserGeneratedQuestions(
-    $id: String
-    $startDate: DateTimeISO
-    $endDate: DateTimeISO
+    $userId: String
+    $dateQuery: DateTimeFilter
+    $cursor: QuestionWhereUniqueInput
+    $skip: Int
   ) {
     questions(
       where: {
-        creatorId: { equals: $id }
-        dateCreated: { gte: $startDate, lte: $endDate }
+        creatorId: { equals: $userId }
+        dateCreated: $dateQuery
       }
       orderBy: { dateCreated: desc }
+      take: 1000
+      cursor: $cursor
+      skip: $skip
     ) {
       id
+      questionType
+      tags
+      questionInfo{
+        title
+      }
+      private
     }
   }
 `);
 const QueryQuestionSubmissions = gql(`
   query QueryQuestionSubmissions(
-    $id: String
-    $startDate: DateTimeISO
-    $endDate: DateTimeISO
+    $userId: String
+    $dateQuery: DateTimeFilter
   ) {
     questionSubmissions(
       where: {
-        userId: { equals: $id }
-        dateCreated: { gte: $startDate, lte: $endDate }
+        userId: { equals: $userId }
+        dateCreated: $dateQuery
       }
       orderBy: { dateCreated: desc }
     ) {
@@ -53,9 +61,11 @@ const GreetingBannerContainer = async () => {
     weeks: 1,
   });
   const queryVariables = {
-    id: userId,
-    startDate: weekPriorDate.toISOString(),
-    endDate: currDate.toISOString(),
+    userId,
+    dateQuery: {
+      gte: weekPriorDate.toISOString(),
+      lte: currDate.toISOString(),
+    },
   };
   const questionQuery = {
     query: QueryUserGeneratedQuestions,
@@ -96,9 +106,8 @@ const GreetingBannerContainer = async () => {
       </div>
     );
   } catch (err: any) {
-    console.log(err.networkError?.result);
-    console.log(err);
-    return <>Nothing</>;
+    console.error(err?.networkError?.result);
+    return <></>;
   }
 };
 export default GreetingBannerContainer;

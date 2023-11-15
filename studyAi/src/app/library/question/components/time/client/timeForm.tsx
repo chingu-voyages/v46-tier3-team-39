@@ -236,6 +236,7 @@ export const TimeForm = ({
   };
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    e.stopPropagation();
     //grab uncontrolled inputs here form
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData.entries());

@@ -4,9 +4,6 @@ import NavigationWrapper from "../util/components/navigation/navigationWrapper";
 import GreetingBannerContainer from "./server/greetingBannerContainer";
 import Profile from "./server/profile";
 
-import { BsStars } from "react-icons/bs";
-import { FaFileCircleQuestion } from "react-icons/fa6"
-
 export default async function DashboardPage() {
   const sessionData = await protectRouteSSR("/auth/login");
 
