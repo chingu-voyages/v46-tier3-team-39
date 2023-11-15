@@ -28,7 +28,6 @@ const QuestionModalWrapper = ({
     initialQuestionData ? {...initialQuestionData, private: true} : blankQuestion
   );
   const [isOpen, setIsOpen] = useState(false);
-  console.log(questionData);
   const styles = {
     modal: [
       "flex",
