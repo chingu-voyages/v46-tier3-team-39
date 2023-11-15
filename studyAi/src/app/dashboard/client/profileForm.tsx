@@ -33,9 +33,17 @@ const UpdateUserProfileInfo = gql(`
     }
   }
 `);
-const ProfileForm = (
-  {isEditable, formData, setFormData, toggleEditable}:
-  {isEditable?: boolean, formData: any, setFormData?: any, toggleEditable: any}) => {
+const ProfileForm = ({
+  isEditable,
+  formData,
+  setFormData,
+  toggleEditable,
+}: {
+  isEditable?: boolean;
+  formData: any;
+  setFormData?: any;
+  toggleEditable: any;
+}) => {
   const session = useSession();
   // const [tags, setTags] = useState(session.data ? session.data.user.tags : []);
   const [name, setName] = useState(session.data ? session.data.user.name : "");
@@ -55,9 +63,10 @@ const ProfileForm = (
   // console.log('1. session: ' + JSON.stringify(session , null, 1))
   // console.log('2. session.data.user.id: ' + session?.data?.user.id)
 
-  const tags = ['eating', 'sleeping'];
+  const tags = ["eating", "sleeping"];
   const [mutationQuery, { loading, error, data }] = useMutation(
-    UpdateUserProfileInfo as any);
+    UpdateUserProfileInfo as any
+  );
   // console.log(data);
   const submitted = useRef(false);
   // const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -84,92 +93,115 @@ const ProfileForm = (
     e.preventDefault();
     if (submitted.current) return;
     try {
-      console.log('formData in mutation', formData)
-      const res = await mutationQuery(
-        {
-          variables: {
-            id: formData?.id || id,
-            tags: {
-              set: formData?.tags || tags,
-            },
-            name: {
-              set: formData?.name || name,
-            },
-            school: {
-              set: formData?.school || school,
-            },
-            location: {
-              set: {
-                locationType: formData?.location.locationType || location.locationType,
-                coordinates: { set: formData?.location.coordinates || location.coordinates},
-                locationName: formData?.locationName || location.locationName,
+      console.log("formData in mutation", formData);
+      const res = await mutationQuery({
+        variables: {
+          id: formData?.id || id,
+          tags: {
+            set: formData?.tags || tags,
+          },
+          name: {
+            set: formData?.name || name,
+          },
+          school: {
+            set: formData?.school || school,
+          },
+          location: {
+            set: {
+              locationType:
+                formData?.location.locationType || location.locationType,
+              coordinates: {
+                set: formData?.location.coordinates || location.coordinates,
               },
+              locationName: formData?.locationName || location.locationName,
             },
           },
-        }
-      );
+        },
+      });
       submitted.current = false;
     } catch (err) {
       console.log(err);
     }
     toggleEditable();
-  }
+  };
 
   const changeForm = (e: any) => {
     const { name, value } = e.target;
     if (setFormData) {
-      setFormData((prevFormData: any) => ({...prevFormData, [name]: value}))
+      setFormData((prevFormData: any) => ({ ...prevFormData, [name]: value }));
     }
-  }
+  };
 
-  const locationElement = isEditable
-  ? (<TextField name="location" variant="outlined"
-    defaultValue={location.locationName}
-    onChange={changeForm} />)
-  : (<div>{location.locationName? location.locationName : 'NA'}</div>)
+  const locationElement = isEditable ? (
+    <TextField
+      name="location"
+      variant="outlined"
+      defaultValue={location.locationName}
+      onChange={changeForm}
+    />
+  ) : (
+    <div>{location.locationName ? location.locationName : "NA"}</div>
+  );
 
-  const schoolElement = isEditable
-  ? (<TextField name="school" variant="outlined"
-    defaultValue={school}
-    onChange={changeForm} />)
-  : (<div>{school? school : 'NA'}</div>)
+  const schoolElement = isEditable ? (
+    <TextField
+      name="school"
+      variant="outlined"
+      defaultValue={school}
+      onChange={changeForm}
+    />
+  ) : (
+    <div>{school ? school : "NA"}</div>
+  );
 
   const removeTag = (e: any) => {
     const { name } = e.target;
     if (setFormData) {
-      setFormData((prevFormData: any) => (
-        {...prevFormData,
-          tags: formData.tags?.filter((tag: any) => tag !== name)}
-      ))
+      setFormData((prevFormData: any) => ({
+        ...prevFormData,
+        tags: formData.tags?.filter((tag: any) => tag !== name),
+      }));
     }
-  }
+  };
 
-  const tagsEditElement =
+  const tagsEditElement = (
     <div className="flex flex-col gap-1">
       <div>Dropdown</div>
       {formData.tags?.map((tag: any, index: number) => (
-          <div key={index} className="text-sm border rounded-full px-2 py-[0.2rem] flex flex-row gap-1 flex-wrap">
-            <span>{tag}</span>
-            <button name={tag} onClick={removeTag}><RxCross2 /></button>
-          </div>
+        <div
+          key={index}
+          className="text-sm border rounded-full px-2 py-[0.2rem] flex flex-row gap-1 flex-wrap"
+        >
+          <span>{tag}</span>
+          <button name={tag} onClick={removeTag}>
+            <RxCross2 />
+          </button>
+        </div>
       ))}
-  </div>
+    </div>
+  );
 
-
-  const tagsElement = isEditable
-  ? tagsEditElement
-  : (<div className="flex flex-row gap-1">
-      {tags.length > 0
-      ? tags?.map((tag: any, index: number) => (
-          <div key={index} className="text-sm border rounded-full px-2 py-[0.2rem] flex-wrap">{tag}</div>
-      ))
-    : <div className="text-sm">No tags</div>}
-  </div>)
-
+  const tagsElement = isEditable ? (
+    tagsEditElement
+  ) : (
+    <div className="flex flex-row gap-1">
+      {tags.length > 0 ? (
+        tags?.map((tag: any, index: number) => (
+          <div
+            key={index}
+            className="text-sm border rounded-full px-2 py-[0.2rem] flex-wrap"
+          >
+            {tag}
+          </div>
+        ))
+      ) : (
+        <div className="text-sm">No tags</div>
+      )}
+    </div>
+  );
 
   return (
     <div>
-
       {/* Form */}
       <form className="w-full" onSubmit={handleSubmit}>
         <div className="mb-5 flex flex-col">
@@ -178,32 +210,38 @@ const ProfileForm = (
             <div className="mr-4">
               <FaLocationDot />
             </div>
-            <div className="flex flex-row gap-1"><span>Location: </span>{locationElement}</div>
+            <div className="flex flex-row gap-1">{locationElement}</div>
           </div>
           {/* 2. Hat */}
           <div className="flex">
             <div className="mr-4">
               <FaGraduationCap />
             </div>
-            <div className="flex flex-row gap-1"><span>School: </span>{schoolElement}</div>
+            <div className="flex flex-row gap-1">{schoolElement}</div>
           </div>
           {/* 3. Tags */}
           <div className="flex">
             <div className="mr-4">
               <FaTag />
             </div>
-            <div className="flex flex-row items-center gap-2">
-              <span className="self-start">Tags: </span>
-              {tagsElement}</div>
+            <div className="flex flex-row items-center gap-2 border">
+              {tagsElement}
+            </div>
           </div>
         </div>
-        {isEditable
-        && <button
-          type="submit"
-          className="border rounded-lg border-Black text-primary-primary50 flex w-full py-3 justify-center mb-5">
+        {isEditable && (
+          <button
+            type="submit"
+            className="border rounded-lg border-Black text-primary-primary50 flex w-full py-3 justify-center mb-5"
+          >
             Submit
           </button>
-        }
+        )}
+        {/* border line */}
+        <div className="border" />
+        <div className="">
+          <div>icon</div>
+        </div>
       </form>
     </div>
   );
