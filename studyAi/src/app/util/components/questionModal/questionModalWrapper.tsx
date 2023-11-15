@@ -1,5 +1,4 @@
 "use client";
-import { createContext, useContext, useState } from "react";
 import QuestionEditForm from "./questionEditModal";
 import { IconButton, Modal } from "@mui/material";
 import { Question } from "../../../../../prisma/generated/type-graphql";
@@ -8,7 +7,6 @@ import {
   QuestionModalProvider,
   useQuestionModal,
 } from "./context/questionModalProvider";
-
 const defaultModalClasses = ["flex", "items-center", "justify-center"];
 const QuestionModal = ({ children }: { children: React.ReactNode }) => {
   const modalData = useQuestionModal();
@@ -23,7 +21,7 @@ const QuestionModal = ({ children }: { children: React.ReactNode }) => {
     setQuestionData,
   } = modalData;
   const currModalClasses = [...defaultModalClasses];
-  if (type === "modal")
+  if (type.layout === "modal")
     currModalClasses.push(
       "min-w-[90%]",
       "md:min-w-[60%]",
@@ -57,12 +55,15 @@ const QuestionModal = ({ children }: { children: React.ReactNode }) => {
 };
 const QuestionModalContainer = ({
   children,
-  type = "modal",
+  type = {
+    type: "edit",
+    layout: "page",
+  },
   initialQuestionData,
 }: {
   initialQuestionData?: Partial<Question>;
   children: React.ReactNode;
-  type?: "modal" | "page";
+  type?: { type: "edit" | "create"; layout: "modal" | "page" };
 }) => {
   return (
     <QuestionModalProvider
@@ -76,23 +77,24 @@ const QuestionModalContainer = ({
 const QuestionModalWrapper = ({
   children,
   initialQuestionData,
-  type = "modal",
+  type = {
+    type: "edit",
+    layout: "page",
+  },
 }: {
   children: React.ReactNode;
-  type?: "modal" | "page";
+  type?: { type: "edit" | "create"; layout: "modal" | "page" };
   initialQuestionData?: Partial<Question>;
 }) => {
   return (
-    <div>
-      <ElementPosProvider>
-        <QuestionModalContainer
-          type={type}
-          initialQuestionData={initialQuestionData}
-        >
-          {children}
-        </QuestionModalContainer>
-      </ElementPosProvider>
-    </div>
+    <ElementPosProvider>
+      <QuestionModalContainer
+        type={type}
+        initialQuestionData={initialQuestionData}
+      >
+        {children}
+      </QuestionModalContainer>
+    </ElementPosProvider>
   );
 };
 

@@ -29,7 +29,7 @@ const blankQuestion: Partial<Question> = {
 };
 
 export type QuestionModalDataType = {
-  type: "modal" | "page";
+  type: { type: "edit" | "create"; layout: "modal" | "page" };
   currElPos: ElementPostionType | null;
   isOpen: boolean;
   questionData: Partial<Question>;
@@ -46,7 +46,7 @@ export function QuestionModalProvider({
   initialQuestionData,
 }: {
   children: React.ReactNode;
-  type: "modal" | "page";
+  type: { type: "edit" | "create"; layout: "modal" | "page" };
   initialQuestionData?: Partial<Question>;
 }) {
   const [isOpen, setIsOpen] = useState(true);
