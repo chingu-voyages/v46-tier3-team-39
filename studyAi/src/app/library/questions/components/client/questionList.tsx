@@ -10,10 +10,12 @@ import { Carousel } from '@/app/util/components/carousel/carousel';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEarthAmericas } from '@fortawesome/free-solid-svg-icons';
 import Link from "next/link";
+import { useQuestions } from '@/app/stores/questionStore';
 
-export default function QuestionList({questions} : {questions: Partial<Question>[]}) {
+export default function QuestionList() {
     const [tabValue, setTabValue] = useState(0);
-
+    /* const questions = useQuestions()[0].data */
+    const questions: Partial<Question>[] = []
     const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
         setTabValue(newValue);
     };
