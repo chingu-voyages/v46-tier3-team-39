@@ -36,7 +36,7 @@ const SolutionView = () => {
   const answerData = queryData as
     | undefined
     | { question: Partial<Question> | null };
-  const question = questions[questionId];
+  const question = questions.map[questionId];
   return (
     <Container overflow className="px-[5%] py-5 grow">
       {question?.answer?.correctAnswer.map((e) => {
