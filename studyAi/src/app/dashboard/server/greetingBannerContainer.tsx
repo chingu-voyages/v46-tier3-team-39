@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import GreetingBanner from "./greetingBanner";
 import { sub } from "date-fns";
 import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
-import { Question } from "../../../../prisma/generated/type-graphql";
+import { Question } from "@prisma/client";
 import { QuestionSubmission } from "@prisma/client";
 import { gql } from "../../../../graphql/generated";
 export const QueryUserGeneratedQuestions = gql(`

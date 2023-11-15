@@ -64,11 +64,13 @@ const GreetingBanner = (props: {
     <div className="flex w-full flex-col-reverse lg:flex-row">
       <GreetingMessage {...props} />
 
-      {/* <img
-        src={WelcomeImg.src}
-        alt="welcome-back-image"
-        className="w-full sm:w-auto sm:h-full sm:object-cover"
-      /> */}
+      {/* <div className="w-full">
+        <img
+          src={WelcomeImg.src}
+          alt="welcome-back-image"
+          className=""
+        />
+      </div> */}
       <div className="border flex w-full h-full justify-center items-center">
         <Image
           src={WelcomeImg}
