@@ -2,12 +2,14 @@ import { PrismaClient } from "@prisma/client";
 import { Question } from "../../../../prisma/generated/type-graphql";
 import { ObjectId } from "bson";
 export const prismaDb = new PrismaClient();
+
 const createOptions = <T>(e: T[]) => {
   return e.map((val) => ({
     id: new ObjectId().toString(),
     value: val,
   }));
 };
+
 const questions: Omit<Question, "id" | "creatorId" | "dateCreated">[] = [
   {
     questionType: "Short Answer",
@@ -69,14 +71,16 @@ const questions: Omit<Question, "id" | "creatorId" | "dateCreated">[] = [
 
 export const allQuestions = async () => {
   const allUserIds = await prismaDb.user.findMany();
-  const usersQuestions = [];
+  const allUserQuestions= [];
+  const subscribers = []
 
   for (const user of allUserIds) {
+    subscribers.push({ email: user.email })
     for (const question of questions) {
       const questionData = { creatorId: user.id, ...question };
-      usersQuestions.push(questionData);
+      allUserQuestions.push(questionData);
     }
   }
 
-  return usersQuestions;
+  return {allUserQuestions, subscribers};
 };
