@@ -4,11 +4,15 @@ import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "@mui/material";
 import { MouseEvent } from "react";
+import { TimeComponent } from "../../time/client/timeModal";
+import ConditionalWrapper from "@/app/util/components/conditionalWrapper/conditionalWrapper";
+import NavigationWrapper from "@/app/util/components/navigation/navigationWrapper";
+import { useFullscreen } from "@/app/util/providers/FullscreenProvider";
 export type PaginationOptions = {
   onPrev: (e?: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => void;
   onNext: (e?: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => void;
 };
-export function NavigationBtns({
+export function QuestionNavigationBtns({
   children,
   pagination,
 }: {
@@ -60,3 +64,55 @@ export function NavigationBtns({
     </div>
   );
 }
+export const OngoingQuestionBar = ({
+  pagination,
+}: {
+  pagination?: PaginationOptions;
+}) => {
+  if (pagination)
+    return (
+      <QuestionNavigationBtns pagination={pagination}>
+        <TimeComponent />
+      </QuestionNavigationBtns>
+    );
+  return (
+    <div className="h-10 mt-1">
+      <TimeComponent />
+    </div>
+  );
+};
+export const QuestionPageNavigation = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  const { isFullscreen } = useFullscreen();
+  return (
+    <ConditionalWrapper
+      condition={!isFullscreen}
+      wrapper={(children: React.ReactNode) => (
+        <NavigationWrapper
+          usePadding
+          appBars={{
+            footer: false,
+            navbar: true,
+          }}
+        >
+          {children}
+        </NavigationWrapper>
+      )}
+    >
+      <ConditionalWrapper
+        condition={isFullscreen}
+        wrapper={(children: React.ReactNode) => (
+          <div className="flex flex-col min-h-screen bg-White text-Black px-[5%] py-[2%]">
+            {children}
+          </div>
+        )}
+      >
+        {children}
+      </ConditionalWrapper>
+    </ConditionalWrapper>
+  );
+};
+export default QuestionPageNavigation

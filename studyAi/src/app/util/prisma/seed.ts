@@ -1,6 +1,6 @@
 import { Question, QuizLike, QuizSubmission } from "@prisma/client";
 import { prismaDb, allQuestions } from "./seedData";
-
+import { ObjectId } from "bson"
 async function main() {
   const deleteArrPromise = [
     prismaDb.question.deleteMany({}),
@@ -24,7 +24,7 @@ async function main() {
       },
     });
   } catch (e) {
-    console.log(e);
+    console.error(e);
   }
 
   // Question
@@ -46,6 +46,10 @@ async function main() {
       actualScore: 1,
     },
     time: null,
+    answerProvided : [{
+      id: new ObjectId().toString(),
+      value: "hello"
+    }],
   }));
   const questionLikesData = questionInfo.map((question) => ({
     userId: question.creatorId,
