@@ -17,6 +17,7 @@ import onTimeEventChangeHandler from "../../../eventHandlers/onTimeEventChangeHa
 import formatMilliseconds from "@/app/util/parsers/formatMilliseconds";
 import { timeLabelData } from "./timeForm";
 import removeNonIntegerChars from "@/app/util/parsers/removeNonIntegerChars";
+import ReadOnlyInput from "@/app/util/components/inputs/ReadOnlyInput";
 //we can manage time on the frontend
 //because time measurements are only
 //for the user's benefit
@@ -103,6 +104,13 @@ export const DeleteTimeBtn = ({
     </IconButton>
   );
 };
+const ReadOnlyTimeInput = () => {
+  const timeContext = useTimeHook();
+  if (!timeContext) return <></>;
+  return (
+    <ReadOnlyInput value={timeContext.time.toString()} name={"timeTaken"} />
+  );
+};
 export const TimeComponent = ({ props }: { props?: TimeProps }) => {
   const { timeType, initialTime, totalTimeGiven, id } = props || {
     initialTime: 0,
@@ -115,6 +123,22 @@ export const TimeComponent = ({ props }: { props?: TimeProps }) => {
   //every time we modify the time component we should ensure this is false
   //because that means that the timer has been added with new values, or
   //we no longer have a timer
+  const readOnlyInputsArr = [
+    <ReadOnlyTimeInput key="timeInputTime" />,
+    <ReadOnlyInput
+      key={"timeInputTimeType"}
+      value={currType ? currType : "stopwatch"}
+      name={"timeInputType"}
+    />,
+  ];
+  if (typeof currTotalTimeGiven === "number")
+    readOnlyInputsArr.push(
+      <ReadOnlyInput
+        key={"timeInputTotalTimeGiven"}
+        value={currTotalTimeGiven.toString()}
+        name={"totalTimeGiven"}
+      />
+    );
   useEffect(() => {
     setTimerCompleteModalOpen(false);
   }, [currType]);
@@ -149,6 +173,7 @@ export const TimeComponent = ({ props }: { props?: TimeProps }) => {
               />
             }
           />
+          {readOnlyInputsArr.map((val) => val)}
         </TimeProvider>
       );
     case "timer":
@@ -183,6 +208,7 @@ export const TimeComponent = ({ props }: { props?: TimeProps }) => {
                 setTimerCompleteModalOpen={setTimerCompleteModalOpen}
               />
             )}
+            {readOnlyInputsArr.map((val) => val)}
           </TimeProvider>
         );
       else {
