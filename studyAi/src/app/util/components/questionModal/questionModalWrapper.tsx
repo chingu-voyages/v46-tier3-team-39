@@ -1,51 +1,47 @@
 "use client";
-
-import { useState } from "react";
+import { createContext, useContext, useState } from "react";
 import QuestionEditForm from "./questionEditModal";
-import { Modal } from "@mui/material";
+import { IconButton, Modal } from "@mui/material";
 import { Question } from "../../../../../prisma/generated/type-graphql";
+import { ElementPosProvider } from "../../providers/elementPosProvider";
+import {
+  QuestionModalProvider,
+  useQuestionModal,
+} from "./context/questionModalProvider";
 
-const QuestionModalWrapper = ({
-  children,
-  initialQuestionData,
-}: {
-  children: React.ReactNode;
-  initialQuestionData?: Partial<Question>;
-}) => {
-  const blankQuestion: Partial<Question> = {
-    questionInfo: {
-        title:"",
-        description: "",
-        options: [{id: "1", value: "Answer 1"}, {id: "2", value: "Answer 2"}, {id: "3", value: "Answer 3"}, {id: "4", value: "Answer 4"}]
-    },
-    questionType: "Multiple Choice",
-    tags: [],
-    answer: {
-      correctAnswer: [{id: "1", value: "A"}]
-    }
-  }
-  const [questionData, setQuestionData] = useState<Partial<Question>>(
-    initialQuestionData ? {...initialQuestionData, private: true} : blankQuestion
-  );
-  const [isOpen, setIsOpen] = useState(true);
+const defaultModalClasses = ["flex", "items-center", "justify-center"];
+const QuestionModal = ({ children }: { children: React.ReactNode }) => {
+  const modalData = useQuestionModal();
+  if (!modalData) return <></>;
+  const {
+    type,
+    isOpen,
+    setIsOpen,
+    questionData,
+    currElPos,
+    closeHandler,
+    setQuestionData,
+  } = modalData;
+  const currModalClasses = [...defaultModalClasses];
+  if (type === "modal")
+    currModalClasses.push(
+      "min-w-[90%]",
+      "md:min-w-[60%]",
+      "lg:min-w-[40%]",
+      "xl:min-w-[30%]",
+      "max-h-[80%]"
+    );
+  else currModalClasses.push("w-full min-h-full");
   const styles = {
-    modal: [
-      "flex",
-      "justify-center",
-      "items-center",
-      "md:max-w-[80%]",
-      "h-[80vh]",
-      "m-auto",
-    ].join(" "),
+    modal: currModalClasses.join(" "),
   };
-  const closeHandler = () => {
-    setIsOpen(false);
-    setQuestionData(initialQuestionData ? {...initialQuestionData, private: true} : blankQuestion);
-  }
   return (
-    <div>
-      <div onClick={() => setIsOpen(true)}>{children}</div>
+    <>
+      <IconButton type={"button"} onClick={() => setIsOpen(true)}>
+        {children}
+      </IconButton>
       <Modal
+        ref={currElPos ? currElPos.setRef : null}
         open={isOpen}
         className={styles.modal}
         onClose={closeHandler}
@@ -56,6 +52,46 @@ const QuestionModalWrapper = ({
           setQuestionData={setQuestionData}
         />
       </Modal>
+    </>
+  );
+};
+const QuestionModalContainer = ({
+  children,
+  type = "modal",
+  initialQuestionData,
+}: {
+  initialQuestionData?: Partial<Question>;
+  children: React.ReactNode;
+  type?: "modal" | "page";
+}) => {
+  return (
+    <QuestionModalProvider
+      type={type}
+      initialQuestionData={initialQuestionData}
+    >
+      <QuestionModal>{children}</QuestionModal>
+    </QuestionModalProvider>
+  );
+};
+const QuestionModalWrapper = ({
+  children,
+  initialQuestionData,
+  type = "modal",
+}: {
+  children: React.ReactNode;
+  type?: "modal" | "page";
+  initialQuestionData?: Partial<Question>;
+}) => {
+  return (
+    <div>
+      <ElementPosProvider>
+        <QuestionModalContainer
+          type={type}
+          initialQuestionData={initialQuestionData}
+        >
+          {children}
+        </QuestionModalContainer>
+      </ElementPosProvider>
     </div>
   );
 };
