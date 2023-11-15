@@ -34,13 +34,13 @@ const LeftContent = ({ questionData, setQuestionData }: Pick<QuestionProps, "que
             onChange={(e) => setQuestionData({...questionData, questionInfo: {...questionData.questionInfo as QuestionInfoData, title: e.target.value}})}
           />
         </div>
-        <div className={styles.estTimeLayout}>
+        {/* <div className={styles.estTimeLayout}>
           <label htmlFor="time" className={styles.label}>
             Est. Time
           </label>
           <input id="time" className={styles.input({ isTime: true })} />
           <TimeFormatDropdown />
-        </div>
+        </div> */}
         <div>
           <label htmlFor="tags" className={styles.label}>
             Tags
