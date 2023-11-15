@@ -27,13 +27,13 @@ const QuestionModalWrapper = ({
   const [questionData, setQuestionData] = useState<Partial<Question>>(
     initialQuestionData ? {...initialQuestionData, private: true} : blankQuestion
   );
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const styles = {
     modal: [
       "flex",
       "justify-center",
       "items-center",
-      "w-10/12",
+      "md:max-w-[80%]",
       "h-[80vh]",
       "m-auto",
     ].join(" "),

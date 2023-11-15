@@ -13,7 +13,7 @@ export const AnswerType = () => {
   const params = useParams();
   const questions = useQuestions()[0].data;
   const question =
-    params.id && typeof params.id === "string" ? questions[params.id] : null;
+    params.id && typeof params.id === "string" ? questions.map[params.id] : null;
   if (!question) return <></>;
   if (!question.questionInfo) return <></>;
   const {

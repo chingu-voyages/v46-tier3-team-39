@@ -118,7 +118,7 @@ const TopBar = () => {
   const params = useParams();
   const questions = useQuestions()[0].data;
   const question =
-    params.id && typeof params.id === "string" ? questions[params.id] : null;
+    params.id && typeof params.id === "string" ? questions.map[params.id] : null;
   const btnClassNames = "flex items-center justify-center h-[70%]";
   const btnStyle: React.CSSProperties = {
     minHeight: "unset",
