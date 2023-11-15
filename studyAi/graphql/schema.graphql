@@ -1580,17 +1580,18 @@ input QuestionScalarWhereWithAggregatesInput {
 }
 
 type QuestionSubmission {
-  answerProvided: [AnswerOption!]!
+  answerProvided: [String!]!
   dateCreated: DateTimeISO!
   id: String!
   questionId: String!
-  score: Score
+  score: Score!
   time: TimeOptions
   userId: String!
 }
 
 type QuestionSubmissionCountAggregate {
   _all: Int!
+  answerProvided: Int!
   dateCreated: Int!
   id: Int!
   questionId: Int!
@@ -1598,6 +1599,7 @@ type QuestionSubmissionCountAggregate {
 }
 
 input QuestionSubmissionCountOrderByAggregateInput {
+  answerProvided: SortOrder
   dateCreated: SortOrder
   id: SortOrder
   questionId: SortOrder
@@ -1605,29 +1607,34 @@ input QuestionSubmissionCountOrderByAggregateInput {
 }
 
 input QuestionSubmissionCreateInput {
-  answerProvided: [AnswerOptionCreateInput!]
+  answerProvided: QuestionSubmissionCreateanswerProvidedInput
   dateCreated: DateTimeISO
   id: String
   questionId: String!
-  score: ScoreNullableCreateEnvelopeInput
+  score: ScoreCreateEnvelopeInput!
   time: TimeOptionsNullableCreateEnvelopeInput
   userId: String!
 }
 
 input QuestionSubmissionCreateManyInput {
-  answerProvided: [AnswerOptionCreateInput!]
+  answerProvided: QuestionSubmissionCreateanswerProvidedInput
   dateCreated: DateTimeISO
   id: String
   questionId: String!
-  score: ScoreNullableCreateEnvelopeInput
+  score: ScoreCreateEnvelopeInput!
   time: TimeOptionsNullableCreateEnvelopeInput
   userId: String!
+}
+
+input QuestionSubmissionCreateanswerProvidedInput {
+  set: [String!]!
 }
 
 type QuestionSubmissionGroupBy {
   _count: QuestionSubmissionCountAggregate
   _max: QuestionSubmissionMaxAggregate
   _min: QuestionSubmissionMinAggregate
+  answerProvided: [String!]
   dateCreated: DateTimeISO!
   id: String!
   questionId: String!
@@ -1666,6 +1673,7 @@ input QuestionSubmissionOrderByWithAggregationInput {
   _count: QuestionSubmissionCountOrderByAggregateInput
   _max: QuestionSubmissionMaxOrderByAggregateInput
   _min: QuestionSubmissionMinOrderByAggregateInput
+  answerProvided: SortOrder
   dateCreated: SortOrder
   id: SortOrder
   questionId: SortOrder
@@ -1673,7 +1681,7 @@ input QuestionSubmissionOrderByWithAggregationInput {
 }
 
 input QuestionSubmissionOrderByWithRelationInput {
-  answerProvided: AnswerOptionOrderByCompositeAggregateInput
+  answerProvided: SortOrder
   dateCreated: SortOrder
   id: SortOrder
   questionId: SortOrder
@@ -1683,6 +1691,7 @@ input QuestionSubmissionOrderByWithRelationInput {
 }
 
 enum QuestionSubmissionScalarFieldEnum {
+  answerProvided
   dateCreated
   id
   questionId
@@ -1693,6 +1702,7 @@ input QuestionSubmissionScalarWhereWithAggregatesInput {
   AND: [QuestionSubmissionScalarWhereWithAggregatesInput!]
   NOT: [QuestionSubmissionScalarWhereWithAggregatesInput!]
   OR: [QuestionSubmissionScalarWhereWithAggregatesInput!]
+  answerProvided: StringNullableListFilter
   dateCreated: DateTimeWithAggregatesFilter
   id: StringWithAggregatesFilter
   questionId: StringWithAggregatesFilter
@@ -1700,32 +1710,37 @@ input QuestionSubmissionScalarWhereWithAggregatesInput {
 }
 
 input QuestionSubmissionUpdateInput {
-  answerProvided: [AnswerOptionCreateInput!]
+  answerProvided: QuestionSubmissionUpdateanswerProvidedInput
   dateCreated: DateTimeFieldUpdateOperationsInput
   questionId: StringFieldUpdateOperationsInput
-  score: ScoreNullableUpdateEnvelopeInput
+  score: ScoreUpdateEnvelopeInput
   time: TimeOptionsNullableUpdateEnvelopeInput
   userId: StringFieldUpdateOperationsInput
 }
 
 input QuestionSubmissionUpdateManyMutationInput {
-  answerProvided: [AnswerOptionCreateInput!]
+  answerProvided: QuestionSubmissionUpdateanswerProvidedInput
   dateCreated: DateTimeFieldUpdateOperationsInput
   questionId: StringFieldUpdateOperationsInput
-  score: ScoreNullableUpdateEnvelopeInput
+  score: ScoreUpdateEnvelopeInput
   time: TimeOptionsNullableUpdateEnvelopeInput
   userId: StringFieldUpdateOperationsInput
+}
+
+input QuestionSubmissionUpdateanswerProvidedInput {
+  push: [String!]
+  set: [String!]
 }
 
 input QuestionSubmissionWhereInput {
   AND: [QuestionSubmissionWhereInput!]
   NOT: [QuestionSubmissionWhereInput!]
   OR: [QuestionSubmissionWhereInput!]
-  answerProvided: [AnswerOptionObjectEqualityInput!]
+  answerProvided: StringNullableListFilter
   dateCreated: DateTimeFilter
   id: StringFilter
   questionId: StringFilter
-  score: ScoreNullableCompositeFilter
+  score: ScoreCompositeFilter
   time: TimeOptionsNullableCompositeFilter
   userId: StringFilter
 }
@@ -1734,11 +1749,11 @@ input QuestionSubmissionWhereUniqueInput {
   AND: [QuestionSubmissionWhereInput!]
   NOT: [QuestionSubmissionWhereInput!]
   OR: [QuestionSubmissionWhereInput!]
-  answerProvided: [AnswerOptionObjectEqualityInput!]
+  answerProvided: StringNullableListFilter
   dateCreated: DateTimeFilter
   id: String
   questionId: StringFilter
-  score: ScoreNullableCompositeFilter
+  score: ScoreCompositeFilter
   time: TimeOptionsNullableCompositeFilter
   userId: StringFilter
 }
@@ -2346,23 +2361,6 @@ input ScoreCreateInput {
   maxScore: Int!
 }
 
-input ScoreNullableCompositeFilter {
-  equals: ScoreObjectEqualityInput
-  is: ScoreWhereInput
-  isNot: ScoreWhereInput
-  isSet: Boolean
-}
-
-input ScoreNullableCreateEnvelopeInput {
-  set: ScoreCreateInput
-}
-
-input ScoreNullableUpdateEnvelopeInput {
-  set: ScoreCreateInput
-  unset: Boolean
-  upsert: ScoreUpsertInput
-}
-
 input ScoreObjectEqualityInput {
   actualScore: Int!
   maxScore: Int!
@@ -2381,11 +2379,6 @@ input ScoreUpdateEnvelopeInput {
 input ScoreUpdateInput {
   actualScore: IntFieldUpdateOperationsInput
   maxScore: IntFieldUpdateOperationsInput
-}
-
-input ScoreUpsertInput {
-  set: ScoreCreateInput!
-  update: ScoreUpdateInput!
 }
 
 input ScoreWhereInput {
