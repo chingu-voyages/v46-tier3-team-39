@@ -3,7 +3,7 @@ import CubeIcon from "./client/cubeIcon"
 export default function Process(){
     return(
         <div className="text-center py-16 px-5 sm:py-28 sm:px-16">
-            <h4 className="sm:text-3xl font-semibold">Why use Ai?</h4>
+            <h4 className="sm:text-3xl font-semibold">Why use AI?</h4>
             <h1 className="text-6xl sm:text-11xl font-bold my-1 sm:my-3 leading-tight">Understanding the Process</h1>
             <h4 className="sm:text-5xl leading-loose sm:leading-normal mt-6">Dive into generating novel practice questions and creating better exam results!</h4>
             <div className="sm:flex justify-between mt-8 sm:mt-12 text-left">
