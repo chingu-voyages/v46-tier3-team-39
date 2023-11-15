@@ -9,8 +9,10 @@ import { faWandMagicSparkles } from "@fortawesome/free-solid-svg-icons/faWandMag
 import { faFileLines } from "@fortawesome/free-regular-svg-icons";
 import useDropdown from "@/app/util/hooks/useDropdown";
 import { unstable_batchedUpdates } from "react-dom";
+import QuestionModalWrapper from "../../questionModal/questionModalWrapper";
 export const menuItemLinks = [
   {
+    id: "create-question",
     href: "/",
     text: "Create Question",
     onClick: (e?: React.MouseEvent<HTMLLIElement, MouseEvent>) => {},
@@ -19,10 +21,11 @@ export const menuItemLinks = [
     ),
   },
   // {
+  //   id: "create-exam",
   //   href: "/",
   //   text: "Create Exam",
   //   icon: <FontAwesomeIcon icon={faFileLines} className="aspect-square" />,
-  // },
+  // }
 ];
 
 export const GenerateDropdown = () => {
@@ -81,8 +84,10 @@ export const GenerateDropdown = () => {
               handleClose();
             }}
           >
+            {(link.id === "create-question") && (<QuestionModalWrapper>
             {link.icon && link.icon}
             <span className="ml-3">{link.text}</span>
+            </QuestionModalWrapper>)}
           </MenuItem>
         ))}
       </Menu>

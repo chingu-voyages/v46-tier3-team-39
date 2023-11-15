@@ -15,10 +15,12 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
+
 type AnswerOption {
-  id String @db.ObjectId
-  value String 
+  id    String @db.ObjectId
+  value String
 }
+
 type LocationData {
   locationType String
   //latitude and longitude
@@ -57,6 +59,11 @@ type Score {
   actualScore Int
 }
 
+model Subscriber {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  email String @unique
+}
+
 model Question {
   id           String           @id @default(auto()) @map("_id") @db.ObjectId
   creatorId    String           @db.ObjectId
@@ -66,7 +73,7 @@ model Question {
   questionInfo QuestionInfoData
   answer       AnswerData
   likeCounter  LikeCounter
-  private Boolean
+  private      Boolean
 
   @@index([creatorId])
 }
@@ -89,7 +96,7 @@ model Quiz {
   questionIds String[]
   dateCreated DateTime    @default(now())
   likeCounter LikeCounter
-  private Boolean
+  private     Boolean
 
   @@index([creatorId])
 }
@@ -105,13 +112,14 @@ model QuizLike {
 }
 
 model QuestionSubmission {
-  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  id             String         @id @default(auto()) @map("_id") @db.ObjectId
   time           TimeOptions?
   score          Score?
-  dateCreated    DateTime     @default(now())
-  userId         String       @db.ObjectId
-  questionId     String       @db.ObjectId
+  dateCreated    DateTime       @default(now())
+  userId         String         @db.ObjectId
+  questionId     String         @db.ObjectId
   answerProvided AnswerOption[]
+
   @@index([userId, questionId])
 }
 
