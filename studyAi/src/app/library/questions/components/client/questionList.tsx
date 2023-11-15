@@ -14,34 +14,36 @@ import { useQuestions } from '@/app/stores/questionStore';
 
 export default function QuestionList() {
     const [tabValue, setTabValue] = useState(0);
-    /* const questions = useQuestions()[0].data */
-    const questions: Partial<Question>[] = []
+    const questions = useQuestions()[0].data.arr;
     const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
         setTabValue(newValue);
     };
 
-  const styles = {
-    layout: ["w-full", "border", "bg-light-surface", "mt-8"].join(" "),
-    controlsLayout: [
-      "flex",
-      "w-full",
-      "justify-between",
-      "items-center",
-      "sm: px-4",
-    ].join(" "),
-    createButton: ["bg-light-primary", "h-[30px]", "w-[30px]", "mr-4"].join(
-      " "
-    ),
-    h2: ["text-[#5C5F60]"].join(" "),
-    titlesLayout: [
-      "flex",
-      "justify-between",
-      "py-4",
-      "px-2",
-      "bg-LightGrey",
-      "sm:px-16",
-    ].join(" "),
-  };
+    const styles = {
+        layout: ["w-full", "border", "bg-light-surface", "mt-8"].join(" "),
+        controlsLayout: [
+        "flex",
+        "w-full",
+        "justify-between",
+        "items-center",
+        "sm: px-4",
+        ].join(" "),
+        createButton: [
+            "bg-light-primary", 
+            "h-[30px]",
+            "w-[30px]",
+            "mr-4"
+        ].join(" "),
+        h2: ["text-[#5C5F60]"].join(" "),
+        titlesLayout: [
+        "flex",
+        "justify-between",
+        "py-4",
+        "px-2",
+        "bg-LightGrey",
+        "sm:px-16",
+        ].join(" "),
+    };
 
   return (
     <Box className={styles.layout}>
@@ -115,6 +117,7 @@ function List({ questions }: { questions: Partial<Question>[] }) {
     h4: ["text-lg", "text-[#5C5F60]"].join(" "),
     tag: ["p-1", "bg-[#CDCDCD]", "mx-2", "rounded-full", "mt-4"].join(" "),
   };
+  console.log(questions);
   return (
     <>
       {questions.map((question, index) => {

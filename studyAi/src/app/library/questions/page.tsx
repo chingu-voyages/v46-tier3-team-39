@@ -27,12 +27,13 @@ export default async function QuestionLibrary() {
                     footer: true,
                 }}
             >
-                <QuestionsContainer initialItems={data}>
+                
                     <div className={styles.layout}>
                         <h1 className={styles.h1}>My Question Library</h1>
-                        <QuestionList />
+                        <QuestionsContainer initialItems={data}>
+                            <QuestionList />
+                        </QuestionsContainer>
                     </div>    
-                </QuestionsContainer>
             </NavigationWrapper>
         )
     }
