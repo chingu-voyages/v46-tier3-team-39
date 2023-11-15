@@ -60,7 +60,7 @@ const generateQuestion = async (
   setIsGenerating(false);
 };
 
-const AddQuestion: any = gql(`
+const AddQuestion = gql(`
   mutation CreateOneQuestionResolver(
     $creatorId: String!,
     $questionType: String!,

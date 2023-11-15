@@ -12,8 +12,8 @@ export default function Home() {
       <Link href={"/auth/login"}>Login</Link>
       <Link href={"/auth/signup"}>Sign Up</Link>
       <Link href={"/dashboard"}>Dashboard</Link>
-      <Link href={"/dashboard/exams"}>Exams Library</Link>
-      <Link href={"/dashboard/questions"}>Questions Library</Link>
+      <Link href={"/library/exams"}>Exams Library</Link>
+      <Link href={"/library/questions"}>Questions Library</Link>
       <Link href={"/library/question/65429fd993f2d4403eac75ec"}>
         Questions Page
       </Link>
