@@ -1,3 +1,4 @@
+"use client";
 import { GetState, SetState } from "react-sweet-state";
 import { cloneDeep, debounce } from "lodash";
 import { SubmissionsData } from "../util/types/SubmissionsData";

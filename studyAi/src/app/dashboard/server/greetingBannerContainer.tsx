@@ -7,7 +7,7 @@ import { Question } from "../../../../prisma/generated/type-graphql";
 import { QuestionSubmission } from "@prisma/client";
 import { gql } from "../../../../graphql/generated";
 
-const QueryUserGeneratedQuestions = gql(`
+export const QueryUserGeneratedQuestions = gql(`
   query QueryUserGeneratedQuestions(
     $id: String
     $startDate: DateTimeISO

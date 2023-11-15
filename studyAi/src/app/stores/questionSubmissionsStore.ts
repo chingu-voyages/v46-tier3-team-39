@@ -68,6 +68,7 @@ const Store = createStore({
               submissionType: "question",
             })
           : null;
+        console.log(savedSubmission, 'saved');
         if (initialItems.length <= 0) {
           initial =
             savedSubmission && questionId

@@ -16,7 +16,6 @@ const UploadNewQuestionSubmissionQuery = gql(`
     }
   }
 `);
-
 const QuestionFormWrapper = ({ children }: { children: React.ReactNode }) => {
   // define hooks
   const session = useSession();
@@ -28,9 +27,9 @@ const QuestionFormWrapper = ({ children }: { children: React.ReactNode }) => {
   const [mutationQuery, { loading, error, data }] = useMutation(
     UploadNewQuestionSubmissionQuery
   );
-  const currSubmissions = useQuestionSubmissions()[0].ongoingData;
+  const [currSubmissions, { deleteItems }] = useQuestionSubmissions();
   if (!question) return <></>;
-  const submission = currSubmissions[question.id];
+  const submission = currSubmissions.ongoingData[question.id];
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     e.stopPropagation();
@@ -49,6 +48,11 @@ const QuestionFormWrapper = ({ children }: { children: React.ReactNode }) => {
           questionSubmission: doc,
         },
       });
+      deleteItems([
+        {
+          questionId: question.id,
+        },
+      ]);
     } catch (err) {
       console.error(err);
     }

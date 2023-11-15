@@ -6,7 +6,16 @@ import QuestionPageNavigation, {
 } from "@/app/library/question/components/page/client/questionNavigationBtns";
 import QuestionWrapper from "@/app/library/question/components/page/server/questionWrapper";
 import QuestionFormWrapper from "@/app/library/question/components/page/client/questionSubmissionForm";
-import { QuestionSubmissionsContainer } from "@/app/stores/questionSubmissionsStore";
+import dynamic from "next/dynamic";
+//we access local storage here so we render this 
+//dynamically
+const QuestionSubmissionsContainer = dynamic(
+  () =>
+    import("@/app/stores/questionSubmissionsStore").then(
+      (module) => module.QuestionSubmissionsContainer
+    ),
+  { ssr: false }
+);
 const QuestionPageContainer = ({ questionId }: { questionId: string }) => {
   return (
     <FullscreenProvider>

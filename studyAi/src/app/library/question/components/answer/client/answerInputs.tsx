@@ -56,20 +56,9 @@ export const MultipleChoice = ({
   questionId: string;
 }) => {
   const [currSubmissions, { addOrUpdateItems }] = useQuestionSubmissions();
-  const submission = currSubmissions.ongoingData[questionId];
-  //sometimes no ongoing submission will exist.
-  //therefore we'll generate one
-  useEffect(() => {
-    if (submission) return;
-    addOrUpdateItems(
-      [
-        {
-          questionId,
-        },
-      ],
-      "ongoing"
-    );
-  }, [submission, addOrUpdateItems]);
+  const submission = currSubmissions.ongoingData[questionId]
+    ? currSubmissions.ongoingData[questionId]
+    : {};
   const value =
     submission &&
     submission.answerProvided &&
@@ -127,20 +116,10 @@ export const MultipleChoice = ({
 export const ShortAnswer = ({ questionId }: { questionId: string }) => {
   const defaultId = useRef(ObjectId().toString());
   const [currSubmissions, { addOrUpdateItems }] = useQuestionSubmissions();
-  const submission = currSubmissions.ongoingData[questionId];
-  //sometimes no ongoing submission will exist.
+  const submission = currSubmissions.ongoingData[questionId]
+    ? currSubmissions.ongoingData[questionId]
+    : {}; //sometimes no ongoing submission will exist.
   //therefore we'll generate one
-  useEffect(() => {
-    if (submission) return;
-    addOrUpdateItems(
-      [
-        {
-          questionId,
-        },
-      ],
-      "ongoing"
-    );
-  }, [submission, addOrUpdateItems]);
   const value =
     submission &&
     submission.answerProvided &&
@@ -198,26 +177,15 @@ export const SelectMultiple = ({
   questionId: string;
 }) => {
   const [currSubmissions, { addOrUpdateItems }] = useQuestionSubmissions();
-  const submission = currSubmissions.ongoingData[questionId];
+  const submission = currSubmissions.ongoingData[questionId]
+    ? currSubmissions.ongoingData[questionId]
+    : {};
   const currValue =
     submission &&
     submission.answerProvided &&
     submission.answerProvided.length > 0
       ? submission.answerProvided
       : [];
-  //sometimes no ongoing submission will exist.
-  //therefore we'll generate one
-  useEffect(() => {
-    if (submission) return;
-    addOrUpdateItems(
-      [
-        {
-          questionId,
-        },
-      ],
-      "ongoing"
-    );
-  }, [submission, addOrUpdateItems]);
   const onChange = (e: SyntheticEvent<Element, Event>) => {
     const target = e.currentTarget as HTMLInputElement;
     const { value, checked } = target;
@@ -268,4 +236,3 @@ export const SelectMultiple = ({
     </FormGroup>
   );
 };
-
