@@ -25,6 +25,7 @@ type LocationData {
   locationType String
   //latitude and longitude
   coordinates  Float[]
+  locationName String
 }
 
 type TimeOptions {
