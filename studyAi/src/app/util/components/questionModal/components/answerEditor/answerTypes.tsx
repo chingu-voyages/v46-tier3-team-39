@@ -14,15 +14,17 @@ import {
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import { CheckBoxOutlineBlankOutlined } from "@mui/icons-material";
+import { TextAreaAutoResizeInput } from "../../../inputs/TextAreaAutoResizeInput";
+import { useQuestionModal } from "../../context/questionModalProvider";
 const styles = modalStyles.mainContentLayout.questionEditor;
 const answerInputClassNames = [
   ...styles.inputField.input({}),
   "py-2 pl-2 pr-1",
 ];
-export const MultipleChoice = ({
-  questionData,
-  setQuestionData,
-}: Pick<QuestionProps, "questionData" | "setQuestionData">) => {
+export const MultipleChoice = () => {
+  const modalData = useQuestionModal();
+  if (!modalData) return <></>;
+  const { questionData, setQuestionData } = modalData;
   const options = questionData.questionInfo?.options as AnswerOption[];
   const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const id = (e.target as HTMLInputElement).value;
@@ -103,10 +105,10 @@ export const MultipleChoice = ({
   );
 };
 
-export const SelectAll = ({
-  questionData,
-  setQuestionData,
-}: Pick<QuestionProps, "questionData" | "setQuestionData">) => {
+export const SelectAll = () => {
+  const modalData = useQuestionModal();
+  if (!modalData) return <></>;
+  const { questionData, setQuestionData } = modalData;
   const options = questionData.questionInfo?.options as AnswerOption[];
 
   return (
@@ -214,10 +216,20 @@ export const SelectAll = ({
   );
 };
 
-export const ShortAnswer = ({
-  questionData,
-  setQuestionData,
-}: Pick<QuestionProps, "questionData" | "setQuestionData">) => {
+export const ShortAnswer = () => {
+  const modalData = useQuestionModal();
+  if (!modalData) return <></>;
+  const { questionData, setQuestionData, currElPos } = modalData;
+  const currInputClassNames = [...styles.inputField.input({})];
+  currInputClassNames.push(
+    "px-3 py-2 text-sm grow border border-neutral-neutral80"
+  );
+  if (currElPos) {
+    const width = currElPos.position.width;
+    //adjust spacing of text container
+    if (width > 640) currInputClassNames.push("my-6");
+    else currInputClassNames.push("my-4");
+  }
   const changeHandler = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newAnswer = {
       id: questionData.answer?.correctAnswer[0].id as string,
@@ -229,9 +241,14 @@ export const ShortAnswer = ({
     });
   };
   return (
-    <textarea
-      className={styles.inputField.input({ isTextArea: true }).join(" ")}
+    <TextAreaAutoResizeInput
+      id={"question-short-answer-input"}
+      minRows={8}
       value={questionData.answer?.correctAnswer[0]?.value}
+      name={"question-short-answer-input"}
+      style={{ height: "100%", resize: "none" }}
+      className={currInputClassNames.join(" ")}
+      placeholder="Write your answer here"
       onChange={changeHandler}
     />
   );

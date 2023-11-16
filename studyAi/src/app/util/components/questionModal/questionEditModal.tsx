@@ -65,10 +65,15 @@ const QuestionFormHeader = () => {
     else currHeaderClasses.push("text-2xl");
     //handle container margins
     if (width > 640) currHeaderContainerClasses.push("mb-8");
-    else currHeaderContainerClasses.push("mb-5");
+    else if (width > 480) currHeaderContainerClasses.push("mb-5");
+    else {
+      currHeaderContainerClasses.push("mb-3");
+      currHeaderClasses.push("mb-3");
+    }
     //handle container flex
-    if (width > 480) currHeaderContainerClasses.push("justify-between");
-    else currHeaderContainerClasses.push("align-stretch", "flex-col");
+    if (width > 480)
+      currHeaderContainerClasses.push("justify-between", "items-center");
+    else currHeaderContainerClasses.push("items-stretch", "flex-col");
   }
   return (
     <div className={currHeaderContainerClasses.join(" ")}>
@@ -177,20 +182,31 @@ const QuestionEditForm = () => {
       <form className={"flex flex-col w-full grow"} onSubmit={onSubmit}>
         <QuestionFormHeader />
         <QuestionFormMainContent />
-        <Button type="submit">
-          {type.type === "create" && (
-            <>
-              <FileUploadOutlined className="mr-3" />
-              Upload
-            </>
-          )}
-          {type.type === "edit" && (
-            <>
-              <SaveOutlinedIcon className="mr-3" />
-              Save
-            </>
-          )}
-        </Button>
+        <div className="flex justify-center w-full">
+          <Button
+            type="submit"
+            variant="outlined"
+            className="w-fit py-2 px-4 mt-4 flex"
+            sx={{
+              minHeight: "unset",
+              textTransform: "none",
+              minWidth: "unset",
+            }}
+          >
+            {type.type === "create" && (
+              <>
+                <FileUploadOutlined className="mr-3" />
+                Upload
+              </>
+            )}
+            {type.type === "edit" && (
+              <>
+                <SaveOutlinedIcon className="mr-3" />
+                Save
+              </>
+            )}
+          </Button>
+        </div>
       </form>
     </div>
   );

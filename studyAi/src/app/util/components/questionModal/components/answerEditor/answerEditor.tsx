@@ -114,48 +114,26 @@ const AnswerSelectDropdownInput = () => {
 export default function AnswerEditor() {
   const modalData = useQuestionModal();
   if (!modalData) return <></>;
-  const { questionData, setQuestionData } = modalData;
+  const { questionData } = modalData;
   const questionType = questionData?.questionType;
   let answerType: React.ReactNode;
   switch (questionType) {
     case "Multiple Choice":
-      answerType = (
-        <MultipleChoice
-          questionData={questionData}
-          setQuestionData={setQuestionData}
-        />
-      );
+      answerType = <MultipleChoice />;
       break;
     case "Select Multiple":
-      answerType = (
-        <SelectAll
-          questionData={questionData}
-          setQuestionData={setQuestionData}
-        />
-      );
+      answerType = <SelectAll />;
       break;
     case "Short Answer":
-      answerType = (
-        <ShortAnswer
-          questionData={questionData}
-          setQuestionData={setQuestionData}
-        />
-      );
+      answerType = <ShortAnswer />;
       break;
     default:
-      answerType = (
-        <ShortAnswer
-          questionData={questionData}
-          setQuestionData={setQuestionData}
-        />
-      );
+      answerType = <ShortAnswer />;
       break;
   }
   return (
-    <Box className={styles.layout}>
-      <div className={styles.tabsContainer}>
-        <AnswerSelectDropdownInput />
-      </div>
+    <Box className="flex flex-col w-full">
+      <AnswerSelectDropdownInput />
       {answerType}
     </Box>
   );
