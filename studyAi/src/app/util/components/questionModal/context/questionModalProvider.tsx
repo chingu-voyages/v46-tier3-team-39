@@ -33,7 +33,9 @@ export type QuestionModalDataType = {
   currElPos: ElementPostionType | null;
   isOpen: boolean;
   questionData: Partial<Question>;
+  isGenerating: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
+  setIsGenerating: Dispatch<SetStateAction<boolean>>;
   closeHandler: () => void;
   setQuestionData: Dispatch<SetStateAction<Partial<Question>>>;
   onSave?: (e: Partial<Question>) => void;
@@ -53,6 +55,7 @@ export function QuestionModalProvider({
   onSave?: (e: Partial<Question>) => void;
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
   const [questionData, setQuestionData] = useState<Partial<Question>>(
     initialQuestionData ? { ...initialQuestionData } : blankQuestion
   );
@@ -67,9 +70,11 @@ export function QuestionModalProvider({
     <QuestionModalContext.Provider
       value={{
         isOpen,
+        isGenerating,
         questionData,
         type,
         currElPos,
+        setIsGenerating,
         onSave,
         closeHandler,
         setIsOpen,

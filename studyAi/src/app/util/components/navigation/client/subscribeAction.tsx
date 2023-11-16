@@ -1,14 +1,53 @@
 "use client";
 import { TextFieldInput } from "@/app/auth/components/server/formInputs";
 import useElementPosition from "@/app/util/hooks/useElementSize";
+import { useMutation } from "@apollo/client";
 import { Button } from "@mui/material";
+import gql from "graphql-tag";
+
+const AddSubscriber = gql(`
+  mutation CreateOneSubscriberResolver($email: String!) {
+    createOneSubscriber(data: {
+      email: $email
+    })
+    {
+      id
+    }
+  }
+`);
+
 export const SubscribeAction = () => {
   const {
     setRef,
     position: { height: inputHeight },
   } = useElementPosition();
+
+  const [mutationQuery, { loading, error, data }] = useMutation(
+    AddSubscriber
+  );
+  
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    if (loading) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formData.entries());
+    const { email } = data;
+    
+    try {
+      await mutationQuery({
+        variables: {
+          email: email.toString(),
+        },
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
-    <div
+    <form
+      onSubmit={onSubmit}
       className="flex flex-col space-y-3 items-end sm:flex-row sm:space-y-0"
     >
       <TextFieldInput
@@ -24,8 +63,8 @@ export const SubscribeAction = () => {
         autoComplete="email"
         InputProps={{
           classes: {
-            input: "text-sm"
-          }
+            input: "text-sm",
+          },
         }}
       />
       <Button
@@ -37,11 +76,13 @@ export const SubscribeAction = () => {
         }}
         size="large"
         className="rounded-none w-full ml-0 sm:ml-4 sm:w-auto"
-        variant={"contained"}
+        variant={"outlined"}
         aria-label={"subscribe"}
+        disabled={loading}
       >
         Subscribe
       </Button>
-    </div>
+    </form>
   );
 };
+
