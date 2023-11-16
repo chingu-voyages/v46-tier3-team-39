@@ -11,45 +11,30 @@ const defaultModalClasses = ["flex", "items-center", "justify-center"];
 const QuestionModal = ({ children }: { children: React.ReactNode }) => {
   const modalData = useQuestionModal();
   if (!modalData) return <></>;
-  const {
-    type,
-    isOpen,
-    setIsOpen,
-    questionData,
-    currElPos,
-    closeHandler,
-    setQuestionData,
-  } = modalData;
+  const { type, isOpen, setIsOpen, closeHandler } = modalData;
   const currModalClasses = [...defaultModalClasses];
-  if (type.layout === "modal")
-    currModalClasses.push(
-      "min-w-[90%]",
-      "md:min-w-[60%]",
-      "lg:min-w-[40%]",
-      "xl:min-w-[30%]",
-      "max-h-[80%]"
-    );
-  else currModalClasses.push("w-full min-h-full");
   const styles = {
     modal: currModalClasses.join(" "),
   };
   return (
     <>
-      <IconButton type={"button"} onClick={() => setIsOpen(true)}>
-        {children}
-      </IconButton>
-      <Modal
-        ref={currElPos ? currElPos.setRef : null}
-        open={isOpen}
-        className={styles.modal}
-        onClose={closeHandler}
-      >
-        <QuestionEditForm
-          closeHandler={closeHandler}
-          questionData={questionData}
-          setQuestionData={setQuestionData}
-        />
-      </Modal>
+      {type.layout === "modal" && (
+        <>
+          <IconButton type={"button"} onClick={() => setIsOpen(true)}>
+            {children}
+          </IconButton>
+          <Modal
+            open={isOpen}
+            className={styles.modal}
+            onClose={closeHandler}
+          >
+            <>
+              <QuestionEditForm />
+            </>
+          </Modal>
+        </>
+      )}
+      {type.layout === "page" && <QuestionEditForm />}
     </>
   );
 };
@@ -57,7 +42,7 @@ const QuestionModalContainer = ({
   children,
   type = {
     type: "edit",
-    layout: "page",
+    layout: "modal",
   },
   initialQuestionData,
 }: {
@@ -79,7 +64,7 @@ const QuestionModalWrapper = ({
   initialQuestionData,
   type = {
     type: "edit",
-    layout: "page",
+    layout: "modal",
   },
 }: {
   children: React.ReactNode;

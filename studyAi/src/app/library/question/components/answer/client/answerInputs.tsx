@@ -8,45 +8,16 @@ import {
   RadioGroup,
 } from "@mui/material";
 import {
-  ChangeEvent,
   InputHTMLAttributes,
-  KeyboardEvent,
   SyntheticEvent,
-  useEffect,
   useRef,
 } from "react";
 import { Question } from "../../../../../../../graphql/generated/graphql";
 import ReadOnlyInput from "@/app/util/components/inputs/ReadOnlyInput";
 import { useQuestionSubmissions } from "@/app/stores/questionSubmissionsStore";
 import ObjectId from "bson-objectid";
-const adjustScroll = (
-  event: ChangeEvent<HTMLTextAreaElement> | KeyboardEvent<HTMLTextAreaElement>
-) => {
-  const element = event.currentTarget as HTMLTextAreaElement;
-  if (!element) return;
-  const { selectionEnd, clientHeight, scrollTop } = element;
-  const computedStyle = window.getComputedStyle(element);
-  const lineHeight = Number(
-    computedStyle.getPropertyValue("line-height").replace("px", "")
-  );
-  const paddingTop = Number(
-    computedStyle.getPropertyValue("padding-top").replace("px", "")
-  );
-  const paddingBottom = Number(
-    computedStyle.getPropertyValue("padding-bottom").replace("px", "")
-  );
-  let currCursorPos: number, scrollPosBottom: number, scrollPosTop: number;
-  currCursorPos = lineHeight * (selectionEnd + 1);
-  scrollPosBottom =
-    Math.ceil(clientHeight) + Math.ceil(scrollTop) - paddingBottom - lineHeight;
-  scrollPosTop = Math.ceil(scrollTop) + paddingTop + lineHeight;
-  if (scrollPosBottom <= currCursorPos)
-    return (element.scrollTop = Math.ceil(scrollTop) + lineHeight);
-  if (currCursorPos <= scrollPosTop) {
-    const newScrollPos = Math.ceil(scrollTop) - lineHeight;
-    return (element.scrollTop = newScrollPos <= 0 ? 0 : newScrollPos);
-  }
-};
+import { TextAreaAutoResizeInput } from "@/app/util/components/inputs/TextAreaAutoResizeInput";
+
 
 export const MultipleChoice = ({
   options,
@@ -150,17 +121,14 @@ export const ShortAnswer = ({ questionId }: { questionId: string }) => {
   };
   return (
     <>
-      <TextareaAutosize
+      <TextAreaAutoResizeInput
         minRows={8}
-        onKeyDown={adjustScroll}
         data-id={value[0].id}
         value={value[0].value}
         style={{ height: "100%", resize: "none" }}
         className="px-[4%] py-4 pb-6 text-sm grow"
         placeholder="Type answer here"
         onChange={(e) => {
-          //modify scroll cursor pos
-          adjustScroll(e);
           //update state
           onChange(e);
         }}
