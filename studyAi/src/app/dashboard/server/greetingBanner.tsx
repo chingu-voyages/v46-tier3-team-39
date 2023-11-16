@@ -61,7 +61,7 @@ const GreetingBanner = (props: {
   submissionCount: number;
 }) => {
   return (
-    <div className="flex flex-row w-full ">
+    <div className="flex w-full flex-col-reverse lg:flex-row">
       <GreetingMessage {...props} />
 
       {/* <img

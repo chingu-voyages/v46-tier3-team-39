@@ -5,7 +5,8 @@ import { useSession } from "next-auth/react";
 import { useRef, useState } from "react";
 import { gql } from "../../../../graphql/generated";
 import TextField from "@mui/material/TextField";
-import { RxCross2 } from "react-icons/rx";
+import CreatableSelect from 'react-select/creatable';
+import Chip from '@mui/material/Chip';
 
 import { FaLocationDot, FaTag, FaGraduationCap } from "react-icons/fa6";
 
@@ -55,7 +56,9 @@ const ProfileForm = (
   // console.log('1. session: ' + JSON.stringify(session , null, 1))
   // console.log('2. session.data.user.id: ' + session?.data?.user.id)
 
-  const tags = ['eating', 'sleeping'];
+  const tags = [{value: 'eating', label: 'Eating'},
+                {value: 'sleeping', label: 'Sleeping'}];
+
   const [mutationQuery, { loading, error, data }] = useMutation(
     UpdateUserProfileInfo as any);
   // console.log(data);
@@ -134,36 +137,26 @@ const ProfileForm = (
     onChange={changeForm} />)
   : (<div>{school? school : 'NA'}</div>)
 
-  const removeTag = (e: any) => {
-    e.preventDefault();
-    const { name } = e.currentTarget;
-    console.log('remove tag', name);
-    if (setFormData) {
-      setFormData((prevFormData: any) => (
-        {...prevFormData,
-          tags: formData.tags?.filter((tag: any) => tag !== name)}
-      ))
-    }
-  }
-
-  const tagsEditElement =
-    <div className="flex flex-col gap-1 w-full">
-      <div>Dropdown</div>
-      {formData.tags?.map((tag: any, index: number) => (
-          <div key={index} className="text-sm border rounded-full px-2 py-[0.2rem] flex flex-row gap-1 flex-wrap">
-            <span>{tag}</span>
-            <button name={tag} onClick={removeTag}><RxCross2 /></button>
-          </div>
-      ))}
-  </div>
-
+  const tagsEditElement = <CreatableSelect
+                            isMulti
+                            options={tags}
+                            isClearable
+                            name="tags"
+                            className="w-full"
+                            onChange={(e) => {
+                              if (setFormData) {
+                                setFormData((prevFormData: any) => (
+                                  {...prevFormData, tags: e}
+                                  ))
+                              }
+                            }}/>
 
   const tagsElement = isEditable
   ? tagsEditElement
-  : (<div className="flex flex-row gap-1">
+  : (<div className="flex flex-row gap-1 flex-wrap">
       {tags.length > 0
       ? tags?.map((tag: any, index: number) => (
-          <div key={index} className="text-sm border rounded-full px-2 py-[0.2rem] flex-wrap">{tag}</div>
+          <Chip key={tag.value + index} label={tag.label}></Chip>
       ))
     : <div className="text-sm">No tags</div>}
   </div>)
@@ -181,7 +174,6 @@ const ProfileForm = (
               <FaLocationDot />
             </div>
             <div className="flex flex-row gap-1 items-center">
-              <span>Location: </span>
               {locationElement}</div>
           </div>
           {/* 2. Hat */}
@@ -189,16 +181,16 @@ const ProfileForm = (
             <div className="mr-2">
               <FaGraduationCap />
             </div>
-            <div className="flex flex-row gap-1 items-center"><span>School: </span>{schoolElement}</div>
+            <div className="flex flex-row gap-1 items-center">{schoolElement}</div>
           </div>
           {/* 3. Tags */}
-          <div className="flex w-full gap-1">
-            <div className="mr-2">
+          <div className="flex w-full gap-1 items-center">
+            <div className="mr-2 item-center">
               <FaTag />
             </div>
-            <div className="flex flex-row items-center gap- w-full">
-              <span className="self-start">Tags: </span>
-              {tagsElement}</div>
+            <div className="flex flex-row items-center w-full">
+              {tagsElement}
+            </div>
           </div>
         </div>
         {isEditable

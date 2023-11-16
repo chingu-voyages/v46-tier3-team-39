@@ -8,8 +8,8 @@ const ProfileWrapper = ({session}: {session?: any}) => {
     const [formData, setFormData] = useState<any>({
       ...session?.user,
       id: session?.user?.id? session?.user?.id : "",
-      // tags: session?.user?.tags? session?.user?.tags : [],
-      tags: ['eating', 'sleeping'],
+      tags: session?.user?.tags? session?.user?.tags : [],
+      // tags: ['eating', 'sleeping'],
       name: session?.user?.name? session?.user?.name : "",
       school: session?.user?.school? session?.user?.school : "",
       location: session?.user?.location? session?.user?.location : {
