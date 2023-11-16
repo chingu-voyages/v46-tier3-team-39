@@ -16,7 +16,7 @@ const QuestionTagsInput = ({
 }) => {
   const modalData = useQuestionModal();
   if (!modalData) return <></>;
-  const { questionData, setQuestionData, currElPos } = modalData;
+  const { questionData, setQuestionData } = modalData;
   // need to update tagOptions with actaul options from DB
   const tagOptions = [
     { value: "science", label: "science" },
@@ -24,7 +24,7 @@ const QuestionTagsInput = ({
   ];
 
   const tagsDefault = questionData?.tags
-    ? questionData?.tags.map((tag) => {
+    ? questionData?.tags.map((tag, idx) => {
         return {
           value: tag,
           label: tag,
@@ -40,10 +40,10 @@ const QuestionTagsInput = ({
         Tags
       </label>
       <CreatableSelect
-        id="question-tags-input"
         name="question-tags-input"
         options={tagOptions}
         value={tagsDefault}
+        inputId="question-tags-input"
         onChange={(e) =>
           setQuestionData({
             ...questionData,
@@ -51,13 +51,13 @@ const QuestionTagsInput = ({
           })
         }
         classNames={{
-          control: () => "min-h-0",
+          container: () => "flex w-full",
+          control: () => "min-h-0 grow w-min",
           valueContainer: () => currInputClassNames.join(" "),
           input: () => "m-0 p-0",
           menu: () => "m-0",
           option: () => currInputClassNames.join(" "),
         }}
-        
         isMulti
       />
     </div>

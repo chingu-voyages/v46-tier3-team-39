@@ -122,7 +122,7 @@ const QuestionEditForm = () => {
   const session = useSession();
   const creatorId = session?.data?.user.id;
   if (!modalData) return <></>;
-  const { type, currElPos, questionData } = modalData;
+  const { type, currElPos, questionData, onSave } = modalData;
   const currModalClasses = [...styles.modal];
   if (type.layout === "modal")
     currModalClasses.push(
@@ -172,7 +172,13 @@ const QuestionEditForm = () => {
       },
       private: !!questionData?.private,
     };
-    await mutationQuery({ variables });
+    const result = await mutationQuery({ variables });
+    const newId = result.data?.createOneQuestion.id;
+    const newQuestion = {
+      ...questionData,
+      id: newId ? newId : questionData.id,
+    };
+    if (onSave) onSave(newQuestion);
   };
   return (
     <div

@@ -20,9 +20,7 @@ const QuestionModal = ({ children }: { children: React.ReactNode }) => {
     <>
       {type.layout === "modal" && (
         <>
-          <IconButton type={"button"} onClick={() => setIsOpen(true)}>
-            {children}
-          </IconButton>
+          <div onClick={() => setIsOpen(true)}>{children}</div>
           <Modal open={isOpen} className={styles.modal} onClose={closeHandler}>
             <>
               <QuestionEditForm />
@@ -41,15 +39,18 @@ const QuestionModalContainer = ({
     layout: "modal",
   },
   initialQuestionData,
+  onSave,
 }: {
   initialQuestionData?: Partial<Question>;
   children: React.ReactNode;
   type?: { type: "edit" | "create"; layout: "modal" | "page" };
+  onSave?: (e: Partial<Question>) => void;
 }) => {
   return (
     <QuestionModalProvider
       type={type}
       initialQuestionData={initialQuestionData}
+      onSave={onSave}
     >
       <QuestionModal>{children}</QuestionModal>
     </QuestionModalProvider>
@@ -58,6 +59,7 @@ const QuestionModalContainer = ({
 const QuestionModalWrapper = ({
   children,
   initialQuestionData,
+  onSave,
   type = {
     type: "edit",
     layout: "modal",
@@ -66,12 +68,14 @@ const QuestionModalWrapper = ({
   children: React.ReactNode;
   type?: { type: "edit" | "create"; layout: "modal" | "page" };
   initialQuestionData?: Partial<Question>;
+  onSave?: (e: Partial<Question>) => void;
 }) => {
   return (
     <ElementPosProvider>
       <QuestionModalContainer
         type={type}
         initialQuestionData={initialQuestionData}
+        onSave={onSave}
       >
         {children}
       </QuestionModalContainer>

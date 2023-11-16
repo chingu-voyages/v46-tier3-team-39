@@ -36,6 +36,7 @@ export type QuestionModalDataType = {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   closeHandler: () => void;
   setQuestionData: Dispatch<SetStateAction<Partial<Question>>>;
+  onSave?: (e: Partial<Question>) => void;
 };
 
 const QuestionModalContext = createContext<QuestionModalDataType | null>(null);
@@ -44,24 +45,22 @@ export function QuestionModalProvider({
   children,
   type,
   initialQuestionData,
+  onSave,
 }: {
   children: React.ReactNode;
   type: { type: "edit" | "create"; layout: "modal" | "page" };
   initialQuestionData?: Partial<Question>;
+  onSave?: (e: Partial<Question>) => void;
 }) {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [questionData, setQuestionData] = useState<Partial<Question>>(
-    initialQuestionData
-      ? { ...initialQuestionData, private: true }
-      : blankQuestion
+    initialQuestionData ? { ...initialQuestionData } : blankQuestion
   );
   const currElPos = useElementPos();
   const closeHandler = () => {
     setIsOpen(false);
     setQuestionData(
-      initialQuestionData
-        ? { ...initialQuestionData, private: true }
-        : blankQuestion
+      initialQuestionData ? { ...initialQuestionData } : blankQuestion
     );
   };
   return (
@@ -71,6 +70,7 @@ export function QuestionModalProvider({
         questionData,
         type,
         currElPos,
+        onSave,
         closeHandler,
         setIsOpen,
         setQuestionData,

@@ -73,6 +73,7 @@ export const MultipleChoice = () => {
             <div key={`radio-${index}`} className="flex my-2 items-center">
               <Radio value={options[index].id} className="p-0" />
               <TextField
+                name={`multiple-choice-answer-${index}-option`}
                 value={options[index].value}
                 type="text"
                 variant="standard"
@@ -80,16 +81,21 @@ export const MultipleChoice = () => {
                 onChange={handleInputChange}
                 multiline
               />
-              <IconButton
-                type="button"
-                className="ml-0 p-1"
-                onClick={() =>
-                  deleteChoice(Number(index), { questionData, setQuestionData })
-                }
-                aria-label="delete-answer-option"
-              >
-                <CloseOutlinedIcon />
-              </IconButton>
+              {options.length > 1 && (
+                <IconButton
+                  type="button"
+                  className="p-1 ml-0"
+                  onClick={() =>
+                    deleteChoice(Number(index), {
+                      questionData,
+                      setQuestionData,
+                    })
+                  }
+                  aria-label="delete-answer-option"
+                >
+                  <CloseOutlinedIcon />
+                </IconButton>
+              )}
             </div>
           );
         })}
@@ -113,7 +119,7 @@ export const SelectAll = () => {
 
   return (
     <>
-      {questionData.questionInfo?.options.map((option, index) => {
+      {options.map((option, index) => {
         const handleInputChange = (
           event: React.ChangeEvent<HTMLInputElement>
         ) => {
@@ -186,22 +192,25 @@ export const SelectAll = () => {
               className="p-0"
             />
             <TextField
+              name={`select-all-answer-${index}-option`}
               value={options[index].value}
               variant="standard"
               className={answerInputClassNames.join(" ")}
               onChange={handleInputChange}
               multiline
             />
-            <IconButton
-              type="button"
-              className="p-1 ml-0"
-              onClick={() =>
-                deleteChoice(Number(index), { questionData, setQuestionData })
-              }
-              aria-label="delete-answer-option"
-            >
-              <CloseOutlinedIcon />
-            </IconButton>
+            {options.length > 1 && (
+              <IconButton
+                type="button"
+                className="p-1 ml-0"
+                onClick={() =>
+                  deleteChoice(Number(index), { questionData, setQuestionData })
+                }
+                aria-label="delete-answer-option"
+              >
+                <CloseOutlinedIcon />
+              </IconButton>
+            )}
           </div>
         );
       })}

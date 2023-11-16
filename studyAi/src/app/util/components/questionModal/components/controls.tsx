@@ -10,6 +10,7 @@ import { v4 as uuid } from "uuid";
 import { IconButton } from "@mui/material";
 import { Stars } from "@/app/util/icons/stars";
 import { useQuestionModal } from "../context/questionModalProvider";
+import BtnLabelDropdown from "../../btnLabelDropdown/btnLabelDropdown";
 const generateQuestion = async (
   questionData: Partial<Question>,
   isLoading: boolean,
@@ -66,25 +67,35 @@ const Controls = () => {
   return (
     <div className="flex items-stretch justify-end space-x-3">
       <div className="flex items-center h-10 ">
-        <IconButton
-          type="button"
-          // className={styles.button({})}
-          onClick={async () => {
-            try {
-              setIsLoading(true);
-              await generateQuestion(
-                questionData || {},
-                isLoading,
-                setQuestionData
-              );
-            } catch (err) {
-              setIsLoading(false);
-            }
-          }}
-          className={"aspect-square p-2 h-full"}
-        >
-          <Stars svg={{ className: "h-full w-full" }} />
-        </IconButton>
+        <BtnLabelDropdown text="Generate With AI" pointerEvents={false}>
+          {(props) => (
+            <IconButton
+              ref={props.setAnchorEl}
+              onPointerEnter={(e) => {
+                if (e.pointerType === "mouse") props.handleClick(e);
+              }}
+              onPointerLeave={(e) => {
+                if (e.pointerType === "mouse") props.handleClose();
+              }}
+              type="button"
+              onClick={async () => {
+                try {
+                  setIsLoading(true);
+                  await generateQuestion(
+                    questionData || {},
+                    isLoading,
+                    setQuestionData
+                  );
+                } catch (err) {
+                  setIsLoading(false);
+                }
+              }}
+              className={"aspect-square p-2 h-full"}
+            >
+              <Stars svg={{ className: "h-full w-full" }} />
+            </IconButton>
+          )}
+        </BtnLabelDropdown>
       </div>
       <div className="flex items-center">
         <div className="w-[1px] h-4/6 bg-Black" />
