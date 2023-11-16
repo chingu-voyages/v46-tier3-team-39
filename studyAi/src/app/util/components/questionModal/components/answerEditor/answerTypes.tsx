@@ -1,7 +1,5 @@
 import React from "react";
 import modalStyles from "../../ModalStyles";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { QuestionProps } from "../../questionEditModal";
 import type { AnswerOption } from "../../../../../../../prisma/generated/type-graphql";
 import ObjectId from "bson-objectid";
@@ -81,6 +79,7 @@ export const MultipleChoice = ({
                 multiline
               />
               <IconButton
+                type="button"
                 className="ml-0 p-1"
                 onClick={() =>
                   deleteChoice(Number(index), { questionData, setQuestionData })
@@ -192,6 +191,7 @@ export const SelectAll = ({
               multiline
             />
             <IconButton
+              type="button"
               className="p-1 ml-0"
               onClick={() =>
                 deleteChoice(Number(index), { questionData, setQuestionData })

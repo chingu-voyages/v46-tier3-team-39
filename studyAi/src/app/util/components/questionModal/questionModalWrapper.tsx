@@ -23,11 +23,7 @@ const QuestionModal = ({ children }: { children: React.ReactNode }) => {
           <IconButton type={"button"} onClick={() => setIsOpen(true)}>
             {children}
           </IconButton>
-          <Modal
-            open={isOpen}
-            className={styles.modal}
-            onClose={closeHandler}
-          >
+          <Modal open={isOpen} className={styles.modal} onClose={closeHandler}>
             <>
               <QuestionEditForm />
             </>

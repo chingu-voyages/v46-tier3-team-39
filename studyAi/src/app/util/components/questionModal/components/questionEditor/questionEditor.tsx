@@ -33,11 +33,15 @@ const QuestionTagsInput = ({
     : undefined;
   return (
     <div className={currInputFieldContainerClassNames.join(" ")}>
-      <label htmlFor="tags" className={currLabelClassNames.join(" ")}>
+      <label
+        htmlFor="question-tags-input"
+        className={currLabelClassNames.join(" ")}
+      >
         Tags
       </label>
       <CreatableSelect
-        id="tags"
+        id="question-tags-input"
+        name="question-tags-input"
         options={tagOptions}
         value={tagsDefault}
         onChange={(e) =>
@@ -51,8 +55,9 @@ const QuestionTagsInput = ({
           valueContainer: () => currInputClassNames.join(" "),
           input: () => "m-0 p-0",
           menu: () => "m-0",
-          option: () => currInputClassNames.join(" ")
+          option: () => currInputClassNames.join(" "),
         }}
+        
         isMulti
       />
     </div>
@@ -70,14 +75,17 @@ const QuestionDescriptionInput = ({
   const { questionData, setQuestionData, currElPos } = modalData;
   return (
     <div className={currInputFieldContainerClassNames.join(" ")}>
-      <label htmlFor="description" className={currLabelClassNames.join(" ")}>
+      <label
+        htmlFor="question-description-input"
+        className={currLabelClassNames.join(" ")}
+      >
         Description
       </label>
       <TextAreaAutoResizeInput
-        id={"description"}
+        id={"question-description-input"}
         minRows={8}
         value={questionData?.questionInfo?.description}
-        name={"description"}
+        name={"question-description-input"}
         style={{ height: "100%", resize: "none" }}
         className="px-3 py-2 text-sm grow border border-neutral-neutral80"
         placeholder="Write your question here"
@@ -117,7 +125,8 @@ const QuestionEditor = () => {
   return (
     <div className={styles.layout.join(" ")}>
       <TextFieldInput
-        name={"title"}
+        id="question-title-input"
+        name={"question-title-input"}
         label={"Title"}
         value={questionData?.questionInfo?.title}
         labelClassNames={currLabelClassNames.join(" ")}
