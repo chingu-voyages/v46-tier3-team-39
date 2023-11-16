@@ -10,10 +10,11 @@ import {
   faUpRightAndDownLeftFromCenter,
 } from "@fortawesome/free-solid-svg-icons";
 import { QuestionTypes } from "@/app/util/types/UserData";
-import { AnswerType } from "./answerInputs";
 import { useFullscreen } from "@/app/util/providers/FullscreenProvider";
 import React from "react";
 import BtnLabelDropdown from "@/app/util/components/btnLabelDropdown/btnLabelDropdown";
+import { useQuestionSubmissions } from "@/app/stores/questionSubmissionsStore";
+import { AnswerType } from "./answerTypeContainer";
 const determineAnswerTitle = (str?: string) => {
   const matchStr = str as (typeof QuestionTypes)[number];
   switch (matchStr) {
@@ -75,10 +76,14 @@ const FullScreenBtn = ({
 const ResetAnswerBtn = ({
   btnClassNames,
   btnStyle,
+  questionId,
 }: {
+  questionId: string;
   btnClassNames?: string;
   btnStyle?: React.CSSProperties;
 }) => {
+  const [currSubmissions, { deleteItems }] = useQuestionSubmissions();
+  const submission = currSubmissions.ongoingData[questionId];
   return (
     <BtnLabelDropdown text="Reset" pointerEvents={false}>
       {(props) => (
@@ -89,6 +94,14 @@ const ResetAnswerBtn = ({
           }}
           onPointerLeave={(e) => {
             if (e.pointerType === "mouse") props.handleClose();
+          }}
+          onClick={() => {
+            if (submission && submission.questionId)
+              deleteItems([
+                {
+                  questionId: submission.questionId,
+                },
+              ]);
           }}
           size="small"
           sx={btnStyle}
@@ -105,21 +118,26 @@ const TopBar = () => {
   const params = useParams();
   const questions = useQuestions()[0].data;
   const question =
-    params.id && typeof params.id === "string" ? questions[params.id] : null;
+    params.id && typeof params.id === "string" ? questions.map[params.id] : null;
   const btnClassNames = "flex items-center justify-center h-[70%]";
   const btnStyle: React.CSSProperties = {
     minHeight: "unset",
     padding: 0,
     aspectRatio: 1,
   };
-
   return (
     <ContainerBar border>
       <h3 className="flex items-center h-full text-sm">
         {determineAnswerTitle(question?.questionType)}
       </h3>
       <div className="flex items-center h-full grow justify-end">
-        <ResetAnswerBtn btnClassNames={btnClassNames} btnStyle={btnStyle} />
+        {question && (
+          <ResetAnswerBtn
+            questionId={question.id}
+            btnClassNames={btnClassNames}
+            btnStyle={btnStyle}
+          />
+        )}
         <FullScreenBtn btnClassNames={btnClassNames} btnStyle={btnStyle} />
       </div>
     </ContainerBar>

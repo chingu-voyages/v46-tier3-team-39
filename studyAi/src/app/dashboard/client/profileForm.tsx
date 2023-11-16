@@ -34,9 +34,10 @@ const UpdateUserProfileInfo = gql(`
     }
   }
 `);
+
 const ProfileForm = (
   {isEditable, formData, setFormData, toggleEditable}:
-  {isEditable?: boolean, formData: any, setFormData?: any, toggleEditable: any}) => {
+  {isEditable: boolean, formData: any, setFormData: any, toggleEditable: any}) => {
   const session = useSession();
   // const [tags, setTags] = useState(session.data ? session.data.user.tags : []);
   const [name, setName] = useState(session.data ? session.data.user.name : "");
@@ -142,6 +143,7 @@ const ProfileForm = (
                             options={tags}
                             isClearable
                             name="tags"
+                            value={tags}
                             className="w-full"
                             onChange={(e) => {
                               if (setFormData) {
@@ -163,9 +165,6 @@ const ProfileForm = (
 
 
   return (
-    <div>
-
-      {/* Form */}
       <form className="w-full" onSubmit={handleSubmit}>
         <div className="mb-5 flex flex-col gap-2">
           {/* 1.Location */}
@@ -173,7 +172,7 @@ const ProfileForm = (
             <div className="mr-2">
               <FaLocationDot />
             </div>
-            <div className="flex flex-row gap-1 items-center">
+            <div className="flex flex-row gap-1 items-center w-full">
               {locationElement}</div>
           </div>
           {/* 2. Hat */}
@@ -181,7 +180,7 @@ const ProfileForm = (
             <div className="mr-2">
               <FaGraduationCap />
             </div>
-            <div className="flex flex-row gap-1 items-center">{schoolElement}</div>
+            <div className="flex flex-row gap-1 items-center w-full">{schoolElement}</div>
           </div>
           {/* 3. Tags */}
           <div className="flex w-full gap-1 items-center">
@@ -201,7 +200,6 @@ const ProfileForm = (
           </button>
         }
       </form>
-    </div>
   );
 };
 export default ProfileForm;

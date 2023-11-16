@@ -4,7 +4,8 @@ import  ProfileWrapper from '../client/profileWrapper'
 import { getServerSession } from "next-auth";
 import { FaLocationDot, FaTag, FaGraduationCap } from "react-icons/fa6";
 
-const Profile = async () => {
+const Profile = async ({questionCount, submissionCount}
+  : {questionCount: number, submissionCount: number}) => {
   const session = await getServerSession(options);
 
 
@@ -12,7 +13,10 @@ const Profile = async () => {
   console.log("session in profile: " + JSON.stringify(session, null, 1));
   return (
     <div className="">
-      {session && <ProfileWrapper session={session} />}
+      {session && <ProfileWrapper
+          session={session}
+          questionCount={questionCount}
+          submissionCount={submissionCount} />}
     </div>
   );
 };
