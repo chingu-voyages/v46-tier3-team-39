@@ -73,8 +73,8 @@ const styles = {
     closeIcon: {
       btn: [
         "absolute",
-        "top-[2.5%]",
-        "right-[calc(max(1.5%,0.75rem))]",
+        "top-[calc(max(1.5%,0.75rem))]",
+        "right-0",
         "h-10",
         "aspect-square",
         "flex",
@@ -125,7 +125,7 @@ const styles = {
           // "focus:border-blue-500",
           // "block",
           isTime ? "w-8" : "w-full",
-          isTime ? "p-1" : "p-2.5",
+          // isTime ? "p-1" : "p-2.5",
           isTime ? "my-auto ml-4 h-8" : "",
           isTextArea ? "h-[215px] max-h-[215px]" : "",
         ],
@@ -142,7 +142,7 @@ const styles = {
       layout: ["w-full"].join(" "),
       h2: [
         "text-3xl",
-        "text-center",
+        // "text-center",
         "font-semibold",
         "mb-2",
         "sm:text-5xl",

@@ -8,9 +8,11 @@ const styles = modalStyles.mainContentLayout.questionEditor;
 const QuestionTagsInput = ({
   currLabelClassNames,
   currInputFieldContainerClassNames,
+  currInputClassNames,
 }: {
   currInputFieldContainerClassNames: string[];
   currLabelClassNames: string[];
+  currInputClassNames: string[];
 }) => {
   const modalData = useQuestionModal();
   if (!modalData) return <></>;
@@ -44,6 +46,13 @@ const QuestionTagsInput = ({
             tags: e.map((tag) => tag.value),
           })
         }
+        classNames={{
+          control: () => "min-h-0",
+          valueContainer: () => currInputClassNames.join(" "),
+          input: () => "m-0 p-0",
+          menu: () => "m-0",
+          option: () => currInputClassNames.join(" ")
+        }}
         isMulti
       />
     </div>
@@ -133,6 +142,7 @@ const QuestionEditor = () => {
       <QuestionTagsInput
         currLabelClassNames={currLabelClassNames}
         currInputFieldContainerClassNames={currInputFieldContainerClassNames}
+        currInputClassNames={currInputClassNames}
       />
       <QuestionDescriptionInput
         currLabelClassNames={currLabelClassNames}
@@ -143,10 +153,3 @@ const QuestionEditor = () => {
 };
 
 export default QuestionEditor;
-/* <div className={styles.estTimeLayout}>
-          <label htmlFor="time" className={styles.label}>
-            Est. Time
-          </label>
-          <input id="time" className={styles.input({ isTime: true })} />
-          <TimeFormatDropdown />
-        </div> */

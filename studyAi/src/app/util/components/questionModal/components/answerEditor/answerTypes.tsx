@@ -1,13 +1,26 @@
-import { Radio, RadioGroup, Checkbox } from "@mui/material";
+import React from "react";
 import modalStyles from "../../ModalStyles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import React from "react";
 import { QuestionProps } from "../../questionEditModal";
 import type { AnswerOption } from "../../../../../../../prisma/generated/type-graphql";
-import { v4 as uuid } from "uuid";
+import ObjectId from "bson-objectid";
+import {
+  Radio,
+  RadioGroup,
+  Checkbox,
+  IconButton,
+  TextField,
+  Button,
+} from "@mui/material";
+import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
+import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
+import { CheckBoxOutlineBlankOutlined } from "@mui/icons-material";
 const styles = modalStyles.mainContentLayout.questionEditor;
+const answerInputClassNames = [
+  ...styles.inputField.input({}),
+  "py-2 pl-2 pr-1",
+];
 export const MultipleChoice = ({
   questionData,
   setQuestionData,
@@ -28,57 +41,66 @@ export const MultipleChoice = ({
   };
 
   return (
-    <RadioGroup
-      className="mt-2"
-      defaultValue="outlined"
-      name="radio-buttons-group"
-      value={questionData.answer?.correctAnswer[0].id}
-      onChange={handleRadioChange}
-    >
-      {options.map((_option, index) => {
-        const handleInputChange = (
-          event: React.ChangeEvent<HTMLInputElement>
-        ) => {
-          const newOptions = options
-            .slice(0, index)
-            .concat({ id: options[index].id, value: event.target.value })
-            .concat(options.slice(index + 1));
-          setQuestionData(
-            questionData.questionInfo
-              ? {
-                  ...questionData,
-                  questionInfo: {
-                    ...questionData.questionInfo,
-                    options: newOptions,
-                  },
+    <>
+      <RadioGroup
+        className="mt-2"
+        defaultValue="outlined"
+        name="radio-buttons-group"
+        value={questionData.answer?.correctAnswer[0].id}
+        onChange={handleRadioChange}
+      >
+        {options.map((_option, index) => {
+          const handleInputChange = (
+            event: React.ChangeEvent<HTMLInputElement>
+          ) => {
+            const newOptions = options
+              .slice(0, index)
+              .concat({ id: options[index].id, value: event.target.value })
+              .concat(options.slice(index + 1));
+            setQuestionData(
+              questionData.questionInfo
+                ? {
+                    ...questionData,
+                    questionInfo: {
+                      ...questionData.questionInfo,
+                      options: newOptions,
+                    },
+                  }
+                : questionData
+            );
+          };
+          return (
+            <div key={`radio-${index}`} className="flex my-2 items-center">
+              <Radio value={options[index].id} className="p-0" />
+              <TextField
+                value={options[index].value}
+                type="text"
+                variant="standard"
+                className={answerInputClassNames.join(" ")}
+                onChange={handleInputChange}
+                multiline
+              />
+              <IconButton
+                className="ml-0 p-1"
+                onClick={() =>
+                  deleteChoice(Number(index), { questionData, setQuestionData })
                 }
-              : questionData
+                aria-label="delete-answer-option"
+              >
+                <CloseOutlinedIcon />
+              </IconButton>
+            </div>
           );
-        };
-        return (
-          <div key={`radio-${index}`} className="flex my-2 px-4 items-center">
-            <Radio value={options[index].id} />
-            <input
-              value={options[index].value}
-              type="text"
-              className={styles.inputField.input({}).join(" ")}
-              onChange={handleInputChange}
-            />
-            <FontAwesomeIcon
-              icon={faTrash}
-              className="ml-2 hover:cursor-pointer"
-              onClick={() =>
-                deleteChoice(Number(index), { questionData, setQuestionData })
-              }
-            />
-          </div>
-        );
-      })}
-      <NewAnswer
-        questionData={questionData}
-        setQuestionData={setQuestionData}
-      />
-    </RadioGroup>
+        })}
+      </RadioGroup>
+      <div className="flex my-4">
+        <RadioButtonUncheckedIcon />
+        <NewAnswer
+          questionData={questionData}
+          setQuestionData={setQuestionData}
+        />
+      </div>
+    </>
   );
 };
 
@@ -155,32 +177,39 @@ export const SelectAll = ({
           return checked;
         };
         return (
-          <div key={`select-${index}`} className="flex my-4 px-4 items-center">
+          <div key={`select-${index}`} className="flex my-4 items-center">
             <Checkbox
               value={options[index].value}
               checked={isChecked(options[index].id)}
               onChange={handleCheckboxChange}
+              className="p-0"
             />
-            <input
-              type="text"
-              className={styles.inputField.input({}).join(" ")}
+            <TextField
               value={options[index].value}
+              variant="standard"
+              className={answerInputClassNames.join(" ")}
               onChange={handleInputChange}
+              multiline
             />
-            <FontAwesomeIcon
-              icon={faTrash}
-              className="ml-2 hover:cursor-pointer"
+            <IconButton
+              className="p-1 ml-0"
               onClick={() =>
                 deleteChoice(Number(index), { questionData, setQuestionData })
               }
-            />
+              aria-label="delete-answer-option"
+            >
+              <CloseOutlinedIcon />
+            </IconButton>
           </div>
         );
       })}
-      <NewAnswer
-        questionData={questionData}
-        setQuestionData={setQuestionData}
-      />
+      <div className="flex my-4">
+        <CheckBoxOutlineBlankOutlined />
+        <NewAnswer
+          questionData={questionData}
+          setQuestionData={setQuestionData}
+        />
+      </div>
     </>
   );
 };
@@ -207,7 +236,6 @@ export const ShortAnswer = ({
     />
   );
 };
-
 const NewAnswer = ({
   questionData,
   setQuestionData,
@@ -221,18 +249,25 @@ const NewAnswer = ({
             ...questionData,
             questionInfo: {
               ...questionInfo,
-              options: options.concat({ id: uuid(), value: "" }),
+              options: options.concat({ id: ObjectId().toString(), value: "" }),
             },
           }
         : questionData
     );
   };
-
   return (
-    <button onClick={clickHandler} className="ml-4 my-2 px-4 items-center">
-      <FontAwesomeIcon icon={faPlus} />
-      <span className="ml-3 text-md font-semibold">New Answer</span>
-    </button>
+    <Button
+      variant="text"
+      onClick={clickHandler}
+      className="ml-2 items-center py-0 px-1 tracking-normal"
+      sx={{
+        minWidth: "unset",
+        minHeight: "unset",
+        textTransform: "none",
+      }}
+    >
+      <span className="font-semibold">Add option</span>
+    </Button>
   );
 };
 
