@@ -37,7 +37,7 @@ const UpdateUserProfileInfo = gql(`
 
 const ProfileForm = (
   {isEditable, formData, setFormData, toggleEditable}:
-  {isEditable?: boolean, formData: any, setFormData?: any, toggleEditable: any}) => {
+  {isEditable: boolean, formData: any, setFormData: any, toggleEditable: any}) => {
   const session = useSession();
   // const [tags, setTags] = useState(session.data ? session.data.user.tags : []);
   const [name, setName] = useState(session.data ? session.data.user.name : "");

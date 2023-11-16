@@ -49,8 +49,8 @@ const GreetingMessage = ({
         variant="h6"
         className="flex justify-center font-medium w-full tracking-tight"
       >
-        You’ve completed {submissionCount} questions this week and generated{" "}
-        {questionCount} ! Keep it up and improve your results!
+        You’ve completed {submissionCount.toString()} questions this week and generated{" "}
+        {questionCount.toString()} ! Keep it up and improve your results!
       </Typography>
     </div>
   );
@@ -71,7 +71,7 @@ const GreetingBanner = (props: {
           className=""
         />
       </div> */}
-      <div className="border flex w-full h-full justify-center items-center">
+      <div className="flex w-full h-full justify-center items-center">
         <Image
           src={WelcomeImg}
           alt="welcome-back-image"

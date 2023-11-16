@@ -5,7 +5,15 @@ import ProfileForm from "./profileForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FaClipboardQuestion, FaPeopleGroup } from "react-icons/fa6";
 
-const ProfileWrapper = ({ session }: { session?: any }) => {
+const ProfileWrapper = ({
+  session,
+  questionCount,
+  submissionCount,
+}: {
+  session?: any;
+  questionCount?: number;
+  submissionCount?: number;
+}) => {
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [formData, setFormData] = useState<any>({
     ...session?.user,
@@ -58,34 +66,42 @@ const ProfileWrapper = ({ session }: { session?: any }) => {
           toggleEditable={toggleEditable}
         />
       }
-      <div className="border border-black" />
+      <div className="border-0 border-black" />
 
       <div>
-        <h2 className=" font-bold">Activity</h2>
+        <h2 className="font-bold text-lg mb-1">Activity</h2>
         {/* 1. Questions   */}
-        <div className=" flex flex-row">
-          <div className="mr-2  ">
-            {" "}
-            <FaClipboardQuestion />
+        <div className="flex flex-col">
+          <div className="mr-2 flex">
+            <div className=" border-0 flex justify-center items-center mr-2 ">
+              <FaClipboardQuestion />
+            </div>
+            <div className="font-bold text-md">Question</div>
           </div>
           <div className=" flex flex-col">
-            <div>Question</div>
             <div className=" flex flex-row gap-1">
-              <div>Answered</div>
-              <div>Generated</div>
+              {" "}
+              <div className=" invisible">
+                <FaClipboardQuestion />
+              </div>
+              <div>Answered: {submissionCount?.toString()}</div>
+              <div>Generated: {questionCount?.toString()}</div>
             </div>
           </div>
         </div>
-        {/* 2. COmmunity */}
-        <div className=" flex flex-row">
-        <div className="mr-2  ">
-            <FaPeopleGroup />
-          </div>
-          <div className=" flex flex-col">
-            <div>Community</div>
-            <div>
-              <div>Impacted</div>
+        {/* 2. Community */}
+        <div className="flex flex-col mt-2">
+          <div className="mr-2 flex ">
+            <div className=" border-0 flex justify-center items-center mr-2">
+              <FaPeopleGroup />
             </div>
+            <div className="font-bold text-md">Community</div>
+          </div>
+          <div className=" flex flex-row">
+            <div className="invisible mr-2">
+              <FaPeopleGroup />
+            </div>
+            <div>Impacted {session?.user?.usersReached} users</div>
           </div>
         </div>
       </div>
