@@ -15,7 +15,7 @@ const ExamPrep = async () => {
         <h2 className="sm:text-xl mt-4">
           Unlock your full potential with our AI-powered practice questions
         </h2>
-      </div>
+      </div> 
       <div className="flex mt-4">
         <div className="mx-auto">
           {session ? (

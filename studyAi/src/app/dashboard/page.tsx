@@ -140,15 +140,13 @@ export default async function DashboardPage() {
         </div>
         <div className="col-span-2 ">
           <div className="grid grid-rows-2 ">
-            <div className=" row-span-1 border-8 md:p-5 md:m-5 flex ">
+            <div className="row-span-1 border-2 md:p-5 md:m-5 flex w-full">
               {/* 2.1 */}
-              <div className="flex w-full border-2 border-blue-500">
-                <GreetingBanner
-                  name={userName}
-                  questionCount={questionsLength}
-                  submissionCount={submissionsLength}
-                />
-              </div>
+              <GreetingBanner
+                name={userName}
+                questionCount={questionsLength}
+                submissionCount={submissionsLength}
+              />
             </div>
             <div className=" row-span-1 ">
               <div className=" grid grid-cols-1 sm:grid-cols-2 ">
