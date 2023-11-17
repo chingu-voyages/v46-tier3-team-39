@@ -4,7 +4,7 @@ const CreatePage = () => {
   return (
     <NavigationWrapper
       appBars={{
-        footer: true,
+        footer: false,
         navbar: true,
       }}
       usePadding={false}

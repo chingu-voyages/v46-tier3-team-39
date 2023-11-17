@@ -23,7 +23,8 @@ const QuestionDescriptionInput = ({
   currLabelClassNames: string[];
 }) => {
   const modalData = useQuestionModal();
-  const { questionData, setQuestionData, currElPos } = modalData;
+  if (!modalData) return <></>;
+  const { questionData, setQuestionData } = modalData;
   const currTextFieldInputClassNames = [
     ...currInputFieldContainerClassNames,
     "grow",
