@@ -771,11 +771,13 @@ input LikeCounterWhereInput {
 
 type LocationData {
   coordinates: [Float!]!
+  locationName: String!
   locationType: String!
 }
 
 input LocationDataCreateInput {
   coordinates: LocationDataCreatecoordinatesInput
+  locationName: String!
   locationType: String!
 }
 
@@ -802,16 +804,19 @@ input LocationDataNullableUpdateEnvelopeInput {
 
 input LocationDataObjectEqualityInput {
   coordinates: [Float!]
+  locationName: String!
   locationType: String!
 }
 
 input LocationDataOrderByInput {
   coordinates: SortOrder
+  locationName: SortOrder
   locationType: SortOrder
 }
 
 input LocationDataUpdateInput {
   coordinates: LocationDataUpdatecoordinatesInput
+  locationName: StringFieldUpdateOperationsInput
   locationType: StringFieldUpdateOperationsInput
 }
 
@@ -830,6 +835,7 @@ input LocationDataWhereInput {
   NOT: [LocationDataWhereInput!]
   OR: [LocationDataWhereInput!]
   coordinates: FloatNullableListFilter
+  locationName: StringFilter
   locationType: StringFilter
 }
 

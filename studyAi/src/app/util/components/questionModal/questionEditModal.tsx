@@ -1,5 +1,4 @@
 "use client";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import AnswerEditor from "./components/answerEditor/answerEditor";
@@ -58,8 +57,8 @@ const QuestionFormHeader = () => {
   const currBtnClasses = [...styles.header.closeIcon.btn];
   const currHeaderClasses = [...styles.header.h1];
   const currHeaderContainerClasses = [...styles.header.container];
-  if (currElPos) {
-    const width = currElPos.position.width;
+  const width = currElPos?.position?.width;
+  if (currElPos && typeof width === "number") {
     //handle header text
     if (width > 640) currHeaderClasses.push("text-5xl");
     else if (width > 480) currHeaderClasses.push("text-3xl");
@@ -94,7 +93,7 @@ const QuestionFormHeader = () => {
       <h1 className={currHeaderClasses.join(" ")}>
         {formTypeHeaderText + " Your Question"}
       </h1>
-      <Controls />
+      { <Controls />}
     </div>
   );
 };
@@ -132,7 +131,7 @@ const QuestionEditFormLoadingBanner = ({ text }: { text: string }) => {
   ];
   return (
     <div className={bannerStyles.join(" ")}>
-      <LoadingIcon backgroundColor="black" strokeWidth={'1rem'}/>
+      <LoadingIcon backgroundColor="black" strokeWidth={"1rem"} />
       <Typography variant="body1">{text}</Typography>
     </div>
   );

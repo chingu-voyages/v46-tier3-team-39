@@ -3,7 +3,15 @@ import type { Metadata } from "next";
 import AuthProvider from "./util/providers/AuthContext";
 import GraphQLProvider from "./util/providers/apolloProvider";
 import { IsClientCtxProvider } from "./util/providers/isClientProvider";
+import * as React from "react";
+import { StyledEngineProvider } from "@mui/material/styles";
 
+// export default function GlobalCssPriority() {
+//   return (
+//       {/* Your component tree. Now you can override Material UI's styles. */}
+//     </StyledEngineProvider>
+//   );
+// }
 export const metadata: Metadata = {
   title: "StudyAI",
   description:
@@ -41,7 +49,9 @@ export default function RootLayout({
       <GraphQLProvider>
         <IsClientCtxProvider>
           <AuthProvider>
-            <body>{children}</body>
+            <StyledEngineProvider injectFirst>
+              <body>{children}</body>
+            </StyledEngineProvider>
           </AuthProvider>
         </IsClientCtxProvider>
       </GraphQLProvider>
