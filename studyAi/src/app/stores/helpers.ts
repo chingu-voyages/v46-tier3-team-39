@@ -93,6 +93,7 @@ export const addOrUpdateFunc = <T>({
   const currState = getState();
   const newArr = [...currState.data.arr];
   const arr = items.map((item) => {
+    //update item
     if (item.id in currState.data.map) {
       const newItem = {
         ...currState.data.map[item.id],
@@ -102,6 +103,8 @@ export const addOrUpdateFunc = <T>({
       newArr.splice(findById(newArr, item.id), 1, newItem);
       return [item.id, newItem];
     }
+    //when adding new item
+    newArr.push(item)
     return [item.id, item];
   });
   const data = {

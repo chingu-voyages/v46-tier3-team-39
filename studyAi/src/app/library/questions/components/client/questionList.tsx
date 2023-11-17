@@ -10,40 +10,45 @@ import { Carousel } from "@/app/util/components/carousel/carousel";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEarthAmericas } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
+import { useQuestions } from '@/app/stores/questionStore';
+import PaginatedItems from "@/app/util/components/pagination/pagination"
 
-export default function QuestionList({
-  questions,
-}: {
-  questions: Partial<Question>[];
-}) {
-  const [tabValue, setTabValue] = useState(0);
+export default function QuestionList() {
+    const [tabValue, setTabValue] = useState(0);
+    const questions = useQuestions()[0].data.arr;
 
-  const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
-    setTabValue(newValue);
-  };
+    //for testing pagination
+    /* const questions: Partial<Question>[] = Array(100).fill({id:"1", questionInfo: {title: "title"}, questionType: "Short Answer", tags: ["Math"]}) */
+    
+    const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
+        setTabValue(newValue);
+    };
 
-  const styles = {
-    layout: ["w-full", "border", "bg-light-surface", "mt-8"].join(" "),
-    controlsLayout: [
-      "flex",
-      "w-full",
-      "justify-between",
-      "items-center",
-      "sm: px-4",
-    ].join(" "),
-    createButton: ["bg-light-primary", "h-[30px]", "w-[30px]", "mr-4"].join(
-      " "
-    ),
-    h2: ["text-[#5C5F60]"].join(" "),
-    titlesLayout: [
-      "flex",
-      "justify-between",
-      "py-4",
-      "px-2",
-      "bg-LightGrey",
-      "sm:px-16",
-    ].join(" "),
-  };
+    const styles = {
+        layout: ["w-full", "border", "bg-light-surface", "mt-8"].join(" "),
+        controlsLayout: [
+        "flex",
+        "w-full",
+        "justify-between",
+        "items-center",
+        "sm: px-4",
+        ].join(" "),
+        createButton: [
+            "bg-light-primary", 
+            "h-[30px]",
+            "w-[30px]",
+            "mr-4"
+        ].join(" "),
+        h2: ["text-[#5C5F60]"].join(" "),
+        titlesLayout: [
+        "flex",
+        "justify-between",
+        "py-4",
+        "px-2",
+        "bg-LightGrey",
+        "sm:px-16",
+        ].join(" "),
+    };
 
   return (
     <Box className={styles.layout}>
@@ -116,36 +121,39 @@ function List({ questions }: { questions: Partial<Question>[] }) {
     h3: ["text-xl", "mb-2"].join(" "),
     h4: ["text-lg", "text-[#5C5F60]"].join(" "),
     tag: ["p-1", "bg-[#CDCDCD]", "mx-2", "rounded-full", "mt-4"].join(" "),
+    paginateContainer: ["flex", "justify-between", "p-4", "w-[400px]"].join(" ")
   };
+
+  const formatedQuestions = questions.map((question, index) => {
+    return (
+      <Link
+        key={index}
+        className={styles.layout}
+        href={`/library/question/${question.id}`}
+      >
+        <div>
+          <h4 className={styles.h4}>{question.questionType}</h4>
+          <h3 className={styles.h3}>{question.questionInfo?.title}</h3>
+          <Carousel>
+            {(question.tags as string[]).map((tag, index) => {
+              return (
+                <span
+                  className={styles.tag}
+                  key={(question.id as string) + index}
+                >
+                  {tag}
+                </span>
+              );
+            })}
+          </Carousel>
+        </div>
+        <FontAwesomeIcon icon={faEarthAmericas} width="16" />
+      </Link>
+    );
+  })
   return (
     <>
-      {questions.map((question, index) => {
-        return (
-          <Link
-            key={index}
-            className={styles.layout}
-            href={`/library/question/${question.id}`}
-          >
-            <div>
-              <h4 className={styles.h4}>{question.questionType}</h4>
-              <h3 className={styles.h3}>{question.questionInfo?.title}</h3>
-              <Carousel>
-                {(question.tags as string[]).map((tag, index) => {
-                  return (
-                    <span
-                      className={styles.tag}
-                      key={(question.id as string) + index}
-                    >
-                      {tag}
-                    </span>
-                  );
-                })}
-              </Carousel>
-            </div>
-            <FontAwesomeIcon icon={faEarthAmericas} width="16" />
-          </Link>
-        );
-      })}
+      <PaginatedItems items={formatedQuestions} itemsPerPage={10} containerClassName={styles.paginateContainer} />
     </>
   );
 }
