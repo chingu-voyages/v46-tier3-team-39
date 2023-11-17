@@ -29,11 +29,14 @@ const AnswerSelectDropdownInput = () => {
 
   if (currElPos) {
     const width = currElPos.position.width;
+    //determine margins
+    if (width > 1024) currInputFieldContainerClassNames.push("mt-12");
+    else if (width > 640) currInputFieldContainerClassNames.push("mt-7");
+    else currInputFieldContainerClassNames.push("mt-6");
+    //determine padding
     if (width > 640) {
-      currInputFieldContainerClassNames.push("mt-7");
       currInputClassNames.push("p-3", "text-lg");
     } else {
-      currInputFieldContainerClassNames.push("mt-6");
       currInputClassNames.push("p-2.5", "text-base");
     }
   }
@@ -114,7 +117,7 @@ const AnswerSelectDropdownInput = () => {
 export default function AnswerEditor() {
   const modalData = useQuestionModal();
   if (!modalData) return <></>;
-  const { questionData } = modalData;
+  const { questionData, currElPos } = modalData;
   const questionType = questionData?.questionType;
   let answerType: React.ReactNode;
   switch (questionType) {
@@ -131,6 +134,7 @@ export default function AnswerEditor() {
       answerType = <ShortAnswer />;
       break;
   }
+  const width = currElPos?.position?.width;
   return (
     <Box className="flex flex-col w-full">
       <AnswerSelectDropdownInput />

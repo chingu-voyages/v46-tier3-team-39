@@ -57,10 +57,12 @@ class ServerGraphQLClientClass {
 const ServerGraphQLClientInstance = new ServerGraphQLClientClass();
 const ServerGraphQLClient = (session: Session | null) => {
   const allCookies = cookies();
-  const mergedCookie = allCookies
+  const mergedCookieArr = allCookies
     .getAll()
-    .map((cookie) => cookie.name + "=" + cookie.value)
-    .reduce((a, b) => `${a}; ${b}`);
+    .map((cookie) => cookie.name + "=" + cookie.value);
+  let mergedCookie = "";
+  if (mergedCookieArr.length > 1)
+    mergedCookie = mergedCookieArr.reduce((a, b) => `${a}; ${b}`);
   const client = ServerGraphQLClientInstance.setClient(session, mergedCookie);
   return client;
 };

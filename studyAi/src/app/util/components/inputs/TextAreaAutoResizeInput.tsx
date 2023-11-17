@@ -1,6 +1,6 @@
 "use client";
 import { TextareaAutosize, TextareaAutosizeProps } from "@mui/material";
-import { ChangeEvent, KeyboardEvent } from "react";
+import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
 export const adjustScroll = (
   event: ChangeEvent<HTMLTextAreaElement> | KeyboardEvent<HTMLTextAreaElement>
 ) => {
@@ -32,6 +32,12 @@ export const adjustScroll = (
 export const TextAreaAutoResizeInput = (
   props: TextareaAutosizeProps & React.RefAttributes<Element>
 ) => {
+  // prevent unlimited re-renders from MUI
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  if (!mounted) return <></>;
   return (
     <TextareaAutosize
       {...props}

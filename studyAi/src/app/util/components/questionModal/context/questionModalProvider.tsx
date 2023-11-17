@@ -3,6 +3,7 @@ import {
   Dispatch,
   SetStateAction,
   createContext,
+  useCallback,
   useContext,
   useState,
 } from "react";
@@ -60,17 +61,23 @@ export function QuestionModalProvider({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
+  //For future optimization,
+  // split the following data into different context providers
+  //and replace hooks for each input. We can then have one function
+  //at the top level that modifies the initial values of all the providers
+  //and each provider's stored value, is automatically re-rendered with the initial 
+  //changes
   const [questionData, setQuestionData] = useState<Partial<Question>>(
     initialQuestionData ? { ...initialQuestionData } : blankQuestion
   );
   const currElPos = useElementPos();
-  const closeHandler = () => {
+  const closeHandler = useCallback(() => {
     setIsOpen(false);
     console.log(initialQuestionData)
     setQuestionData(
       initialQuestionData ? { ...initialQuestionData } : blankQuestion
     );
-  };
+  }, [initialQuestionData]);
   return (
     <QuestionModalContext.Provider
       value={{

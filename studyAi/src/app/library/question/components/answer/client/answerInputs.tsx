@@ -1,5 +1,4 @@
 "use client";
-import { TextareaAutosize } from "@mui/base/TextareaAutosize";
 import {
   Checkbox,
   FormControlLabel,

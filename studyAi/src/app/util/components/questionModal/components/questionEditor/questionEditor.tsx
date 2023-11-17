@@ -1,68 +1,20 @@
 import modalStyles from "../../ModalStyles";
-import CreatableSelect from "react-select/creatable";
 import { QuestionInfoData } from "../../../../../../../prisma/generated/type-graphql";
 import { useQuestionModal } from "../../context/questionModalProvider";
 import { TextFieldInput } from "@/app/auth/components/server/formInputs";
 import { TextAreaAutoResizeInput } from "../../../inputs/TextAreaAutoResizeInput";
+import dynamic from "next/dynamic";
+//import question tags dynamically
+//as it auto generates ids
+const QuestionTagsInput = dynamic(
+  () =>
+    import(
+      "@/app/util/components/questionModal/components/questionEditor/questionTagsInput"
+    ).then((module) => module.QuestionTagsInput),
+  { ssr: false }
+);
 const styles = modalStyles.mainContentLayout.questionEditor;
-const QuestionTagsInput = ({
-  currLabelClassNames,
-  currInputFieldContainerClassNames,
-  currInputClassNames,
-}: {
-  currInputFieldContainerClassNames: string[];
-  currLabelClassNames: string[];
-  currInputClassNames: string[];
-}) => {
-  const modalData = useQuestionModal();
-  if (!modalData) return <></>;
-  const { questionData, setQuestionData } = modalData;
-  // need to update tagOptions with actaul options from DB
-  const tagOptions = [
-    { value: "science", label: "science" },
-    { value: "math", label: "math" },
-  ];
 
-  const tagsDefault = questionData?.tags
-    ? questionData?.tags.map((tag, idx) => {
-        return {
-          value: tag,
-          label: tag,
-        };
-      })
-    : undefined;
-  return (
-    <div className={currInputFieldContainerClassNames.join(" ")}>
-      <label
-        htmlFor="question-tags-input"
-        className={currLabelClassNames.join(" ")}
-      >
-        Tags
-      </label>
-      <CreatableSelect
-        name="question-tags-input"
-        options={tagOptions}
-        value={tagsDefault}
-        inputId="question-tags-input"
-        onChange={(e) =>
-          setQuestionData({
-            ...questionData,
-            tags: e.map((tag) => tag.value),
-          })
-        }
-        classNames={{
-          container: () => "flex w-full",
-          control: () => "min-h-0 grow w-min",
-          valueContainer: () => currInputClassNames.join(" "),
-          input: () => "m-0 p-0",
-          menu: () => "m-0",
-          option: () => currInputClassNames.join(" "),
-        }}
-        isMulti
-      />
-    </div>
-  );
-};
 const QuestionDescriptionInput = ({
   currLabelClassNames,
   currInputFieldContainerClassNames,
@@ -72,15 +24,21 @@ const QuestionDescriptionInput = ({
 }) => {
   const modalData = useQuestionModal();
   if (!modalData) return <></>;
-  const { questionData, setQuestionData, currElPos } = modalData;
+  const { questionData, setQuestionData } = modalData;
+  const currTextFieldInputClassNames = [
+    ...currInputFieldContainerClassNames,
+    "grow",
+  ];
   return (
-    <div className={currInputFieldContainerClassNames.join(" ")}>
+    <div className={currTextFieldInputClassNames.join(" ")}>
       <label
         htmlFor="question-description-input"
         className={currLabelClassNames.join(" ")}
       >
         Description
       </label>
+      {/* This prevents infinite loop re-rendering from MUI due to being unable
+      to find the appropriate height for the element */}
       <TextAreaAutoResizeInput
         id={"question-description-input"}
         minRows={8}
