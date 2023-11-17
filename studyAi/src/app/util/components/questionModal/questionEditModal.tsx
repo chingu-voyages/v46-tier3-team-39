@@ -18,6 +18,7 @@ import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
 import { gql } from "../../../../../graphql/generated";
 import { useMutation } from "@apollo/client";
 import { useSession } from "next-auth/react";
+import LoadingIcon from "../../icons/loadingIcon";
 const AddQuestion = gql(`
   mutation CreateOneQuestionResolver(
     $creatorId: String!,
@@ -116,13 +117,31 @@ const QuestionFormMainContent = () => {
     </div>
   );
 };
+const QuestionEditFormLoadingBanner = ({ text }: { text: string }) => {
+  const bannerStyles = [
+    "flex",
+    "justify-center",
+    "items-center",
+    "absolute",
+    "top-0",
+    "left-0",
+    "w-full",
+    "h-full",
+    "z-10",
+  ];
+  return (
+    <div className={bannerStyles.join(" ")}>
+      <LoadingIcon />
+    </div>
+  );
+};
 const QuestionEditForm = () => {
   const modalData = useQuestionModal();
   const [mutationQuery, { loading, error, data }] = useMutation(AddQuestion);
   const session = useSession();
   const creatorId = session?.data?.user.id;
   if (!modalData) return <></>;
-  const { type, currElPos, questionData, onSave } = modalData;
+  const { type, currElPos, questionData, onSave, isGenerating } = modalData;
   const currModalClasses = [...styles.modal];
   if (type.layout === "modal")
     currModalClasses.push(
@@ -185,6 +204,7 @@ const QuestionEditForm = () => {
       className={currModalClasses.join(" ")}
       ref={currElPos ? currElPos.setRef : null}
     >
+      {!isGenerating && <QuestionEditFormLoadingBanner text="Generating..." />}
       <form className={"flex flex-col w-full grow"} onSubmit={onSubmit}>
         <QuestionFormHeader />
         <QuestionFormMainContent />
