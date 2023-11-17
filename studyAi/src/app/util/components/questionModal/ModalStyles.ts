@@ -23,20 +23,10 @@ export const determineMainContentLayoutStyle = (
   position: ElementPostionType["position"],
   arr: string[]
 ) => {
-  switch (true) {
-    case position.width > 1024:
-      arr.push("flex-row");
-    case position.width > 768:
-
-    case position.width > 640:
-
-    case position.width > 480:
-      break;
-    default:
-      arr.push("flex-col");
-      //when width is less than sm
-      break;
-  }
+  const width = position.width;
+  //determine flex
+  if (width > 1024) arr.push("flex-row");
+  else arr.push("flex-col");
 };
 const styles = {
   modal: [
@@ -53,9 +43,7 @@ const styles = {
   ],
   header: {
     container: ["flex", "w-full"],
-    h1: [
-      "whitespace-nowrap",
-    ],
+    h1: ["whitespace-nowrap"],
     closeIcon: {
       btn: [
         "absolute",
@@ -71,21 +59,12 @@ const styles = {
     },
   },
   mainContentLayout: {
-    container: [
-      "flex",
-      "w-full",
-    ],
+    container: ["flex", "w-full"],
     questionEditor: {
-      layout: [
-        "flex",
-        "flex-col",
-        "w-full",
-      ],
+      layout: ["flex", "flex-col", "w-full"],
       inputField: {
         container: ["flex", "flex-col", "w-full"],
-        label: [
-          "font-semibold",
-        ],
+        label: ["font-semibold"],
         input: ({ isTime = false, isTextArea = false }) => [
           isTime ? "w-8" : "w-full",
           isTime ? "my-auto ml-4 h-8" : "",
@@ -102,17 +81,10 @@ const styles = {
     },
     answerEditor: {
       layout: ["w-full"].join(" "),
-      h2: [
-        "text-3xl",
-        "font-semibold",
-        "mb-2",
-        "sm:text-5xl",
-      ].join(" "),
+      h2: ["text-3xl", "font-semibold", "mb-2", "sm:text-5xl"].join(" "),
       tabsContainer: ["bg-White"].join(" "),
       tabLabel: ["text-2xs", "w-4/12"].join(" "),
-      customTabPanel: [
-        "bg-White",
-      ].join(" "),
+      customTabPanel: ["bg-White"].join(" "),
     },
   },
 };

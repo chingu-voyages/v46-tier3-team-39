@@ -12,7 +12,7 @@ import styles, {
 import { Question } from "../../../../../prisma/generated/type-graphql";
 import { SetStateAction } from "react";
 import { useQuestionModal } from "./context/questionModalProvider";
-import { Button, IconButton } from "@mui/material";
+import { Button, IconButton, Typography } from "@mui/material";
 import { FileUploadOutlined } from "@mui/icons-material";
 import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
 import { gql } from "../../../../../graphql/generated";
@@ -128,10 +128,12 @@ const QuestionEditFormLoadingBanner = ({ text }: { text: string }) => {
     "w-full",
     "h-full",
     "z-10",
+    "bg-White",
   ];
   return (
     <div className={bannerStyles.join(" ")}>
-      <LoadingIcon />
+      <LoadingIcon backgroundColor="black" strokeWidth={'1rem'}/>
+      <Typography variant="body1">{text}</Typography>
     </div>
   );
 };
@@ -204,7 +206,8 @@ const QuestionEditForm = () => {
       className={currModalClasses.join(" ")}
       ref={currElPos ? currElPos.setRef : null}
     >
-      {!isGenerating && <QuestionEditFormLoadingBanner text="Generating..." />}
+      {isGenerating && <QuestionEditFormLoadingBanner text="Generating..." />}
+      {loading && <QuestionEditFormLoadingBanner text="Loading..." />}
       <form className={"flex flex-col w-full grow"} onSubmit={onSubmit}>
         <QuestionFormHeader />
         <QuestionFormMainContent />
