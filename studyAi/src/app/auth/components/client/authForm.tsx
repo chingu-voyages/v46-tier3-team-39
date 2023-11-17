@@ -6,21 +6,28 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useRef } from "react";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { useOriginContext } from "@/app/util/providers/originProvider";
 const onGoogleSign = async () => await signIn("google");
 const onEmailSign = async (
   creds: { email: string; password: string },
-  router: AppRouterInstance
+  router: {
+    router: AppRouterInstance;
+    isWithinPage: boolean;
+  }
 ) => {
   const signInData = await signIn("credentials", { ...creds, redirect: false });
   if (signInData?.error) {
     console.error(signInData.error);
   }
   if (signInData?.ok && !signInData?.error) {
-    router.push("/dashboard");
+    const { router: appRouter, isWithinPage } = router;
+    if (isWithinPage) appRouter.back();
+    else appRouter.push("/dashboard");
   }
 };
 export const AuthFormBtns = ({ type }: { type: "login" | "signup" }) => {
   const router = useRouter();
+  const isWithinPage = useOriginContext();
   return (
     <div className="flex flex-col w-full">
       <Button
@@ -40,7 +47,8 @@ export const AuthFormBtns = ({ type }: { type: "login" | "signup" }) => {
           const signInData = await onGoogleSign();
           if (!signInData) return;
           if (signInData.error) return console.error(signInData.error);
-          router.push("/dashboard");
+          if (isWithinPage) router.back();
+          else router.push("/dashboard");
         }}
       >
         {type === "login" ? "Login" : "Sign up"} With Google
@@ -56,6 +64,7 @@ export const AuthForm = ({
   errMessageArr?: { code: string; message: string }[];
 }) => {
   const router = useRouter();
+  const isWithinPage = useOriginContext();
   //for debounce user inputs
   const submitted = useRef(false);
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -79,7 +88,10 @@ export const AuthForm = ({
               email: creds.email,
               password: creds.password,
             },
-            router
+            {
+              router,
+              isWithinPage,
+            }
           );
           return;
         case "signup":
@@ -97,7 +109,10 @@ export const AuthForm = ({
                 email: creds.email,
                 password: creds.password,
               },
-              router
+              {
+                router,
+                isWithinPage,
+              }
             );
           } else console.error("Registration Failed");
           break;

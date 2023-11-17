@@ -5,6 +5,7 @@ import GraphQLProvider from "./util/providers/apolloProvider";
 import { IsClientCtxProvider } from "./util/providers/isClientProvider";
 import * as React from "react";
 import { StyledEngineProvider } from "@mui/material/styles";
+import { OriginProvider } from "./util/providers/originProvider";
 
 // export default function GlobalCssPriority() {
 //   return (
@@ -47,13 +48,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <GraphQLProvider>
-        <IsClientCtxProvider>
-          <AuthProvider>
-            <StyledEngineProvider injectFirst>
-              <body>{children}</body>
-            </StyledEngineProvider>
-          </AuthProvider>
-        </IsClientCtxProvider>
+        <OriginProvider>
+          <IsClientCtxProvider>
+            <AuthProvider>
+              <StyledEngineProvider injectFirst>
+                <body>{children}</body>
+              </StyledEngineProvider>
+            </AuthProvider>
+          </IsClientCtxProvider>
+        </OriginProvider>
       </GraphQLProvider>
     </html>
   );
