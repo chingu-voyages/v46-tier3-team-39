@@ -54,7 +54,6 @@ const GreetingBannerContainer = async () => {
   const client = ServerGraphQLClient(session);
   const userId = session?.user.id;
   const userName = session?.user.name;
-  console.log("userId: " + JSON.stringify(userId, null, 1));
   if (!userName || !userId) return <></>;
   const currDate = new Date();
   const weekPriorDate = sub(currDate, {
@@ -89,13 +88,10 @@ const GreetingBannerContainer = async () => {
     const questions = questionsResult.data.questions.map(
       (e: any) => e.id
     ) as Question["id"][];
-    console.log("questions: " + questions);
     const submissions = submissionsResult.data.questionSubmissions.map(
       (e: any) => e.id
     ) as QuestionSubmission["id"][];
-    console.log("submissions: " + submissions);
     const uniqueSubmissions = [...new Set(submissions)];
-    console.log("uniqueSubmissions: " + uniqueSubmissions);
     return (
       <div className="flex w-full border-2 border-blue-500">
         <GreetingBanner

@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { UserProfile } from "@/app/util/components/navigation/client/userProfile";
 import ProfileForm from "./profileForm";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FaClipboardQuestion, FaPeopleGroup } from "react-icons/fa6";
 import { Session } from "next-auth";
 import { useSession } from "next-auth/react";
@@ -35,7 +34,6 @@ const ProfileWrapper = ({
   const toggleEditable = () => {
     setIsEditable((isEditable) => !isEditable);
   };
-  console.log("formData", formData);
 
   if (!session?.user) {
     return <></>;
