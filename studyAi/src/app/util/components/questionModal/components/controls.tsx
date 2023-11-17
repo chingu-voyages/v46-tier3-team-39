@@ -81,16 +81,17 @@ const Controls = () => {
               }}
               type="button"
               onClick={async () => {
+                setIsGenerating(true);
                 try {
-                  setIsGenerating(true);
                   if (isGenerating) return;
                   await generateQuestion({
                     questionData: questionData || {},
                     setQuestionData,
                   });
                 } catch (err) {
-                  setIsGenerating(false);
+                  console.error(err);
                 }
+                setIsGenerating(false);
               }}
               className={"aspect-square p-2 h-full"}
               disabled={isGenerating}
