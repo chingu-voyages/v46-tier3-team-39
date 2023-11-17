@@ -29,8 +29,7 @@ const styles = {
 const LoadingSVGAnimationStyles = () => {
   return (
     <style>
-      {`
-          @keyframes dash {
+      {` @keyframes dash {
       0% {
         stroke-dasharray: 1, 200;
         stroke-dashoffset: 0;
@@ -50,8 +49,7 @@ const LoadingSVGAnimationStyles = () => {
       stroke: $dark-blue;
       stroke-linecap: round;
       animation: dash 1.5s ease-in-out infinite;
-    }
-    `}
+    }`}
     </style>
   );
 };
