@@ -41,7 +41,7 @@ const AuthenticationButtons = ({
       {authenicationLinks.map((link, idx) => (
         <NextLink
           className={`${
-            idx !== 0 ? "text-Black bg-White" : "text-White"
+            idx !== 0 ? "text-Black bg-White" : "text-Black"
           } border-Black border-solid border font-regular text-sm flex items-center ${authLinksName}`}
           href={link.href}
           key={link.href}

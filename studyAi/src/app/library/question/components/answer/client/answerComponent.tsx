@@ -160,6 +160,7 @@ const AnswerContainer = ({ height }: { height?: string | number }) => {
           </div>
           <div className="sticky left-0 bottom-0 p-5 flex justify-center items-center border-t border-solid border-Black">
             <Button
+              className="text-Black"
               type="submit"
               sx={{ textTransform: "none" }}
               variant="contained"
