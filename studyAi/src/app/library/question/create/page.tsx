@@ -1,6 +1,8 @@
 import NavigationWrapper from "@/app/util/components/navigation/navigationWrapper";
 import QuestionCreatePage from "./questionCreatePage";
 import { Metadata } from "next";
+import determineOriginUrl from "@/app/util/parsers/determineOriginUrl";
+import { protectRouteSSR } from "@/app/api/utils/sessionFuncs";
 const createPageContainerClasses = [
   "flex",
   "items-center",
@@ -12,7 +14,9 @@ const createPageContainerClasses = [
   "px-[5%]",
   "py-[calc(max(4%,2rem))]",
 ];
-const CreatePage = () => {
+const CreatePage = async () => {
+  //protect current route
+  const sessionData = await protectRouteSSR("/auth/login");
   return (
     <NavigationWrapper
       appBars={{
@@ -30,6 +34,7 @@ const CreatePage = () => {
 export async function generateMetadata(): Promise<Metadata> {
   const title = "Create Question - Study AI";
   const description = "Create a novel question!";
+  const origin = determineOriginUrl() as string;
   return {
     title,
     description,

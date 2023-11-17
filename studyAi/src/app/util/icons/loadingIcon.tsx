@@ -1,6 +1,9 @@
+import { createPortal } from "react-dom";
 const styles = {
   viewportContainer: [
     "absolute",
+    "top-0",
+    "left-0",
     "flex",
     "items-center",
     "justify-center",
@@ -64,10 +67,11 @@ const ViewPortWrapper = ({
 }) => {
   const currViewportClassNames = [...styles.viewportContainer];
   const stylesObj = { backgroundColor: backgroundColor, height: height };
-  return (
+  return createPortal(
     <div className={currViewportClassNames.join(" ")} style={stylesObj}>
       {children}
-    </div>
+    </div>,
+    document.body
   );
 };
 const Icon = ({

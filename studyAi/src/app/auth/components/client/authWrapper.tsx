@@ -2,7 +2,26 @@
 import useElementPosition from "@/app/util/hooks/useElementSize";
 import { AuthImg } from "../server/authImg";
 import useWindowWidth from "@/app/util/hooks/useWindowWidth";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { useEffect } from "react";
+import { useOriginContext } from "@/app/util/providers/originProvider";
+import LoadingIcon from "@/app/util/icons/loadingIcon";
 const AuthPageWrapper = ({ children }: { children: React.ReactNode }) => {
+  const router = useRouter();
+  const sessionData = useSession();
+  const authenticated = sessionData.status === "authenticated";
+  const isWithinPage = useOriginContext();
+  useEffect(() => {
+    if (!authenticated) return;
+    try {
+      if (isWithinPage) router.back();
+      else router.push("/dashboard");
+    } catch (e) {
+      console.error(e);
+      router.push("/dashboard");
+    }
+  }, [authenticated, router, isWithinPage]);
   const windowWidth = useWindowWidth();
   const {
     setRef,
@@ -11,6 +30,8 @@ const AuthPageWrapper = ({ children }: { children: React.ReactNode }) => {
   const imgStyles = {
     height: elementHeight + "px",
   };
+  //page must be empty if authenticated, as the hooks will trigger a re-direct
+  if (authenticated) return <LoadingIcon entireViewPort strokeWidth={'1rem'} />;
   return (
     <div
       ref={setRef}
