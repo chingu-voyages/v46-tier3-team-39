@@ -25,10 +25,9 @@ const Store = createStore({
   // actions that trigger store mutation
   actions: {
     addOrUpdateItems:
-      () =>
+      (items: (Partial<Question> & { id: string })[]) =>
       async (
-        { setState, getState },
-        items: (Partial<Question> & { id: string })[]
+        { setState, getState }
       ) =>
         addOrUpdateFunc({
           items,
