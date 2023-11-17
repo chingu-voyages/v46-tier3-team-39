@@ -6,13 +6,13 @@ import AuthenticationNav, {
 } from "../client/authentication";
 const links = [
   {
-    href: "/dashboard",
-    text: "Dashboard",
+    href: "/about",
+    text: "About",
   },
-  {
-    href: "/library/questions",
-    text: "Question Library",
-  }
+  // {
+  //   href: "/library/questions",
+  //   text: "Question Library",
+  // }
 ];
 
 export const NavbarLinks = ({

@@ -6,16 +6,21 @@ import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import useRemToPixel from "@/app/util/hooks/useRemToPixel";
 import useElementPosition from "@/app/util/hooks/useElementSize";
 import { faWandMagicSparkles } from "@fortawesome/free-solid-svg-icons/faWandMagicSparkles";
-import { faFileLines } from "@fortawesome/free-regular-svg-icons";
 import useDropdown from "@/app/util/hooks/useDropdown";
 import { unstable_batchedUpdates } from "react-dom";
-import QuestionModalWrapper from "../../questionModal/questionModalWrapper";
+import { useRouter } from "next/navigation";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+
 export const menuItemLinks = [
   {
     id: "create-question",
     href: "/",
     text: "Create Question",
-    onClick: (e?: React.MouseEvent<HTMLLIElement, MouseEvent>) => {},
+    onClick:
+      (router: AppRouterInstance) =>
+      (e?: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
+        router.push("/dashboard/createQuestion");
+      },
     icon: (
       <FontAwesomeIcon icon={faWandMagicSparkles} className="aspect-square" />
     ),
@@ -33,6 +38,7 @@ export const GenerateDropdown = () => {
   const { setRef, position: dropdownButtonPos } = useElementPosition();
   const { anchorEl, setAnchorEl, handleClick, handleClose, open } =
     useDropdown();
+  const router = useRouter();
   return (
     <div className="relative flex items-center m-0 p-0">
       <Link
@@ -80,14 +86,23 @@ export const GenerateDropdown = () => {
             key={link.text}
             className="text-Black font-regular flex items-center tracking-tight text-sm"
             onClick={(e) => {
-              if (link.onClick) link.onClick(e);
+              if (link.onClick) {
+                if (link.id === "create-question") link.onClick(router)(e);
+                else {
+                  const clickFunc = link.onClick as any;
+                  clickFunc(e);
+                }
+              }
               handleClose();
             }}
           >
-            {(link.id === "create-question") && (<QuestionModalWrapper>
-            {link.icon && link.icon}
-            <span className="ml-3">{link.text}</span>
-            </QuestionModalWrapper>)}
+            {link.id === "create-question" && (
+              <>
+                {link.icon && link.icon}
+                <span className="ml-3">{link.text}</span>
+              </>
+            )}
+
           </MenuItem>
         ))}
       </Menu>

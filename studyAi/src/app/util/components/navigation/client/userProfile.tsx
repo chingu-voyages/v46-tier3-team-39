@@ -7,27 +7,34 @@ import useRemToPixel from "@/app/util/hooks/useRemToPixel";
 import { LogoutBtn } from "./authentication";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown, faChartLine } from "@fortawesome/free-solid-svg-icons";
-import { faFileLines, faUserCircle } from "@fortawesome/free-regular-svg-icons";
+import { faQuestionCircle } from "@fortawesome/free-regular-svg-icons";
 import TextField from "@mui/material/TextField";
 import NextLink from "next/link";
 import { useSession } from "next-auth/react";
 import { unstable_batchedUpdates } from "react-dom";
+import { Dispatch, SetStateAction } from "react";
+import { Session } from "next-auth";
 const userItemLinks = (userId?: string) => [
-  // {
-  //   href: `/dashboard`,
-  //   text: "Dashboard",
-  //   icon: <FontAwesomeIcon icon={faChartLine} className="aspect-square" />,
-  // },
+  {
+    href: `/dashboard`,
+    text: "Dashboard",
+    icon: <FontAwesomeIcon icon={faChartLine} className="aspect-square" />,
+  },
+  {
+    href: `/library/${userId}/questions`,
+    text: "Your Questions",
+    icon: <FontAwesomeIcon icon={faQuestionCircle} className="aspect-square" />,
+  },
   // {
   //   href: `/${userId}/exams`,
   //   text: "Your Exams",
   //   icon: <FontAwesomeIcon icon={faFileLines} className="aspect-square" />,
   // },
-  {
-    href: `/profile`,
-    text: "Profile",
-    icon: <FontAwesomeIcon icon={faUserCircle} className="aspect-square" />,
-  }
+  // {
+  //   href: `/profile`,
+  //   text: "Profile",
+  //   icon: <FontAwesomeIcon icon={faUserCircle} className="aspect-square" />,
+  // },
 ];
 export const UserProfile = ({
   setFormData,
@@ -37,25 +44,24 @@ export const UserProfile = ({
   image,
   showUserInfo = false,
 }: {
-  setFormData?: any;
+  setFormData?: Dispatch<SetStateAction<Partial<Session["user"]>>>;
   isEditable?: boolean;
   showUserInfo?: boolean;
 } & Partial<UserInfo>) => {
   const { setRef, position: infoPos } = useElementPosition();
+  const changeName = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    name = e.target.value;
+    if (setFormData)
+      setFormData((prevFormData) => ({ ...prevFormData, name: name }));
+  };
 
-  const changeName = (e: any) => {
-    name = e.target.value
-    if (setFormData) {
-      setFormData((prevFormData: any) => ({...prevFormData, name: name}))
-    }
-  }
-
-  const nameElement = isEditable
-    ? (<TextField variant="outlined" defaultValue={name}
-    onChange={changeName}/>)
-    : (<span className="text-Black font-bold tracking-tight text-lg">
-          { name}
-      </span>)
+  const nameElement = isEditable ? (
+    <TextField variant="outlined" defaultValue={name} onChange={changeName} />
+  ) : (
+    <span className="text-Black font-bold tracking-tight text-lg">{name}</span>
+  );
 
   return (
     <div className="flex items-center h-full">
