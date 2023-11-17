@@ -13,7 +13,10 @@ interface TextFieldInputCustomProps {
   };
 }
 export const TextFieldInput = forwardRef(
-  (props: TextFieldProps & TextFieldInputCustomProps, ref: ForwardedRef<HTMLDivElement | null>) => {
+  (
+    props: TextFieldProps & TextFieldInputCustomProps,
+    ref: ForwardedRef<HTMLDivElement | null>
+  ) => {
     const nonFieldProps: TextFieldInputCustomProps = {
       headerLink: undefined,
       labelContainerClassNames: undefined,
@@ -45,7 +48,7 @@ export const TextFieldInput = forwardRef(
             <NextLink {...props.headerLink}>{props.headerLink.text}</NextLink>
           )}
         </div>
-        <TextField ref={ref} {...fieldProps} />
+        <TextField ref={ref} {...fieldProps} id={props.name} />
       </div>
     );
   }

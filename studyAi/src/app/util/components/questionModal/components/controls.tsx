@@ -1,214 +1,132 @@
+"use client";
 import {
   AnswerOption,
   Question,
 } from "../../../../../../prisma/generated/type-graphql";
 import axios from "axios";
-import { QuestionProps } from "../questionEditModal";
-import { SetStateAction, useState } from "react";
-import { gql } from "../../../../../../graphql/generated";
-import { useSession } from "next-auth/react";
-import { useMutation } from "@apollo/client";
+import { SetStateAction } from "react";
 import Switch from "@mui/material/Switch";
 import ObjectId from "bson-objectid";
+import { IconButton } from "@mui/material";
+import { Stars } from "@/app/util/icons/stars";
+import { useQuestionModal } from "../context/questionModalProvider";
+import BtnLabelDropdown from "../../btnLabelDropdown/btnLabelDropdown";
 
-const generateQuestion = async (
-  questionData: Partial<Question>,
-  setIsGenerating: React.Dispatch<SetStateAction<boolean>>,
-  setQuestionData: React.Dispatch<SetStateAction<Partial<Question>>>
-) => {
-  setIsGenerating(true);
-  if (!questionData) return;
-  try {
-    const questionProvided = {
-      type: questionData.questionType,
-      tags: questionData.tags,
-      title: [questionData.questionInfo?.title],
-      question: questionData.questionInfo?.description,
-      numberOfOptions: questionData.questionInfo?.options.length,
-      answers: questionData.questionInfo?.options,
-    };
-    const result = await axios({
-      url: "/api/generateQuestion",
-      method: "POST",
-      data: questionProvided,
-    });
-    let newAnswers: AnswerOption[] = [];
-    const newOptions = result?.data?.newQuestion?.options.map(
-      (option: string) => {
-        const newOption = { id: ObjectId().toString(), value: option };
-        if (result?.data?.newQuestion?.answer.includes(option)) {
-          newAnswers.push(newOption);
-        }
-        return newOption;
-      }
-    );
-    setQuestionData((prev) => ({
-      ...prev,
-      questionInfo: {
-        title: prev?.questionInfo?.title || "",
-        description: result?.data?.newQuestion?.description || "",
-        options: newOptions || [],
-      },
-      answer: {
-        correctAnswer: newAnswers || [],
-      },
-    }));
-  } catch (err) {
-    console.error(err);
-    return null;
-  }
-  setIsGenerating(false);
-};
-
-const AddQuestion = gql(`
-  mutation CreateOneQuestionResolver(
-    $creatorId: String!,
-    $questionType: String!,
-    $tags: QuestionCreatetagsInput,
-    $questionInfo: QuestionInfoDataCreateEnvelopeInput!,
-    $answer: AnswerDataCreateEnvelopeInput!,
-    $likeCounter: LikeCounterCreateEnvelopeInput!,
-    $private: Boolean!
-  ){
-    createOneQuestion(
-      data: {
-        creatorId: $creatorId,
-        questionType: $questionType,
-        tags: $tags,
-        questionInfo: $questionInfo,
-        answer: $answer,
-        likeCounter: $likeCounter,
-        private: $private
-      }
-      )
-    {
-      id
-    }
-  }
-`);
-
-const styles = {
-  layout: [
-    "mx-auto",
-    "mt-4",
-    "sm:flex",
-    "sm:items-center",
-    "sm:w-[640px]",
-  ].join(" "),
-  topButtonsLayout: [
-    "flex",
-    "justify-between",
-    "w-11/12",
-    "mx-auto",
-    "max-w-[400px]",
-    "sm:w-[400px]",
-  ].join(" "),
-  button: ({ isCancel = false }) =>
-    [
-      "p-3",
-      "h-fit",
-      "block",
-      "text-White",
-      "text-sm",
-      "rounded-2xl",
-      "whitespace-nowrap",
-      isCancel ? "bg-light-error" : "bg-light-on-secondary-container",
-      isCancel ? "mx-auto my-4" : "",
-      "sm:text-lg",
-    ].join(" "),
-};
-
-const uploadQuestion = (mutationQuery: any, e: any) => {
-  e.preventDefault();
-  mutationQuery();
-};
-
-const Controls = ({
-  closeHandler,
-  setQuestionData,
+const generateQuestion = async ({
   questionData,
-}: QuestionProps) => {
-  const label = { inputProps: { "aria-label": "Switch demo" } };
-  const [isGenerating, setIsGenerating] = useState(false);
-  const session = useSession();
-  const creatorId = session?.data?.user.id;
-  const variables = {
-    questionType: questionData?.questionType
-      ? questionData.questionType
-      : "Short Answer",
-    tags: {
-      set: questionData?.tags ? questionData.tags : [],
-    },
+  setQuestionData,
+}: {
+  questionData: Partial<Question>;
+  setQuestionData: React.Dispatch<SetStateAction<Partial<Question>>>;
+}) => {
+  if (!questionData) return;
+  const questionProvided = {
+    type: questionData.questionType,
+    tags: questionData.tags,
+    title: [questionData.questionInfo?.title],
+    question: questionData.questionInfo?.description,
+    numberOfOptions: questionData.questionInfo?.options.length,
+    answers: questionData.questionInfo?.options,
+  };
+  const result = await axios({
+    url: "/api/generateQuestion",
+    method: "POST",
+    data: questionProvided,
+  });
+  let newAnswers: AnswerOption[] = [];
+  const newOptions = result?.data?.newQuestion?.options.map(
+    (option: string) => {
+      const newOption = { id: ObjectId().toString(), value: option };
+      if (result?.data?.newQuestion?.answer.includes(option)) {
+        newAnswers.push(newOption);
+      }
+      return newOption;
+    }
+  );
+  setQuestionData((prev) => ({
+    ...prev,
     questionInfo: {
-      set: questionData?.questionInfo
-        ? {
-            ...questionData.questionInfo,
-          }
-        : {
-            title: "",
-            description: "",
-            options: [],
-          },
-    },
-    creatorId: creatorId ? creatorId : "",
-    likeCounter: {
-      set: {
-        likes: 0,
-        dislikes: 0,
-      },
+      title: prev?.questionInfo?.title || "",
+      description: result?.data?.newQuestion?.description || "",
+      options: newOptions || [],
     },
     answer: {
-      set: {
-        correctAnswer: questionData?.answer?.correctAnswer
-          ? questionData?.answer?.correctAnswer
-          : [],
-      },
+      correctAnswer: newAnswers || [],
     },
-    private: !!questionData?.private,
-  };
-  const [mutationQuery, { loading, error, data }] = useMutation(AddQuestion, {
-    variables,
-  });
+  }));
+};
 
+const Controls = () => {
+  const modalData = useQuestionModal();
+  if (!modalData) return <></>;
+  const {
+    questionData,
+    setQuestionData,
+    currElPos,
+    isGenerating,
+    setIsGenerating,
+  } = modalData;
   return (
-    <div className={styles.layout}>
-      <div className={styles.topButtonsLayout}>
-        <button
-          className={styles.button({})}
-          onClick={(e) => uploadQuestion(mutationQuery, e)}
-          disabled={loading || isGenerating}
-        >
-          {loading ? "Uploading..........." : "Upload Question"}
-        </button>
-        <button
-          className={styles.button({})}
-          onClick={() =>
-            generateQuestion(
-              questionData || {},
-              setIsGenerating,
-              setQuestionData
-            )
-          }
-          disabled={isGenerating || loading}
-        >
-          {isGenerating ? "Generating.........." : "Generate With AI"}
-        </button>
+    <div className="flex items-stretch justify-end space-x-3">
+      <div className="flex items-center h-10 ">
+        <BtnLabelDropdown text="Generate With AI" pointerEvents={false}>
+          {(props) => (
+            <IconButton
+              ref={props.setAnchorEl}
+              onPointerEnter={(e) => {
+                if (e.pointerType === "mouse") props.handleClick(e);
+              }}
+              onPointerLeave={(e) => {
+                if (e.pointerType === "mouse") props.handleClose();
+              }}
+              type="button"
+              onClick={async () => {
+                try {
+                  setIsGenerating(true);
+                  if (isGenerating) return;
+                  await generateQuestion({
+                    questionData: questionData || {},
+                    setQuestionData,
+                  });
+                } catch (err) {
+                  setIsGenerating(false);
+                }
+              }}
+              className={"aspect-square p-2 h-full"}
+              disabled={isGenerating}
+            >
+              <Stars svg={{ className: "h-full w-full" }} />
+            </IconButton>
+          )}
+        </BtnLabelDropdown>
       </div>
-      <div>
-        <div style={{ color: "black" }}>Private</div>
+      <div className="flex items-center">
+        <div className="w-[1px] h-4/6 bg-Black" />
+      </div>
+      <div className="flex items-center justify-center">
+        <label
+          htmlFor="question-access-rights-input"
+          className={
+            currElPos && currElPos.position.width > 640
+              ? "text-base"
+              : "text-sm"
+          }
+          style={{ color: "black" }}
+        >
+          Private
+        </label>
         <Switch
+          id={"question-access-rights-input"}
+          name="question-access-rights-input"
+          size={
+            currElPos && currElPos.position.width > 640 ? "medium" : "small"
+          }
           onChange={() => {
             setQuestionData((prev) => ({ ...prev, private: !prev?.private }));
           }}
           defaultChecked
         />
       </div>
-      <button
-        className={styles.button({ isCancel: true })}
-        onClick={closeHandler}
-      >
-        Cancel
-      </button>
     </div>
   );
 };

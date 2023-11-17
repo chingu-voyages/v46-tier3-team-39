@@ -2,44 +2,55 @@
 import ContainerBar, { Container } from "../../page/server/containerBar";
 import capitalizeEveryWord from "@/app/util/parsers/capitalizeEveryWord";
 import EditIcon from "@mui/icons-material/Edit";
-import {
-  IconButton,
-  Menu,
-  MenuProps,
-  Tab,
-  Tabs,
-  Typography,
-} from "@mui/material";
+import { IconButton, Tab, Tabs } from "@mui/material";
 import React, { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useQuestions } from "@/app/stores/questionStore";
 import { useParams } from "next/navigation";
 import { containerTabs, InnerContainer } from "../server/questionViewContainer";
 import BtnLabelDropdown from "@/app/util/components/btnLabelDropdown/btnLabelDropdown";
+import QuestionModalWrapper from "@/app/util/components/questionModal/questionModalWrapper";
 const EditBtn = ({
   btnStyles,
   btnClassNames,
+  questionId,
 }: {
   btnStyles: React.CSSProperties;
   btnClassNames: string;
+  questionId: string;
 }) => {
+  const [questionData, { addOrUpdateItems }] = useQuestions();
+  const questions = questionData.data;
+  const question = questions.map[questionId];
+  if (!question) return <></>;
   return (
     <BtnLabelDropdown text="Edit Question" pointerEvents={false}>
       {(props) => (
-        <IconButton
-          ref={props.setAnchorEl}
-          onPointerEnter={(e) => {
-            if (e.pointerType === "mouse") props.handleClick(e);
+        <QuestionModalWrapper
+          initialQuestionData={question}
+          onSave={(newQuestion) => {
+            addOrUpdateItems([{ ...newQuestion, id: questionId }]);
           }}
-          onPointerLeave={(e) => {
-            if (e.pointerType === "mouse") props.handleClose();
+          type={{
+            type: "edit",
+            layout: "modal",
           }}
-          type="button"
-          sx={btnStyles}
-          className={btnClassNames + " aspect-square h-[70%]"}
         >
-          <EditIcon className="text-base" />
-        </IconButton>
+          <IconButton
+            type="button"
+            ref={props.setAnchorEl}
+            onPointerEnter={(e) => {
+              if (e.pointerType === "mouse") props.handleClick(e);
+            }}
+            onPointerLeave={(e) => {
+              if (e.pointerType === "mouse") props.handleClose();
+            }}
+            sx={btnStyles}
+            className={btnClassNames + " aspect-square h-[70%]"}
+          >
+            <EditIcon className="text-base" />
+          </IconButton>
+        </QuestionModalWrapper>
       )}
     </BtnLabelDropdown>
   );
@@ -59,7 +70,9 @@ const TopBar = ({
   const session = useSession();
   const questions = useQuestions()[0].data;
   const question =
-    params.id && typeof params.id === "string" ? questions.map[params.id] : null;
+    params.id && typeof params.id === "string"
+      ? questions.map[params.id]
+      : null;
   const btnStyles: React.CSSProperties = {
     textTransform: "none",
     padding: 0,
@@ -92,7 +105,11 @@ const TopBar = ({
       {session.data &&
         question &&
         session.data.user.id === question.creatorId && (
-          <EditBtn btnClassNames={btnClassNames} btnStyles={btnStyles} />
+          <EditBtn
+            btnClassNames={btnClassNames}
+            btnStyles={btnStyles}
+            questionId={question.id}
+          />
         )}
     </ContainerBar>
   );

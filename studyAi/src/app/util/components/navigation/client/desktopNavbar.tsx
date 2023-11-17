@@ -84,10 +84,10 @@ export const GenerateDropdown = () => {
               handleClose();
             }}
           >
-            {(link.id === "create-question") && (<QuestionModalWrapper>
+            {/* {(link.id === "create-question") && (<QuestionModalWrapper>
             {link.icon && link.icon}
             <span className="ml-3">{link.text}</span>
-            </QuestionModalWrapper>)}
+            </QuestionModalWrapper>)} */}
           </MenuItem>
         ))}
       </Menu>

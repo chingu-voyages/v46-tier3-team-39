@@ -118,7 +118,9 @@ const TopBar = () => {
   const params = useParams();
   const questions = useQuestions()[0].data;
   const question =
-    params.id && typeof params.id === "string" ? questions.map[params.id] : null;
+    params.id && typeof params.id === "string"
+      ? questions.map[params.id]
+      : null;
   const btnClassNames = "flex items-center justify-center h-[70%]";
   const btnStyle: React.CSSProperties = {
     minHeight: "unset",
@@ -160,6 +162,7 @@ const AnswerContainer = ({ height }: { height?: string | number }) => {
           </div>
           <div className="sticky left-0 bottom-0 p-5 flex justify-center items-center border-t border-solid border-Black">
             <Button
+              className="text-Black"
               type="submit"
               sx={{ textTransform: "none" }}
               variant="contained"

@@ -96,7 +96,7 @@ const validateAuthRequirementInQuery = ({
   const isQuery =
     parsedQuery?.definitions[0].operation.toLowerCase() === "query";
   // Validate of presence of all required variables in the query
-  validateVariables(resolverRequested, variables, accessibleModels, isQuery);
+  // validateVariables(resolverRequested, variables, accessibleModels, isQuery);
 
   // Validation of session for relevant models
   if (isQuery) {
