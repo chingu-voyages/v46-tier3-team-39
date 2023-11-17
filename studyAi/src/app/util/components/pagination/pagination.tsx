@@ -11,7 +11,7 @@ interface Props {
 
 export default function PaginatedItems(props: Props) {
     const [currentPage, setCurrentPage] = useState(0);
-    const [totalPages, setTotalPages] = useState(Math.ceil(props.items.length) / props.itemsPerPage);
+    const [totalPages, setTotalPages] = useState(Math.ceil(props.items.length / props.itemsPerPage));
 
     const startIndex = currentPage * props.itemsPerPage;
     const endIndex = startIndex + props.itemsPerPage;
@@ -23,8 +23,8 @@ export default function PaginatedItems(props: Props) {
 
     return (
         <div>
-            {subset.map((item) => (
-                <div>{item}</div>
+            {subset.map((item, index) => (
+                <div key={`pagination-item-${index}`}>{item}</div>
             ))}
             <ReactPaginate 
                 pageCount={totalPages}

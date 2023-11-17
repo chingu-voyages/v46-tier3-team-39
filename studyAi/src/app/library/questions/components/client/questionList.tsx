@@ -8,7 +8,7 @@ import { useState } from "react";
 import QuestionModalWrapper from "@/app/util/components/questionModal/questionModalWrapper";
 import { Carousel } from "@/app/util/components/carousel/carousel";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEarthAmericas } from "@fortawesome/free-solid-svg-icons";
+import { faEarthAmericas, faPlus, faLock } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import { useQuestions } from '@/app/stores/questionStore';
 import PaginatedItems from "@/app/util/components/pagination/pagination"
@@ -16,7 +16,6 @@ import PaginatedItems from "@/app/util/components/pagination/pagination"
 export default function QuestionList() {
     const [tabValue, setTabValue] = useState(0);
     const questions = useQuestions()[0].data.arr;
-
     //for testing pagination
     /* const questions: Partial<Question>[] = Array(100).fill({id:"1", questionInfo: {title: "title"}, questionType: "Short Answer", tags: ["Math"]}) */
     
@@ -27,26 +26,30 @@ export default function QuestionList() {
     const styles = {
         layout: ["w-full", "border", "bg-light-surface", "mt-8"].join(" "),
         controlsLayout: [
-        "flex",
-        "w-full",
-        "justify-between",
-        "items-center",
-        "sm: px-4",
+          "flex",
+          "w-full",
+          "justify-between",
+          "items-center",
+          "sm: px-4",
         ].join(" "),
         createButton: [
-            "bg-light-primary", 
-            "h-[30px]",
-            "w-[30px]",
-            "mr-4"
+          "bg-[#5244DF]",
+          "py-2",
+          "px-[10px]", 
+          "mr-4",
+          "hover:cursor-pointer",
+          "text-White",
+          "flex",
+          "items-center",
         ].join(" "),
-        h2: ["text-[#5C5F60]"].join(" "),
+        h2: ["text-[#5C5F60]", "font-semibold"].join(" "),
         titlesLayout: [
-        "flex",
-        "justify-between",
-        "py-4",
-        "px-2",
-        "bg-LightGrey",
-        "sm:px-16",
+          "flex",
+          "justify-between",
+          "py-4",
+          "px-2",
+          "bg-LightGrey",
+          "sm:px-16",
         ].join(" "),
     };
 
@@ -61,7 +64,7 @@ export default function QuestionList() {
           <Tab label="All" {...a11yProps(0)} />
         </Tabs>
         <QuestionModalWrapper>
-          <div className={styles.createButton}>+</div>
+          <button className={styles.createButton}><FontAwesomeIcon icon={faPlus} /><span className="hidden ml-2 sm:block"> Create</span></button>
         </QuestionModalWrapper>
       </Box>
       <div className={styles.titlesLayout}>
@@ -119,9 +122,9 @@ function List({ questions }: { questions: Partial<Question>[] }) {
       "sm:px-16",
     ].join(" "),
     h3: ["text-xl", "mb-2"].join(" "),
-    h4: ["text-lg", "text-[#5C5F60]"].join(" "),
-    tag: ["p-1", "bg-[#CDCDCD]", "mx-2", "rounded-full", "mt-4"].join(" "),
-    paginateContainer: ["flex", "justify-between", "p-4", "w-[400px]"].join(" ")
+    h4: ["text-md", "text-[#5C5F60]", "font-semibold"].join(" "),
+    tag: ["p-1", "bg-[#CDCDCD]", "mx-2", "rounded-full",].join(" "),
+    paginateContainer: ["flex", "justify-between", "p-4", "sm:max-w-[400px]"].join(" ")
   };
 
   const formatedQuestions = questions.map((question, index) => {
@@ -137,17 +140,17 @@ function List({ questions }: { questions: Partial<Question>[] }) {
           <Carousel>
             {(question.tags as string[]).map((tag, index) => {
               return (
-                <span
+                <div
                   className={styles.tag}
                   key={(question.id as string) + index}
                 >
                   {tag}
-                </span>
+                </div>
               );
             })}
           </Carousel>
         </div>
-        <FontAwesomeIcon icon={faEarthAmericas} width="16" />
+        <FontAwesomeIcon icon={question.private ? faLock : faEarthAmericas} width="16" />
       </Link>
     );
   })
