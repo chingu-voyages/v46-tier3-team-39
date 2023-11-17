@@ -37,8 +37,6 @@ const styles = {
     "items-center",
     "text-Black",
     "overflow-y-auto",
-    "px-[5%]",
-    "py-[calc(max(4%,2rem))]",
     "relative",
   ],
   header: {

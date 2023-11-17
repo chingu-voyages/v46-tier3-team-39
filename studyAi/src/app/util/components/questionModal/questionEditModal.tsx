@@ -62,10 +62,10 @@ const QuestionFormHeader = () => {
     //handle header text
     if (width > 640) currHeaderClasses.push("text-5xl");
     else if (width > 480) currHeaderClasses.push("text-3xl");
-    else currHeaderClasses.push("text-2xl");
+    else currHeaderClasses.push("text-2xl", "text-center");
     //handle container margins
-    if (width > 640) currHeaderContainerClasses.push("mb-8");
-    else if (width > 480) currHeaderContainerClasses.push("mb-5");
+    if (width > 640) currHeaderContainerClasses.push("mb-7");
+    else if (width > 480) currHeaderContainerClasses.push("mb-4");
     else {
       currHeaderContainerClasses.push("mb-3");
       currHeaderClasses.push("mb-3");
@@ -73,7 +73,7 @@ const QuestionFormHeader = () => {
     //handle container flex
     if (width > 480)
       currHeaderContainerClasses.push("justify-between", "items-center");
-    else currHeaderContainerClasses.push("items-stretch", "flex-col");
+    else currHeaderContainerClasses.push("items-center", "flex-col");
   }
   return (
     <div className={currHeaderContainerClasses.join(" ")}>
@@ -93,7 +93,7 @@ const QuestionFormHeader = () => {
       <h1 className={currHeaderClasses.join(" ")}>
         {formTypeHeaderText + " Your Question"}
       </h1>
-      { <Controls />}
+      {<Controls />}
     </div>
   );
 };
@@ -150,10 +150,19 @@ const QuestionEditForm = () => {
       "md:min-w-[65%]",
       "lg:min-w-[50%]",
       "xl:min-w-[40%]",
-      "max-h-[80%]"
+      "max-h-[80%]",
+      "px-[5%]",
+      "py-[calc(max(4%,2rem))]"
     );
   else currModalClasses.push("w-full", "min-h-full");
   if (currElPos) determineModalStyle(currElPos.position, currModalClasses);
+  const btnContainerClasses = ["w-fit", "py-2", "px-4", "flex"];
+  const width = currElPos?.position.width;
+  if (typeof width === "number") {
+    if (width > 640) btnContainerClasses.push("mt-7");
+    else if (width > 480) btnContainerClasses.push("mt-4");
+    else btnContainerClasses.push("mt-3");
+  }
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     e.stopPropagation();
@@ -200,6 +209,7 @@ const QuestionEditForm = () => {
     };
     if (onSave) onSave(newQuestion);
   };
+
   return (
     <div
       className={currModalClasses.join(" ")}
@@ -214,7 +224,7 @@ const QuestionEditForm = () => {
           <Button
             type="submit"
             variant="outlined"
-            className="w-fit py-2 px-4 mt-4 flex"
+            className={btnContainerClasses.join(' ')}
             sx={{
               minHeight: "unset",
               textTransform: "none",
