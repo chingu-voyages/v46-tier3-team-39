@@ -61,11 +61,10 @@ const QueryQuestionSubmissions = gql(`
 
 export default async function DashboardPage() {
   const sessionData = await protectRouteSSR("/auth/login");
-  const session = await getServerSession(options);
+  const session = sessionData.props.session;
   const client = ServerGraphQLClient(session);
   const userId = session?.user.id;
   const userName = session?.user.name;
-  console.log("userId: " + JSON.stringify(userId, null, 1));
   if (!userName || !userId) return <></>;
   const currDate = new Date();
   const weekPriorDate = sub(currDate, {
@@ -161,7 +160,7 @@ export default async function DashboardPage() {
                     </div>
                   </div>
                 </Link>
-                <Link href="/library/questions">
+                <Link href={`/library/${userId}/questions`}>
                   <div className=" col-span-1 border p-5 h-full flex flex-col lg:flex-row items-center">
                     {/* 2.2.2 */}
                     <div className="me-2 ">

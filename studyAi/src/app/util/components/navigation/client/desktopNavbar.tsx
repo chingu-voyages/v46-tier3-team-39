@@ -19,7 +19,7 @@ export const menuItemLinks = [
     onClick:
       (router: AppRouterInstance) =>
       (e?: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
-        router.push("/dashboard/create-question");
+        router.push("/dashboard/createQuestion");
       },
     icon: (
       <FontAwesomeIcon icon={faWandMagicSparkles} className="aspect-square" />
