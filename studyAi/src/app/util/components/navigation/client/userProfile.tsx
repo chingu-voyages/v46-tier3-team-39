@@ -12,6 +12,8 @@ import TextField from "@mui/material/TextField";
 import NextLink from "next/link";
 import { useSession } from "next-auth/react";
 import { unstable_batchedUpdates } from "react-dom";
+import { Dispatch, SetStateAction } from "react";
+import { Session } from "next-auth";
 const userItemLinks = (userId?: string) => [
   // {
   //   href: `/dashboard`,
@@ -27,7 +29,7 @@ const userItemLinks = (userId?: string) => [
     href: `/profile`,
     text: "Profile",
     icon: <FontAwesomeIcon icon={faUserCircle} className="aspect-square" />,
-  }
+  },
 ];
 export const UserProfile = ({
   setFormData,
@@ -37,25 +39,24 @@ export const UserProfile = ({
   image,
   showUserInfo = false,
 }: {
-  setFormData?: any;
+  setFormData?: Dispatch<SetStateAction<Partial<Session["user"]>>>;
   isEditable?: boolean;
   showUserInfo?: boolean;
 } & Partial<UserInfo>) => {
   const { setRef, position: infoPos } = useElementPosition();
+  const changeName = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    name = e.target.value;
+    if (setFormData)
+      setFormData((prevFormData) => ({ ...prevFormData, name: name }));
+  };
 
-  const changeName = (e: any) => {
-    name = e.target.value
-    if (setFormData) {
-      setFormData((prevFormData: any) => ({...prevFormData, name: name}))
-    }
-  }
-
-  const nameElement = isEditable
-    ? (<TextField variant="outlined" defaultValue={name}
-    onChange={changeName}/>)
-    : (<span className="text-Black font-bold tracking-tight text-lg">
-          { name}
-      </span>)
+  const nameElement = isEditable ? (
+    <TextField variant="outlined" defaultValue={name} onChange={changeName} />
+  ) : (
+    <span className="text-Black font-bold tracking-tight text-lg">{name}</span>
+  );
 
   return (
     <div className="flex items-center h-full">

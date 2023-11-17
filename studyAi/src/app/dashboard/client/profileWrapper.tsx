@@ -4,18 +4,20 @@ import { UserProfile } from "@/app/util/components/navigation/client/userProfile
 import ProfileForm from "./profileForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FaClipboardQuestion, FaPeopleGroup } from "react-icons/fa6";
+import { Session } from "next-auth";
+import { useSession } from "next-auth/react";
 
 const ProfileWrapper = ({
-  session,
   questionCount = 0,
   submissionCount = 0,
 }: {
-  session?: any;
   questionCount?: number;
   submissionCount?: number;
 }) => {
+  const sessionData = useSession();
+  const session = sessionData.data;
   const [isEditable, setIsEditable] = useState<boolean>(false);
-  const [formData, setFormData] = useState<any>({
+  const [formData, setFormData] = useState<Partial<Session["user"]>>({
     ...session?.user,
     id: session?.user?.id ? session?.user?.id : "",
     // tags: session?.user?.tags? session?.user?.tags : [],

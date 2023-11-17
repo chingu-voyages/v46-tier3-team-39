@@ -93,8 +93,8 @@ export default async function DashboardPage() {
 
   const questionPromise = client.query(questionQuery);
   const submissionsPromise = client.query(submissionsQuery);
-
-  let questionsLength : number, submissionsLength : number;
+  let questionsLength = 0;
+  let submissionsLength = 0;
   try {
     const [questionsResult, submissionsResult] = await Promise.all([
       questionPromise,
@@ -103,21 +103,16 @@ export default async function DashboardPage() {
     const questions = questionsResult.data.questions.map(
       (e: any) => e.id
     ) as Question["id"][];
-    console.log("questions: " + questions);
     //convert Number to String and pass to children component
     questionsLength = questions?.length;
     const submissions = submissionsResult.data.questionSubmissions.map(
       (e: any) => e.id
     ) as QuestionSubmission["id"][];
-    console.log("submissions: " + submissions);
     const uniqueSubmissions = [...new Set(submissions)];
-    console.log("uniqueSubmissions: " + uniqueSubmissions);
     //convert Number to String and pass to children component
     submissionsLength = uniqueSubmissions?.length;
   } catch (err: any) {
     console.error(err?.networkError?.result);
-    questionsLength = 0;
-    submissionsLength = 0;
   }
 
   return (
@@ -128,7 +123,6 @@ export default async function DashboardPage() {
       }}
       usePadding
     >
-      {/* <Blah /> */}
       {/* <QuestionEditor /> */}
       <div className="grid grid-cols-1 md:grid-cols-3 p-5 m-5 md:gap-5 w-full sm:gap-y-5">
         <div className="col-span-1 border p-5 md:col-span-1">
