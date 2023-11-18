@@ -244,7 +244,17 @@ const QuestionEditForm = () => {
       ref={currElPos ? currElPos.setRef : null}
     >
       {isGenerating && <QuestionEditFormLoadingBanner text="Generating..." />}
-      {loading && <QuestionEditFormLoadingBanner text="Saving..." />}
+      {loading && (
+        <QuestionEditFormLoadingBanner
+          text={
+            type.type === "create"
+              ? "Uploading..."
+              : type.type === "edit"
+              ? "Saving..."
+              : "Loading..."
+          }
+        />
+      )}
       <form className={"flex flex-col w-full grow"} onSubmit={onSubmit}>
         <QuestionFormHeader />
         <QuestionFormMainContent />
