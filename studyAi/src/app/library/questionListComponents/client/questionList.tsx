@@ -16,11 +16,14 @@ import PublicIcon from "@mui/icons-material/Public";
 import LockIcon from "@mui/icons-material/Lock";
 import TextField from "@mui/material/TextField";
 
-export default function QuestionList(page: string | null) {
+export default function QuestionList({
+  allPublicQuestions,
+}: {
+  allPublicQuestions: boolean | null;
+}) {
   const [tabValue, setTabValue] = useState(0);
   const questions = useQuestions()[0].data.arr;
   const [search, setSearch] = useState("");
-  console.log("search", search);
 
   //for testing pagination
   /* const questions: Partial<Question>[] = Array(100).fill({id:"1", questionInfo: {title: "title"}, questionType: "Short Answer", tags: ["Math"]}) */
@@ -30,7 +33,7 @@ export default function QuestionList(page: string | null) {
     for (const tag of tagSearched) {
       if (tag.includes(search)) return true;
     }
-  }
+  };
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
@@ -59,16 +62,39 @@ export default function QuestionList(page: string | null) {
     ].join(" "),
   };
 
-  const privateQuestions =
-    page === "public" ? [] : questions.filter((question) => question.private);
-  const publicQuestions =
-    page === "public"
-      ? questions
-      : questions.filter((question) => !question.private);
+  const privateQuestions = allPublicQuestions
+    ? []
+    : questions.filter((question) => question.private);
+  const publicQuestions = allPublicQuestions
+    ? questions
+    : questions.filter((question) => !question.private);
+
+  const filteredQuestions = (questionType: string | null) => {
+    let questionsToFilter;
+    switch (questionType) {
+      case "public":
+        questionsToFilter = publicQuestions;
+        break;
+      case "private":
+        questionsToFilter = publicQuestions;
+        break;
+      default:
+        questionsToFilter = questions;
+    }
+
+    return search.length >= 3
+      ? questionsToFilter.filter(
+          (question) =>
+            question.questionInfo?.title.toLowerCase().includes(search) ||
+            question.questionType?.toLowerCase().includes(search) ||
+            tagSearched(question.tags)
+        )
+      : questionsToFilter;
+  };
 
   return (
     <Box className={styles.layout}>
-      {page === "public" && (
+      {!allPublicQuestions && (
         <Box className={styles.controlsLayout}>
           <Tabs
             value={tabValue}
@@ -87,46 +113,33 @@ export default function QuestionList(page: string | null) {
       <div className={styles.titlesLayout}>
         <h2 className={styles.h2}>Question</h2>
         <h2 className={styles.h2}>
-          {page === "public" ? (
-            "Shared With"
-          ) : (
-            <TextField
-              id="search-bar"
-              size="small"
-              name="location"
-              variant="outlined"
-              label="Search for a quiz"
-              placeholder="Search..."
-              onChange={(e) => {
-                setSearch(e.target.value.toLowerCase());
-              }}
-            />
-          )}
+          <TextField
+            id="search-bar"
+            size="small"
+            name="location"
+            variant="outlined"
+            label="Search for a quiz"
+            placeholder="Search..."
+            onChange={(e) => {
+              setSearch(e.target.value.toLowerCase());
+            }}
+          />
         </h2>
       </div>
 
       {/*panel for the ALL tab  */}
       <CustomTabPanel value={tabValue} index={0}>
-        <List
-          questions={
-            search.length >= 3
-              ? questions.filter(
-                  (question) =>
-                    question.questionInfo?.title
-                      .toLowerCase()
-                      .includes(search) ||
-                    question.questionType?.toLowerCase().includes(search) ||
-                    tagSearched(question.tags)
-                )
-              : questions
-          }
-        />
+        <List questions={filteredQuestions("all")} />
       </CustomTabPanel>
       <CustomTabPanel value={tabValue} index={1}>
-        <List questions={privateQuestions} />
+        <List
+          questions={filteredQuestions("private")}
+        />
       </CustomTabPanel>
       <CustomTabPanel value={tabValue} index={2}>
-        <List questions={publicQuestions} />
+        <List
+          questions={filteredQuestions("public")}
+        />
       </CustomTabPanel>
       {/*add more panels under here wrapped in CustomTabPanel and pass questions needed into <List>*/}
     </Box>
