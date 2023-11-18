@@ -13,6 +13,7 @@ const AuthPageWrapper = ({ children }: { children: React.ReactNode }) => {
   const sessionData = useSession();
   const authenticated = sessionData.status === "authenticated";
   const isWithinPage = useOriginContext();
+  //we handle routing logic here
   useEffect(() => {
     if (!authenticated) return;
     try {

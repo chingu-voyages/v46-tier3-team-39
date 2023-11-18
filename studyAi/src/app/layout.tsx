@@ -1,4 +1,4 @@
-import "tailwindcss/tailwind.css";
+import "../globals.css"
 import type { Metadata } from "next";
 import AuthProvider from "./util/providers/AuthContext";
 import GraphQLProvider from "./util/providers/apolloProvider";

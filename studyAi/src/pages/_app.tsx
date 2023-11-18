@@ -1,4 +1,4 @@
-import "tailwindcss/tailwind.css";
+import "../globals.css"
 import * as React from "react";
 import AuthProvider from "../app/util/providers/AuthContext";
 import { IsClientCtxProvider } from "../app/util/providers/isClientProvider";

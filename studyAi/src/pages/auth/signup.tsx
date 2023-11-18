@@ -1,11 +1,14 @@
-import { redirectIfLoggedIn } from "@/app/api/utils/sessionFuncs";
 import AuthPage from "../../authComponents/providers/authPageWrapper";
-import { generateMetadataProps } from "@/app/util/metadata/generateMetadataProps";
-export default async function SignUpPage() {
-  const session = await redirectIfLoggedIn("/dashboard");
-  return <AuthPage type="signup" />;
-}
-export const generateMetadata = generateMetadataProps({
+import MetadataHead from "@/authComponents/metadata/MetadataHead";
+const metadata = {
   title: "Join us - Study AI",
   description: "Create your account, and start your educational journey today",
-});
+};
+export default async function SignUpPage() {
+  return (
+    <>
+      <MetadataHead {...metadata} />
+      <AuthPage type="signup" />
+    </>
+  );
+}

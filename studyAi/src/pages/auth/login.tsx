@@ -1,18 +1,14 @@
-// import { redirectIfLoggedIn } from "@/app/api/utils/sessionFuncs";
+import MetadataHead from "@/authComponents/metadata/MetadataHead";
 import AuthPage from "../../authComponents/providers/authPageWrapper";
-// import { generateMetadataProps } from "@/app/util/metadata/generateMetadataProps";
+const metadata = {
+  title: "Login - Study AI",
+  description: "Welcome back! Login to start your educational journey",
+};
 export default function LoginPage() {
-  //     {
-  //   params,
-  //   searchParams,
-  // }: {
-  //   params?: { slug: string };
-  //   searchParams?: { [key: string]: string | string[] | undefined };
-  // }
-  // const session = await redirectIfLoggedIn("/dashboard");
-  return <AuthPage type="login" />;
+  return (
+    <>
+      <MetadataHead {...metadata} />
+      <AuthPage type="login" />
+    </>
+  );
 }
-// export const generateMetadata = generateMetadataProps({
-//   title: "Login - Study AI",
-//   description: "Welcome back! Login to start your educational journey",
-// });
