@@ -15,14 +15,19 @@ const ExamPrep = async () => {
         <h2 className="sm:text-xl mt-4">
           Unlock your full potential with our AI-powered practice questions
         </h2>
-      </div> 
+      </div>
       <div className="flex mt-4">
         <div className="mx-auto">
           {session ? (
             <QuestionModalWrapper>
-              <button className="bg-Black border text-White py-3 px-6 mr-4">
-                Try
-              </button>
+              {(props) => (
+                <button
+                  className="bg-Black border text-White py-3 px-6 mr-4"
+                  onClick={props.onClick}
+                >
+                  Try
+                </button>
+              )}
             </QuestionModalWrapper>
           ) : (
             <Link href={"/auth/signup"}>

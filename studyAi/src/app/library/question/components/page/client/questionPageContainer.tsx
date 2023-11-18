@@ -20,7 +20,7 @@ const QuestionSubmissionsContainer = dynamic(
 const QuestionPageContainer = () => {
   const questionIdData = useQuestionId();
   const questionId = questionIdData?.questionId;
-  if (questionId) return <></>;
+  if (!questionId) return <></>;
   return (
     <FullscreenProvider>
       <QuestionPageNavigation>

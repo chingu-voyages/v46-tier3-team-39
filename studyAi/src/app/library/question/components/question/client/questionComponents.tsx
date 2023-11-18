@@ -36,26 +36,29 @@ const EditBtn = ({
             layout: "modal",
           }}
         >
-          <IconButton
-            type="button"
-            ref={props.setAnchorEl}
-            onPointerEnter={(e) => {
-              if (e.pointerType === "mouse") props.handleClick(e);
-            }}
-            onPointerLeave={(e) => {
-              if (e.pointerType === "mouse") props.handleClose();
-            }}
-            sx={btnStyles}
-            className={btnClassNames + " aspect-square h-[70%]"}
-          >
-            <EditIcon className="text-base" />
-          </IconButton>
+          {(modalProps) => (
+            <IconButton
+              type="button"
+              ref={props.setAnchorEl}
+              onPointerEnter={(e) => {
+                if (e.pointerType === "mouse") props.handleClick(e);
+              }}
+              onPointerLeave={(e) => {
+                if (e.pointerType === "mouse") props.handleClose();
+              }}
+              sx={btnStyles}
+              className={btnClassNames + " aspect-square h-[70%]"}
+              onClick={modalProps.onClick}
+            >
+              <EditIcon className="text-base" />
+            </IconButton>
+          )}
         </QuestionModalWrapper>
       )}
     </BtnLabelDropdown>
   );
 };
-
+const deleteBtn = () => {};
 const TopBar = ({
   view,
   handleChange,

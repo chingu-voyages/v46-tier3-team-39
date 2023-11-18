@@ -57,7 +57,11 @@ export default function QuestionList() {
           <Tab label="All" {...a11yProps(0)} />
         </Tabs>
         <QuestionModalWrapper>
-          <div className={styles.createButton}>+</div>
+          {(props) => (
+            <div className={styles.createButton} onClick={props.onClick}>
+              +
+            </div>
+          )}
         </QuestionModalWrapper>
       </Box>
       <div className={styles.titlesLayout}>
