@@ -78,7 +78,7 @@ export default function QuestionList({
         questionsToFilter = publicQuestions;
         break;
       case "private":
-        questionsToFilter = publicQuestions;
+        questionsToFilter = privateQuestions;
         break;
       default:
         questionsToFilter = questions;
