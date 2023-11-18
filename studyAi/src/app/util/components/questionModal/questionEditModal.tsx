@@ -11,13 +11,18 @@ import styles, {
 import { Question } from "../../../../../prisma/generated/type-graphql";
 import { SetStateAction } from "react";
 import { useQuestionModal } from "./context/questionModalProvider";
-import { Button, IconButton, Typography } from "@mui/material";
+import {
+  Button,
+  CircularProgress,
+  IconButton,
+  Modal,
+  Typography,
+} from "@mui/material";
 import { FileUploadOutlined } from "@mui/icons-material";
 import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
 import { gql } from "../../../../../graphql/generated";
 import { useMutation } from "@apollo/client";
 import { useSession } from "next-auth/react";
-import LoadingIcon from "../../icons/loadingIcon";
 const AddQuestion = gql(`
   mutation CreateOneQuestionResolver(
     $creatorId: String!,
@@ -117,22 +122,40 @@ const QuestionFormMainContent = () => {
   );
 };
 const QuestionEditFormLoadingBanner = ({ text }: { text: string }) => {
-  const bannerStyles = [
+  const modalData = useQuestionModal();
+  if (!modalData) return <></>;
+  const { type, currElPos } = modalData;
+  const generalBannerStyles = [
     "flex",
+    "flex-col",
     "justify-center",
     "items-center",
-    "absolute",
-    "top-0",
     "left-0",
     "w-full",
     "h-full",
     "z-10",
-    "bg-White",
+    "bottom-0",
   ];
+  const bannerStyles = [...generalBannerStyles, "bg-White", "text-Black"];
+  if (type.layout === "page")
+    return (
+      <Modal open={true}>
+        <div className={bannerStyles.join(" ")}>
+          <CircularProgress color="primary" />
+          <Typography variant="h5" className="mt-6">
+            {text}
+          </Typography>
+        </div>
+      </Modal>
+    );
+  //if displayed as a modal
+  bannerStyles.push("absolute");
   return (
     <div className={bannerStyles.join(" ")}>
-      <LoadingIcon backgroundColor="black" strokeWidth={"1rem"} />
-      <Typography variant="body1">{text}</Typography>
+      <CircularProgress color="primary" />
+      <Typography variant="body1" className={"mt-3"}>
+        {text}
+      </Typography>
     </div>
   );
 };
@@ -144,7 +167,7 @@ const QuestionEditForm = () => {
   if (!modalData) return <></>;
   const { type, currElPos, questionData, onSave, isGenerating } = modalData;
   const currModalClasses = [...styles.modal];
-  if (type.layout === "modal")
+  if (type.layout === "modal") {
     currModalClasses.push(
       "min-w-[90%]",
       "md:min-w-[65%]",
@@ -152,9 +175,12 @@ const QuestionEditForm = () => {
       "xl:min-w-[40%]",
       "max-h-[80%]",
       "px-[5%]",
-      "py-[calc(max(4%,2rem))]"
+      "py-[calc(max(4%,2rem))]",
+      "relative"
     );
-  else currModalClasses.push("w-full", "min-h-full");
+    if (loading || isGenerating) currModalClasses.push("overflow-y-hidden");
+    else currModalClasses.push("overflow-y-auto");
+  } else currModalClasses.push("w-full", "min-h-full");
   if (currElPos) determineModalStyle(currElPos.position, currModalClasses);
   const btnContainerClasses = ["w-fit", "py-2", "px-4", "flex"];
   const width = currElPos?.position.width;
@@ -166,6 +192,8 @@ const QuestionEditForm = () => {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     e.stopPropagation();
+    //scroll to start
+    currElPos?.elementRef?.scrollTo(0, 0);
     if (loading) return;
     const variables = {
       questionType: questionData?.questionType
@@ -224,7 +252,7 @@ const QuestionEditForm = () => {
           <Button
             type="submit"
             variant="outlined"
-            className={btnContainerClasses.join(' ')}
+            className={btnContainerClasses.join(" ")}
             sx={{
               minHeight: "unset",
               textTransform: "none",

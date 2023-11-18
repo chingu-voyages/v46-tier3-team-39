@@ -36,8 +36,6 @@ const styles = {
     "flex-col",
     "items-center",
     "text-Black",
-    "overflow-y-auto",
-    "relative",
   ],
   header: {
     container: ["flex", "w-full"],

@@ -82,8 +82,10 @@ const Controls = () => {
               type="button"
               onClick={async () => {
                 try {
-                  setIsGenerating(true);
                   if (isGenerating) return;
+                  setIsGenerating(true);
+                  //scroll to start
+                  currElPos?.elementRef?.scrollTo(0, 0);
                   await generateQuestion({
                     questionData: questionData || {},
                     setQuestionData,

@@ -49,7 +49,7 @@ const LoadingSVGAnimationStyles = () => {
     .loading-icon-path {
       stroke-dasharray: 1, 200;
       stroke-dashoffset: 0;
-      stroke: $dark-blue;
+      stroke: black;
       stroke-linecap: round;
       animation: dash 1.5s ease-in-out infinite;
     }`}
