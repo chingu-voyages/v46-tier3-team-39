@@ -49,6 +49,9 @@ export default function QuestionList() {
     ].join(" "),
   };
 
+  const privateQuestions = questions.filter((question) => question.private);
+  const publicQuestions = questions.filter((question) => !question.private)
+
   return (
     <Box className={styles.layout}>
       <Box className={styles.controlsLayout}>
@@ -58,6 +61,9 @@ export default function QuestionList() {
           aria-label="basic tabs example"
         >
           <Tab label="All" {...a11yProps(0)} />
+          <Tab label="Private" {...a11yProps(0)} />
+          <Tab label="Public" {...a11yProps(0)} />
+
         </Tabs>
         <QuestionModalWrapper>
           <AddIcon />
@@ -71,6 +77,12 @@ export default function QuestionList() {
       {/*panel for the ALL tab  */}
       <CustomTabPanel value={tabValue} index={0}>
         <List questions={questions} />
+      </CustomTabPanel>
+      <CustomTabPanel value={tabValue} index={1}>
+        <List questions={privateQuestions} />
+      </CustomTabPanel>
+      <CustomTabPanel value={tabValue} index={2}>
+        <List questions={publicQuestions} />
       </CustomTabPanel>
       {/*add more panels under here wrapped in CustomTabPanel and pass questions needed into <List>*/}
     </Box>
