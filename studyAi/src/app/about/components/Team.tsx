@@ -10,9 +10,7 @@ export default function Team() {
       <p className="leading-loose sm:text-5xl">
         Get to know the talented individuals behind our exam prep company.
       </p>
-      <button
-        className="my-4 border py-5 px-2.5 sm:px-8 sm:text-3xl"
-      >
+      <button className="my-4 border py-5 px-2.5 sm:px-8 sm:text-3xl">
         <NextLink
           href={"mailto:studyai210@gmail.com"}
           key={"mailto:studyai210@gmail.com"}
@@ -31,7 +29,7 @@ export default function Team() {
             name="Arky"
             role="Developer"
             avatarURL="/placeholderImages/squarePlaceholder.png"
-            linkedInURL=""
+            linkedInURL="https://www.linkedin.com/in/arky-asmal/"
           />
         </Grid>
         <Grid item xs={6} sm={4}>
@@ -39,7 +37,15 @@ export default function Team() {
             name="Irha"
             role="Developer"
             avatarURL="/placeholderImages/squarePlaceholder.png"
-            linkedInURL=""
+            linkedInURL="https://www.linkedin.com/in/irha-ali-522039105/"
+          />
+        </Grid>
+        <Grid item xs={6} sm={4}>
+          <TeamMember
+            name="Connor"
+            role="Developer"
+            avatarURL="/placeholderImages/squarePlaceholder.png"
+            linkedInURL="https://www.linkedin.com/in/connor-crump-b83166264/"
           />
         </Grid>
         <Grid item xs={6} sm={4}>
@@ -53,14 +59,6 @@ export default function Team() {
         <Grid item xs={6} sm={4}>
           <TeamMember
             name="Fung"
-            role="Developer"
-            avatarURL="/placeholderImages/squarePlaceholder.png"
-            linkedInURL=""
-          />
-        </Grid>
-        <Grid item xs={6} sm={4}>
-          <TeamMember
-            name="Connor"
             role="Developer"
             avatarURL="/placeholderImages/squarePlaceholder.png"
             linkedInURL=""

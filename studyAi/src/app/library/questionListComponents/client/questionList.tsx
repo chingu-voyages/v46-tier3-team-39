@@ -11,13 +11,29 @@ import { faEarthAmericas } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import { useQuestions } from "@/app/stores/questionStore";
 import PaginatedItems from "@/app/util/components/pagination/pagination";
+import AddIcon from "@mui/icons-material/Add";
+import PublicIcon from "@mui/icons-material/Public";
+import LockIcon from "@mui/icons-material/Lock";
+import TextField from "@mui/material/TextField";
 
-export default function QuestionList() {
+export default function QuestionList({
+  allPublicQuestions,
+}: {
+  allPublicQuestions: boolean | null;
+}) {
   const [tabValue, setTabValue] = useState(0);
   const questions = useQuestions()[0].data.arr;
+  const [search, setSearch] = useState("");
 
   //for testing pagination
   /* const questions: Partial<Question>[] = Array(100).fill({id:"1", questionInfo: {title: "title"}, questionType: "Short Answer", tags: ["Math"]}) */
+
+  const tagSearched = (tagSearched: string[] | undefined) => {
+    if (!tagSearched) return;
+    for (const tag of tagSearched) {
+      if (tag.includes(search)) return true;
+    }
+  };
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
@@ -46,32 +62,84 @@ export default function QuestionList() {
     ].join(" "),
   };
 
+  const privateQuestions = allPublicQuestions
+    ? []
+    : questions.filter((question) => question.private);
+  const publicQuestions = allPublicQuestions
+    ? questions
+    : questions.filter((question) => !question.private);
+
+  const filteredQuestions = (questionType: string | null) => {
+    let questionsToFilter;
+    switch (questionType) {
+      case "public":
+        questionsToFilter = publicQuestions;
+        break;
+      case "private":
+        questionsToFilter = publicQuestions;
+        break;
+      default:
+        questionsToFilter = questions;
+    }
+
+    return search.length >= 3
+      ? questionsToFilter.filter(
+          (question) =>
+            question.questionInfo?.title.toLowerCase().includes(search) ||
+            question.questionType?.toLowerCase().includes(search) ||
+            tagSearched(question.tags)
+        )
+      : questionsToFilter;
+  };
+
   return (
     <Box className={styles.layout}>
-      <Box className={styles.controlsLayout}>
-        <Tabs
-          value={tabValue}
-          onChange={handleChange}
-          aria-label="basic tabs example"
-        >
-          <Tab label="All" {...a11yProps(0)} />
-        </Tabs>
-        <QuestionModalWrapper>
-          {(props) => (
-            <div className={styles.createButton} onClick={props.onClick}>
-              +
-            </div>
-          )}
-        </QuestionModalWrapper>
-      </Box>
+      {!allPublicQuestions && (
+        <Box className={styles.controlsLayout}>
+          <Tabs
+            value={tabValue}
+            onChange={handleChange}
+            aria-label="basic tabs example"
+          >
+            <Tab label="All" {...a11yProps(0)} />
+            <Tab label="Private" {...a11yProps(0)} />
+            <Tab label="Public" {...a11yProps(0)} />{" "}
+          </Tabs>
+          <QuestionModalWrapper>
+            <AddIcon />
+          </QuestionModalWrapper>
+        </Box>
+      )}
       <div className={styles.titlesLayout}>
         <h2 className={styles.h2}>Question</h2>
-        <h2 className={styles.h2}>Shared With</h2>
+        <h2 className={styles.h2}>
+          <TextField
+            id="search-bar"
+            size="small"
+            name="location"
+            variant="outlined"
+            label="Search for a quiz"
+            placeholder="Search..."
+            onChange={(e) => {
+              setSearch(e.target.value.toLowerCase());
+            }}
+          />
+        </h2>
       </div>
 
       {/*panel for the ALL tab  */}
       <CustomTabPanel value={tabValue} index={0}>
-        <List questions={questions} />
+        <List questions={filteredQuestions("all")} />
+      </CustomTabPanel>
+      <CustomTabPanel value={tabValue} index={1}>
+        <List
+          questions={filteredQuestions("private")}
+        />
+      </CustomTabPanel>
+      <CustomTabPanel value={tabValue} index={2}>
+        <List
+          questions={filteredQuestions("public")}
+        />
       </CustomTabPanel>
       {/*add more panels under here wrapped in CustomTabPanel and pass questions needed into <List>*/}
     </Box>
@@ -149,7 +217,7 @@ function List({ questions }: { questions: Partial<Question>[] }) {
             })}
           </Carousel>
         </div>
-        <FontAwesomeIcon icon={faEarthAmericas} width="16" />
+        {question.private ? <LockIcon /> : <PublicIcon />}
       </Link>
     );
   });

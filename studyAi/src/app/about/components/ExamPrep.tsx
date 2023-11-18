@@ -1,5 +1,4 @@
 import { options } from "@/authComponents/nextAuth/options";
-import QuestionModalWrapper from "@/app/util/components/questionModal/questionModalWrapper";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 
@@ -18,6 +17,7 @@ const ExamPrep = async () => {
       </div>
       <div className="flex mt-4">
         <div className="mx-auto">
+          <Link href={session ? "/library/question/create" : "/auth/signup"}>
           {session ? (
             <QuestionModalWrapper>
               {(props) => (
@@ -30,12 +30,11 @@ const ExamPrep = async () => {
               )}
             </QuestionModalWrapper>
           ) : (
-            <Link href={"/auth/signup"}>
               <button className="border-2 py-3 px-6 sm:px-8 sm:py-4">
                 Sign Up
               </button>
-            </Link>
           )}
+          </Link>
 
           <button className="border py-3 px-6">learn More</button>
         </div>
