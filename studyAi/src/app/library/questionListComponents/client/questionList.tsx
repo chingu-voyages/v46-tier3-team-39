@@ -14,10 +14,13 @@ import PaginatedItems from "@/app/util/components/pagination/pagination";
 import AddIcon from "@mui/icons-material/Add";
 import PublicIcon from "@mui/icons-material/Public";
 import LockIcon from "@mui/icons-material/Lock";
+import TextField from "@mui/material/TextField";
 
-export default function QuestionList(page: any) {
+export default function QuestionList(page: string | null) {
   const [tabValue, setTabValue] = useState(0);
   const questions = useQuestions()[0].data.arr;
+  const [search, setSearch] = useState("");
+  console.log("search", search);
 
   //for testing pagination
   /* const questions: Partial<Question>[] = Array(100).fill({id:"1", questionInfo: {title: "title"}, questionType: "Short Answer", tags: ["Math"]}) */
@@ -49,39 +52,68 @@ export default function QuestionList(page: any) {
     ].join(" "),
   };
 
-  const privateQuestions = questions.filter((question) => question.private);
-  const publicQuestions = questions.filter((question) => !question.private);
+  const privateQuestions =
+    page === "public" ? [] : questions.filter((question) => question.private);
+  const publicQuestions =
+    page === "public"
+      ? questions
+      : questions.filter((question) => !question.private);
 
   return (
     <Box className={styles.layout}>
-      <Box className={styles.controlsLayout}>
-        <Tabs
-          value={tabValue}
-          onChange={handleChange}
-          aria-label="basic tabs example"
-        >
-          <Tab label="All" {...a11yProps(0)} />
-          {page === "public" && (
-            <>
-              <Tab label="Private" {...a11yProps(0)} />
-              <Tab label="Public" {...a11yProps(0)} />{" "}
-            </>
-          )}
-        </Tabs>
-        {page === "public" && (
+      {page === "public" && (
+        <Box className={styles.controlsLayout}>
+          <Tabs
+            value={tabValue}
+            onChange={handleChange}
+            aria-label="basic tabs example"
+          >
+            <Tab label="All" {...a11yProps(0)} />
+            <Tab label="Private" {...a11yProps(0)} />
+            <Tab label="Public" {...a11yProps(0)} />{" "}
+          </Tabs>
           <QuestionModalWrapper>
             <AddIcon />
           </QuestionModalWrapper>
-        )}
-      </Box>
+        </Box>
+      )}
       <div className={styles.titlesLayout}>
         <h2 className={styles.h2}>Question</h2>
-        <h2 className={styles.h2}>Shared With</h2>
+        <h2 className={styles.h2}>
+          {page === "public" ? (
+            "Shared With"
+          ) : (
+            <TextField
+              id="search-bar"
+              size="small"
+              name="location"
+              variant="outlined"
+              label="Search for a quiz"
+              placeholder="Search..."
+              onChange={(e) => {
+                setSearch(e.target.value.toLowerCase());
+              }}
+            />
+          )}
+        </h2>
       </div>
 
       {/*panel for the ALL tab  */}
       <CustomTabPanel value={tabValue} index={0}>
-        <List questions={questions} />
+        <List
+          questions={
+            search.length >= 3
+              ? questions.filter(
+                  (question) =>
+                    question.questionInfo?.title
+                      .toLowerCase()
+                      .includes(search) ||
+                    question.questionType?.toLowerCase().includes(search) ||
+                    question.tags?.includes(search)
+                )
+              : questions
+          }
+        />
       </CustomTabPanel>
       <CustomTabPanel value={tabValue} index={1}>
         <List questions={privateQuestions} />
