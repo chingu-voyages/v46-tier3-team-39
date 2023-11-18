@@ -29,7 +29,7 @@ export default async function QuestionLibrary() {
         <div className={styles.layout}>
           <h1 className={styles.h1}>My Question Library</h1>
           <QuestionsContainer initialItems={data}>
-            <QuestionList />
+            <QuestionList allPublicQuestions={false}/>
           </QuestionsContainer>
         </div>
       </NavigationWrapper>
