@@ -143,7 +143,7 @@ export default async function DashboardPage() {
             </div>
             <div className=" row-span-1 flex item-center py-5">
               <div className=" grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <Link href="/generateQuestion">
+                <Link href={`/library/question/create`}>
                   <div className=" col-span-1 border p-5 flex flex-col lg:flex-row h-full items-center">
                     {/* 2.2.1 */}
                     <div className="me-2 ">
