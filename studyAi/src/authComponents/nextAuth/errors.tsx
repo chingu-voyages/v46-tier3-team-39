@@ -5,26 +5,25 @@ export function getErrorMessage(errorCode: string) {
   let errorMessage;
   switch (errorCode) {
     case "CredentialsSignin":
-      errorMessage = "Invalid email or password.";
+      errorMessage = "Invalid credentials, please try again";
       break;
     case "OAuthCreateAccount":
-      errorMessage =
-        "There was an error creating your account with this provider (i.e Google, Github, etc)";
+      errorMessage = "An error occured. Please try again";
       break;
     case "OAuthAccountNotLinked":
-      errorMessage =
-        "This account is not linked with this provider (i.e Google, Github, etc). Login to your account another way, and link this provider";
+      errorMessage = "Invalid credentials, please try again";
+      break;
     case "EmailSignin":
-      errorMessage = "The email you provided is not registered.";
+      errorMessage = "This account does not exist";
       break;
     case "AccountNotLinked":
-      errorMessage = "This account is not linked with any provider.";
+      errorMessage = "An error occured, please try again";
       break;
     case "OAuthSignin":
-      errorMessage = "There was an error with the OAuth provider.";
+      errorMessage = "Invalid sign in, please try again.";
       break;
     default:
-      errorMessage = "An unknown error occurred.";
+      errorMessage = "An error occurred, please try agin";
   }
   return errorMessage;
 }

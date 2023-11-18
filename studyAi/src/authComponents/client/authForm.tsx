@@ -3,9 +3,8 @@ import { TextFieldInput } from "@/authComponents/server/formInputs";
 import { Alert, Button } from "@mui/material";
 import { signIn } from "next-auth/react";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+import { useRouter, NextRouter } from "next/router";
 import { useRef } from "react";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { useOriginContext } from "@/app/util/providers/originProvider";
 const onGoogleSign = async () =>
   await signIn("google", undefined, {
@@ -14,7 +13,7 @@ const onGoogleSign = async () =>
 const onEmailSign = async (
   creds: { email: string; password: string },
   router: {
-    router: AppRouterInstance;
+    router: NextRouter;
     isWithinPage: boolean;
   }
 ) => {

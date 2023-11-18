@@ -1,7 +1,8 @@
 import Head from "next/head";
 import determineOriginUrl from "../../app/util/parsers/determineOriginUrl";
+const origin = determineOriginUrl() as string;
 const generalMetadataProps = {
-  metadataBase: new URL(determineOriginUrl() as string).toString(),
+  metadataBase: origin,
   openGraph: {
     locale: "en_US",
     type: "website",
@@ -30,16 +31,22 @@ const MetadataHead = ({
       <link rel="canonical" href={generalMetadataProps.metadataBase} />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
-      <meta property="og:locale" content="en_US" />
-      <meta property="og:url" content={generalMetadataProps.metadataBase} />
-      <meta property="og:site_name" content="Study AI" />
+      <meta
+        property="og:locale"
+        content={generalMetadataProps.openGraph.locale}
+      />
+      <meta property="og:url" content={generalMetadataProps.openGraph.url} />
+      <meta
+        property="og:site_name"
+        content={generalMetadataProps.openGraph.siteName}
+      />
       <meta
         property="og:image:url"
-        content={`${generalMetadataProps.metadataBase}/logo/logo.png`}
+        content={`${generalMetadataProps.openGraph.url}/logo/logo.png`}
       />
       <meta property="og:image:width" content="800" />
       <meta property="og:image:height" content="600" />
-      <meta property="og:type" content="website" />
+      <meta property="og:type" content={generalMetadataProps.openGraph.type} />
     </Head>
   );
 };

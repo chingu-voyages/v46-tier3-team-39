@@ -2,6 +2,8 @@ import AppLogo from "../../app/util/components/logo/server/responsiveLogo";
 import NextLink from "next/link";
 import { AuthForm } from "../client/authForm";
 import AuthPageWrapper from "../client/authWrapper";
+import { useRouter } from "next/router";
+import { determineErrorMessageArr } from "../nextAuth/errors";
 export const AuthHeader = ({ type }: { type: "login" | "signup" }) => {
   const header = type === "login" ? "Sign In" : "Join us";
   const subheader =
@@ -18,13 +20,12 @@ export const AuthHeader = ({ type }: { type: "login" | "signup" }) => {
   );
 };
 
-export const AuthPage = ({
-  type,
-  errMessageArr,
-}: {
-  type: "login" | "signup";
-  errMessageArr?: { code: string; message: string }[];
-}) => {
+export const AuthPage = ({ type }: { type: "login" | "signup" }) => {
+  const router = useRouter();
+  const { query } = router;
+  const errMessageArr = query.error
+    ? determineErrorMessageArr(query.error)
+    : [];
   const bottomText =
     type === "login" ? "Don't have an account?" : "Already have an account?";
   return (

@@ -2,7 +2,7 @@
 import useElementPosition from "@/app/util/hooks/useElementSize";
 import { AuthImg } from "../server/authImg";
 import useWindowWidth from "@/app/util/hooks/useWindowWidth";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 import { useOriginContext } from "@/app/util/providers/originProvider";
