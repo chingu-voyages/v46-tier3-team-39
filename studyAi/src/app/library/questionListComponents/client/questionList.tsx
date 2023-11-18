@@ -11,6 +11,9 @@ import { faEarthAmericas } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import { useQuestions } from "@/app/stores/questionStore";
 import PaginatedItems from "@/app/util/components/pagination/pagination";
+import AddIcon from "@mui/icons-material/Add";
+import PublicIcon from "@mui/icons-material/Public";
+import LockIcon from "@mui/icons-material/Lock";
 
 export default function QuestionList() {
   const [tabValue, setTabValue] = useState(0);
@@ -57,7 +60,7 @@ export default function QuestionList() {
           <Tab label="All" {...a11yProps(0)} />
         </Tabs>
         <QuestionModalWrapper>
-          <div className={styles.createButton}>+</div>
+          <AddIcon />
         </QuestionModalWrapper>
       </Box>
       <div className={styles.titlesLayout}>
@@ -145,7 +148,7 @@ function List({ questions }: { questions: Partial<Question>[] }) {
             })}
           </Carousel>
         </div>
-        <FontAwesomeIcon icon={faEarthAmericas} width="16" />
+        {question.private ? <LockIcon /> : <PublicIcon />}
       </Link>
     );
   });
