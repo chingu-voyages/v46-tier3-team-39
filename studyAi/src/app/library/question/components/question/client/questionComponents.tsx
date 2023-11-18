@@ -2,7 +2,16 @@
 import ContainerBar, { Container } from "../../page/server/containerBar";
 import capitalizeEveryWord from "@/app/util/parsers/capitalizeEveryWord";
 import EditIcon from "@mui/icons-material/Edit";
-import { IconButton, Tab, Tabs } from "@mui/material";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import {
+  Alert,
+  Button,
+  IconButton,
+  Modal,
+  Tab,
+  Tabs,
+  Typography,
+} from "@mui/material";
 import React, { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useQuestions } from "@/app/stores/questionStore";
@@ -58,7 +67,65 @@ const EditBtn = ({
     </BtnLabelDropdown>
   );
 };
-const deleteBtn = () => {};
+const deleteBtn = ({
+  btnStyles,
+  btnClassNames,
+  questionId,
+}: {
+  btnStyles: React.CSSProperties;
+  btnClassNames: string;
+  questionId: string;
+}) => {
+  const [questionData, { addOrUpdateItems, deleteItems }] = useQuestions();
+  const questions = questionData.data;
+  const question = questions.map[questionId];
+  const [open, setOpen] = useState(false);
+  if (!question) return <></>;
+  const onDelete = () => {};
+  return (
+    <BtnLabelDropdown text="Delete Question" pointerEvents={false}>
+      {(props) => (
+        <>
+          <Modal open={open} onClose={() => setOpen(false)}>
+            <div className="space-y-4 px-3 py-2">
+              <Alert severity="warning"> This action is permenant </Alert>
+              <Typography variant="h6">Delete Question</Typography>
+              <Typography variant="body1">
+                {" "}
+                {`Are you sure you want to delete`}{" "}
+                {`"${question.questionInfo?.title}" ?`}
+              </Typography>
+              <Button
+                variant={"outlined"}
+                color={"error"}
+                sx={{
+                  textTransform: "unset",
+                }}
+              >
+                Delete
+              </Button>
+            </div>
+          </Modal>
+          <IconButton
+            type="button"
+            ref={props.setAnchorEl}
+            onPointerEnter={(e) => {
+              if (e.pointerType === "mouse") props.handleClick(e);
+            }}
+            onPointerLeave={(e) => {
+              if (e.pointerType === "mouse") props.handleClose();
+            }}
+            sx={btnStyles}
+            className={btnClassNames + " aspect-square h-[70%]"}
+            onClick={onDelete}
+          >
+            <DeleteOutlineIcon className="text-base" />
+          </IconButton>
+        </>
+      )}
+    </BtnLabelDropdown>
+  );
+};
 const TopBar = ({
   view,
   handleChange,

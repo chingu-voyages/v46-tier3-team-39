@@ -1,7 +1,7 @@
 import { options } from "@/authComponents/nextAuth/options";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
-
+import QuestionModalWrapper from "@/app/util/components/questionModal/questionModalWrapper";
 const ExamPrep = async () => {
   const session = await getServerSession(options);
 
@@ -18,22 +18,22 @@ const ExamPrep = async () => {
       <div className="flex mt-4">
         <div className="mx-auto">
           <Link href={session ? "/library/question/create" : "/auth/signup"}>
-          {session ? (
-            <QuestionModalWrapper>
-              {(props) => (
-                <button
-                  className="bg-Black border text-White py-3 px-6 mr-4"
-                  onClick={props.onClick}
-                >
-                  Try
-                </button>
-              )}
-            </QuestionModalWrapper>
-          ) : (
+            {session ? (
+              <QuestionModalWrapper>
+                {(props) => (
+                  <button
+                    className="bg-Black border text-White py-3 px-6 mr-4"
+                    onClick={props.onClick}
+                  >
+                    Try
+                  </button>
+                )}
+              </QuestionModalWrapper>
+            ) : (
               <button className="border-2 py-3 px-6 sm:px-8 sm:py-4">
                 Sign Up
               </button>
-          )}
+            )}
           </Link>
 
           <button className="border py-3 px-6">learn More</button>

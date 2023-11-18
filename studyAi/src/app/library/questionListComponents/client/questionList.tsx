@@ -15,6 +15,8 @@ import AddIcon from "@mui/icons-material/Add";
 import PublicIcon from "@mui/icons-material/Public";
 import LockIcon from "@mui/icons-material/Lock";
 import TextField from "@mui/material/TextField";
+import BtnLabelDropdown from "@/app/util/components/btnLabelDropdown/btnLabelDropdown";
+import { IconButton } from "@mui/material";
 
 export default function QuestionList({
   allPublicQuestions,
@@ -105,9 +107,28 @@ export default function QuestionList({
             <Tab label="Private" {...a11yProps(0)} />
             <Tab label="Public" {...a11yProps(0)} />{" "}
           </Tabs>
-          <QuestionModalWrapper>
-            <AddIcon />
-          </QuestionModalWrapper>
+          <BtnLabelDropdown text="Create question" pointerEvents={false}>
+            {(btnLabelProps) => (
+              <QuestionModalWrapper>
+                {(props) => (
+                  <IconButton
+                    ref={btnLabelProps.setAnchorEl}
+                    onPointerEnter={(e) => {
+                      if (e.pointerType === "mouse")
+                        btnLabelProps.handleClick(e);
+                    }}
+                    onPointerLeave={(e) => {
+                      if (e.pointerType === "mouse")
+                        btnLabelProps.handleClose();
+                    }}
+                    onClick={props.onClick}
+                  >
+                    <AddIcon />
+                  </IconButton>
+                )}
+              </QuestionModalWrapper>
+            )}
+          </BtnLabelDropdown>
         </Box>
       )}
       <div className={styles.titlesLayout}>
@@ -132,14 +153,10 @@ export default function QuestionList({
         <List questions={filteredQuestions("all")} />
       </CustomTabPanel>
       <CustomTabPanel value={tabValue} index={1}>
-        <List
-          questions={filteredQuestions("private")}
-        />
+        <List questions={filteredQuestions("private")} />
       </CustomTabPanel>
       <CustomTabPanel value={tabValue} index={2}>
-        <List
-          questions={filteredQuestions("public")}
-        />
+        <List questions={filteredQuestions("public")} />
       </CustomTabPanel>
       {/*add more panels under here wrapped in CustomTabPanel and pass questions needed into <List>*/}
     </Box>
