@@ -73,7 +73,6 @@ export function QuestionModalProvider({
   const currElPos = useElementPos();
   const closeHandler = useCallback(() => {
     setIsOpen(false);
-    console.log(initialQuestionData)
     setQuestionData(
       initialQuestionData ? { ...initialQuestionData } : blankQuestion
     );

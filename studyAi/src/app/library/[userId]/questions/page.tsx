@@ -19,7 +19,6 @@ export default async function QuestionLibrary() {
     };
     const { data: result } = await client.query(query);
     const data = result.questions as (Partial<Question> & { id: string })[];
-    console.log(data);
     return (
       <NavigationWrapper
         appBars={{
