@@ -19,6 +19,18 @@ import { containerTabs, InnerContainer } from "../server/questionViewContainer";
 import BtnLabelDropdown from "@/app/util/components/btnLabelDropdown/btnLabelDropdown";
 import QuestionModalWrapper from "@/app/util/components/questionModal/questionModalWrapper";
 import { useQuestionId } from "../../../context/QuestionIdContext";
+import { gql } from "../../../../../../../graphql/generated";
+import { useMutation } from "@apollo/client";
+export const DeleteQuestionMutation = gql(`
+  mutation DeleteSingleQuestion($id: String!, $userId: String!) {
+    deleteOneQuestion(
+      where: { id: $id, creatorId: { equals: $userId }  }
+    ) 
+    {
+      id
+    }
+  }
+`);
 const EditBtn = ({
   btnStyles,
   btnClassNames,
@@ -67,7 +79,7 @@ const EditBtn = ({
     </BtnLabelDropdown>
   );
 };
-const deleteBtn = ({
+const DeleteBtn = ({
   btnStyles,
   btnClassNames,
   questionId,
@@ -76,12 +88,31 @@ const deleteBtn = ({
   btnClassNames: string;
   questionId: string;
 }) => {
-  const [questionData, { addOrUpdateItems, deleteItems }] = useQuestions();
+  const [questionData, { deleteItems }] = useQuestions();
   const questions = questionData.data;
   const question = questions.map[questionId];
   const [open, setOpen] = useState(false);
+  const [mutationQuery, { loading, error, data }] = useMutation(
+    DeleteQuestionMutation
+  );
+  const session = useSession();
+  const userId = session.data?.user?.id;
   if (!question) return <></>;
-  const onDelete = () => {};
+  const onDelete = async () => {
+    try {
+      if (loading) return;
+      await mutationQuery({
+        variables: {
+          id: questionId,
+          userId: userId ? userId : "",
+        },
+      });
+      deleteItems([questionId]);
+      setOpen(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <BtnLabelDropdown text="Delete Question" pointerEvents={false}>
       {(props) => (
@@ -101,6 +132,7 @@ const deleteBtn = ({
                 sx={{
                   textTransform: "unset",
                 }}
+                onClick={onDelete}
               >
                 Delete
               </Button>
@@ -167,7 +199,10 @@ const TopBar = ({
           <Tab
             key={tab}
             value={tab}
-            className={btnClassNames + " h-full"}
+            className={
+              btnClassNames +
+              " h-full text-xs md:text-sm min-w-[4.5rem] md:min-w-[5.5rem]"
+            }
             label={capitalizeEveryWord(tab)}
             sx={btnStyles}
           />
@@ -176,11 +211,19 @@ const TopBar = ({
       {session.data &&
         question &&
         session.data.user.id === question.creatorId && (
-          <EditBtn
-            btnClassNames={btnClassNames}
-            btnStyles={btnStyles}
-            questionId={question.id}
-          />
+          <div className="h-full flex space-x-0 items-center grow justify-end">
+            <EditBtn
+              btnClassNames={btnClassNames}
+              btnStyles={btnStyles}
+              questionId={question.id}
+            />
+
+            <DeleteBtn
+              btnClassNames={btnClassNames}
+              btnStyles={btnStyles}
+              questionId={question.id}
+            />
+          </div>
         )}
     </ContainerBar>
   );
