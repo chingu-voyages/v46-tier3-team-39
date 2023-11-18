@@ -10,6 +10,7 @@ import { useParams } from "next/navigation";
 import { containerTabs, InnerContainer } from "../server/questionViewContainer";
 import BtnLabelDropdown from "@/app/util/components/btnLabelDropdown/btnLabelDropdown";
 import QuestionModalWrapper from "@/app/util/components/questionModal/questionModalWrapper";
+import { useQuestionId } from "../../../context/QuestionIdContext";
 const EditBtn = ({
   btnStyles,
   btnClassNames,
@@ -69,9 +70,11 @@ const TopBar = ({
   const params = useParams();
   const session = useSession();
   const questions = useQuestions()[0].data;
+  const questionIdData = useQuestionId();
+  const questionId = questionIdData?.questionId;
   const question =
-    params.id && typeof params.id === "string"
-      ? questions.map[params.id]
+    questionId && typeof questionId === "string"
+      ? questions.map[questionId]
       : null;
   const btnStyles: React.CSSProperties = {
     textTransform: "none",

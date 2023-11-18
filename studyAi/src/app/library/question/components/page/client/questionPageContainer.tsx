@@ -7,7 +7,8 @@ import QuestionPageNavigation, {
 import QuestionWrapper from "@/app/library/question/components/page/server/questionWrapper";
 import QuestionFormWrapper from "@/app/library/question/components/page/client/questionSubmissionForm";
 import dynamic from "next/dynamic";
-//we access local storage here so we render this 
+import { useQuestionId } from "../../../context/QuestionIdContext";
+//we access local storage here so we render this
 //dynamically
 const QuestionSubmissionsContainer = dynamic(
   () =>
@@ -16,7 +17,10 @@ const QuestionSubmissionsContainer = dynamic(
     ),
   { ssr: false }
 );
-const QuestionPageContainer = ({ questionId }: { questionId: string }) => {
+const QuestionPageContainer = () => {
+  const questionIdData = useQuestionId();
+  const questionId = questionIdData?.questionId;
+  if (questionId) return <></>;
   return (
     <FullscreenProvider>
       <QuestionPageNavigation>

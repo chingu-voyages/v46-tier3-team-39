@@ -15,6 +15,7 @@ import React from "react";
 import BtnLabelDropdown from "@/app/util/components/btnLabelDropdown/btnLabelDropdown";
 import { useQuestionSubmissions } from "@/app/stores/questionSubmissionsStore";
 import { AnswerType } from "./answerTypeContainer";
+import { useQuestionId } from "../../../context/QuestionIdContext";
 const determineAnswerTitle = (str?: string) => {
   const matchStr = str as (typeof QuestionTypes)[number];
   switch (matchStr) {
@@ -117,9 +118,11 @@ const ResetAnswerBtn = ({
 const TopBar = () => {
   const params = useParams();
   const questions = useQuestions()[0].data;
+  const questionIdData = useQuestionId();
+  const questionId = questionIdData?.questionId;
   const question =
-    params.id && typeof params.id === "string"
-      ? questions.map[params.id]
+    questionId && typeof questionId === "string"
+      ? questions.map[questionId]
       : null;
   const btnClassNames = "flex items-center justify-center h-[70%]";
   const btnStyle: React.CSSProperties = {

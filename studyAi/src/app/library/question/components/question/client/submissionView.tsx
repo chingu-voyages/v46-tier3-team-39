@@ -5,6 +5,7 @@ import { Container } from "../../page/server/containerBar";
 import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { gql } from "../../../../../../../graphql/generated";
+import { useQuestionId } from "../../../context/QuestionIdContext";
 const getSubmissionByQuestionId = gql(`
   query GetQuestionSubmissionByQuestionId($questionId: String, $userId: String ) {
     questionSubmissions(
@@ -31,11 +32,13 @@ const getSubmissionByQuestionId = gql(`
 export const SubmissionView = () => {
   const params = useParams();
   const { data: session } = useSession();
+  const questionIdData = useQuestionId();
+  const questionId = questionIdData?.questionId;
   if (!params?.id) return <></>;
   const userId = session ? session.user.id : "";
   const queryOptions = {
     variables: {
-      questionId: typeof params.id === "string" ? params.id : params.id[0],
+      questionId: questionId === "string" ? questionId : '',
       userId: userId,
     },
   };

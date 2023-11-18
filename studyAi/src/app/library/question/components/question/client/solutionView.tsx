@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { useQuestions } from "@/app/stores/questionStore";
 import { Container } from "../../page/server/containerBar";
 import { gql } from "../../../../../../../graphql/generated";
+import { useQuestionId } from "../../../context/QuestionIdContext";
 const getAnswerById = gql(`
   query GetAnswerById($id: String) {
     question(where: { id: $id }) {
@@ -21,11 +22,8 @@ const getAnswerById = gql(`
 const SolutionView = () => {
   const params = useParams();
   const questions = useQuestions()[0].data;
-  const questionId = params
-    ? typeof params.id === "string"
-      ? params.id
-      : params.id[0]
-    : "";
+  const questionIdData = useQuestionId();
+  const questionId = questionIdData?.questionId;
   const {
     loading,
     error,
