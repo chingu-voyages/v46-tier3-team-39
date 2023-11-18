@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import modalStyles from "../../ModalStyles";
 import { QuestionProps } from "../../questionEditModal";
 import type { AnswerOption } from "../../../../../../../prisma/generated/type-graphql";

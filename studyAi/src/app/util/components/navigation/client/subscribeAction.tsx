@@ -1,5 +1,5 @@
 "use client";
-import { TextFieldInput } from "@/app/auth/components/server/formInputs";
+import { TextFieldInput } from "@/authComponents/server/formInputs";
 import useElementPosition from "@/app/util/hooks/useElementSize";
 import { useMutation } from "@apollo/client";
 import { Button } from "@mui/material";
@@ -75,7 +75,7 @@ export const SubscribeAction = () => {
           height: inputHeight + "px",
         }}
         size="large"
-        className="rounded-none w-full ml-0 sm:ml-4 sm:w-auto"
+        className="rounded-none w-full ml-0 sm:ml-4 sm:w-auto text-Black"
         variant={"outlined"}
         aria-label={"subscribe"}
         disabled={loading}

@@ -1,5 +1,4 @@
 "use client";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import AnswerEditor from "./components/answerEditor/answerEditor";
@@ -12,13 +11,18 @@ import styles, {
 import { Question } from "../../../../../prisma/generated/type-graphql";
 import { SetStateAction } from "react";
 import { useQuestionModal } from "./context/questionModalProvider";
-import { Button, IconButton, Typography } from "@mui/material";
+import {
+  Button,
+  CircularProgress,
+  IconButton,
+  Modal,
+  Typography,
+} from "@mui/material";
 import { FileUploadOutlined } from "@mui/icons-material";
 import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
 import { gql } from "../../../../../graphql/generated";
 import { useMutation } from "@apollo/client";
 import { useSession } from "next-auth/react";
-import LoadingIcon from "../../icons/loadingIcon";
 const AddQuestion = gql(`
   mutation CreateOneQuestionResolver(
     $creatorId: String!,
@@ -58,15 +62,15 @@ const QuestionFormHeader = () => {
   const currBtnClasses = [...styles.header.closeIcon.btn];
   const currHeaderClasses = [...styles.header.h1];
   const currHeaderContainerClasses = [...styles.header.container];
-  if (currElPos) {
-    const width = currElPos.position.width;
+  const width = currElPos?.position?.width;
+  if (currElPos && typeof width === "number") {
     //handle header text
     if (width > 640) currHeaderClasses.push("text-5xl");
     else if (width > 480) currHeaderClasses.push("text-3xl");
-    else currHeaderClasses.push("text-2xl");
+    else currHeaderClasses.push("text-2xl", "text-center");
     //handle container margins
-    if (width > 640) currHeaderContainerClasses.push("mb-8");
-    else if (width > 480) currHeaderContainerClasses.push("mb-5");
+    if (width > 640) currHeaderContainerClasses.push("mb-7");
+    else if (width > 480) currHeaderContainerClasses.push("mb-4");
     else {
       currHeaderContainerClasses.push("mb-3");
       currHeaderClasses.push("mb-3");
@@ -74,7 +78,7 @@ const QuestionFormHeader = () => {
     //handle container flex
     if (width > 480)
       currHeaderContainerClasses.push("justify-between", "items-center");
-    else currHeaderContainerClasses.push("items-stretch", "flex-col");
+    else currHeaderContainerClasses.push("items-center", "flex-col");
   }
   return (
     <div className={currHeaderContainerClasses.join(" ")}>
@@ -94,7 +98,7 @@ const QuestionFormHeader = () => {
       <h1 className={currHeaderClasses.join(" ")}>
         {formTypeHeaderText + " Your Question"}
       </h1>
-      <Controls />
+      {<Controls />}
     </div>
   );
 };
@@ -118,22 +122,40 @@ const QuestionFormMainContent = () => {
   );
 };
 const QuestionEditFormLoadingBanner = ({ text }: { text: string }) => {
-  const bannerStyles = [
+  const modalData = useQuestionModal();
+  if (!modalData) return <></>;
+  const { type, currElPos } = modalData;
+  const generalBannerStyles = [
     "flex",
+    "flex-col",
     "justify-center",
     "items-center",
-    "absolute",
-    "top-0",
     "left-0",
     "w-full",
     "h-full",
     "z-10",
-    "bg-White",
+    "bottom-0",
   ];
+  const bannerStyles = [...generalBannerStyles, "bg-White", "text-Black"];
+  if (type.layout === "page")
+    return (
+      <Modal open={true}>
+        <div className={bannerStyles.join(" ")}>
+          <CircularProgress color="primary" />
+          <Typography variant="h5" className="mt-6">
+            {text}
+          </Typography>
+        </div>
+      </Modal>
+    );
+  //if displayed as a modal
+  bannerStyles.push("absolute");
   return (
     <div className={bannerStyles.join(" ")}>
-      <LoadingIcon backgroundColor="black" strokeWidth={'1rem'}/>
-      <Typography variant="body1">{text}</Typography>
+      <CircularProgress color="primary" />
+      <Typography variant="body1" className={"mt-3"}>
+        {text}
+      </Typography>
     </div>
   );
 };
@@ -145,19 +167,33 @@ const QuestionEditForm = () => {
   if (!modalData) return <></>;
   const { type, currElPos, questionData, onSave, isGenerating } = modalData;
   const currModalClasses = [...styles.modal];
-  if (type.layout === "modal")
+  if (type.layout === "modal") {
     currModalClasses.push(
       "min-w-[90%]",
       "md:min-w-[65%]",
       "lg:min-w-[50%]",
       "xl:min-w-[40%]",
-      "max-h-[80%]"
+      "max-h-[80%]",
+      "px-[5%]",
+      "py-[calc(max(4%,2rem))]",
+      "relative"
     );
-  else currModalClasses.push("w-full", "min-h-full");
+    if (loading || isGenerating) currModalClasses.push("overflow-y-hidden");
+    else currModalClasses.push("overflow-y-auto");
+  } else currModalClasses.push("w-full", "min-h-full");
   if (currElPos) determineModalStyle(currElPos.position, currModalClasses);
+  const btnContainerClasses = ["w-fit", "py-2", "px-4", "flex"];
+  const width = currElPos?.position.width;
+  if (typeof width === "number") {
+    if (width > 640) btnContainerClasses.push("mt-7");
+    else if (width > 480) btnContainerClasses.push("mt-4");
+    else btnContainerClasses.push("mt-3");
+  }
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     e.stopPropagation();
+    //scroll to start
+    currElPos?.elementRef?.scrollTo(0, 0);
     if (loading) return;
     const variables = {
       questionType: questionData?.questionType
@@ -201,6 +237,7 @@ const QuestionEditForm = () => {
     };
     if (onSave) onSave(newQuestion);
   };
+
   return (
     <div
       className={currModalClasses.join(" ")}
@@ -215,7 +252,7 @@ const QuestionEditForm = () => {
           <Button
             type="submit"
             variant="outlined"
-            className="w-fit py-2 px-4 mt-4 flex"
+            className={btnContainerClasses.join(" ")}
             sx={{
               minHeight: "unset",
               textTransform: "none",

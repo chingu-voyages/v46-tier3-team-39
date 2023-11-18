@@ -1,9 +1,11 @@
-import "./globals.css";
+import "../globals.css"
 import type { Metadata } from "next";
 import AuthProvider from "./util/providers/AuthContext";
 import GraphQLProvider from "./util/providers/apolloProvider";
 import { IsClientCtxProvider } from "./util/providers/isClientProvider";
-
+import * as React from "react";
+import { StyledEngineProvider } from "@mui/material/styles";
+import { OriginProvider } from "./util/providers/originProvider";
 export const metadata: Metadata = {
   title: "StudyAI",
   description:
@@ -39,11 +41,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <GraphQLProvider>
-        <IsClientCtxProvider>
-          <AuthProvider>
-            <body>{children}</body>
-          </AuthProvider>
-        </IsClientCtxProvider>
+        <OriginProvider>
+          <IsClientCtxProvider>
+            <AuthProvider>
+              <StyledEngineProvider injectFirst>
+                <body>{children}</body>
+              </StyledEngineProvider>
+            </AuthProvider>
+          </IsClientCtxProvider>
+        </OriginProvider>
       </GraphQLProvider>
     </html>
   );
