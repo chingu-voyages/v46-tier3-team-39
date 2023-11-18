@@ -10,23 +10,27 @@ import {
 import { useElementPos } from "../../../providers/elementPosProvider";
 import { ElementPostionType } from "../../../hooks/useElementSize";
 import { Question } from "@prisma/client";
+import ObjectId from "bson-objectid";
+
 // Create a new context
+const chosenId = ObjectId().toString()
 const blankQuestion: Partial<Question> = {
   questionInfo: {
-    title: "",
-    description: "",
+    title: "Addition",
+    description: "What is 1+1?",
     options: [
-      { id: "1", value: "Answer 1" },
-      { id: "2", value: "Answer 2" },
-      { id: "3", value: "Answer 3" },
-      { id: "4", value: "Answer 4" },
+      { id: chosenId, value: "2" },
+      { id: ObjectId().toString(), value: "1" },
+      { id: ObjectId().toString(), value: "3" },
+      { id: ObjectId().toString(), value: "5" },
     ],
   },
   questionType: "Multiple Choice",
-  tags: [],
+  tags: ["math"],
   answer: {
-    correctAnswer: [{ id: "1", value: "A" }],
+    correctAnswer: [{ id: chosenId, value: "2" }],
   },
+  private: true
 };
 
 export type QuestionModalDataType = {
