@@ -25,6 +25,13 @@ export default function QuestionList(page: string | null) {
   //for testing pagination
   /* const questions: Partial<Question>[] = Array(100).fill({id:"1", questionInfo: {title: "title"}, questionType: "Short Answer", tags: ["Math"]}) */
 
+  const tagSearched = (tagSearched: string[] | undefined) => {
+    if (!tagSearched) return;
+    for (const tag of tagSearched) {
+      if (tag.includes(search)) return true;
+    }
+  }
+
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
@@ -109,7 +116,7 @@ export default function QuestionList(page: string | null) {
                       .toLowerCase()
                       .includes(search) ||
                     question.questionType?.toLowerCase().includes(search) ||
-                    question.tags?.includes(search)
+                    tagSearched(question.tags)
                 )
               : questions
           }
