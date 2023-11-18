@@ -1,4 +1,4 @@
-import { options } from "@/app/api/auth/[...nextauth]/options";
+import { options } from "@/authComponents/nextAuth/options";
 import QuestionModalWrapper from "@/app/util/components/questionModal/questionModalWrapper";
 import { getServerSession } from "next-auth";
 import Link from "next/link";

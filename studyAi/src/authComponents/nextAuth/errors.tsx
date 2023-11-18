@@ -1,7 +1,7 @@
-import { redirectIfLoggedIn } from "@/app/api/utils/sessionFuncs";
-import AuthPage from "../components/authPageWrapper";
-import { redirect } from "next/navigation";
-function getErrorMessage(errorCode: string) {
+// import { redirectIfLoggedIn } from "@/app/api/utils/sessionFuncs";
+// import AuthPage from "../providers/authPageWrapper";
+// import { redirect } from "next/navigation";
+export function getErrorMessage(errorCode: string) {
   let errorMessage;
   switch (errorCode) {
     case "CredentialsSignin":
@@ -29,7 +29,7 @@ function getErrorMessage(errorCode: string) {
   return errorMessage;
 }
 
-const determineErrorMessageArr = (err: string | string[]) => {
+export const determineErrorMessageArr = (err: string | string[]) => {
   if (typeof err === "string")
     return [
       {
@@ -42,16 +42,19 @@ const determineErrorMessageArr = (err: string | string[]) => {
     message: getErrorMessage(e),
   }));
 };
-export default async function ErrorPage({
-  params,
-  searchParams,
-}: {
-  params: { slug: string };
-  searchParams: { [key: string]: string | string[] | undefined };
-}) {
-  const session = await redirectIfLoggedIn("/dashboard");
-  const error = searchParams.error;
-  if (!error) redirect("/auth/login");
-  const errorMessageArr = determineErrorMessageArr(error);
-  return <AuthPage type="login" errMessageArr={errorMessageArr} />;
-}
+// export default async function ErrorPage(
+// //   {
+// //   params,
+// //   searchParams,
+// // }: {
+// //   params?: { slug: string };
+// //   searchParams?: { [key: string]: string | string[] | undefined };
+// // }
+// ) {
+//   return <>hello</>;
+//   // const session = await redirectIfLoggedIn("/dashboard");
+//   // const error = searchParams.error;
+//   // if (!error) redirect("/auth/login");
+//   // const errorMessageArr = determineErrorMessageArr(error);
+//   // return <AuthPage type="login" errMessageArr={errorMessageArr} />;
+// }

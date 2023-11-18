@@ -1,4 +1,4 @@
-import "./globals.css";
+import "tailwindcss/tailwind.css";
 import type { Metadata } from "next";
 import AuthProvider from "./util/providers/AuthContext";
 import GraphQLProvider from "./util/providers/apolloProvider";
@@ -6,13 +6,6 @@ import { IsClientCtxProvider } from "./util/providers/isClientProvider";
 import * as React from "react";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { OriginProvider } from "./util/providers/originProvider";
-
-// export default function GlobalCssPriority() {
-//   return (
-//       {/* Your component tree. Now you can override Material UI's styles. */}
-//     </StyledEngineProvider>
-//   );
-// }
 export const metadata: Metadata = {
   title: "StudyAI",
   description:

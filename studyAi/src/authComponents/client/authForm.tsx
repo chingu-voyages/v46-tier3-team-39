@@ -1,5 +1,5 @@
 "use client";
-import { TextFieldInput } from "@/app/auth/components/server/formInputs";
+import { TextFieldInput } from "@/authComponents/server/formInputs";
 import { Alert, Button } from "@mui/material";
 import { signIn } from "next-auth/react";
 import axios from "axios";
@@ -7,7 +7,10 @@ import { useRouter } from "next/navigation";
 import { useRef } from "react";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { useOriginContext } from "@/app/util/providers/originProvider";
-const onGoogleSign = async () => await signIn("google");
+const onGoogleSign = async () =>
+  await signIn("google", undefined, {
+    prompt: "select_account",
+  });
 const onEmailSign = async (
   creds: { email: string; password: string },
   router: {
@@ -17,7 +20,7 @@ const onEmailSign = async (
 ) => {
   const signInData = await signIn("credentials", { ...creds, redirect: false });
   if (signInData?.error) {
-    console.error(signInData.error);
+    console.error(signInData.error, "credentials error");
   }
   if (signInData?.ok && !signInData?.error) {
     const { router: appRouter, isWithinPage } = router;
@@ -46,7 +49,8 @@ export const AuthFormBtns = ({ type }: { type: "login" | "signup" }) => {
         onClick={async () => {
           const signInData = await onGoogleSign();
           if (!signInData) return;
-          if (signInData.error) return console.error(signInData.error);
+          if (signInData.error)
+            return console.error(signInData.error, "google signIn error");
           if (isWithinPage) router.back();
           else router.push("/dashboard");
         }}

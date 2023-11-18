@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
 import CubeIcon from "./client/cubeIcon";
-import { options } from "@/app/api/auth/[...nextauth]/options";
+import { options } from "@/authComponents/nextAuth/options";
 import Link from "next/link";
 
 const Process = async () => {

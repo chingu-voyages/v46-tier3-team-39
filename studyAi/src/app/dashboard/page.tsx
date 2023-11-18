@@ -8,7 +8,7 @@ import { BsStars } from "react-icons/bs";
 import { FaFileCircleQuestion } from "react-icons/fa6";
 import { gql } from "@apollo/client";
 import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
-import { options } from "@/app/api/auth/[...nextauth]/options";
+import { options } from "@/authComponents/nextAuth/options";
 import { getServerSession } from "next-auth";
 import { Question } from "@prisma/client";
 import { QuestionSubmission } from "@prisma/client";

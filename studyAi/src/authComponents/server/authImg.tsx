@@ -8,8 +8,9 @@ export const AuthImg = ({
   return (
     <div
       style={style}
-      className={"bg-Black w-full" + " " + containerClassNames}
+      className={"bg-Black" + " " + containerClassNames}
     >
+      {/* {"hello"} */}
     </div>
   );
 };
