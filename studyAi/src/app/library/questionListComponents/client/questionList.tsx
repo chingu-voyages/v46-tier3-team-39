@@ -15,7 +15,7 @@ import AddIcon from "@mui/icons-material/Add";
 import PublicIcon from "@mui/icons-material/Public";
 import LockIcon from "@mui/icons-material/Lock";
 
-export default function QuestionList() {
+export default function QuestionList(page: any) {
   const [tabValue, setTabValue] = useState(0);
   const questions = useQuestions()[0].data.arr;
 
@@ -50,7 +50,7 @@ export default function QuestionList() {
   };
 
   const privateQuestions = questions.filter((question) => question.private);
-  const publicQuestions = questions.filter((question) => !question.private)
+  const publicQuestions = questions.filter((question) => !question.private);
 
   return (
     <Box className={styles.layout}>
@@ -61,13 +61,18 @@ export default function QuestionList() {
           aria-label="basic tabs example"
         >
           <Tab label="All" {...a11yProps(0)} />
-          <Tab label="Private" {...a11yProps(0)} />
-          <Tab label="Public" {...a11yProps(0)} />
-
+          {page === "public" && (
+            <>
+              <Tab label="Private" {...a11yProps(0)} />
+              <Tab label="Public" {...a11yProps(0)} />{" "}
+            </>
+          )}
         </Tabs>
-        <QuestionModalWrapper>
-          <AddIcon />
-        </QuestionModalWrapper>
+        {page === "public" && (
+          <QuestionModalWrapper>
+            <AddIcon />
+          </QuestionModalWrapper>
+        )}
       </Box>
       <div className={styles.titlesLayout}>
         <h2 className={styles.h2}>Question</h2>
