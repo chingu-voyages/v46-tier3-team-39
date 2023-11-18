@@ -1,7 +1,7 @@
 import modalStyles from "../../ModalStyles";
 import { QuestionInfoData } from "../../../../../../../prisma/generated/type-graphql";
 import { useQuestionModal } from "../../context/questionModalProvider";
-import { TextFieldInput } from "@/app/auth/components/server/formInputs";
+import { TextFieldInput } from "@/authComponents/server/formInputs";
 import { TextAreaAutoResizeInput } from "../../../inputs/TextAreaAutoResizeInput";
 import dynamic from "next/dynamic";
 //import question tags dynamically

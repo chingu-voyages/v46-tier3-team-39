@@ -1,5 +1,5 @@
 import { getServerSession } from "next-auth";
-import { options } from "../auth/[...nextauth]/options";
+import { options } from "../../../authComponents/nextAuth/options";
 import { Session } from "next-auth";
 import { GraphQLError, parse } from "graphql";
 

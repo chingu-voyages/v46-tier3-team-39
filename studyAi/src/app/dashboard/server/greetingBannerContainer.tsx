@@ -1,4 +1,4 @@
-import { options } from "@/app/api/auth/[...nextauth]/options";
+import { options } from "@/authComponents/nextAuth/options";
 import { getServerSession } from "next-auth";
 import GreetingBanner from "./greetingBanner";
 import { sub } from "date-fns";

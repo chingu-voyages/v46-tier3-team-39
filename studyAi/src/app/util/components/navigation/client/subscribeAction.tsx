@@ -1,5 +1,5 @@
 "use client";
-import { TextFieldInput } from "@/app/auth/components/server/formInputs";
+import { TextFieldInput } from "@/authComponents/server/formInputs";
 import useElementPosition from "@/app/util/hooks/useElementSize";
 import { useMutation } from "@apollo/client";
 import { Button } from "@mui/material";

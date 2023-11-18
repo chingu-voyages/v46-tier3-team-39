@@ -1,4 +1,4 @@
-import { options } from "@/app/api/auth/[...nextauth]/options";
+import { options } from "@/authComponents/nextAuth/options";
 import ProfileWrapper from "../client/profileWrapper";
 import { getServerSession } from "next-auth";
 

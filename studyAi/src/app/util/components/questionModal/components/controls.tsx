@@ -84,6 +84,9 @@ const Controls = () => {
                 setIsGenerating(true);
                 try {
                   if (isGenerating) return;
+                  setIsGenerating(true);
+                  //scroll to start
+                  currElPos?.elementRef?.scrollTo(0, 0);
                   await generateQuestion({
                     questionData: questionData || {},
                     setQuestionData,

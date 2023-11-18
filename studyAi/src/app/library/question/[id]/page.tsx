@@ -5,7 +5,7 @@ import { QuestionsContainer } from "@/app/stores/questionStore";
 import { QuestionTypes } from "@/app/util/types/UserData";
 import { gql } from "../../../../../graphql/generated";
 import { getServerSession } from "next-auth";
-import { options } from "@/app/api/auth/[...nextauth]/options";
+import { options } from "@/authComponents/nextAuth/options";
 import { Metadata, ResolvingMetadata } from "next";
 import determineOriginUrl from "@/app/util/parsers/determineOriginUrl";
 const question: Partial<Question> & {

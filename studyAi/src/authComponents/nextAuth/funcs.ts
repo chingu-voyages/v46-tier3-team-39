@@ -45,7 +45,7 @@ export const addCredDoc = async ({
         },
       });
   } catch (err) {
-    console.error(err);
+    console.error(err, 'could not create user document');
   } finally {
     prismaDb.$disconnect();
   }
