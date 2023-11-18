@@ -1,7 +1,6 @@
 "use client";
 import { useQuery } from "@apollo/client";
 import { Question } from "../../../../../../../prisma/generated/type-graphql";
-import { useParams } from "next/navigation";
 import { useQuestions } from "@/app/stores/questionStore";
 import { Container } from "../../page/server/containerBar";
 import { gql } from "../../../../../../../graphql/generated";
@@ -20,7 +19,6 @@ const getAnswerById = gql(`
   }
 `);
 const SolutionView = () => {
-  const params = useParams();
   const questions = useQuestions()[0].data;
   const questionIdData = useQuestionId();
   const questionId = questionIdData?.questionId;
@@ -34,7 +32,7 @@ const SolutionView = () => {
   const answerData = queryData as
     | undefined
     | { question: Partial<Question> | null };
-  const question = questions.map[questionId];
+  const question = questions.map[questionId ? questionId : ""];
   return (
     <Container overflow className="px-[5%] py-5 grow">
       {question?.answer?.correctAnswer.map((e) => {

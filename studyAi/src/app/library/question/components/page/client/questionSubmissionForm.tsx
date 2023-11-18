@@ -1,7 +1,6 @@
 "use client";
 import React, { useRef } from "react";
 import { useQuestions } from "@/app/stores/questionStore";
-import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { gql } from "../../../../../../../graphql/generated";
 import { useMutation } from "@apollo/client";

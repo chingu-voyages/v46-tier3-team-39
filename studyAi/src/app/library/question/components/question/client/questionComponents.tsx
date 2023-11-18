@@ -6,7 +6,6 @@ import { IconButton, Tab, Tabs } from "@mui/material";
 import React, { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useQuestions } from "@/app/stores/questionStore";
-import { useParams } from "next/navigation";
 import { containerTabs, InnerContainer } from "../server/questionViewContainer";
 import BtnLabelDropdown from "@/app/util/components/btnLabelDropdown/btnLabelDropdown";
 import QuestionModalWrapper from "@/app/util/components/questionModal/questionModalWrapper";
@@ -67,7 +66,6 @@ const TopBar = ({
     newValue: (typeof containerTabs)[number]
   ) => void;
 }) => {
-  const params = useParams();
   const session = useSession();
   const questions = useQuestions()[0].data;
   const questionIdData = useQuestionId();

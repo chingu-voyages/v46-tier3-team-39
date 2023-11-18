@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useQuestions } from "@/app/stores/questionStore";
-import { useParams, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Share } from "@mui/icons-material";
 import { faThumbsUp, faThumbsDown } from "@fortawesome/free-regular-svg-icons";
@@ -201,7 +201,6 @@ const QuestionActionBtns = () => {
   );
 };
 const LikeCounterBtns = () => {
-  const params = useParams();
   const questions = useQuestions()[0].data;
   const questionIdData = useQuestionId();
   const questionId = questionIdData?.questionId;
@@ -241,7 +240,6 @@ const LikeCounterBtns = () => {
   );
 };
 export const QuestionView = () => {
-  const params = useParams();
   const questions = useQuestions()[0].data;
   const questionIdData = useQuestionId();
   const questionId = questionIdData?.questionId;

@@ -2,7 +2,6 @@
 import { QuestionSubmission } from "../../../../../../../prisma/generated/type-graphql";
 import { useQuery } from "@apollo/client";
 import { Container } from "../../page/server/containerBar";
-import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { gql } from "../../../../../../../graphql/generated";
 import { useQuestionId } from "../../../context/QuestionIdContext";
@@ -30,15 +29,14 @@ const getSubmissionByQuestionId = gql(`
   }
 `);
 export const SubmissionView = () => {
-  const params = useParams();
   const { data: session } = useSession();
   const questionIdData = useQuestionId();
   const questionId = questionIdData?.questionId;
-  if (!params?.id) return <></>;
+  if (questionId) return <></>;
   const userId = session ? session.user.id : "";
   const queryOptions = {
     variables: {
-      questionId: questionId === "string" ? questionId : '',
+      questionId: questionId === "string" ? questionId : "",
       userId: userId,
     },
   };

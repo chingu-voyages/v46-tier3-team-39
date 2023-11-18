@@ -1,5 +1,4 @@
 "use client";
-import { useParams } from "next/navigation";
 import { useQuestions } from "@/app/stores/questionStore";
 import ContainerBar, { Container } from "../../page/server/containerBar";
 import { Button, IconButton } from "@mui/material";
@@ -116,7 +115,6 @@ const ResetAnswerBtn = ({
   );
 };
 const TopBar = () => {
-  const params = useParams();
   const questions = useQuestions()[0].data;
   const questionIdData = useQuestionId();
   const questionId = questionIdData?.questionId;
