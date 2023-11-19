@@ -6,7 +6,7 @@ import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
 import { Question } from "@prisma/client";
 import { QuestionSubmission } from "@prisma/client";
 import { GetQuestionsInfo } from "@/gql/queries/questionQueries";
-import { QueryQuestionSubmissions } from "@/gql/queries/questionSubmissionQueries";
+import { QueryQuestionSubmissionsIdOnly } from "@/gql/queries/questionSubmissionQueries";
 import { SortOrder } from "../../../../graphql/generated/graphql";
 const GreetingBannerContainer = async () => {
   const session = await getServerSession(options);
@@ -36,7 +36,7 @@ const GreetingBannerContainer = async () => {
     },
   };
   const submissionsQuery = {
-    query: QueryQuestionSubmissions,
+    query: QueryQuestionSubmissionsIdOnly,
     variables: {
       ...queryVariables,
     },

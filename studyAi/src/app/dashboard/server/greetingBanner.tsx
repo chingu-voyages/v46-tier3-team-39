@@ -1,7 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import Image from "next/image";
 import WelcomeImg from "../images/welcomeBack.png";
-import { object } from "zod";
 // const GreetingImage = ({ children }: { children: React.ReactNode }) => {
 //   return (
 //     <div className="w-full flex">

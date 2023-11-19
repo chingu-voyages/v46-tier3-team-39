@@ -11,6 +11,7 @@ import QuestionPageContainer from "../components/page/client/questionPageContain
 import { QuestionSubmissionsContainerWrapper } from "@/app/stores/questionSubmissionsStore";
 import { QuestionSubmission } from "@prisma/client";
 import { QueryFullQuestionSubmissions } from "@/gql/queries/questionSubmissionQueries";
+import { SortOrder } from "../../../../../graphql/generated/graphql";
 
 export default async function QuestionPage({
   params,
@@ -22,12 +23,17 @@ export default async function QuestionPage({
     query: GetFullQuestion,
     variables: { id: questionId },
   };
-  const submissionQuery = {
-    query: QueryFullQuestionSubmissions,
-  };
   try {
     const session = await getServerSession(options);
     const client = ServerGraphQLClient(session);
+    const submissionQuery = {
+      query: QueryFullQuestionSubmissions,
+      variables: {
+        questionId: { equals: questionId },
+        userId: session?.user.id || "",
+        orderBy: { dateCreated: "desc" as SortOrder },
+      },
+    };
     const questionPromise = client.query(questionQuery);
     const submissionPromise = client.query(submissionQuery);
     const [{ data: question }, { data: submission }] = await Promise.all([
