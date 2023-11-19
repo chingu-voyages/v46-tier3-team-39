@@ -1,11 +1,11 @@
 "use client";
-import { QuestionSubmission } from "@prisma/client";
+import { useSession } from "next-auth/react";
 import { useQuery } from "@apollo/client";
 import { Container } from "../../page/server/containerBar";
-import { useSession } from "next-auth/react";
 import { useQuestionId } from "../../../context/QuestionIdContext";
-import SubmissionsListItem from "../../submissions/SubmissionListItem";
 import { GetSubmissionByQuestionId } from "@/gql/queries/questionSubmissionQueries";
+import { QuestionSubmission } from "@prisma/client";
+import SubmissionsListItem from "../../submissions/SubmissionListItem";
 export const SubmissionView = () => {
   const { data: session } = useSession();
   const questionIdData = useQuestionId();

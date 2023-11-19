@@ -13,14 +13,14 @@ export default async function QuestionLibrary() {
   const session = sessionData.props.session;
   const client = ServerGraphQLClient(session);
   try {
-    const userId = session?.user.id;
+    const userId = session?.user.id || "";
     const query = {
       query: GetQuestionsInfo,
       variables: {
-        userId: userId,
+        creatorId: { equals: userId },
         orderBy: {
           dateCreated: "desc" as SortOrder,
-        }
+        },
       },
     };
     const { data: result } = await client.query(query);

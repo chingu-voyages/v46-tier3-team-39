@@ -21,6 +21,7 @@ import {
   Tabs,
   Typography,
 } from "@mui/material";
+import { useRouter } from "next/navigation";
 
 const EditBtn = ({
   btnStyles,
@@ -79,6 +80,7 @@ const DeleteBtn = ({
   btnClassNames: string;
   questionId: string;
 }) => {
+  const router = useRouter();
   const [questionData, { deleteItems }] = useQuestions();
   const questions = questionData.data;
   const question = questions.map[questionId];
@@ -100,6 +102,7 @@ const DeleteBtn = ({
       });
       deleteItems([questionId]);
       setOpen(false);
+      router.push(`/library/${userId}/questions`);
     } catch (error) {
       console.error(error);
     }
@@ -108,15 +111,23 @@ const DeleteBtn = ({
     <BtnLabelDropdown text="Delete Question" pointerEvents={false}>
       {(props) => (
         <>
-          <Modal open={open} onClose={() => setOpen(false)}>
-            <div className="space-y-4 px-3 py-2">
-              <Alert severity="warning"> This action is permenant </Alert>
+          <Modal
+            open={open}
+            onClose={() => setOpen(false)}
+            className="flex justify-center items-center"
+          >
+            <div className="flex flex-col justify-center space-y-6 px-[4%] py-[2.5%] bg-White text-Black">
               <Typography variant="h6">Delete Question</Typography>
-              <Typography variant="body1">
+              <Alert severity="warning"> You cannot undo this action </Alert>
+              <Typography
+                variant="subtitle1"
+                className="tracking-normal text-sm"
+              >
                 {" "}
                 {`Are you sure you want to delete`}{" "}
                 {`"${question.questionInfo?.title}" ?`}
               </Typography>
+
               <Button
                 variant={"outlined"}
                 color={"error"}
@@ -140,7 +151,7 @@ const DeleteBtn = ({
             }}
             sx={btnStyles}
             className={btnClassNames + " aspect-square h-[70%]"}
-            onClick={onDelete}
+            onClick={() => setOpen(true)}
           >
             <DeleteOutlineIcon className="text-base" />
           </IconButton>
