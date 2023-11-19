@@ -1,15 +1,12 @@
 import React from "react";
 import { protectRouteSSR } from "../api/utils/sessionFuncs";
 import NavigationWrapper from "../util/components/navigation/navigationWrapper";
-import GreetingBannerContainer from "./server/greetingBannerContainer";
 import Profile from "./server/profile";
 import Link from "next/link";
 import { BsStars } from "react-icons/bs";
 import { FaFileCircleQuestion } from "react-icons/fa6";
 import { gql } from "@apollo/client";
 import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
-import { options } from "@/authComponents/nextAuth/options";
-import { getServerSession } from "next-auth";
 import { Question } from "@prisma/client";
 import { QuestionSubmission } from "@prisma/client";
 import GreetingBanner from "./server/greetingBanner";
@@ -122,7 +119,6 @@ export default async function DashboardPage() {
       }}
       usePadding
     >
-      {/* <QuestionEditor /> */}
       <div className="grid grid-cols-1 md:grid-cols-3 p-5 m-5 md:gap-5 w-full sm:gap-y-5">
         <div className="col-span-1 border p-5 md:col-span-1">
           {/* 1 */}

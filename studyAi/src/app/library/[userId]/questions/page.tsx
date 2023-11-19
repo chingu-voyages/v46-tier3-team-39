@@ -15,7 +15,12 @@ export default async function QuestionLibrary() {
     const userId = session?.user.id;
     const query = {
       query: QueryUserGeneratedQuestions,
-      variables: { userId: userId },
+      variables: {
+        userId: userId,
+        // dateQuery: {
+        //   lte: new Date().toISOString(),
+        // },
+      },
     };
     const { data: result } = await client.query(query);
     const data = result.questions as (Partial<Question> & { id: string })[];
@@ -29,7 +34,7 @@ export default async function QuestionLibrary() {
         <div className={styles.layout}>
           <h1 className={styles.h1}>My Question Library</h1>
           <QuestionsContainer initialItems={data}>
-            <QuestionList allPublicQuestions={false}/>
+            <QuestionList allPublicQuestions={false} />
           </QuestionsContainer>
         </div>
       </NavigationWrapper>

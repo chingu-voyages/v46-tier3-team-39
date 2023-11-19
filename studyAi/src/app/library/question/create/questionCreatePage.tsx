@@ -14,7 +14,7 @@ const QuestionCreatePage = () => {
           if (question.id) router.push(`/library/question/${question.id}`);
         }}
       >
-        <></>
+        {() => <></>}
       </QuestionModalWrapper>
     </div>
   );
