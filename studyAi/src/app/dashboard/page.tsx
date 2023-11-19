@@ -13,6 +13,7 @@ import { sub } from "date-fns";
 import { QueryQuestionSubmissions } from "@/gql/queries/questionSubmissionQueries";
 import { GetQuestionsInfo } from "@/gql/queries/questionQueries";
 import { SortOrder } from "../../../graphql/generated/graphql";
+import GreetingBannerContainer from "./server/greetingBannerContainer";
 export default async function DashboardPage() {
   const sessionData = await protectRouteSSR("/auth/login");
   const session = sessionData.props.session;
@@ -91,11 +92,7 @@ export default async function DashboardPage() {
           <div className="grid grid-rows-2 ">
             <div className="row-span-1 border p-5 flex w-full">
               {/* 2.1 */}
-              <GreetingBanner
-                name={userName}
-                questionCount={questionsLength}
-                submissionCount={submissionsLength}
-              />
+              <GreetingBannerContainer/>
             </div>
             <div className=" row-span-1 flex item-center py-5">
               <div className=" grid grid-cols-1 sm:grid-cols-2 gap-5">

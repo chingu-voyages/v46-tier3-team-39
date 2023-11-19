@@ -783,14 +783,12 @@ input LikeCounterWhereInput {
 
 type LocationData {
   coordinates: [Float!]!
-  id: String!
   locationName: String!
   locationType: String!
 }
 
 input LocationDataCreateInput {
   coordinates: LocationDataCreatecoordinatesInput
-  id: String!
   locationName: String!
   locationType: String!
 }
@@ -818,21 +816,18 @@ input LocationDataNullableUpdateEnvelopeInput {
 
 input LocationDataObjectEqualityInput {
   coordinates: [Float!]
-  id: String!
   locationName: String!
   locationType: String!
 }
 
 input LocationDataOrderByInput {
   coordinates: SortOrder
-  id: SortOrder
   locationName: SortOrder
   locationType: SortOrder
 }
 
 input LocationDataUpdateInput {
   coordinates: LocationDataUpdatecoordinatesInput
-  id: StringFieldUpdateOperationsInput
   locationName: StringFieldUpdateOperationsInput
   locationType: StringFieldUpdateOperationsInput
 }
@@ -852,7 +847,6 @@ input LocationDataWhereInput {
   NOT: [LocationDataWhereInput!]
   OR: [LocationDataWhereInput!]
   coordinates: FloatNullableListFilter
-  id: StringFilter
   locationName: StringFilter
   locationType: StringFilter
 }
@@ -3330,7 +3324,6 @@ input UserOrderByWithRelationInput {
 type UserQuestionData {
   answered: Int!
   generated: Int!
-  id: String!
 }
 
 input UserQuestionDataCompositeFilter {
@@ -3346,19 +3339,16 @@ input UserQuestionDataCreateEnvelopeInput {
 input UserQuestionDataCreateInput {
   answered: Int
   generated: Int
-  id: String!
 }
 
 input UserQuestionDataObjectEqualityInput {
   answered: Int!
   generated: Int!
-  id: String!
 }
 
 input UserQuestionDataOrderByInput {
   answered: SortOrder
   generated: SortOrder
-  id: SortOrder
 }
 
 input UserQuestionDataUpdateEnvelopeInput {
@@ -3369,7 +3359,6 @@ input UserQuestionDataUpdateEnvelopeInput {
 input UserQuestionDataUpdateInput {
   answered: IntFieldUpdateOperationsInput
   generated: IntFieldUpdateOperationsInput
-  id: StringFieldUpdateOperationsInput
 }
 
 input UserQuestionDataWhereInput {
@@ -3378,7 +3367,6 @@ input UserQuestionDataWhereInput {
   OR: [UserQuestionDataWhereInput!]
   answered: IntFilter
   generated: IntFilter
-  id: StringFilter
 }
 
 input UserRelationFilter {

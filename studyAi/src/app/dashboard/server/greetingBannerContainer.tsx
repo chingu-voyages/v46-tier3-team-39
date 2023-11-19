@@ -32,6 +32,7 @@ const GreetingBannerContainer = async () => {
     query: GetQuestionsInfo,
     variables: {
       ...queryVariables,
+      creatorId: { equals: userId },
     },
   };
   const submissionsQuery = {

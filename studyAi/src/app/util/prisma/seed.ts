@@ -22,7 +22,6 @@ async function main() {
         tags: [],
         school: "",
         questionData: {
-          id: new ObjectId().toString(),
           generated: 0,
           answered: 0,
         },
