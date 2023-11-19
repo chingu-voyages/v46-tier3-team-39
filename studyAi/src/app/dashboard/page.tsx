@@ -119,7 +119,6 @@ export default async function DashboardPage() {
       }}
       usePadding
     >
-      {/* <QuestionEditor /> */}
       <div className="grid grid-cols-1 md:grid-cols-3 p-5 m-5 md:gap-5 w-full sm:gap-y-5">
         <div className="col-span-1 border p-5 md:col-span-1">
           {/* 1 */}
