@@ -15,14 +15,18 @@ const questions: Omit<Question, "id" | "creatorId" | "dateCreated">[] = [
     questionType: "Short Answer",
     tags: ["Science", "Chemistry"],
     questionInfo: {
+      id: new ObjectId().toString(),
       title: "Molecular Compound",
       description: "What is the molecular compound of water?",
       options: [],
     },
     answer: {
+      id: new ObjectId().toString(),
+
       correctAnswer: createOptions(["H20"]),
     },
     likeCounter: {
+      id: new ObjectId().toString(),
       likes: 1,
       dislikes: 0,
     },
@@ -32,6 +36,7 @@ const questions: Omit<Question, "id" | "creatorId" | "dateCreated">[] = [
     questionType: "Multiple Choice",
     tags: ["Maths", "Technology"],
     questionInfo: {
+      id: new ObjectId().toString(),
       title: "Recursion",
       description: "When does recursion end?",
       options: createOptions([
@@ -41,9 +46,11 @@ const questions: Omit<Question, "id" | "creatorId" | "dateCreated">[] = [
       ]),
     },
     answer: {
+      id: new ObjectId().toString(),
       correctAnswer: createOptions(["When we reach base case."]),
     },
     likeCounter: {
+      id: new ObjectId().toString(),
       likes: 1,
       dislikes: 0,
     },
@@ -53,15 +60,18 @@ const questions: Omit<Question, "id" | "creatorId" | "dateCreated">[] = [
     questionType: "Select Multiple",
     tags: ["Science", "Chemistry"],
     questionInfo: {
+      id: new ObjectId().toString(),
       title: "Molecular Compound",
       description:
         "Which of the following elements are found in the molecular formula H2O (water)?",
       options: createOptions(["Carbon", "Nitrogen", "Hydrogen", "Oxygen"]),
     },
     answer: {
+      id: new ObjectId().toString(),
       correctAnswer: createOptions(["Hydrogen", "Oxygen"]),
     },
     likeCounter: {
+      id: new ObjectId().toString(),
       likes: 1,
       dislikes: 0,
     },
@@ -71,16 +81,16 @@ const questions: Omit<Question, "id" | "creatorId" | "dateCreated">[] = [
 
 export const allQuestions = async () => {
   const allUserIds = await prismaDb.user.findMany();
-  const allUserQuestions= [];
-  const subscribers = []
+  const allUserQuestions = [];
+  const subscribers = [];
 
   for (const user of allUserIds) {
-    subscribers.push({ email: user.email })
+    subscribers.push({ email: user.email });
     for (const question of questions) {
       const questionData = { creatorId: user.id, ...question };
       allUserQuestions.push(questionData);
     }
   }
 
-  return {allUserQuestions, subscribers};
+  return { allUserQuestions, subscribers };
 };

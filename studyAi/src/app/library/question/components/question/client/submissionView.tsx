@@ -15,11 +15,13 @@ const getSubmissionByQuestionId = gql(`
     ) {
       id
       time {
+        id
         timeType
         timeTaken
         totalTimeGiven
       }
       score {
+        id
         maxScore
         actualScore
       }

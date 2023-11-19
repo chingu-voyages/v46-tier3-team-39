@@ -23,6 +23,7 @@ import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
 import { gql } from "../../../../../graphql/generated";
 import { useMutation } from "@apollo/client";
 import { useSession } from "next-auth/react";
+import ObjectID from "bson-objectid";
 const AddQuestion = gql(`
   mutation CreateOneQuestionResolver(
     $creatorId: String!,
@@ -43,7 +44,7 @@ const AddQuestion = gql(`
         likeCounter: $likeCounter,
         private: $private
       }
-      )
+    )
     {
       id
     }
@@ -208,6 +209,7 @@ const QuestionEditForm = () => {
               ...questionData.questionInfo,
             }
           : {
+              id: ObjectID().toString(),
               title: "",
               description: "",
               options: [],
@@ -216,12 +218,14 @@ const QuestionEditForm = () => {
       creatorId: creatorId ? creatorId : "",
       likeCounter: {
         set: {
+          id: ObjectID().toString(),
           likes: 0,
           dislikes: 0,
         },
       },
       answer: {
         set: {
+          id: ObjectID().toString(),
           correctAnswer: questionData?.answer?.correctAnswer
             ? questionData?.answer?.correctAnswer
             : [],

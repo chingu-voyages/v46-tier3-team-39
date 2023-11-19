@@ -16,6 +16,7 @@ const QuestionQueryById = gql(`
       questionType
       tags
       questionInfo {
+        id
         title
         description
         options {
@@ -24,6 +25,7 @@ const QuestionQueryById = gql(`
         }
       }
       likeCounter {
+        id
         likes
         dislikes
       }

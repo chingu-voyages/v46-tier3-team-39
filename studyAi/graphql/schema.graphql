@@ -512,6 +512,7 @@ type AggregateVerificationToken {
 
 type AnswerData {
   correctAnswer: [AnswerOption!]!
+  id: String!
 }
 
 input AnswerDataCompositeFilter {
@@ -526,14 +527,17 @@ input AnswerDataCreateEnvelopeInput {
 
 input AnswerDataCreateInput {
   correctAnswer: [AnswerOptionCreateInput!]
+  id: String!
 }
 
 input AnswerDataObjectEqualityInput {
   correctAnswer: [AnswerOptionObjectEqualityInput!]
+  id: String!
 }
 
 input AnswerDataOrderByInput {
   correctAnswer: AnswerOptionOrderByCompositeAggregateInput
+  id: SortOrder
 }
 
 input AnswerDataUpdateEnvelopeInput {
@@ -543,6 +547,7 @@ input AnswerDataUpdateEnvelopeInput {
 
 input AnswerDataUpdateInput {
   correctAnswer: [AnswerOptionCreateInput!]
+  id: StringFieldUpdateOperationsInput
 }
 
 input AnswerDataWhereInput {
@@ -550,6 +555,7 @@ input AnswerDataWhereInput {
   NOT: [AnswerDataWhereInput!]
   OR: [AnswerDataWhereInput!]
   correctAnswer: [AnswerOptionObjectEqualityInput!]
+  id: StringFilter
 }
 
 type AnswerOption {
@@ -723,6 +729,7 @@ input IntWithAggregatesFilter {
 
 type LikeCounter {
   dislikes: Int!
+  id: String!
   likes: Int!
 }
 
@@ -738,16 +745,19 @@ input LikeCounterCreateEnvelopeInput {
 
 input LikeCounterCreateInput {
   dislikes: Int!
+  id: String!
   likes: Int!
 }
 
 input LikeCounterObjectEqualityInput {
   dislikes: Int!
+  id: String!
   likes: Int!
 }
 
 input LikeCounterOrderByInput {
   dislikes: SortOrder
+  id: SortOrder
   likes: SortOrder
 }
 
@@ -758,6 +768,7 @@ input LikeCounterUpdateEnvelopeInput {
 
 input LikeCounterUpdateInput {
   dislikes: IntFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
   likes: IntFieldUpdateOperationsInput
 }
 
@@ -766,17 +777,20 @@ input LikeCounterWhereInput {
   NOT: [LikeCounterWhereInput!]
   OR: [LikeCounterWhereInput!]
   dislikes: IntFilter
+  id: StringFilter
   likes: IntFilter
 }
 
 type LocationData {
   coordinates: [Float!]!
+  id: String!
   locationName: String!
   locationType: String!
 }
 
 input LocationDataCreateInput {
   coordinates: LocationDataCreatecoordinatesInput
+  id: String!
   locationName: String!
   locationType: String!
 }
@@ -804,18 +818,21 @@ input LocationDataNullableUpdateEnvelopeInput {
 
 input LocationDataObjectEqualityInput {
   coordinates: [Float!]
+  id: String!
   locationName: String!
   locationType: String!
 }
 
 input LocationDataOrderByInput {
   coordinates: SortOrder
+  id: SortOrder
   locationName: SortOrder
   locationType: SortOrder
 }
 
 input LocationDataUpdateInput {
   coordinates: LocationDataUpdatecoordinatesInput
+  id: StringFieldUpdateOperationsInput
   locationName: StringFieldUpdateOperationsInput
   locationType: StringFieldUpdateOperationsInput
 }
@@ -835,6 +852,7 @@ input LocationDataWhereInput {
   NOT: [LocationDataWhereInput!]
   OR: [LocationDataWhereInput!]
   coordinates: FloatNullableListFilter
+  id: StringFilter
   locationName: StringFilter
   locationType: StringFilter
 }
@@ -1318,6 +1336,7 @@ type QuestionGroupBy {
 
 type QuestionInfoData {
   description: String!
+  id: String!
   options: [AnswerOption!]!
   title: String!
 }
@@ -1334,18 +1353,21 @@ input QuestionInfoDataCreateEnvelopeInput {
 
 input QuestionInfoDataCreateInput {
   description: String!
+  id: String!
   options: [AnswerOptionCreateInput!]
   title: String!
 }
 
 input QuestionInfoDataObjectEqualityInput {
   description: String!
+  id: String!
   options: [AnswerOptionObjectEqualityInput!]
   title: String!
 }
 
 input QuestionInfoDataOrderByInput {
   description: SortOrder
+  id: SortOrder
   options: AnswerOptionOrderByCompositeAggregateInput
   title: SortOrder
 }
@@ -1357,6 +1379,7 @@ input QuestionInfoDataUpdateEnvelopeInput {
 
 input QuestionInfoDataUpdateInput {
   description: StringFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
   options: [AnswerOptionCreateInput!]
   title: StringFieldUpdateOperationsInput
 }
@@ -1366,6 +1389,7 @@ input QuestionInfoDataWhereInput {
   NOT: [QuestionInfoDataWhereInput!]
   OR: [QuestionInfoDataWhereInput!]
   description: StringFilter
+  id: StringFilter
   options: [AnswerOptionObjectEqualityInput!]
   title: StringFilter
 }
@@ -2354,6 +2378,7 @@ input QuizWhereUniqueInput {
 
 type Score {
   actualScore: Int!
+  id: String!
   maxScore: Int!
 }
 
@@ -2369,6 +2394,7 @@ input ScoreCreateEnvelopeInput {
 
 input ScoreCreateInput {
   actualScore: Int!
+  id: String!
   maxScore: Int!
 }
 
@@ -2391,11 +2417,13 @@ input ScoreNullableUpdateEnvelopeInput {
 
 input ScoreObjectEqualityInput {
   actualScore: Int!
+  id: String!
   maxScore: Int!
 }
 
 input ScoreOrderByInput {
   actualScore: SortOrder
+  id: SortOrder
   maxScore: SortOrder
 }
 
@@ -2406,6 +2434,7 @@ input ScoreUpdateEnvelopeInput {
 
 input ScoreUpdateInput {
   actualScore: IntFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
   maxScore: IntFieldUpdateOperationsInput
 }
 
@@ -2419,6 +2448,7 @@ input ScoreWhereInput {
   NOT: [ScoreWhereInput!]
   OR: [ScoreWhereInput!]
   actualScore: IntFilter
+  id: StringFilter
   maxScore: IntFilter
 }
 
@@ -2838,12 +2868,14 @@ input SubscriberWhereUniqueInput {
 }
 
 type TimeOptions {
+  id: String
   timeTaken: Int
   timeType: String!
   totalTimeGiven: Int
 }
 
 input TimeOptionsCreateInput {
+  id: String
   timeTaken: Int
   timeType: String!
   totalTimeGiven: Int
@@ -2867,18 +2899,21 @@ input TimeOptionsNullableUpdateEnvelopeInput {
 }
 
 input TimeOptionsObjectEqualityInput {
+  id: String
   timeTaken: Int
   timeType: String!
   totalTimeGiven: Int
 }
 
 input TimeOptionsOrderByInput {
+  id: SortOrder
   timeTaken: SortOrder
   timeType: SortOrder
   totalTimeGiven: SortOrder
 }
 
 input TimeOptionsUpdateInput {
+  id: NullableStringFieldUpdateOperationsInput
   timeTaken: NullableIntFieldUpdateOperationsInput
   timeType: StringFieldUpdateOperationsInput
   totalTimeGiven: NullableIntFieldUpdateOperationsInput
@@ -2893,6 +2928,7 @@ input TimeOptionsWhereInput {
   AND: [TimeOptionsWhereInput!]
   NOT: [TimeOptionsWhereInput!]
   OR: [TimeOptionsWhereInput!]
+  id: StringNullableFilter
   timeTaken: IntNullableFilter
   timeType: StringFilter
   totalTimeGiven: IntNullableFilter
@@ -3294,6 +3330,7 @@ input UserOrderByWithRelationInput {
 type UserQuestionData {
   answered: Int!
   generated: Int!
+  id: String!
 }
 
 input UserQuestionDataCompositeFilter {
@@ -3309,16 +3346,19 @@ input UserQuestionDataCreateEnvelopeInput {
 input UserQuestionDataCreateInput {
   answered: Int
   generated: Int
+  id: String!
 }
 
 input UserQuestionDataObjectEqualityInput {
   answered: Int!
   generated: Int!
+  id: String!
 }
 
 input UserQuestionDataOrderByInput {
   answered: SortOrder
   generated: SortOrder
+  id: SortOrder
 }
 
 input UserQuestionDataUpdateEnvelopeInput {
@@ -3329,6 +3369,7 @@ input UserQuestionDataUpdateEnvelopeInput {
 input UserQuestionDataUpdateInput {
   answered: IntFieldUpdateOperationsInput
   generated: IntFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
 }
 
 input UserQuestionDataWhereInput {
@@ -3337,6 +3378,7 @@ input UserQuestionDataWhereInput {
   OR: [UserQuestionDataWhereInput!]
   answered: IntFilter
   generated: IntFilter
+  id: StringFilter
 }
 
 input UserRelationFilter {
