@@ -35,8 +35,8 @@ const Store = createStore({
           getState,
         }),
     deleteItems:
-      () =>
-      async ({ setState, getState }, items: Question["id"][]) =>
+      ( items: Question["id"][]) =>
+      async ({ setState, getState }) =>
         deleteItems({ items, setState, getState }),
   },
   handlers: {

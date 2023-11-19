@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useQuestions } from "@/app/stores/questionStore";
-import { useParams, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Share } from "@mui/icons-material";
 import { faThumbsUp, faThumbsDown } from "@fortawesome/free-regular-svg-icons";
@@ -27,6 +27,7 @@ import {
 import { faCheck, faLink } from "@fortawesome/free-solid-svg-icons";
 import useDropdown from "@/app/util/hooks/useDropdown";
 import BtnLabelDropdown from "@/app/util/components/btnLabelDropdown/btnLabelDropdown";
+import { useQuestionId } from "../../../context/QuestionIdContext";
 const platformsToShare = [
   {
     platform: "link",
@@ -79,7 +80,8 @@ const ShareBtn = () => {
     open,
   } = useDropdown();
   const [copied, setCopied] = useState(false);
-  const fullUrl = origin + pathName;
+
+  const fullUrl = origin && pathName ? origin + pathName : "";
   const onShareClick = (
     e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
   ) => {
@@ -199,10 +201,13 @@ const QuestionActionBtns = () => {
   );
 };
 const LikeCounterBtns = () => {
-  const params = useParams();
   const questions = useQuestions()[0].data;
+  const questionIdData = useQuestionId();
+  const questionId = questionIdData?.questionId;
   const question =
-    params.id && typeof params.id === "string" ? questions.map[params.id] : null;
+    questionId && typeof questionId === "string"
+      ? questions.map[questionId]
+      : null;
   return (
     <div className="flex items-center mr-1">
       <Button
@@ -235,10 +240,13 @@ const LikeCounterBtns = () => {
   );
 };
 export const QuestionView = () => {
-  const params = useParams();
   const questions = useQuestions()[0].data;
+  const questionIdData = useQuestionId();
+  const questionId = questionIdData?.questionId;
   const question =
-    params.id && typeof params.id === "string" ? questions.map[params.id] : null;
+    questionId && typeof questionId === "string"
+      ? questions.map[questionId]
+      : null;
 
   if (!question) return <></>;
   return (

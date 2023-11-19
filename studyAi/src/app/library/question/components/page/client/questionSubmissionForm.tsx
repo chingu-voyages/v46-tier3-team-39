@@ -1,12 +1,12 @@
 "use client";
 import React, { useRef } from "react";
 import { useQuestions } from "@/app/stores/questionStore";
-import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { gql } from "../../../../../../../graphql/generated";
 import { useMutation } from "@apollo/client";
 import createQuestionSubmissionDoc from "../utils/createQuestionSubmission";
 import { useQuestionSubmissions } from "@/app/stores/questionSubmissionsStore";
+import { useQuestionId } from "../../../context/QuestionIdContext";
 const UploadNewQuestionSubmissionQuery = gql(`
   mutation UploadNewQuestionSubmission($questionSubmission: QuestionSubmissionCreateInput!){
     createOneQuestionSubmission(
@@ -19,11 +19,14 @@ const UploadNewQuestionSubmissionQuery = gql(`
 const QuestionFormWrapper = ({ children }: { children: React.ReactNode }) => {
   // define hooks
   const session = useSession();
-  const params = useParams();
   const questions = useQuestions()[0].data;
   const isSubmitting = useRef<boolean | null>(null);
+  const questionIdData = useQuestionId();
+  const questionId = questionIdData?.questionId;
   const question =
-    params.id && typeof params.id === "string" ? questions.map[params.id] : null;
+    questionId && typeof questionId === "string"
+      ? questions.map[questionId]
+      : null;
   const [mutationQuery, { loading, error, data }] = useMutation(
     UploadNewQuestionSubmissionQuery
   );

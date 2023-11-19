@@ -9,13 +9,12 @@ import { protectRouteSSR } from "@/app/api/utils/sessionFuncs";
 import gql from "graphql-tag";
 
 const QueryPublicQuestions = gql(`
-  query FindManyQuestionResolver(
-    $private: String
+  query FindPublicQuestions(
     $dateQuery: DateTimeFilter
   ) {
     questions(
       where: {
-        private: { equals: $private }
+        private: { equals: false }
         dateCreated: $dateQuery
       }
       orderBy: { dateCreated: desc }
@@ -53,7 +52,7 @@ export default async function QuestionLibrary() {
         <div className={styles.layout}>
           <h1 className={styles.h1}>Question Library</h1>
           <QuestionsContainer initialItems={data}>
-            <QuestionList allPublicQuestions={true}/>
+            <QuestionList allPublicQuestions={true} />
           </QuestionsContainer>
         </div>
       </NavigationWrapper>
