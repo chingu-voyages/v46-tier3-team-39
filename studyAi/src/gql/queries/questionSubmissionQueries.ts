@@ -1,11 +1,18 @@
 import { gql } from "../../../graphql/generated";
-export const GetSubmissionByQuestionId = gql(`
-  query GetQuestionSubmissionByQuestionId($questionId: String, $userId: String ) {
+export const QueryFullQuestionSubmissions = gql(`
+  query QueryFullQuestionSubmissions(
+    $userId: String!
+    $dateQuery: DateTimeFilter
+    $questionId: StringFilter
+    $orderBy: [QuestionSubmissionOrderByWithRelationInput!]
+  ) {
     questionSubmissions(
       where: {
         userId: { equals: $userId }
-        questionId: { equals: $questionId }
+        dateCreated: $dateQuery
+        questionId: $questionId
       }
+      orderBy: $orderBy
     ) {
       id
       time {
@@ -24,17 +31,20 @@ export const GetSubmissionByQuestionId = gql(`
     }
   }
 `);
-export const QueryQuestionSubmissions = gql(`
-  query QueryQuestionSubmissions(
-    $userId: String
+export const QueryQuestionSubmissionsIdOnly = gql(`
+  query QueryQuestionSubmissionsId(
+    $userId: String!
     $dateQuery: DateTimeFilter
+    $questionId: StringFilter
+    $orderBy: [QuestionSubmissionOrderByWithRelationInput!]
   ) {
     questionSubmissions(
       where: {
         userId: { equals: $userId }
         dateCreated: $dateQuery
+        questionId: $questionId
       }
-      orderBy: { dateCreated: desc }
+      orderBy: $orderBy
     ) {
       id
     }

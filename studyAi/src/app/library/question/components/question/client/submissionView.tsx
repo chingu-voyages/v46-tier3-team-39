@@ -3,9 +3,10 @@ import { useSession } from "next-auth/react";
 import { useQuery } from "@apollo/client";
 import { Container } from "../../page/server/containerBar";
 import { useQuestionId } from "../../../context/QuestionIdContext";
-import { GetSubmissionByQuestionId } from "@/gql/queries/questionSubmissionQueries";
+import { QueryFullQuestionSubmissions } from "@/gql/queries/questionSubmissionQueries";
 import { QuestionSubmission } from "@prisma/client";
 import SubmissionsListItem from "../../submissions/SubmissionListItem";
+import { SortOrder } from "../../../../../../../graphql/generated/graphql";
 export const SubmissionView = () => {
   const { data: session } = useSession();
   const questionIdData = useQuestionId();
@@ -14,11 +15,14 @@ export const SubmissionView = () => {
   const userId = session ? session.user.id : "";
   const queryOptions = {
     variables: {
-      questionId: questionId === "string" ? questionId : "",
+      questionId: { equals: questionId === "string" ? questionId : "" },
       userId: userId,
+      orderBy: {
+        dateCreated: "desc" as SortOrder,
+      },
     },
   };
-  const { data: result } = useQuery(GetSubmissionByQuestionId, queryOptions);
+  const { data: result } = useQuery(QueryFullQuestionSubmissions, queryOptions);
   const data = result as {
     questionSubmissions:
       | Partial<QuestionSubmission>[]

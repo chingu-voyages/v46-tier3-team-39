@@ -8,27 +8,51 @@ import { GetFullQuestion } from "@/gql/queries/questionQueries";
 import determineOriginUrl from "@/app/util/parsers/determineOriginUrl";
 import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
 import QuestionPageContainer from "../components/page/client/questionPageContainer";
+import { QuestionSubmissionsContainerWrapper } from "@/app/stores/questionSubmissionsStore";
+import { QuestionSubmission } from "@prisma/client";
+import { QueryFullQuestionSubmissions } from "@/gql/queries/questionSubmissionQueries";
+
 export default async function QuestionPage({
   params,
 }: {
   params: { id: string };
 }) {
   const questionId = params.id;
-  const query = {
+  const questionQuery = {
     query: GetFullQuestion,
     variables: { id: questionId },
+  };
+  const submissionQuery = {
+    query: QueryFullQuestionSubmissions,
   };
   try {
     const session = await getServerSession(options);
     const client = ServerGraphQLClient(session);
-    const { data: result } = await client.query(query);
-    const data = result.question as (Partial<Question> & { id: string }) | null;
-    if (!data?.id) return <></>;
+    const questionPromise = client.query(questionQuery);
+    const submissionPromise = client.query(submissionQuery);
+    const [{ data: question }, { data: submission }] = await Promise.all([
+      questionPromise,
+      submissionPromise,
+    ]);
+    const questionData = question.question as
+      | (Partial<Question> & { id: string })
+      | null;
+    const submissionData =
+      submission.questionSubmissions as (Partial<QuestionSubmission> & {
+        questionId: string;
+        id: string;
+      })[];
+    if (!questionData?.id) return <></>;
     return (
-      <QuestionsContainer initialItems={data ? [data] : []}>
-        <QuestionIdProvider questionId={data.id}>
-          <QuestionPageContainer />
-        </QuestionIdProvider>
+      <QuestionsContainer initialItems={questionData ? [questionData] : []}>
+        <QuestionSubmissionsContainerWrapper
+          initialItems={submissionData ? submissionData : []}
+          questionId={questionId}
+        >
+          <QuestionIdProvider questionId={questionData.id}>
+            <QuestionPageContainer />
+          </QuestionIdProvider>
+        </QuestionSubmissionsContainerWrapper>
       </QuestionsContainer>
     );
   } catch (err) {
