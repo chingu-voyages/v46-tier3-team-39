@@ -1,6 +1,12 @@
 import { Logo } from "../../logo/client/Logo";
 import { SubscribeAction } from "../client/subscribeAction";
 import NextLink from "next/link";
+import EmailIcon from "@mui/icons-material/Email";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import TwitterIcon from "@mui/icons-material/Twitter";
+import MessageIcon from "@mui/icons-material/Message";
+import Link from "next/link";
+
 export const footerLinks = [];
 export const footerServiceLinks = [
   {
@@ -57,6 +63,36 @@ export const FooterBody = () => {
             </NextLink>
           ))}
         </div>
+        {/* <div >
+          <Link
+            href={
+              "mailto:?subject=StudyAI&body=Check out this cool study app I found."
+            }
+          >
+            <EmailIcon />
+          </Link>
+          <Link
+            href={
+              "whatsapp://send?text=Check out this cool study app I found StudyAI."
+            }
+          >
+            <WhatsAppIcon />
+          </Link>
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href={
+              "https://twitter.com/share?url=&text=Check out this cool study app I found StudyAI."
+            }
+          >
+            <TwitterIcon />
+          </a>
+          <Link
+            href={"sms:?&body=Check out this cool study app I found StudyAI."}
+          >
+            <MessageIcon />
+          </Link>
+        </div> */}
       </div>
       <PrivacyPolicyWrapper>
         <SubscribeAction />
