@@ -39,16 +39,16 @@ const Process = async () => {
         </div>
         <div className="sm:w-1/3 max-w-md mx-auto bg-gray-200 p-5 border-2">
           <CubeIcon size="xl" />
-          {!session ? (
-            <>
+          {/* {!session ? (
+            <> */}
               <h1 className="text-3xl sm:text-5xl font-bold my-4">Join us</h1>
               <p>Contribute and use our endlessly growing technology</p>
-              <Link href={"/auth/signup"}>
+              <Link href={(session) ? "/dashboard" : "/auth/signup"}>
                 <button className="border-2 py-3 px-6 sm:px-8 sm:py-4">
                   Sign Up
                 </button>
               </Link>
-            </>
+            {/* </>
           ) : (
             <>
               <h1 className="text-3xl sm:text-5xl font-bold my-4">
@@ -87,7 +87,7 @@ const Process = async () => {
                 <MessageIcon />
               </Link>
             </>
-          )}
+          )} */}
         </div>
       </div>
     </div>

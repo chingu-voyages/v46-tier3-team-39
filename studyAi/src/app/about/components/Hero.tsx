@@ -21,13 +21,11 @@ const Hero = async () => {
             Learn More
           </button>
         </Link>
-        {!session && (
-          <Link href={"/auth/signup"}>
+          <Link href={(session) ? "/dashboard" : "/auth/signup"}>
             <button className="border-2 py-3 px-6 sm:px-8 sm:py-4">
-              Sign Up
+              Get Started
             </button>
           </Link>
-        )}
       </div>
     </div>
   );
