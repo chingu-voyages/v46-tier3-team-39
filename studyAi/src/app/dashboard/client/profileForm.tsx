@@ -201,14 +201,14 @@ const ProfileForm = ({
     <form className="w-full" onSubmit={handleSubmit}>
       <div className="mb-5 flex flex-col gap-2">
         {/* 1.Location */}
-        <div className="flex items-center">
+        {/* <div className="flex items-center">
           <div className="mr-2">
             <FaLocationDot />
           </div>
           <div className="flex flex-row gap-1 items-center w-full">
             {locationElement}
           </div>
-        </div>
+        </div> */}
         {/* 2. Hat */}
         <div className="flex items-center">
           <div className="mr-2">
