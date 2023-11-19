@@ -3,21 +3,8 @@ import { useQuery } from "@apollo/client";
 import { Question } from "../../../../../../../prisma/generated/type-graphql";
 import { useQuestions } from "@/app/stores/questionStore";
 import { Container } from "../../page/server/containerBar";
-import { gql } from "../../../../../../../graphql/generated";
 import { useQuestionId } from "../../../context/QuestionIdContext";
-const getAnswerById = gql(`
-  query GetAnswerById($id: String) {
-    question(where: { id: $id }) {
-      id
-      answer {
-        correctAnswer {
-          id
-          value
-        }
-      }
-    }
-  }
-`);
+import { GetQuestionAnswerById } from "@/gql/queries/questionQueries";
 const SolutionView = () => {
   const questions = useQuestions()[0].data;
   const questionIdData = useQuestionId();
@@ -26,7 +13,7 @@ const SolutionView = () => {
     loading,
     error,
     data: queryData,
-  } = useQuery(getAnswerById, {
+  } = useQuery(GetQuestionAnswerById, {
     variables: { id: questionId },
   });
   const answerData = queryData as

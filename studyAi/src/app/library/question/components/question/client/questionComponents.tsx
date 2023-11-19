@@ -3,6 +3,15 @@ import ContainerBar, { Container } from "../../page/server/containerBar";
 import capitalizeEveryWord from "@/app/util/parsers/capitalizeEveryWord";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import React, { useState } from "react";
+import { useSession } from "next-auth/react";
+import { useQuestions } from "@/app/stores/questionStore";
+import { containerTabs, InnerContainer } from "../server/questionViewContainer";
+import BtnLabelDropdown from "@/app/util/components/btnLabelDropdown/btnLabelDropdown";
+import QuestionModalWrapper from "@/app/util/components/questionModal/questionModalWrapper";
+import { useQuestionId } from "../../../context/QuestionIdContext";
+import { useMutation } from "@apollo/client";
+import { DeleteQuestionMutation } from "@/gql/mutations/questionMutation";
 import {
   Alert,
   Button,
@@ -12,25 +21,7 @@ import {
   Tabs,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
-import { useSession } from "next-auth/react";
-import { useQuestions } from "@/app/stores/questionStore";
-import { containerTabs, InnerContainer } from "../server/questionViewContainer";
-import BtnLabelDropdown from "@/app/util/components/btnLabelDropdown/btnLabelDropdown";
-import QuestionModalWrapper from "@/app/util/components/questionModal/questionModalWrapper";
-import { useQuestionId } from "../../../context/QuestionIdContext";
-import { gql } from "../../../../../../../graphql/generated";
-import { useMutation } from "@apollo/client";
-export const DeleteQuestionMutation = gql(`
-  mutation DeleteSingleQuestion($id: String!, $userId: String!) {
-    deleteOneQuestion(
-      where: { id: $id, creatorId: { equals: $userId }  }
-    ) 
-    {
-      id
-    }
-  }
-`);
+
 const EditBtn = ({
   btnStyles,
   btnClassNames,

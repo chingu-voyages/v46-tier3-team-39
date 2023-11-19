@@ -20,36 +20,10 @@ import {
 } from "@mui/material";
 import { FileUploadOutlined } from "@mui/icons-material";
 import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
-import { gql } from "../../../../../graphql/generated";
 import { useMutation } from "@apollo/client";
 import { useSession } from "next-auth/react";
 import ObjectID from "bson-objectid";
-const AddQuestion = gql(`
-  mutation CreateOneQuestionResolver(
-    $creatorId: String!,
-    $questionType: String!,
-    $tags: QuestionCreatetagsInput,
-    $questionInfo: QuestionInfoDataCreateEnvelopeInput!,
-    $answer: AnswerDataCreateEnvelopeInput!,
-    $likeCounter: LikeCounterCreateEnvelopeInput!,
-    $private: Boolean!
-  ){
-    createOneQuestion(
-      data: {
-        creatorId: $creatorId,
-        questionType: $questionType,
-        tags: $tags,
-        questionInfo: $questionInfo,
-        answer: $answer,
-        likeCounter: $likeCounter,
-        private: $private
-      }
-    )
-    {
-      id
-    }
-  }
-`);
+import { AddQuestionMutation } from "@/gql/mutations/questionMutation";
 export interface QuestionProps {
   questionData: Partial<Question>;
   closeHandler: () => void;
@@ -162,7 +136,7 @@ const QuestionEditFormLoadingBanner = ({ text }: { text: string }) => {
 };
 const QuestionEditForm = () => {
   const modalData = useQuestionModal();
-  const [mutationQuery, { loading, error, data }] = useMutation(AddQuestion);
+  const [mutationQuery, { loading, error, data }] = useMutation(AddQuestionMutation);
   const session = useSession();
   const creatorId = session?.data?.user.id;
   if (!modalData) return <></>;

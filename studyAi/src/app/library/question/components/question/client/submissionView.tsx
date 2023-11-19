@@ -1,35 +1,11 @@
 "use client";
-import { QuestionSubmission } from "../../../../../../../prisma/generated/type-graphql";
+import { QuestionSubmission } from "@prisma/client";
 import { useQuery } from "@apollo/client";
 import { Container } from "../../page/server/containerBar";
 import { useSession } from "next-auth/react";
-import { gql } from "../../../../../../../graphql/generated";
 import { useQuestionId } from "../../../context/QuestionIdContext";
-const getSubmissionByQuestionId = gql(`
-  query GetQuestionSubmissionByQuestionId($questionId: String, $userId: String ) {
-    questionSubmissions(
-      where: {
-        userId: { equals: $userId }
-        questionId: { equals: $questionId }
-      }
-    ) {
-      id
-      time {
-        id
-        timeType
-        timeTaken
-        totalTimeGiven
-      }
-      score {
-        id
-        maxScore
-        actualScore
-      }
-      questionId
-      userId
-    }
-  }
-`);
+import SubmissionsListItem from "../../submissions/SubmissionListItem";
+import { GetSubmissionByQuestionId } from "@/gql/queries/questionSubmissionQueries";
 export const SubmissionView = () => {
   const { data: session } = useSession();
   const questionIdData = useQuestionId();
@@ -42,7 +18,7 @@ export const SubmissionView = () => {
       userId: userId,
     },
   };
-  const { data: result } = useQuery(getSubmissionByQuestionId, queryOptions);
+  const { data: result } = useQuery(GetSubmissionByQuestionId, queryOptions);
   const data = result as {
     questionSubmissions:
       | Partial<QuestionSubmission>[]
@@ -58,7 +34,9 @@ export const SubmissionView = () => {
   return (
     <Container overflow className="px-[5%] py-5 grow">
       {Array.isArray(data.questionSubmissions) &&
-        data.questionSubmissions.map((doc) => <div key={doc.id}>{}</div>)}
+        data.questionSubmissions.map((doc) => (
+          <SubmissionsListItem data={doc} />
+        ))}
       {(!Array.isArray(data.questionSubmissions) ||
         data.questionSubmissions.length <= 0) &&
         noDataPlaceholder}

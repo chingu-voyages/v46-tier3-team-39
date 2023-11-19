@@ -172,7 +172,7 @@ function TimerInput() {
         newValArr.reduce(
           (a, b, idx) => a + timeLabelData[idx - 1].abbrev + " " + b
         ) + timeLabelData[timeLabelData.length - 1].abbrev;
-      //we can do this because we are using 
+      //we can do this because we are using
       //updating from the same component
       unstable_batchedUpdates(() => {
         //update new total time

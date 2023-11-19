@@ -1,37 +1,13 @@
-import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
-import QuestionPageContainer from "../components/page/client/questionPageContainer";
 import { Question } from "../../../../../prisma/generated/type-graphql";
 import { QuestionsContainer } from "@/app/stores/questionStore";
-import { gql } from "../../../../../graphql/generated";
 import { getServerSession } from "next-auth";
 import { options } from "@/authComponents/nextAuth/options";
 import { Metadata, ResolvingMetadata } from "next";
-import determineOriginUrl from "@/app/util/parsers/determineOriginUrl";
 import { QuestionIdProvider } from "../context/QuestionIdContext";
-const QuestionQueryById = gql(`
-  query GetFullQuestion($id: String) {
-    question(where: { id: $id }) {
-      id
-      creatorId
-      questionType
-      tags
-      questionInfo {
-        id
-        title
-        description
-        options {
-          id
-          value
-        }
-      }
-      likeCounter {
-        id
-        likes
-        dislikes
-      }
-    }
-  }
-`);
+import { GetFullQuestion } from "@/gql/queries/questionQueries";
+import determineOriginUrl from "@/app/util/parsers/determineOriginUrl";
+import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
+import QuestionPageContainer from "../components/page/client/questionPageContainer";
 export default async function QuestionPage({
   params,
 }: {
@@ -39,7 +15,7 @@ export default async function QuestionPage({
 }) {
   const questionId = params.id;
   const query = {
-    query: QuestionQueryById,
+    query: GetFullQuestion,
     variables: { id: questionId },
   };
   try {
@@ -70,7 +46,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const questionId = params.id;
   const query = {
-    query: QuestionQueryById,
+    query: GetFullQuestion,
     variables: { id: questionId },
   };
   const session = await getServerSession(options);

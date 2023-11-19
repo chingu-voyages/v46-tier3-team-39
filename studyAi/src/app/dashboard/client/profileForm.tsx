@@ -1,40 +1,13 @@
 "use client";
-import { UserProfile } from "@/app/util/components/navigation/client/userProfile";
 import { FaLocationDot, FaTag, FaGraduationCap } from "react-icons/fa6";
 import { useMutation } from "@apollo/client";
 import { useSession } from "next-auth/react";
 import { Dispatch, SetStateAction, useRef, useState } from "react";
-import { gql } from "../../../../graphql/generated";
 import TextField from "@mui/material/TextField";
 import CreatableSelect from "react-select/creatable";
 import Chip from "@mui/material/Chip";
 import { Session } from "next-auth";
-
-const UpdateUserProfileInfo = gql(`
-  mutation UpdateUserProfileInfo (
-    $id: String!,
-    $tags: UserUpdatetagsInput,
-    $name: StringFieldUpdateOperationsInput,
-    $school: NullableStringFieldUpdateOperationsInput,
-    $location: LocationDataNullableUpdateEnvelopeInput
-  ) {
-    updateOneUser(
-      where: { id: $id },
-      data: {
-        tags: $tags,
-        name: $name,
-        school: $school
-        location: $location
-      },
-    )
-    {
-      tags
-      name
-      school
-    }
-  }
-`);
-
+import { UpdateUserProfileInfo } from "@/gql/queries/userQueries";
 const ProfileForm = ({
   isEditable,
   formData,
@@ -74,27 +47,7 @@ const ProfileForm = ({
   const [mutationQuery, { loading, error, data }] = useMutation(
     UpdateUserProfileInfo
   );
-  // console.log(data);
   const submitted = useRef(false);
-  // const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   submitted.current = true;
-  //   try {
-  //     submitted.current = false;
-  //   } catch (err) {
-  //     console.error(err);
-  //     submitted.current = false;
-  //   }
-  //   try {
-  //     const formData = new FormData(e.currentTarget);
-  //     const data = Object.fromEntries(formData.entries());
-  //     const { email, password, name } = data;
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
-  // console.log('location', location)
-  // console.log('tags', tags)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
