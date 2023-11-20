@@ -1,5 +1,5 @@
 "use client";
-import { QuestionSubmission, Score, TimeOptions } from "@prisma/client";
+import { QuestionSubmission } from "@prisma/client";
 import { memo } from "react";
 //since we're memoizing, so we define our custom logic comparison
 const arePropsEqual = (

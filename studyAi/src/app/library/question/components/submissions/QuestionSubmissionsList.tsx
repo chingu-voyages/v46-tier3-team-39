@@ -68,8 +68,8 @@ const QuestionSubmissionsList = ({ layout }: { layout: "page" | "tabbed" }) => {
   const userId = session ? session.user.id : "";
   const question = questionId ? questions.map[questionId] : null;
   const questionName = question?.questionInfo?.title;
-  //add skip and cursor logic
   const fetchItems = useCallback(async () => {
+    if (!questionId) return;
     const queryOptions = {
       variables: {
         questionId: { equals: questionId === "string" ? questionId : "" },
@@ -84,14 +84,26 @@ const QuestionSubmissionsList = ({ layout }: { layout: "page" | "tabbed" }) => {
       },
     };
     const { data: results } = await getSubmission(queryOptions);
-    if (!results) return;
-    return addOrUpdateItems(
+    if (!results) {
+      setCursor(null);
+      return [];
+    }
+    const newData = addOrUpdateItems(
       results.questionSubmissions as (Partial<QuestionSubmission> & {
         id: string;
         questionId: string;
       })[],
       "submitted"
     );
+    if (results.questionSubmissions.length <= 0) {
+      setCursor(null);
+      return results.questionSubmissions;
+    }
+    //means we have new items to update
+    const newArr = newData.submittedData.arr?.[questionId] || null;
+    const newNextCursor = newArr?.[newArr.length - 1]?.id || null;
+    setCursor(newNextCursor);
+    return results.questionSubmissions;
   }, [userId, questionId, addOrUpdateItems]);
   if (!questionId) return <></>;
   const data = questionSubmissionsArrMap[questionId];
@@ -103,11 +115,7 @@ const QuestionSubmissionsList = ({ layout }: { layout: "page" | "tabbed" }) => {
   return (
     <SubmissionListProvider layout={layout}>
       <PaginationWrapper
-        hasMore={
-          submissionsData?.questionSubmissions
-            ? submissionsData.questionSubmissions.length > 0
-            : false
-        }
+        hasMore={!!cursor}
         fetchMoreData={fetchItems}
         dataLength={data ? data.length : 0}
       >
