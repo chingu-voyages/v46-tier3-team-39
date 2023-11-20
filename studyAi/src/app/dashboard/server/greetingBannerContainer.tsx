@@ -5,50 +5,9 @@ import { sub } from "date-fns";
 import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
 import { Question } from "@prisma/client";
 import { QuestionSubmission } from "@prisma/client";
-import { gql } from "../../../../graphql/generated";
-export const QueryUserGeneratedQuestions = gql(`
-  query QueryUserGeneratedQuestions(
-    $userId: String
-    $dateQuery: DateTimeFilter
-    $cursor: QuestionWhereUniqueInput
-    $skip: Int
-  ) {
-    questions(
-      where: {
-        creatorId: { equals: $userId }
-        dateCreated: $dateQuery
-      }
-      orderBy: { dateCreated: desc }
-      take: 1000
-      cursor: $cursor
-      skip: $skip
-    ) {
-      id
-      questionType
-      tags
-      questionInfo{
-        title
-      }
-      private
-    }
-  }
-`);
-const QueryQuestionSubmissions = gql(`
-  query QueryQuestionSubmissions(
-    $userId: String
-    $dateQuery: DateTimeFilter
-  ) {
-    questionSubmissions(
-      where: {
-        userId: { equals: $userId }
-        dateCreated: $dateQuery
-      }
-      orderBy: { dateCreated: desc }
-    ) {
-      id
-    }
-  }
-`);
+import { GetQuestionsInfo } from "@/gql/queries/questionQueries";
+import { QueryQuestionSubmissionsIdOnly } from "@/gql/queries/questionSubmissionQueries";
+import { SortOrder } from "../../../../graphql/generated/graphql";
 const GreetingBannerContainer = async () => {
   const session = await getServerSession(options);
   const client = ServerGraphQLClient(session);
@@ -65,15 +24,19 @@ const GreetingBannerContainer = async () => {
       gte: weekPriorDate.toISOString(),
       lte: currDate.toISOString(),
     },
+    orderBy: {
+      dateCreated: "desc" as SortOrder,
+    },
   };
   const questionQuery = {
-    query: QueryUserGeneratedQuestions,
+    query: GetQuestionsInfo,
     variables: {
       ...queryVariables,
+      creatorId: { equals: userId },
     },
   };
   const submissionsQuery = {
-    query: QueryQuestionSubmissions,
+    query: QueryQuestionSubmissionsIdOnly,
     variables: {
       ...queryVariables,
     },

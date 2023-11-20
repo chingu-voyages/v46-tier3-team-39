@@ -16,6 +16,7 @@ import ObjectId from "bson-objectid";
 const chosenId = ObjectId().toString()
 const blankQuestion: Partial<Question> = {
   questionInfo: {
+    id: ObjectId().toString(),
     title: "Addition",
     description: "What is 1+1?",
     options: [
@@ -28,9 +29,10 @@ const blankQuestion: Partial<Question> = {
   questionType: "Multiple Choice",
   tags: ["math"],
   answer: {
+    id: ObjectId().toString(),
     correctAnswer: [{ id: chosenId, value: "2" }],
   },
-  private: true
+  private: true,
 };
 
 export type QuestionModalDataType = {

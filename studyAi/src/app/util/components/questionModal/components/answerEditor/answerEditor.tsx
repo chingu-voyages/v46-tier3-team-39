@@ -63,10 +63,13 @@ const AnswerSelectDropdownInput = () => {
       questionType = "Short Answer";
       newAnswer = [defaultNewValue];
     }
+    const newAnswerKey = questionData.answer
+      ? questionData.answer
+      : { id: ObjectId().toString(), correctAnswer: [] };
     setQuestionData({
       ...questionData,
       questionType: questionType,
-      answer: { correctAnswer: newAnswer },
+      answer: { ...newAnswerKey, correctAnswer: newAnswer },
     });
   };
 

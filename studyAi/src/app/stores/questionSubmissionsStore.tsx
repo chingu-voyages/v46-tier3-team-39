@@ -7,6 +7,8 @@ import {
 } from "./helpers";
 import { QuestionSubmission } from "@prisma/client";
 import { SubmissionsData } from "../util/types/SubmissionsData";
+import { useRef } from "react";
+import { useIsClient } from "../util/providers/isClientProvider";
 export type QuestionSubmissionsData = SubmissionsData<QuestionSubmission>;
 const initialState: QuestionSubmissionsData = {
   submittedData: {
@@ -15,14 +17,16 @@ const initialState: QuestionSubmissionsData = {
   },
   ongoingData: {},
 };
-export const QuestionSubmissionsContainer = createContainer<{
+export type QuestionSubmissionContainerProps = {
   initialItems: (Partial<QuestionSubmission> & {
     questionId: string;
     id?: string;
   })[];
   questionId?: string;
   children: React.ReactNode;
-}>();
+};
+export const QuestionSubmissionsContainer =
+  createContainer<QuestionSubmissionContainerProps>();
 const Store = createStore({
   containedBy: QuestionSubmissionsContainer,
   // value of the store on initialisation
@@ -106,3 +110,22 @@ const Store = createStore({
 });
 
 export const useQuestionSubmissions = createHook(Store);
+
+export const QuestionSubmissionsContainerWrapper = ({
+  questionId,
+  children,
+  initialItems,
+}: QuestionSubmissionContainerProps) => {
+  const initData = useRef(initialItems ? initialItems : []);
+  const isClient = useIsClient();
+  if (!isClient) return <></>;
+  //ensures we only render container with hydration when on client side
+  return (
+    <QuestionSubmissionsContainer
+      initialItems={initData.current}
+      questionId={questionId}
+    >
+      {children}
+    </QuestionSubmissionsContainer>
+  );
+};

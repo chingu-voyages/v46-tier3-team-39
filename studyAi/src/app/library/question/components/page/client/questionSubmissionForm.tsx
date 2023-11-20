@@ -2,20 +2,11 @@
 import React, { useRef } from "react";
 import { useQuestions } from "@/app/stores/questionStore";
 import { useSession } from "next-auth/react";
-import { gql } from "../../../../../../../graphql/generated";
 import { useMutation } from "@apollo/client";
 import createQuestionSubmissionDoc from "../utils/createQuestionSubmission";
 import { useQuestionSubmissions } from "@/app/stores/questionSubmissionsStore";
 import { useQuestionId } from "../../../context/QuestionIdContext";
-const UploadNewQuestionSubmissionQuery = gql(`
-  mutation UploadNewQuestionSubmission($questionSubmission: QuestionSubmissionCreateInput!){
-    createOneQuestionSubmission(
-      data: $questionSubmission
-    ){
-      id
-    }
-  }
-`);
+import { UploadNewQuestionSubmissionQuery } from "@/gql/mutations/questionSubmissionMutation";
 const QuestionFormWrapper = ({ children }: { children: React.ReactNode }) => {
   // define hooks
   const session = useSession();

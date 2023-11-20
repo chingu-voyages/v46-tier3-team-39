@@ -54,12 +54,15 @@ export const MultipleChoice = ({
           const dataProps = {
             "data-id": val.id,
           } as InputHTMLAttributes<HTMLInputElement>;
-
           return (
             <FormControlLabel
               key={val.id}
               value={val.value}
-              className="text-sm md:text-base"
+              slotProps={{
+                typography: {
+                  className: "text-sm md:text-base",
+                },
+              }}
               control={
                 <Radio
                   inputProps={dataProps}
@@ -184,7 +187,11 @@ export const SelectMultiple = ({
           <FormControlLabel
             key={val.id}
             value={val.value}
-            className="text-sm md:text-base"
+            slotProps={{
+              typography: {
+                className: "text-sm md:text-base",
+              },
+            }}
             control={
               <Checkbox
                 inputProps={dataProps}
