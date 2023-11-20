@@ -80,8 +80,10 @@ model Question {
   answer       AnswerData
   likeCounter  LikeCounter
   private      Boolean
-
   @@index([creatorId])
+  @@index([dateCreated])
+  @@index([questionInfo.title])
+  @@index([likeCounter.likes])
 }
 
 model QuestionLike {

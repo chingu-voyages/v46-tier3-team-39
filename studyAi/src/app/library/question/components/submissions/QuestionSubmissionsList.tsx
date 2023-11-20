@@ -5,12 +5,12 @@ import { useSession } from "next-auth/react";
 import { useLazyQuery } from "@apollo/client";
 import { useQuestionId } from "../../context/QuestionIdContext";
 import { QueryFullQuestionSubmissions } from "@/gql/queries/questionSubmissionQueries";
-import { SortOrder } from "../../../../../../graphql/generated/graphql";
 import { memo, useCallback, useState } from "react";
 import MemoizedQuestionSubmissionsListItem from "./QuestionSubmissionListItem";
 import { useQuestions } from "@/app/stores/questionStore";
 import { QuestionSubmission } from "@prisma/client";
 import { useQuestionSubmissions } from "@/app/stores/questionSubmissionsStore";
+import fetchItems from "./fetchNewData";
 type ArrOneOrMore<T> = [T, ...T[]];
 const SubmissionList = ({
   data,
@@ -51,9 +51,7 @@ const QuestionSubmissionsList = ({ layout }: { layout: "page" | "tabbed" }) => {
   const questionIdData = useQuestionId();
   const questions = useQuestions()[0].data;
   const [questionSubmissions, { addOrUpdateItems }] = useQuestionSubmissions();
-  const [getSubmission, { data: submissionsData }] = useLazyQuery(
-    QueryFullQuestionSubmissions
-  );
+  const [getSubmission, {}] = useLazyQuery(QueryFullQuestionSubmissions);
   const questionSubmissionsArrMap = questionSubmissions.submittedData.arr;
   const questionId = questionIdData?.questionId;
   const currSubmissionsArr =
@@ -66,58 +64,34 @@ const QuestionSubmissionsList = ({ layout }: { layout: "page" | "tabbed" }) => {
       : null
   );
   const userId = session ? session.user.id : "";
+  //memoized function to fetch new data
+  const savedFetchSubmissionsFunc = useCallback(
+    fetchItems({
+      userId,
+      questionId,
+      getSubmission,
+      cursor,
+      setCursor,
+      addOrUpdateItems,
+    }),
+    [userId, questionId, getSubmission, cursor, setCursor, addOrUpdateItems]
+  );
   const question = questionId ? questions.map[questionId] : null;
   const questionName = question?.questionInfo?.title;
-  const fetchItems = useCallback(async () => {
-    if (!questionId) return;
-    const queryOptions = {
-      variables: {
-        questionId: { equals: questionId === "string" ? questionId : "" },
-        userId: userId,
-        cursor: {
-          id: cursor,
-        },
-        skip: cursor ? 1 : null,
-        orderBy: {
-          dateCreated: "desc" as SortOrder,
-        },
-      },
-    };
-    const { data: results } = await getSubmission(queryOptions);
-    if (!results) {
-      setCursor(null);
-      return [];
-    }
-    const newData = addOrUpdateItems(
-      results.questionSubmissions as (Partial<QuestionSubmission> & {
-        id: string;
-        questionId: string;
-      })[],
-      "submitted"
-    );
-    if (results.questionSubmissions.length <= 0) {
-      setCursor(null);
-      return results.questionSubmissions;
-    }
-    //means we have new items to update
-    const newArr = newData.submittedData.arr?.[questionId] || null;
-    const newNextCursor = newArr?.[newArr.length - 1]?.id || null;
-    setCursor(newNextCursor);
-    return results.questionSubmissions;
-  }, [userId, questionId, addOrUpdateItems]);
-  if (!questionId) return <></>;
-  const data = questionSubmissionsArrMap[questionId];
   const noDataPlaceholder = (
     <label className="text-Black flex h-full w-full items-center justify-center grow py-5">
       No submissions found
     </label>
   );
+  if (!questionId) return noDataPlaceholder;
+  const data = questionSubmissionsArrMap[questionId];
   return (
     <SubmissionListProvider layout={layout}>
       <PaginationWrapper
         hasMore={!!cursor}
-        fetchMoreData={fetchItems}
+        fetchMoreData={savedFetchSubmissionsFunc}
         dataLength={data ? data.length : 0}
+        hasChildren
       >
         {questionName && data && data.length > 0 && data[0] ? (
           <MemoizedSubmissionsList

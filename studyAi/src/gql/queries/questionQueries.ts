@@ -75,6 +75,11 @@ export const GetQuestionsInfo = gql(`
       questionInfo{
         title
       }
+      likeCounter {
+        id
+        likes
+        dislikes
+      }
     }
   }
 `);
