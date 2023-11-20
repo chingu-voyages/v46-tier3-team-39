@@ -12,8 +12,8 @@ export default function Team() {
       </p>
       <button className="my-4 border py-3 px-2 sm:px-6 sm:text-1xl">
         <NextLink
-          href={"mailto:studyai210@gmail.com"}
-          key={"mailto:studyai210@gmail.com"}
+          href={`mailto:${process.env.NEXT_PUBLIC_EMAIL}`}
+          key={`mailto:${process.env.NEXT_PUBLIC_EMAIL}`}
         >
           Contact Us
         </NextLink>

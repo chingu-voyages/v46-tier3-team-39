@@ -20,7 +20,7 @@ export const footerServiceLinks = [
 ];
 export const footerContactLinks = [
   {
-    href: "mailto:studyai210@gmail.com",
+    href: `mailto:${process.env.NEXT_PUBLIC_EMAIL}`,
     name: "Contact Us",
   },
   {
