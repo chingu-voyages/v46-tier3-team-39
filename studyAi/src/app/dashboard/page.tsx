@@ -5,73 +5,15 @@ import Profile from "./server/profile";
 import Link from "next/link";
 import { BsStars } from "react-icons/bs";
 import { FaFileCircleQuestion } from "react-icons/fa6";
-import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
-import { Question } from "@prisma/client";
-import { QuestionSubmission } from "@prisma/client";
-import GreetingBanner from "./server/greetingBanner";
-import { sub } from "date-fns";
-import { QueryQuestionSubmissions } from "@/gql/queries/questionSubmissionQueries";
-import { GetQuestionsInfo } from "@/gql/queries/questionQueries";
-import { SortOrder } from "../../../graphql/generated/graphql";
 import GreetingBannerContainer from "./server/greetingBannerContainer";
 export default async function DashboardPage() {
   const sessionData = await protectRouteSSR("/auth/login");
   const session = sessionData.props.session;
-  const client = ServerGraphQLClient(session);
   const userId = session?.user.id;
   const userName = session?.user.name;
   if (!userName || !userId) return <></>;
-  const currDate = new Date();
-  const weekPriorDate = sub(currDate, {
-    weeks: 1,
-  });
-  const queryVariables = {
-    userId,
-    dateQuery: {
-      gte: weekPriorDate.toISOString(),
-      lte: currDate.toISOString(),
-    },
-    orderBy: {
-      dateCreated: "desc" as SortOrder,
-    },
-  };
-  const questionQuery = {
-    query: GetQuestionsInfo,
-    variables: {
-      ...queryVariables,
-    },
-  };
-  const submissionsQuery = {
-    query: QueryQuestionSubmissions,
-    variables: {
-      ...queryVariables,
-    },
-  };
-
-  const questionPromise = client.query(questionQuery);
-  const submissionsPromise = client.query(submissionsQuery);
-  let questionsLength = 0;
-  let submissionsLength = 0;
-  try {
-    const [questionsResult, submissionsResult] = await Promise.all([
-      questionPromise,
-      submissionsPromise,
-    ]);
-    const questions = questionsResult.data.questions.map(
-      (e: any) => e.id
-    ) as Question["id"][];
-    //convert Number to String and pass to children component
-    questionsLength = questions?.length;
-    const submissions = submissionsResult.data.questionSubmissions.map(
-      (e: any) => e.id
-    ) as QuestionSubmission["id"][];
-    const uniqueSubmissions = [...new Set(submissions)];
-    //convert Number to String and pass to children component
-    submissionsLength = uniqueSubmissions?.length;
-  } catch (err: any) {
-    console.error(err?.networkError?.result);
-  }
-
+  const { answered: questionsLength, generated: submissionsLength } =
+    session.user.questionData;
   return (
     <NavigationWrapper
       appBars={{
@@ -92,7 +34,7 @@ export default async function DashboardPage() {
           <div className="grid grid-rows-2 ">
             <div className="row-span-1 border p-5 flex w-full">
               {/* 2.1 */}
-              <GreetingBannerContainer/>
+              <GreetingBannerContainer />
             </div>
             <div className=" row-span-1 flex item-center py-5">
               <div className=" grid grid-cols-1 sm:grid-cols-2 gap-5">
