@@ -41,7 +41,7 @@ const Store = createStore({
         })[],
         submissionType: "ongoing" | "submitted"
       ) =>
-      async ({ setState, getState }) =>
+      ({ setState, getState }) =>
         addOrUpdateSubmissionsFunc({
           items,
           setState,
@@ -57,7 +57,7 @@ const Store = createStore({
             id?: string;
           }[]
       ) =>
-      async ({ setState, getState }) =>
+      ({ setState, getState }) =>
         deleteSubmissionItems({ items, setState, getState }),
   },
   handlers: {

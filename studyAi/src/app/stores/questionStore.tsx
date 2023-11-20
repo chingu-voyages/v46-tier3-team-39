@@ -26,17 +26,15 @@ const Store = createStore({
   actions: {
     addOrUpdateItems:
       (items: (Partial<Question> & { id: string })[]) =>
-      async (
-        { setState, getState }
-      ) =>
+      ({ setState, getState }) =>
         addOrUpdateFunc({
           items,
           setState,
           getState,
         }),
     deleteItems:
-      ( items: Question["id"][]) =>
-      async ({ setState, getState }) =>
+      (items: Question["id"][]) =>
+      ({ setState, getState }) =>
         deleteItems({ items, setState, getState }),
   },
   handlers: {

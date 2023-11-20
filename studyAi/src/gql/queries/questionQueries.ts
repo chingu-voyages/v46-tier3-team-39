@@ -1,12 +1,14 @@
 import { gql } from "../../../graphql/generated";
-
-export const GetFullQuestion = gql(`
-  query GetFullQuestion($id: String) {
-    question(where: { id: $id }) {
+export const GeneralQuestionData = gql(`
+  fragment GeneralQuestionData on Question {
       id
-      creatorId
       questionType
       tags
+      private
+  }
+`);
+export const QuestionInfoData = gql(`
+  fragment QuestionInfoData on Question {
       questionInfo {
         id
         title
@@ -16,6 +18,24 @@ export const GetFullQuestion = gql(`
           value
         }
       }
+  }
+`);
+export const QuestionAnswerData = gql(`
+  fragment QuestionAnswerData on Question {
+    answer {
+        correctAnswer {
+          id
+          value
+        }
+      }
+  }
+`);
+export const GetFullQuestion = gql(`
+  query GetFullQuestion($id: String) {
+    question(where: { id: $id }) {
+      ...GeneralQuestionData
+      ...QuestionInfoData
+      creatorId
       likeCounter {
         id
         likes
@@ -27,13 +47,7 @@ export const GetFullQuestion = gql(`
 export const GetQuestionAnswerById = gql(`
   query GetQuestionAnswerById($id: String) {
     question(where: { id: $id }) {
-      id
-      answer {
-        correctAnswer {
-          id
-          value
-        }
-      }
+      ...QuestionAnswerData
     }
   }
 `);
@@ -57,13 +71,10 @@ export const GetQuestionsInfo = gql(`
       cursor: $cursor
       skip: $skip
     ) {
-      id
-      questionType
-      tags
+      ...GeneralQuestionData
       questionInfo{
         title
       }
-      private
     }
   }
 `);

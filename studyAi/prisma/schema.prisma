@@ -119,11 +119,11 @@ model QuizLike {
 
 model QuestionSubmission {
   id             String         @id @default(auto()) @map("_id") @db.ObjectId
-  time           TimeOptions?
-  score          Score?
   dateCreated    DateTime       @default(now())
   userId         String         @db.ObjectId
   questionId     String         @db.ObjectId
+  time           TimeOptions?
+  score          Score?
   answerProvided AnswerOption[]
 
   @@index([userId, questionId])

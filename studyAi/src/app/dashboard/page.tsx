@@ -12,7 +12,7 @@ export default async function DashboardPage() {
   const userId = session?.user.id;
   const userName = session?.user.name;
   if (!userName || !userId) return <></>;
-  const { answered: questionsLength, generated: submissionsLength } =
+  const { answered: questionsLength, generated: submissionsLength } = 
     session.user.questionData;
   return (
     <NavigationWrapper

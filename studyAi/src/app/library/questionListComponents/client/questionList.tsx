@@ -8,7 +8,6 @@ import QuestionModalWrapper from "@/app/util/components/questionModal/questionMo
 import { Carousel } from "@/app/util/components/carousel/carousel";
 import Link from "next/link";
 import { useQuestions } from "@/app/stores/questionStore";
-import PaginatedItems from "@/app/util/components/pagination/pagination";
 import AddIcon from "@mui/icons-material/Add";
 import PublicIcon from "@mui/icons-material/Public";
 import LockIcon from "@mui/icons-material/Lock";
@@ -238,11 +237,6 @@ function List({ questions }: { questions: Partial<Question>[] }) {
   });
   return (
     <>
-      <PaginatedItems
-        items={formatedQuestions}
-        itemsPerPage={10}
-        containerClassName={styles.paginateContainer}
-      />
     </>
   );
 }
