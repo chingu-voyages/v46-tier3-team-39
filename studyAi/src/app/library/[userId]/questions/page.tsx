@@ -1,25 +1,26 @@
 import NavigationWrapper from "@/app/util/components/navigation/navigationWrapper";
 import styles from "../../questionListComponents/styles";
 import QuestionList from "../../questionListComponents/client/questionList";
-import { QueryUserGeneratedQuestions } from "@/app/dashboard/server/greetingBannerContainer";
 import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
 import type { Question } from "@prisma/client";
 import { QuestionsContainer } from "@/app/stores/questionStore";
 import { protectRouteSSR } from "@/app/api/utils/sessionFuncs";
+import { GetQuestionsInfo } from "@/gql/queries/questionQueries";
+import { SortOrder } from "../../../../../graphql/generated/graphql";
 
 export default async function QuestionLibrary() {
   const sessionData = await protectRouteSSR("/auth/login");
   const session = sessionData.props.session;
   const client = ServerGraphQLClient(session);
   try {
-    const userId = session?.user.id;
+    const userId = session?.user.id || "";
     const query = {
-      query: QueryUserGeneratedQuestions,
+      query: GetQuestionsInfo,
       variables: {
-        userId: userId,
-        // dateQuery: {
-        //   lte: new Date().toISOString(),
-        // },
+        creatorId: { equals: userId },
+        orderBy: {
+          dateCreated: "desc" as SortOrder,
+        },
       },
     };
     const { data: result } = await client.query(query);

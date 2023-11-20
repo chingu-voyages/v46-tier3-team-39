@@ -53,14 +53,17 @@ async function main() {
     userId: question.creatorId,
     questionId: question.id,
     score: {
+      id: new ObjectId().toString(),
       maxScore: 1,
       actualScore: 1,
     },
     time: null,
-    answerProvided : [{
-      id: new ObjectId().toString(),
-      value: "hello"
-    }],
+    answerProvided: [
+      {
+        id: new ObjectId().toString(),
+        value: "hello",
+      },
+    ],
   }));
   const questionLikesData = questionInfo.map((question) => ({
     userId: question.creatorId,
@@ -75,12 +78,12 @@ async function main() {
         creatorId: question.creatorId,
         questionIds: [question.id],
         likeCounter: {
+          id: new ObjectId().toString(),
           likes: 1,
           dislikes: 0,
         },
-        private: false
+        private: false,
       },
-
     })
   );
   const quizInfoPromise = Promise.all(quizItemsData);
@@ -103,6 +106,7 @@ async function main() {
         userId: quiz.creatorId,
         quizId: quiz.id,
         score: {
+          id: new ObjectId().toString(),
           maxScore: 1,
           actualScore: 0,
         },

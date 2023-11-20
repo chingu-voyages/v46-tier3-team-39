@@ -20,35 +20,10 @@ import {
 } from "@mui/material";
 import { FileUploadOutlined } from "@mui/icons-material";
 import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
-import { gql } from "../../../../../graphql/generated";
 import { useMutation } from "@apollo/client";
 import { useSession } from "next-auth/react";
-const AddQuestion = gql(`
-  mutation CreateOneQuestionResolver(
-    $creatorId: String!,
-    $questionType: String!,
-    $tags: QuestionCreatetagsInput,
-    $questionInfo: QuestionInfoDataCreateEnvelopeInput!,
-    $answer: AnswerDataCreateEnvelopeInput!,
-    $likeCounter: LikeCounterCreateEnvelopeInput!,
-    $private: Boolean!
-  ){
-    createOneQuestion(
-      data: {
-        creatorId: $creatorId,
-        questionType: $questionType,
-        tags: $tags,
-        questionInfo: $questionInfo,
-        answer: $answer,
-        likeCounter: $likeCounter,
-        private: $private
-      }
-      )
-    {
-      id
-    }
-  }
-`);
+import ObjectID from "bson-objectid";
+import { AddQuestionMutation } from "@/gql/mutations/questionMutation";
 export interface QuestionProps {
   questionData: Partial<Question>;
   closeHandler: () => void;
@@ -161,7 +136,7 @@ const QuestionEditFormLoadingBanner = ({ text }: { text: string }) => {
 };
 const QuestionEditForm = () => {
   const modalData = useQuestionModal();
-  const [mutationQuery, { loading, error, data }] = useMutation(AddQuestion);
+  const [mutationQuery, { loading, error, data }] = useMutation(AddQuestionMutation);
   const session = useSession();
   const creatorId = session?.data?.user.id;
   if (!modalData) return <></>;
@@ -208,6 +183,7 @@ const QuestionEditForm = () => {
               ...questionData.questionInfo,
             }
           : {
+              id: ObjectID().toString(),
               title: "",
               description: "",
               options: [],
@@ -216,12 +192,14 @@ const QuestionEditForm = () => {
       creatorId: creatorId ? creatorId : "",
       likeCounter: {
         set: {
+          id: ObjectID().toString(),
           likes: 0,
           dislikes: 0,
         },
       },
       answer: {
         set: {
+          id: ObjectID().toString(),
           correctAnswer: questionData?.answer?.correctAnswer
             ? questionData?.answer?.correctAnswer
             : [],

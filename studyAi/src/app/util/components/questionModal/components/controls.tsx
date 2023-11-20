@@ -46,11 +46,13 @@ const generateQuestion = async ({
   setQuestionData((prev) => ({
     ...prev,
     questionInfo: {
+      id: result?.data?.newQuestion?.questionInfo?.id || ObjectId().toString(),
       title: prev?.questionInfo?.title || "",
       description: result?.data?.newQuestion?.description || "",
       options: newOptions || [],
     },
     answer: {
+      id: result?.data?.newQuestion?.answer?.id || ObjectId().toString(),
       correctAnswer: newAnswers || [],
     },
   }));

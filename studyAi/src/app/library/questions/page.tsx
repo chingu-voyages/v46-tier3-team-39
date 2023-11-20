@@ -5,37 +5,24 @@ import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
 import type { Question } from "@prisma/client";
 import { QuestionsContainer } from "@/app/stores/questionStore";
 import { protectRouteSSR } from "@/app/api/utils/sessionFuncs";
-import gql from "graphql-tag";
-
-const QueryPublicQuestions = gql(`
-  query FindPublicQuestions(
-    $dateQuery: DateTimeFilter
-  ) {
-    questions(
-      where: {
-        private: { equals: false }
-        dateCreated: $dateQuery
-      }
-      orderBy: { dateCreated: desc }
-    ) {
-      id
-      questionType
-      tags
-      questionInfo{
-        title
-      }
-      private
-    }
-  }
-`);
-
+import { GetQuestionsInfo } from "@/gql/queries/questionQueries";
+import { SortOrder } from "../../../../graphql/generated/graphql";
 export default async function QuestionLibrary() {
   const sessionData = await protectRouteSSR("/auth/login");
   const session = sessionData.props.session;
   const client = ServerGraphQLClient(session);
   try {
+    //Grabs all public questions
     const query = {
-      query: QueryPublicQuestions,
+      query: GetQuestionsInfo,
+      variables: {
+        creatorId: { equals: session?.user.id || "" },
+        orderBy: {
+          dateCreated: "desc" as SortOrder,
+        },
+        private: { equals: false },
+        
+      },
     };
     const { data: result } = await client.query(query);
     const data = result.questions as (Partial<Question> & { id: string })[];

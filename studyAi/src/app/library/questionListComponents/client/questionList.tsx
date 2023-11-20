@@ -6,8 +6,6 @@ import Box from "@mui/material/Box";
 import { useState } from "react";
 import QuestionModalWrapper from "@/app/util/components/questionModal/questionModalWrapper";
 import { Carousel } from "@/app/util/components/carousel/carousel";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEarthAmericas } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import { useQuestions } from "@/app/stores/questionStore";
 import PaginatedItems from "@/app/util/components/pagination/pagination";

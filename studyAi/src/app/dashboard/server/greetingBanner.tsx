@@ -1,7 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import Image from "next/image";
 import WelcomeImg from "../images/welcomeBack.png";
-import { object } from "zod";
 // const GreetingImage = ({ children }: { children: React.ReactNode }) => {
 //   return (
 //     <div className="w-full flex">
@@ -50,7 +49,7 @@ const GreetingMessage = ({
         variant="h6"
         className="flex justify-center font-medium w-full tracking-tight"
       >
-        You’ve completed {submissionCount.toString()} questions this week and generated{" "}
+        You’ve attempted {submissionCount.toString()} questions this week and generated{" "}
         {questionCount.toString()} ! Keep it up and improve your results!
       </Typography>
     </div>
@@ -64,14 +63,6 @@ const GreetingBanner = (props: {
   return (
     <div className="flex w-full flex-col-reverse lg:flex-row">
       <GreetingMessage {...props} />
-
-      {/* <div className="w-full">
-        <img
-          src={WelcomeImg.src}
-          alt="welcome-back-image"
-          className=""
-        />
-      </div> */}
       <div className="flex w-full h-full justify-center items-center">
         <Image
           src={WelcomeImg}
