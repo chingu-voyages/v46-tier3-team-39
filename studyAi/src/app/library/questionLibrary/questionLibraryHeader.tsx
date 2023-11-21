@@ -77,15 +77,18 @@ export const QuestionsLibraryHeader = () => {
   };
   return (
     <Box className={styles.controlsLayout}>
-      <Tabs
-        value={tabValue}
-        onChange={handleChange}
-        aria-label="question-access"
-      >
-        <Tab value={"All"} label="All" />
-        <Tab value={"Private"} label="Private" />
-        <Tab value={"Public"} label="Public" />
-      </Tabs>
+      {pageType === "user" && (
+        <Tabs
+          value={tabValue}
+          onChange={handleChange}
+          aria-label="question-access"
+        >
+          <Tab value={"All"} label="All" />
+          <Tab value={"Private"} label="Private" />
+          <Tab value={"Public"} label="Public" />
+        </Tabs>
+      )}
+
       <BtnLabelDropdown text="Create question" pointerEvents={false}>
         {(btnLabelProps) => (
           <QuestionModalWrapper>

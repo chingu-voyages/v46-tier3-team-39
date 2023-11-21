@@ -23,7 +23,7 @@ import {
 } from "../../../../../graphql/generated/graphql";
 import { GetQuestionsInfo } from "@/gql/queries/questionQueries";
 export type QuestionLibraryContextData = {
-  pageType: "user" | "public"; 
+  pageType: "user" | "public";
   error: ApolloError | undefined;
   questions: QuestionStoreQuestionType[];
   tabValue: "All" | "Public" | "Private";
@@ -68,7 +68,9 @@ export const QuestionLibraryProvider = ({
   pageType: "user" | "public";
   children: React.ReactNode;
 }) => {
-  const [tabValue, setTabValue] = useState<"All" | "Public" | "Private">("All");
+  const [tabValue, setTabValue] = useState<"All" | "Public" | "Private">(
+    pageType === "public" ? "Public" : "All"
+  );
   const [questionsData, { resetItems, addOrUpdateItems }] = useQuestions();
   const [getQuestions, { loading, error }] = useLazyQuery(GetQuestionsInfo);
   const questions = questionsData.data.arr;
