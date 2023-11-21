@@ -52,9 +52,11 @@ const fetchItems =
       variables: {
         questionId: { equals: questionId === "string" ? questionId : "" },
         userId: userId,
-        cursor: cursor ?  {
-          id: cursor,
-        }: undefined,
+        cursor: cursor
+          ? {
+              id: cursor,
+            }
+          : undefined,
         skip: cursor ? 1 : 0,
         orderBy: {
           dateCreated: SortOrder.Desc,
@@ -68,7 +70,6 @@ const fetchItems =
     }
     const newSubmissionArr =
       results.questionSubmissions as QuestionSubmissionStoreSubmissionType[];
-    addOrUpdateItems(newSubmissionArr, "submitted");
     if (newSubmissionArr.length <= 0) {
       setCursor(null);
       return newSubmissionArr;
@@ -76,6 +77,7 @@ const fetchItems =
     //means we have new items to update
     const newNextCursor = newSubmissionArr[newSubmissionArr.length - 1].id;
     setCursor(newNextCursor || null);
+    addOrUpdateItems(newSubmissionArr, "submitted");
     return newSubmissionArr;
   };
 export default fetchItems;
