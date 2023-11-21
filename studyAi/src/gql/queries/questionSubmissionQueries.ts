@@ -29,7 +29,7 @@ export const QueryFullQuestionSubmissions = gql(`
         dateCreated: $dateQuery
         questionId: $questionId
       }
-      take: 50
+      take: 15
       cursor: $cursor
       skip: $skip
       orderBy: $orderBy
@@ -38,12 +38,17 @@ export const QueryFullQuestionSubmissions = gql(`
       dateCreated
       questionId
       userId
+      answerProvided {
+        id
+        value
+      }
       time {
        ...TimeData
       }
       score {
        ...ScoreData
       }
+      
     }
   }
 `);

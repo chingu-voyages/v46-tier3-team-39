@@ -37,12 +37,24 @@ const SubmissionList = ({
             : null,
         timeType: submission.time?.timeType || "stopwatch",
       }}
+      answerProvided={submission.answerProvided}
       score={submission.score}
     />
   ));
 };
-const MemoizedSubmissionsList = memo(SubmissionList);
-const QuestionSubmissionsList = ({ layout }: { layout: "page" | "tabbed" }) => {
+const MemoizedSubmissionsList = memo(SubmissionList, (prevProps, newProps) => {
+  const isDataEqual =
+    prevProps.data.every((val, idx) => val.id === newProps.data[idx].id) &&
+    prevProps.data.length === newProps.data.length;
+  return prevProps.questionName === newProps.questionName && isDataEqual;
+});
+const QuestionSubmissionsList = ({
+  layout,
+  containerId,
+}: {
+  containerId: string;
+  layout: "page" | "tabbed";
+}) => {
   const { data: session } = useSession();
   const questionIdData = useQuestionId();
   const questions = useQuestions()[0].data;
@@ -88,6 +100,7 @@ const QuestionSubmissionsList = ({ layout }: { layout: "page" | "tabbed" }) => {
         fetchMoreData={savedFetchSubmissionsFunc}
         dataLength={data ? data.length : 0}
         hasChildren
+        scrollableTarget={containerId}
       >
         {questionName && data && data.length > 0 && data[0] ? (
           <MemoizedSubmissionsList

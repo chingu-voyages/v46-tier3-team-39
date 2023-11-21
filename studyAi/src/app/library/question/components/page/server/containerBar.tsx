@@ -1,6 +1,7 @@
 import { DetailedHTMLProps, HTMLAttributes } from "react";
 export const Container = (
   props: {
+    id?: string;
     children: React.ReactNode;
     overflow?: boolean;
     border?: boolean;

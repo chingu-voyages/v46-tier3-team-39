@@ -11,11 +11,13 @@ const arePropsEqual = (
   const isArrEqual =
     answerProvided && newAnswerProvided
       ? answerProvided.every(
-          (value, index) => value === newAnswerProvided[index]
-        )
+          (value, index) =>
+            value.id === newAnswerProvided[index].id &&
+            value.value === newAnswerProvided[index].value
+        ) && newAnswerProvided.length === answerProvided.length
       : newAnswerProvided || answerProvided
       ? false
-      : false;
+      : newAnswerProvided === answerProvided;
   return (
     prevProps.id === newProps.id &&
     prevProps.questionId === newProps.questionId &&
@@ -28,7 +30,9 @@ const arePropsEqual = (
     isArrEqual
   );
 };
-const QuestionSubmissionsListItem = (props: Partial<QuestionSubmission> & {questionName: string}) => {
+const QuestionSubmissionsListItem = (
+  props: Partial<QuestionSubmission> & { questionName: string }
+) => {
   return <div></div>;
 };
 const MemoizedSubmissionsListItem = memo(
