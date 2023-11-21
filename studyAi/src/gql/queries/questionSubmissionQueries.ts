@@ -71,3 +71,9 @@ export const QueryQuestionSubmissionsIdOnly = gql(`
     }
   }
 `);
+export const GetQuestionSubmissionCountByCreatorId = gql(`
+    query AggregateQuestionSubmissionResolver( $creatorId: StringFilter) {
+      aggregateQuestionSubmission(where: {userId: $creatorId}) {
+      _count {userId} 
+    }}
+  `);

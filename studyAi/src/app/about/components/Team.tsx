@@ -53,7 +53,7 @@ export default function Team() {
             name="Tiffany"
             role="Developer"
             avatarURL="/avatar.png"
-            linkedInURL=""
+            linkedInURL="https://www.linkedin.com/in/pui-yi-tiffany-chan-2a35271a5/"
           />
         </Grid>
         <Grid item xs={6} sm={4}>
