@@ -1,6 +1,4 @@
-import { options } from "@/authComponents/nextAuth/options";
 import ProfileWrapper from "../client/profileWrapper";
-import { getServerSession } from "next-auth";
 
 const Profile = async ({}: {}) => {
   return (
@@ -9,4 +7,5 @@ const Profile = async ({}: {}) => {
     </div>
   );
 };
+
 export default Profile;

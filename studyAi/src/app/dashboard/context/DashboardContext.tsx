@@ -45,7 +45,6 @@ export const DashBoardProvider = ({
   initialProfileData: Partial<User>;
   submissionCount: number;
   questionCount: number;
-  onSave?: (e: Partial<User>) => void;
   children: React.ReactNode;
 }) => {
   const [profileData, setProfileData] = useState(
