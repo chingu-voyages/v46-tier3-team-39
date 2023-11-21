@@ -4,7 +4,9 @@ import WelcomeImg from "../images/welcomeBack.png";
 import { useDashBoard } from "../context/DashboardContext";
 
 const GreetingMessage = () => {
-  const { profileData, greetingBannerData } = useDashBoard();
+  const dashboardContext = useDashBoard();
+  if (!dashboardContext) return <></>;
+  const { greetingBannerData, profileData } = dashboardContext;
 
   return (
     <div className="flex justify-center items-center flex-col w-full p-[max(4%,2rem)] ">
@@ -18,9 +20,10 @@ const GreetingMessage = () => {
         variant="h6"
         className="flex justify-center font-medium w-full tracking-tight"
       >
-        You’ve attempted {greetingBannerData.submissionCount.toString()} questions this week and
-        generated {greetingBannerData.questionCount.toString()} ! Keep it up and improve your
-        results!
+        You’ve attempted {greetingBannerData.submissionCount.toString()}{" "}
+        questions this week and generated{" "}
+        {greetingBannerData.questionCount.toString()} ! Keep it up and improve
+        your results!
       </Typography>
     </div>
   );

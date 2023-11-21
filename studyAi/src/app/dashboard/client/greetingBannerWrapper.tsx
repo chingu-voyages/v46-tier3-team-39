@@ -5,7 +5,9 @@ import Link from "next/link";
 import { useDashBoard } from "../context/DashboardContext";
 
 const GreetingBannerWrapper = () => {
-  const { profileData } = useDashBoard();
+  const dashboardContext = useDashBoard();
+  if (!dashboardContext) return <></>;
+  const { profileData } = dashboardContext;
 
   return (
     <div className="col-span-2">

@@ -10,18 +10,13 @@ import { UpdateUserProfileInfo } from "@/gql/queries/userQueries";
 import { useDashBoard } from "../context/DashboardContext";
 
 const ProfileForm = () => {
-  const {
-    isEditable,
-    profileData,
-    setIsEditable,
-    setProfileData
-  } = useDashBoard();
+  const dashboardContext = useDashBoard();
 
   const [mutationQuery, { loading, error, data }] = useMutation(
     UpdateUserProfileInfo,
     {
       onCompleted: (data) => {
-        setProfileData((prev: User) => ({
+        dashboardContext?.setProfileData((prev: Partial<User>) => ({
           ...prev,
           tags: data.updateOneUser?.tags || prev.tags,
           school: data.updateOneUser?.school || prev.school,
@@ -37,24 +32,26 @@ const ProfileForm = () => {
     try {
       await mutationQuery({
         variables: {
-          id: profileData?.id || "",
+          id: dashboardContext?.profileData?.id || "",
           tags: {
-            set: profileData ? profileData.tags : [],
+            set: dashboardContext?.profileData
+              ? dashboardContext?.profileData.tags
+              : [],
           },
           name: {
-            set: profileData?.name,
+            set: dashboardContext?.profileData?.name,
           },
           school: {
-            set: profileData?.school,
+            set: dashboardContext?.profileData?.school,
           },
           // location: {
           //   set: {
           //     locationType:
-          //       profileData.location.locationType || location.locationType,
+          //       dashboardContext?.profileData.location.locationType || location.locationType,
           //     coordinates: {
-          //       set: profileData?.location.coordinates || location.coordinates,
+          //       set: dashboardContext?.profileData?.location.coordinates || location.coordinates,
           //     },
-          //     locationName: profileData?.locationName || location.locationName,
+          //     locationName: dashboardContext?.profileData?.locationName || location.locationName,
           //   },
           // },
         },
@@ -63,53 +60,62 @@ const ProfileForm = () => {
     } catch (err) {
       console.log(err);
     }
-    setIsEditable((prev: boolean) => !prev);
+    dashboardContext?.setIsEditable((prev: boolean) => !prev);
   };
 
   const changeForm = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.currentTarget;
-    if (setProfileData) {
-      setProfileData((prev: Partial<User>) => ({ ...prev, [name]: value }));
+    if (dashboardContext?.setProfileData) {
+      dashboardContext?.setProfileData((prev: Partial<User>) => ({
+        ...prev,
+        [name]: value,
+      }));
     }
   };
 
-  const locationElement = isEditable ? (
+  const locationElement = dashboardContext?.isEditable ? (
     <TextField
       size="small"
       name="location"
       variant="outlined"
-      defaultValue={profileData.location?.locationName || "N/A"}
+      defaultValue={
+        dashboardContext?.profileData.location?.locationName || "N/A"
+      }
       onChange={changeForm}
     />
   ) : (
-    <div>{profileData.location?.locationName || "N/A"}</div>
+    <div>{dashboardContext?.profileData.location?.locationName || "N/A"}</div>
   );
 
-  const schoolElement = isEditable ? (
+  const schoolElement = dashboardContext?.isEditable ? (
     <TextField
       size="small"
       name="school"
       variant="outlined"
-      defaultValue={profileData.school || "N/A"}
+      defaultValue={dashboardContext?.profileData.school || "N/A"}
       onChange={changeForm}
     />
   ) : (
-    <div>{profileData.school ? profileData.school : "N/A"}</div>
+    <div>
+      {dashboardContext?.profileData.school
+        ? dashboardContext?.profileData.school
+        : "N/A"}
+    </div>
   );
 
   const tagsEditElement = (
     <CreatableSelect
       isMulti
-      options={profileData.tags || []}
+      options={dashboardContext?.profileData.tags || []}
       isClearable
       name="tags"
-      value={profileData.tags || []}
+      value={dashboardContext?.profileData.tags || []}
       className="w-full"
       onChange={(e) => {
-        if (setProfileData) {
-          setProfileData((prev: Partial<User>) => ({
+        if (dashboardContext?.setProfileData) {
+          dashboardContext?.setProfileData((prev: Partial<User>) => ({
             ...prev,
             tags: e.map((e) => e.value),
           }));
@@ -118,12 +124,12 @@ const ProfileForm = () => {
     />
   );
 
-  const tagsElement = isEditable ? (
+  const tagsElement = dashboardContext?.isEditable ? (
     tagsEditElement
   ) : (
     <div className="flex flex-row gap-1 flex-wrap">
-      {Array.isArray(profileData.tags) ? (
-        profileData.tags.map((tag: string, index: number) => (
+      {Array.isArray(dashboardContext?.profileData.tags) ? (
+        dashboardContext?.profileData.tags.map((tag: string, index: number) => (
           <Chip key={tag + index} label={tag}></Chip>
         ))
       ) : (
@@ -158,7 +164,7 @@ const ProfileForm = () => {
           <div className="flex flex-row items-center w-full">{tagsElement}</div>
         </div>
       </div>
-      {isEditable && (
+      {dashboardContext?.isEditable && (
         <button
           type="submit"
           className="border rounded-lg border-Black text-primary-primary50 flex w-full py-3 justify-center mb-5"

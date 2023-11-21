@@ -5,13 +5,15 @@ import { FaClipboardQuestion, FaPeopleGroup } from "react-icons/fa6";
 import { useDashBoard } from "../context/DashboardContext";
 
 const ProfileWrapper = () => {
+  const dashboardContext = useDashBoard();
+  if (!dashboardContext) return <></>;
   const {
     isEditable,
     profileData,
     setIsEditable,
     setProfileData,
     greetingBannerData,
-  } = useDashBoard();
+  } = dashboardContext;
 
   return (
     <div>
@@ -19,15 +21,15 @@ const ProfileWrapper = () => {
         <UserProfile
           setFormData={setProfileData}
           isEditable={isEditable}
-          name={profileData.user?.name}
-          email={profileData.user?.email}
-          image={profileData.user?.image}
+          name={profileData.name}
+          email={profileData.email}
+          image={profileData.image}
           showUserInfo
         />
       </div>
       <button
         className="border rounded-lg border-Black text-primary-primary50 flex w-full py-3 justify-center mb-5"
-        onClick={setIsEditable((prev: boolean) => !prev)}
+        onClick={() => setIsEditable((prev: boolean) => !prev)}
       >
         {isEditable ? "Cancel Editing" : "Edit Profile"}
       </button>
