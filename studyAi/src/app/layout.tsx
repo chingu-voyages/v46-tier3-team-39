@@ -45,7 +45,7 @@ export default function RootLayout({
           <IsClientCtxProvider>
             <AuthProvider>
               <StyledEngineProvider injectFirst>
-                <body>{children}</body>
+                <body id={'_document-body'}>{children}</body>
               </StyledEngineProvider>
             </AuthProvider>
           </IsClientCtxProvider>

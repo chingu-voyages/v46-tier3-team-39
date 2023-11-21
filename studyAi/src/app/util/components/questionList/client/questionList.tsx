@@ -21,10 +21,12 @@ export default function QuestionsListContainer({
   questions,
   fetchMoreData,
   hasMore,
+  scrollableTarget
 }: {
   questions: Partial<Question>[];
   fetchMoreData: () => Promise<QuestionStoreQuestionType[] | undefined>;
   hasMore: boolean;
+  scrollableTarget?: string | React.ReactNode;
 }) {
   return (
     <PaginationWrapper
@@ -32,6 +34,7 @@ export default function QuestionsListContainer({
       hasMore={hasMore}
       dataLength={questions ? questions.length : 0}
       hasChildren
+      scrollableTarget={scrollableTarget}
     >
       <MemoizedQuestionList data={questions} />
     </PaginationWrapper>
