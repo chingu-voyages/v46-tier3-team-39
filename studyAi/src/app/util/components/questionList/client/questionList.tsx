@@ -3,7 +3,7 @@ import { Question } from "@prisma/client";
 import PaginationWrapper from "../../pagination/paginationWrapper";
 import { QuestionStoreQuestionType } from "@/app/stores/questionStore";
 import { memo } from "react";
-import MemoizedQuestionListItem from "./questionListItem";
+import MemoizedQuestionListItem from "../server/questionListItem";
 const QuestionList = ({ data }: { data: Partial<Question>[] }) => {
   return data.map((question, idx) => (
     <MemoizedQuestionListItem
@@ -16,18 +16,23 @@ const QuestionList = ({ data }: { data: Partial<Question>[] }) => {
     />
   ));
 };
-const MemoizedQuestionList = memo(QuestionList);
+const MemoizedQuestionList = memo(QuestionList, (prevProps, nextProps) => {
+  return (
+    prevProps.data.every((prev, idx) => prev.id === nextProps.data[idx].id) &&
+    prevProps.data.length === nextProps.data.length
+  );
+});
 export default function QuestionsListContainer({
   questions,
   fetchMoreData,
   hasMore,
-  scrollableTarget
+  scrollableTarget,
 }: {
   questions: Partial<Question>[];
   fetchMoreData: () => Promise<QuestionStoreQuestionType[] | undefined>;
   hasMore: boolean;
   scrollableTarget?: string | React.ReactNode;
-}) {
+  }) {
   return (
     <PaginationWrapper
       fetchMoreData={fetchMoreData}

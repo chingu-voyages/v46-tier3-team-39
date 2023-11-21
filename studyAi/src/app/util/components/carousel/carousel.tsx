@@ -27,8 +27,9 @@ export const Carousel = ({ children }: { children: JSX.Element[] }) => {
     >
       {children.map((el) => (
         <swiper-slide
+          className="!w-auto"
           style={{
-            width: "auto",
+            width: "auto !important",
           }}
           key={el.key}
         >

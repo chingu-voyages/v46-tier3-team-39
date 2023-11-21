@@ -1,4 +1,4 @@
-import "../globals.css"
+import "../globals.css";
 import type { Metadata } from "next";
 import AuthProvider from "./util/providers/AuthContext";
 import GraphQLProvider from "./util/providers/apolloProvider";
@@ -45,7 +45,9 @@ export default function RootLayout({
           <IsClientCtxProvider>
             <AuthProvider>
               <StyledEngineProvider injectFirst>
-                <body id={'_document-body'}>{children}</body>
+                <body id={"_document_body"} className="min-h-screen">
+                  {children}
+                </body>
               </StyledEngineProvider>
             </AuthProvider>
           </IsClientCtxProvider>

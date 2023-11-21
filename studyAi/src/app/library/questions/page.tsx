@@ -1,5 +1,5 @@
 import NavigationWrapper from "@/app/util/components/navigation/navigationWrapper";
-import styles from "../../util/components/questionList/client/styles";
+import styles from "../../util/components/questionList/server/styles";
 import QuestionList from "../../util/components/questionList/client/questionList";
 import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
 import type { Question } from "@prisma/client";

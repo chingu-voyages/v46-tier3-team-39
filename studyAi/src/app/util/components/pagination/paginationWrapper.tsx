@@ -30,7 +30,7 @@ const PaginationWrapper = <T extends unknown>({
       hasMore={hasMore}
       hasChildren={hasChildren}
       scrollableTarget={scrollableTarget}
-      scrollThreshold={0.6}
+      scrollThreshold={0.75}
     >
       {children}
     </InfiniteScroll>
