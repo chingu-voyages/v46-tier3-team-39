@@ -18,6 +18,7 @@ export const QuestionLibraryList = () => {
   if (!libraryData) return <></>;
   const {
     pageType,
+    loading,
     cursor,
     questions,
     tabValue,
@@ -28,12 +29,15 @@ export const QuestionLibraryList = () => {
     sortValue,
   } = libraryData;
   const fetchMoreData = async () => {
+    if (loading) return;
     const queryOptions = {
       variables: {
-        cursor: {
-          id: cursor,
-        },
-        skip: cursor ? 1 : null,
+        cursor: cursor
+          ? {
+              id: cursor,
+            }
+          : undefined,
+        skip: cursor ? 1 : 0,
         private: determinePrivateQuery(tabValue),
         creatorId: determineCreatorIdQuery(pageType, session),
         orderBy: determineSortQuery(sortValue, sortOrder),
@@ -45,7 +49,6 @@ export const QuestionLibraryList = () => {
       return [];
     }
     const newQuestionArr = results.questions as QuestionStoreQuestionType[];
-    addOrUpdateItems(newQuestionArr);
     if (newQuestionArr.length <= 0) {
       setCursor(null);
       return newQuestionArr;
@@ -53,6 +56,7 @@ export const QuestionLibraryList = () => {
     //means we have new items to update
     const newNextCursor = newQuestionArr[newQuestionArr.length - 1].id;
     setCursor(newNextCursor || null);
+    addOrUpdateItems(newQuestionArr);
     return newQuestionArr;
   };
   return (

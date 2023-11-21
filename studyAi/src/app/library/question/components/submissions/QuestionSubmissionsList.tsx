@@ -19,31 +19,27 @@ const SubmissionList = ({
   questionName: string;
   data: ArrOneOrMore<Partial<QuestionSubmission>>;
 }) => {
-  return (
-    <>
-      {data.map((submission) => (
-        <MemoizedQuestionSubmissionsListItem
-          questionName={questionName ? questionName : ""}
-          key={submission.id}
-          dateCreated={submission.dateCreated}
-          id={submission.id}
-          time={{
-            id: submission.time?.id || "",
-            timeTaken:
-              typeof submission.time?.timeTaken === "number"
-                ? submission.time.timeTaken
-                : null,
-            totalTimeGiven:
-              typeof submission.time?.totalTimeGiven === "number"
-                ? submission.time?.totalTimeGiven
-                : null,
-            timeType: submission.time?.timeType || "stopwatch",
-          }}
-          score={submission.score}
-        />
-      ))}
-    </>
-  );
+  return data.map((submission) => (
+    <MemoizedQuestionSubmissionsListItem
+      questionName={questionName ? questionName : ""}
+      key={submission.id}
+      dateCreated={submission.dateCreated}
+      id={submission.id}
+      time={{
+        id: submission.time?.id || "",
+        timeTaken:
+          typeof submission.time?.timeTaken === "number"
+            ? submission.time.timeTaken
+            : null,
+        totalTimeGiven:
+          typeof submission.time?.totalTimeGiven === "number"
+            ? submission.time?.totalTimeGiven
+            : null,
+        timeType: submission.time?.timeType || "stopwatch",
+      }}
+      score={submission.score}
+    />
+  ));
 };
 const MemoizedSubmissionsList = memo(SubmissionList);
 const QuestionSubmissionsList = ({ layout }: { layout: "page" | "tabbed" }) => {

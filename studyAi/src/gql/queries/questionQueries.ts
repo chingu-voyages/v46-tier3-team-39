@@ -67,7 +67,7 @@ export const GetQuestionsInfo = gql(`
         dateCreated: $dateQuery
       }
       orderBy: $orderBy
-      take: 1000
+      take: 5
       cursor: $cursor
       skip: $skip
     ) {

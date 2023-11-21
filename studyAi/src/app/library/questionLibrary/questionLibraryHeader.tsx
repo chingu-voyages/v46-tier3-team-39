@@ -9,12 +9,10 @@ import BtnLabelDropdown from "@/app/util/components/btnLabelDropdown/btnLabelDro
 import { IconButton } from "@mui/material";
 import { useSession } from "next-auth/react";
 import { styles } from "./styles";
-import { QuestionOrderByWithRelationInput } from "../../../../graphql/generated/graphql";
 import { useQuestionLibraryData } from "./context/questionLibraryContext";
 import { determineSortQuery } from "./helpers/determineSortQuery";
 import { determinePrivateQuery } from "./helpers/determinePrivateQuery";
 import { determineCreatorIdQuery } from "./helpers/determineCreatorIdQuery";
-
 export const QuestionsLibraryHeader = () => {
   const session = useSession();
   const libraryData = useQuestionLibraryData();
@@ -26,7 +24,6 @@ export const QuestionsLibraryHeader = () => {
     setTabValue,
     sortValue,
     sortOrder,
-    cursor,
     setCursor,
     resetItems,
     getQuestions,
@@ -36,44 +33,44 @@ export const QuestionsLibraryHeader = () => {
     newValue: string
   ) => {
     if (loading || newValue === tabValue) return;
+    let currVal: "All" | "Private" | "Public" = "All";
     switch (newValue) {
       case "All":
-        setTabValue(newValue);
+        currVal = "All";
         break;
       case "Private":
-        setTabValue(newValue);
+        currVal = "Private";
         break;
       case "Public":
-        setTabValue(newValue);
+        currVal = "Public";
         break;
       default:
-        setTabValue("All");
+        currVal = "All";
         break;
     }
     try {
-      const { data: newQuestions } = await getQuestions({
+      const query = {
         variables: {
-          private: determinePrivateQuery(tabValue),
+          private: determinePrivateQuery(currVal),
           orderBy: determineSortQuery(sortValue, sortOrder),
           creatorId: determineCreatorIdQuery(pageType, session),
-          cursor: cursor
-            ? {
-                id: cursor,
-              }
-            : null,
-          skip: cursor ? 1 : 0,
+          cursor: undefined,
+          skip: 0,
         },
-      });
+      };
+      const { data: newQuestions } = await getQuestions(query);
       if (!newQuestions || newQuestions.questions.length <= 0) {
         setCursor(null);
+        setTabValue(currVal);
         resetItems([]);
         return;
       }
       //we know this contains the id field
       const newQuestionArr =
         newQuestions.questions as QuestionStoreQuestionType[];
-      resetItems(newQuestionArr);
+      setTabValue(currVal);
       setCursor(newQuestionArr[newQuestionArr.length - 1].id);
+      resetItems(newQuestionArr);
     } catch (err) {
       console.error(err);
     }

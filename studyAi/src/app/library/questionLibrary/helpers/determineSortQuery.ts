@@ -1,7 +1,7 @@
 import { SortOrder } from "../../../../../graphql/generated/graphql";
 import { QuestionOrderByWithRelationInput } from "../../../../../graphql/generated/graphql";
 export const determineSortQuery = (sortValue: string, sortOrder: SortOrder) => {
-  let sortObj: QuestionOrderByWithRelationInput | null = null;
+  let sortObj: QuestionOrderByWithRelationInput | undefined = undefined;
   switch (sortValue) {
     case "date":
       sortObj = {};

@@ -5,20 +5,16 @@ import { QuestionStoreQuestionType } from "@/app/stores/questionStore";
 import { memo } from "react";
 import MemoizedQuestionListItem from "./questionListItem";
 const QuestionList = ({ data }: { data: Partial<Question>[] }) => {
-  return (
-    <>
-      {data.map((question, idx) => (
-        <MemoizedQuestionListItem
-          key={question.id}
-          id={question.id ? question.id : idx.toString()}
-          questionType={question.questionType}
-          title={question.questionInfo?.title}
-          accessKey={question.private}
-          tags={question.tags}
-        />
-      ))}
-    </>
-  );
+  return data.map((question, idx) => (
+    <MemoizedQuestionListItem
+      key={question.id}
+      id={question.id ? question.id : idx.toString()}
+      questionType={question.questionType}
+      title={question.questionInfo?.title}
+      accessKey={question.private}
+      tags={question.tags}
+    />
+  ));
 };
 const MemoizedQuestionList = memo(QuestionList);
 export default function QuestionsListContainer({
@@ -27,7 +23,7 @@ export default function QuestionsListContainer({
   hasMore,
 }: {
   questions: Partial<Question>[];
-  fetchMoreData: () => Promise<QuestionStoreQuestionType[]>;
+  fetchMoreData: () => Promise<QuestionStoreQuestionType[] | undefined>;
   hasMore: boolean;
 }) {
   return (

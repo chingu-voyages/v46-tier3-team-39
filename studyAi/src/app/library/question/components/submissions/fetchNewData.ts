@@ -52,10 +52,10 @@ const fetchItems =
       variables: {
         questionId: { equals: questionId === "string" ? questionId : "" },
         userId: userId,
-        cursor: {
+        cursor: cursor ?  {
           id: cursor,
-        },
-        skip: cursor ? 1 : null,
+        }: undefined,
+        skip: cursor ? 1 : 0,
         orderBy: {
           dateCreated: SortOrder.Desc,
         },

@@ -9,5 +9,5 @@ export const determineCreatorIdQuery = (
 ) => {
   return pageType === "user" && session.status === "authenticated"
     ? { equals: session.data?.user.id }
-    : null;
+    : undefined;
 };
