@@ -12,7 +12,7 @@ import { useElementPos } from "../../../providers/elementPosProvider";
 import { ElementPostionType } from "../../../hooks/useElementSize";
 import { Question } from "@prisma/client";
 import ObjectId from "bson-objectid";
-import { useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { GetQuestionAnswerById } from "@/gql/queries/questionQueries";
 
 // Create a new context
@@ -77,21 +77,27 @@ export function QuestionModalProvider({
     initialQuestionData ? { ...initialQuestionData } : blankQuestion
   );
   const currElPos = useElementPos();
-  const {
-    loading,
-    error,
-    data: queryData,
-  } = useQuery(GetQuestionAnswerById, {
-    variables: { id: questionData?.id },
-  });
+  const [getQuestionAnswer, { loading, error, data: queryData }] = useLazyQuery(
+    GetQuestionAnswerById,
+    {
+      variables: { id: questionData?.id },
+    }
+  );
   const questionId = questionData?.id;
   useEffect(() => {
     //we refresh data every time the modal is opened
     //or the questionId changes
-    const currData = queryData?.question;
-    if (!currData || !questionId) return;
-    setQuestionData((prev) => ({ ...prev, ...currData }));
-  }, [queryData, questionId, isOpen]);
+    let currData = queryData?.question;
+    if (!questionId || !isOpen) return;
+    //if it exists simply update the data
+    if (currData) setQuestionData((prev) => ({ ...prev, ...currData }));
+    //if it doesn't exist, get the data
+    getQuestionAnswer().then((data) => {
+      currData = data?.data?.question;
+      if (!currData) return;
+      setQuestionData((prev) => ({ ...prev, ...currData }));
+    });
+  }, [queryData, questionId, isOpen, getQuestionAnswer]);
   const closeHandler = useCallback(() => {
     setIsOpen(false);
     setQuestionData(

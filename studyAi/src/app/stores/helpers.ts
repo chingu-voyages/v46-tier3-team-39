@@ -92,6 +92,9 @@ export const addOrUpdateFunc = <T>({
 }) => {
   const currState = getState();
   const newArr = [...currState.data.arr];
+  const newItems: (T & {
+    id: string;
+  })[] = [];
   const arr = items.map((item) => {
     //update item
     if (item.id in currState.data.map) {
@@ -104,7 +107,7 @@ export const addOrUpdateFunc = <T>({
       return [item.id, newItem];
     }
     //when adding new item
-    newArr.push(item)
+    newItems.push(item);
     return [item.id, item];
   });
   const data = {
@@ -112,7 +115,9 @@ export const addOrUpdateFunc = <T>({
       ...currState.data.map,
       ...Object.assign({}, Object.fromEntries(arr)),
     },
-    arr: newArr,
+    //set new items first, so they can displayed to user to affirm
+    //their change
+    arr: [...newItems, ...newArr],
   };
   setState({
     data,
@@ -138,12 +143,8 @@ export const addOrUpdateSubmissionsFunc = <T>({
   items.forEach((item) => {
     const { id, questionId, quizId } = item;
     const submissionTypeId = questionId ? questionId : (quizId as string);
-    const inOngoing =
-      submissionTimeType === "ongoing" ||
-      submissionTypeId in currState.ongoingData;
-    const inSubmitted =
-      submissionTimeType === "submitted" ||
-      submissionTypeId in currState.submittedData;
+    const inOngoing = submissionTimeType === "ongoing";
+    const inSubmitted = submissionTimeType === "submitted";
     if (inSubmitted && id) {
       let submissionMap = currState.submittedData.map[submissionTypeId];
       if (!submissionMap) {

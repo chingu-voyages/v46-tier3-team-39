@@ -13,6 +13,7 @@ import { useQuestionLibraryData } from "./context/questionLibraryContext";
 import { determineSortQuery } from "./helpers/determineSortQuery";
 import { determinePrivateQuery } from "./helpers/determinePrivateQuery";
 import { determineCreatorIdQuery } from "./helpers/determineCreatorIdQuery";
+import ObjectID from "bson-objectid";
 export const QuestionsLibraryHeader = () => {
   const session = useSession();
   const libraryData = useQuestionLibraryData();
@@ -27,6 +28,7 @@ export const QuestionsLibraryHeader = () => {
     setCursor,
     resetItems,
     getQuestions,
+    addOrUpdateItems,
   } = libraryData;
   const handleChange = async (
     _event: React.SyntheticEvent,
@@ -91,7 +93,16 @@ export const QuestionsLibraryHeader = () => {
 
       <BtnLabelDropdown text="Create question" pointerEvents={false}>
         {(btnLabelProps) => (
-          <QuestionModalWrapper>
+          <QuestionModalWrapper
+            onSave={(e) => {
+              addOrUpdateItems([
+                {
+                  ...e,
+                  id: e.id ? e.id : ObjectID().toString(),
+                },
+              ]);
+            }}
+          >
             {(props) => (
               <IconButton
                 ref={btnLabelProps.setAnchorEl}
