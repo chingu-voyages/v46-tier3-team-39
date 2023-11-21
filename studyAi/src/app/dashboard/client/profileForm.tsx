@@ -1,78 +1,60 @@
 "use client";
 import { FaLocationDot, FaTag, FaGraduationCap } from "react-icons/fa6";
 import { useMutation } from "@apollo/client";
-import { useSession } from "next-auth/react";
-import { Dispatch, SetStateAction, useRef, useState } from "react";
+import { useRef } from "react";
 import TextField from "@mui/material/TextField";
 import CreatableSelect from "react-select/creatable";
 import Chip from "@mui/material/Chip";
-import { Session } from "next-auth";
+import { User } from "@prisma/client";
 import { UpdateUserProfileInfo } from "@/gql/queries/userQueries";
-const ProfileForm = ({
-  isEditable,
-  formData,
-  setFormData,
-  toggleEditable,
-}: {
-  isEditable: boolean;
-  formData: Partial<Session["user"]>;
-  setFormData: Dispatch<SetStateAction<Partial<Session["user"]>>>;
-  toggleEditable: () => void;
-}) => {
-  const session = useSession();
-  // const [tags, setTags] = useState(session.data ? session.data.user.tags : []);
-  const [name, setName] = useState(session.data ? session.data.user.name : "");
-  const [location, setLocation] = useState(
-    session.data && session.data.user.location
-      ? session.data.user.location
-      : {
-          locationType: "Point",
-          coordinates: [0, 0],
-          locationName: "",
-        }
-  );
-  const [school, setSchool] = useState(
-    session.data && session.data.user.school ? session.data.user.school : ""
-  );
-  const currTags = formData.tags
-    ? formData.tags.map((e) => {
-        return {
-          value: e,
-          label: e,
-        };
-      })
-    : [];
-  const id = session.data ? session.data.user.id : "";
+import { useDashBoard } from "../context/DashboardContext";
+
+const ProfileForm = () => {
+  const {
+    isEditable,
+    profileData,
+    setIsEditable,
+    setProfileData
+  } = useDashBoard();
 
   const [mutationQuery, { loading, error, data }] = useMutation(
-    UpdateUserProfileInfo
+    UpdateUserProfileInfo,
+    {
+      onCompleted: (data) => {
+        setProfileData((prev: User) => ({
+          ...prev,
+          tags: data.updateOneUser?.tags || prev.tags,
+          school: data.updateOneUser?.school || prev.school,
+        }));
+      },
+    }
   );
-  const submitted = useRef(false);
 
+  const submitted = useRef(false);
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (submitted.current) return;
     try {
       await mutationQuery({
         variables: {
-          id: formData?.id || id,
+          id: profileData?.id || "",
           tags: {
-            set: formData ? formData.tags : [],
+            set: profileData ? profileData.tags : [],
           },
           name: {
-            set: formData?.name || name,
+            set: profileData?.name,
           },
           school: {
-            set: formData?.school || school,
+            set: profileData?.school,
           },
           // location: {
           //   set: {
           //     locationType:
-          //       formData.location.locationType || location.locationType,
+          //       profileData.location.locationType || location.locationType,
           //     coordinates: {
-          //       set: formData?.location.coordinates || location.coordinates,
+          //       set: profileData?.location.coordinates || location.coordinates,
           //     },
-          //     locationName: formData?.locationName || location.locationName,
+          //     locationName: profileData?.locationName || location.locationName,
           //   },
           // },
         },
@@ -81,15 +63,15 @@ const ProfileForm = ({
     } catch (err) {
       console.log(err);
     }
-    toggleEditable();
+    setIsEditable((prev: boolean) => !prev);
   };
 
   const changeForm = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.currentTarget;
-    if (setFormData) {
-      setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
+    if (setProfileData) {
+      setProfileData((prev: Partial<User>) => ({ ...prev, [name]: value }));
     }
   };
 
@@ -98,11 +80,11 @@ const ProfileForm = ({
       size="small"
       name="location"
       variant="outlined"
-      defaultValue={location.locationName}
+      defaultValue={profileData.location?.locationName || "N/A"}
       onChange={changeForm}
     />
   ) : (
-    <div>{location.locationName ? location.locationName : "NA"}</div>
+    <div>{profileData.location?.locationName || "N/A"}</div>
   );
 
   const schoolElement = isEditable ? (
@@ -110,25 +92,25 @@ const ProfileForm = ({
       size="small"
       name="school"
       variant="outlined"
-      defaultValue={school}
+      defaultValue={profileData.school || "N/A"}
       onChange={changeForm}
     />
   ) : (
-    <div>{school ? school : "NA"}</div>
+    <div>{profileData.school ? profileData.school : "N/A"}</div>
   );
 
   const tagsEditElement = (
     <CreatableSelect
       isMulti
-      options={currTags}
+      options={profileData.tags || []}
       isClearable
       name="tags"
-      value={currTags}
+      value={profileData.tags || []}
       className="w-full"
       onChange={(e) => {
-        if (setFormData) {
-          setFormData((prevFormData) => ({
-            ...prevFormData,
+        if (setProfileData) {
+          setProfileData((prev: Partial<User>) => ({
+            ...prev,
             tags: e.map((e) => e.value),
           }));
         }
@@ -140,9 +122,9 @@ const ProfileForm = ({
     tagsEditElement
   ) : (
     <div className="flex flex-row gap-1 flex-wrap">
-      {currTags.length > 0 ? (
-        currTags.map((tag, index) => (
-          <Chip key={tag.value + index} label={tag.label}></Chip>
+      {Array.isArray(profileData.tags) ? (
+        profileData.tags.map((tag: string, index: number) => (
+          <Chip key={tag + index} label={tag}></Chip>
         ))
       ) : (
         <div className="text-sm">No tags</div>
@@ -153,7 +135,6 @@ const ProfileForm = ({
   return (
     <form className="w-full" onSubmit={handleSubmit}>
       <div className="mb-5 flex flex-col gap-2">
-        {/* 1.Location */}
         {/* <div className="flex items-center">
           <div className="mr-2">
             <FaLocationDot />
@@ -162,7 +143,6 @@ const ProfileForm = ({
             {locationElement}
           </div>
         </div> */}
-        {/* 2. Hat */}
         <div className="flex items-center">
           <div className="mr-2">
             <FaGraduationCap />
@@ -171,7 +151,6 @@ const ProfileForm = ({
             {schoolElement}
           </div>
         </div>
-        {/* 3. Tags */}
         <div className="flex w-full gap-1 items-center">
           <div className="mr-2 item-center">
             <FaTag />
