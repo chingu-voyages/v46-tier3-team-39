@@ -1,6 +1,6 @@
 import NavigationWrapper from "@/app/util/components/navigation/navigationWrapper";
-import styles from "../../questionListComponents/styles";
-import QuestionList from "../../questionListComponents/client/questionList";
+import styles from "../../../util/components/questionList/client/styles";
+import QuestionsLibraryContainer from "../../questionLibrary/questionLibraryContainer";
 import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
 import type { Question } from "@prisma/client";
 import { QuestionsContainer } from "@/app/stores/questionStore";
@@ -35,7 +35,7 @@ export default async function QuestionLibrary() {
         <div className={styles.layout}>
           <h1 className={styles.h1}>My Question Library</h1>
           <QuestionsContainer initialItems={data}>
-            <QuestionList allPublicQuestions={false} />
+            <QuestionsLibraryContainer pageType="user" />
           </QuestionsContainer>
         </div>
       </NavigationWrapper>

@@ -2,10 +2,11 @@
 import { Question } from "@prisma/client";
 import { createStore, createHook, createContainer } from "react-sweet-state";
 import { addOrUpdateFunc, deleteItems } from "./helpers";
-type QuestionsData = {
+export type QuestionStoreQuestionType = Partial<Question> & { id: string };
+export type QuestionsData = {
   data: {
     map: { [key: string]: Partial<Question> & { id: string } };
-    arr: (Partial<Question> & { id: string })[];
+    arr: QuestionStoreQuestionType[];
   };
 };
 const initialState: QuestionsData = {
@@ -15,7 +16,7 @@ const initialState: QuestionsData = {
   },
 };
 export const QuestionsContainer = createContainer<{
-  initialItems: (Partial<Question> & { id: string })[];
+  initialItems: QuestionStoreQuestionType[];
   children: React.ReactNode;
 }>();
 const Store = createStore({
@@ -25,19 +26,38 @@ const Store = createStore({
   // actions that trigger store mutation
   actions: {
     addOrUpdateItems:
-      (items: (Partial<Question> & { id: string })[]) =>
-      async (
-        { setState, getState }
-      ) =>
+      (items: QuestionStoreQuestionType[]) =>
+      ({ setState, getState }) =>
         addOrUpdateFunc({
           items,
           setState,
           getState,
         }),
     deleteItems:
-      ( items: Question["id"][]) =>
-      async ({ setState, getState }) =>
+      (items: Question["id"][]) =>
+      ({ setState, getState }) =>
         deleteItems({ items, setState, getState }),
+    resetItems:
+      (items: QuestionStoreQuestionType[]) =>
+      ({ setState }) => {
+        if (items.length <= 0)
+          return setState({
+            data: {
+              map: {},
+              arr: [],
+            },
+          });
+        const newState = {
+          data: {
+            map: Object.assign(
+              {},
+              Object.fromEntries(items.map((val) => [val.id, val]))
+            ),
+            arr: items,
+          },
+        };
+        setState(newState);
+      },
   },
   handlers: {
     onInit:

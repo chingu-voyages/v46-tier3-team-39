@@ -5,15 +5,18 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useState,
 } from "react";
 import { useElementPos } from "../../../providers/elementPosProvider";
 import { ElementPostionType } from "../../../hooks/useElementSize";
 import { Question } from "@prisma/client";
 import ObjectId from "bson-objectid";
+import { useQuery } from "@apollo/client";
+import { GetQuestionAnswerById } from "@/gql/queries/questionQueries";
 
 // Create a new context
-const chosenId = ObjectId().toString()
+const chosenId = ObjectId().toString();
 const blankQuestion: Partial<Question> = {
   questionInfo: {
     id: ObjectId().toString(),
@@ -37,6 +40,7 @@ const blankQuestion: Partial<Question> = {
 
 export type QuestionModalDataType = {
   type: { type: "edit" | "create"; layout: "modal" | "page" };
+  loadingQuestionAnswerData: boolean;
   currElPos: ElementPostionType | null;
   isOpen: boolean;
   questionData: Partial<Question>;
@@ -67,21 +71,37 @@ export function QuestionModalProvider({
   // split the following data into different context providers
   //and replace hooks for each input. We can then have one function
   //at the top level that modifies the initial values of all the providers
-  //and each provider's stored value, is automatically re-rendered with the initial 
+  //and each provider's stored value, is automatically re-rendered with the initial
   //changes
   const [questionData, setQuestionData] = useState<Partial<Question>>(
     initialQuestionData ? { ...initialQuestionData } : blankQuestion
   );
   const currElPos = useElementPos();
+  const {
+    loading,
+    error,
+    data: queryData,
+  } = useQuery(GetQuestionAnswerById, {
+    variables: { id: questionData?.id },
+  });
+  const questionId = questionData?.id;
+  useEffect(() => {
+    //we refresh data every time the modal is opened
+    //or the questionId changes
+    const currData = queryData?.question;
+    if (!currData || !questionId) return;
+    setQuestionData((prev) => ({ ...prev, ...currData }));
+  }, [queryData, questionId, isOpen]);
   const closeHandler = useCallback(() => {
     setIsOpen(false);
     setQuestionData(
       initialQuestionData ? { ...initialQuestionData } : blankQuestion
     );
-  }, [initialQuestionData]);
+  }, [initialQuestionData, questionId]);
   return (
     <QuestionModalContext.Provider
       value={{
+        loadingQuestionAnswerData: loading,
         isOpen,
         isGenerating,
         questionData,

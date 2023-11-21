@@ -12,7 +12,6 @@ import { QuestionSubmissionsContainerWrapper } from "@/app/stores/questionSubmis
 import { QuestionSubmission } from "@prisma/client";
 import { QueryFullQuestionSubmissions } from "@/gql/queries/questionSubmissionQueries";
 import { SortOrder } from "../../../../../graphql/generated/graphql";
-
 export default async function QuestionPage({
   params,
 }: {
