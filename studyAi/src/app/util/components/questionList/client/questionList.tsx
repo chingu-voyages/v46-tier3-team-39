@@ -3,7 +3,7 @@ import { Question } from "@prisma/client";
 import PaginationWrapper from "../../pagination/paginationWrapper";
 import { QuestionStoreQuestionType } from "@/app/stores/questionStore";
 import { memo } from "react";
-import MemoizedQuestionListItem from "./questionListItem";
+import MemoizedQuestionListItem from "../server/questionListItem";
 const QuestionList = ({ data }: { data: Partial<Question>[] }) => {
   return data.map((question, idx) => (
     <MemoizedQuestionListItem

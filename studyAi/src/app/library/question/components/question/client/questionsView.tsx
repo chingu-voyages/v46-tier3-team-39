@@ -15,7 +15,7 @@ import { Share } from "@mui/icons-material";
 import { faThumbsUp, faThumbsDown } from "@fortawesome/free-regular-svg-icons";
 import { parseInteger } from "@/app/util/parsers/parseInt";
 import { Carousel } from "@/app/util/components/carousel/carousel";
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useState, useTransition } from "react";
 import useOrigin from "@/app/util/hooks/useOrigin";
 import {
   faFacebook,
@@ -28,6 +28,8 @@ import { faCheck, faLink } from "@fortawesome/free-solid-svg-icons";
 import useDropdown from "@/app/util/hooks/useDropdown";
 import BtnLabelDropdown from "@/app/util/components/btnLabelDropdown/btnLabelDropdown";
 import { useQuestionId } from "../../../context/QuestionIdContext";
+import { useSession } from "next-auth/react";
+import { performLikeAction } from "../server/actions";
 const platformsToShare = [
   {
     platform: "link",
@@ -201,13 +203,37 @@ const QuestionActionBtns = () => {
   );
 };
 const LikeCounterBtns = () => {
-  const questions = useQuestions()[0].data;
+  const [questionData, { addOrUpdateItems }] = useQuestions();
+  const questions = questionData?.data;
   const questionIdData = useQuestionId();
+  const [isPending, startTransition] = useTransition();
   const questionId = questionIdData?.questionId;
   const question =
     questionId && typeof questionId === "string"
       ? questions.map[questionId]
       : null;
+  const session = useSession();
+  const handleClick = async (
+    e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
+  ) => {
+    if (isPending) return;
+    const target = e.currentTarget;
+    const dataset = target.dataset;
+    const type = dataset["likeBtnType"];
+    const actionType = type === "like" ? "like" : "dislike";
+    startTransition(async () => {
+      if (!questionId) return;
+      const result = await performLikeAction(actionType, questionId);
+      console.log(result);
+      if (!result) return;
+      addOrUpdateItems([
+        {
+          id: questionId,
+          likeCounter: result,
+        },
+      ]);
+    });
+  };
   return (
     <div className="flex items-center mr-1">
       <Button
@@ -215,6 +241,8 @@ const LikeCounterBtns = () => {
         variant="text"
         sx={{ minWidth: "unset" }}
         type="button"
+        data-like-btn-type={"like"}
+        onClick={handleClick}
       >
         <FontAwesomeIcon icon={faThumbsUp} className="text-lg" />
         <span className="text-sm">
@@ -222,6 +250,7 @@ const LikeCounterBtns = () => {
         </span>
       </Button>
       <Button
+        data-like-btn-type={"dislike"}
         className="space-x-1"
         variant="text"
         sx={{ minWidth: "unset" }}
