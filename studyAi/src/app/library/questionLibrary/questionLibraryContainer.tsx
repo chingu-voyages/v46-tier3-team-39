@@ -59,7 +59,6 @@ export const QuestionLibraryList = () => {
     addOrUpdateItems(newQuestionArr);
     return newQuestionArr;
   };
-  console.log(document.body.id)
   return (
     <QuestionsListContainer
       scrollableTarget={document.body.id}

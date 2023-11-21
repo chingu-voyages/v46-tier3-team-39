@@ -21,10 +21,11 @@ const PaginationWrapper = <T extends unknown>({
     <InfiniteScroll
       dataLength={dataLength}
       loader={
-        <div className="flex justify-center items-center w-full">
+        <div className="flex justify-center items-center w-full p-8">
           <CircularProgress color="primary" />
         </div>
       }
+      style={{ overflow: "hidden" }}
       next={fetchMoreData}
       hasMore={hasMore}
       hasChildren={hasChildren}
