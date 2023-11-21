@@ -10,15 +10,15 @@ export default async function PrivacyPolicy() {
         footer: true,
       }}
     >
-      <Container>
-        <Typography variant="h4" component="h2">
+      <Container className="py-16 px-8">
+        <Typography variant="h4" component="h2" className="mb-8">
           Privacy Policy
         </Typography>
 
         <Typography variant="h6" component="h2">
           1. Acceptance of Terms
         </Typography>
-        <Container>
+        <Container className="mb-8">
           By accessing or using StudyAI, you agree to comply with and be bound
           by these terms and conditions. If you do not agree with any part of
           these terms, you may not use the App.
@@ -27,7 +27,7 @@ export default async function PrivacyPolicy() {
         <Typography variant="h6" component="h2">
           2. User Accounts
         </Typography>
-        <Container>
+        <Container className="mb-8">
           (a) Users may be required to create an account to access certain
           features of the App. You are responsible for maintaining the
           confidentiality of your account information and for all activities
@@ -38,7 +38,7 @@ export default async function PrivacyPolicy() {
         <Typography variant="h6" component="h2">
           3. Educational Content
         </Typography>
-        <Container>
+        <Container className="mb-8">
           (a) The App provides educational content, including but not limited to
           quizzes, assessments, and interactive learning materials. (b) While we
           strive for accuracy, we do not guarantee the correctness or
@@ -49,7 +49,7 @@ export default async function PrivacyPolicy() {
         <Typography variant="h6" component="h2">
           4. User Conduct
         </Typography>
-        <Container>
+        <Container className="mb-8">
           (a) Users must not engage in any behavior that could harm the App,
           other users, or violate any applicable laws. This includes, but is not
           limited to, misuse, cheating, or unauthorized access. (b) Users are
@@ -60,7 +60,7 @@ export default async function PrivacyPolicy() {
         <Typography variant="h6" component="h2">
           5. Privacy
         </Typography>
-        <Container>
+        <Container className="mb-8">
           (a) We collect and use information in accordance with our Privacy
           Policy. By using the App, you consent to the collection and use of
           your data as described in the Privacy Policy. (b) Users are
@@ -70,7 +70,7 @@ export default async function PrivacyPolicy() {
         <Typography variant="h6" component="h2">
           6. Termination
         </Typography>
-        <Container>
+        <Container className="mb-8">
           We reserve the right to terminate or suspend user accounts and access
           to the App for violation of these terms.
         </Container>
@@ -78,7 +78,7 @@ export default async function PrivacyPolicy() {
         <Typography variant="h6" component="h2">
           7. Changes to Terms
         </Typography>
-        <Container>
+        <Container className="mb-8">
           We may update or modify these terms at any time. Users will be
           notified of changes, and continued use of the App after such
           modifications constitutes acceptance of the updated terms.
@@ -87,7 +87,7 @@ export default async function PrivacyPolicy() {
         <Typography variant="h6" component="h2">
           8. Intellectual Property
         </Typography>
-        <Container>
+        <Container className="mb-8">
           (a) The App and its content are protected by intellectual property
           laws. Users agree not to reproduce, distribute, or create derivative
           works based on the App without our prior written consent.
@@ -96,7 +96,7 @@ export default async function PrivacyPolicy() {
         <Typography variant="h6" component="h2">
           9. Limitation of Liability
         </Typography>
-        <Container>
+        <Container className="mb-8">
           (a) To the extent permitted by law, we shall not be liable for any
           indirect, incidental, special, consequential, or punitive damages, or
           any loss of profits or revenues, whether incurred directly or
@@ -106,7 +106,7 @@ export default async function PrivacyPolicy() {
         <Typography variant="h6" component="h2">
           10. Governing Law
         </Typography>
-        <Container>
+        <Container className="mb-8">
           These terms and conditions are governed by and construed in accordance
           with the laws of Your Jurisdiction. Any disputes arising under or in
           connection with these terms shall be subject to the exclusive
@@ -116,7 +116,7 @@ export default async function PrivacyPolicy() {
         <Typography variant="h6" component="h2">
           11. Contact Information
         </Typography>
-        <Container>
+        <Container className="mb-8">
           If you have any questions about these terms and conditions, please
           contact us{" "}
           <a href="mailto:studyai610@gmail.com">
