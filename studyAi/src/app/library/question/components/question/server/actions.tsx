@@ -31,6 +31,7 @@ export const performLikeAction = async (
       : null;
   //if record exists with same value, ignore call.
   if (doc && doc.dislike === Boolean(type === "dislike")) return null;
+  //configure question like mutation options
   const newQuestionLikeDocOptions = {
     dateCreated: { set: currDate },
     questionId,
@@ -52,6 +53,7 @@ export const performLikeAction = async (
     mutation: CreateQuestionLikeDoc,
     variables: { data: newQuestionLikeDocOptions },
   };
+  //configure question like counter mutation options
   const questionMutationVar = {
     mutation: UpdateQuestionLikeCounter,
     variables: {
@@ -85,9 +87,9 @@ export const performLikeAction = async (
     },
   };
   const [_, questionMutation] = await Promise.all([
-    //either an edit or create function
+    //either an edit or create new like submission doc
     doc?.id ? client.mutate(likeEditOptions) : client.mutate(likeCreateOptions),
-    //update question counter
+    //update question counter in question
     client.mutate(questionMutationVar),
   ]);
   const { data: newQuestionLikeData } = questionMutation;

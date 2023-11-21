@@ -222,9 +222,8 @@ const LikeCounterBtns = () => {
     const type = dataset["likeBtnType"];
     const actionType = type === "like" ? "like" : "dislike";
     startTransition(async () => {
-      if (!questionId) return;
+      if (!questionId || isPending) return;
       const result = await performLikeAction(actionType, questionId);
-      console.log(result);
       if (!result) return;
       addOrUpdateItems([
         {
@@ -255,6 +254,7 @@ const LikeCounterBtns = () => {
         variant="text"
         sx={{ minWidth: "unset" }}
         type="button"
+        onClick={handleClick}
       >
         <FontAwesomeIcon
           icon={faThumbsDown}
