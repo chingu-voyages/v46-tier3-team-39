@@ -78,7 +78,7 @@ export default async function Terms() {
           </Typography>
           <Container>
             If you have any questions about these terms, please contact us{" "}
-            <a href="mailto:studyai610@gmail.com">
+            <a href={`mailto:${process.env.NEXT_PUBLIC_EMAIL}`}>
               <u>here</u>
             </a>
             .

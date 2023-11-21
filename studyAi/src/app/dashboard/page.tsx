@@ -1,19 +1,60 @@
 import React from "react";
 import { protectRouteSSR } from "../api/utils/sessionFuncs";
 import NavigationWrapper from "../util/components/navigation/navigationWrapper";
-import Profile from "./server/profile";
-import Link from "next/link";
-import { BsStars } from "react-icons/bs";
-import { FaFileCircleQuestion } from "react-icons/fa6";
-import GreetingBannerContainer from "./server/greetingBannerContainer";
+import { DashBoardProvider } from "./context/DashboardContext";
+import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
+import { GetQuestionCountByCreatorId } from "@/gql/queries/questionQueries";
+import { GetQuestionSubmissionCountByCreatorId } from "@/gql/queries/questionSubmissionQueries";
+import DashBoardWrapper from "./server/dashboardWrapper";
+import { Session } from "next-auth";
+
+export const generateMetadata = () => {}
+
+const getGreetingBannerInfo = async (session: Session, userId: string) => {
+  const client = ServerGraphQLClient(session);
+  const variables = {
+    creatorId: { equals: userId },
+  };
+  const questionQuery = {
+    query: GetQuestionCountByCreatorId,
+    variables,
+  };
+  const submissionsQuery = {
+    query: GetQuestionSubmissionCountByCreatorId,
+    variables,
+  };
+  const questionPromise = client.query(questionQuery);
+  const submissionsPromise = client.query(submissionsQuery);
+
+  try {
+    const [questionsResult, submissionsResult] = await Promise.all([
+      questionPromise,
+      submissionsPromise,
+    ]);
+    const submissionCount =
+      submissionsResult.data.aggregateQuestionSubmission._count?.userId;
+    const questionCount =
+      questionsResult.data.aggregateQuestion._count?.creatorId;
+    return { submissionCount, questionCount };
+  } catch (err: any) {
+    console.error(err?.networkError?.result);
+    return { submissionCount: 0, questionCount: 0 };
+  }
+};
+
 export default async function DashboardPage() {
   const sessionData = await protectRouteSSR("/auth/login");
   const session = sessionData.props.session;
   const userId = session?.user.id;
   const userName = session?.user.name;
-  if (!userName || !userId) return <></>;
-  const { answered: questionsLength, generated: submissionsLength } = 
-    session.user.questionData;
+  if (!userId || !userName) return <></>;
+
+  const initialProfileData = session.user;
+  const { submissionCount, questionCount } = await getGreetingBannerInfo(
+    session,
+    userId
+  );
+
   return (
     <NavigationWrapper
       appBars={{
@@ -22,59 +63,13 @@ export default async function DashboardPage() {
       }}
       usePadding
     >
-      <div className="grid grid-cols-1 md:grid-cols-3 p-5 m-5 md:gap-5 w-full sm:gap-y-5">
-        <div className="col-span-1 border p-5 md:col-span-1">
-          {/* 1 */}
-          <Profile
-            questionCount={questionsLength}
-            submissionCount={submissionsLength}
-          />
-        </div>
-        <div className="col-span-2">
-          <div className="grid grid-rows-2 ">
-            <div className="row-span-1 border p-5 flex w-full">
-              {/* 2.1 */}
-              <GreetingBannerContainer />
-            </div>
-            <div className=" row-span-1 flex item-center py-5">
-              <div className=" grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <Link href={`/library/question/create`}>
-                  <div className=" col-span-1 border p-5 flex flex-col lg:flex-row h-full items-center">
-                    {/* 2.2.1 */}
-                    <div className="me-2 ">
-                      <BsStars size={34} />
-                    </div>
-                    <div className="flex flex-col">
-                      <div className=" font-bold text-xl">
-                        Generate Questions
-                      </div>
-                      <div>
-                        Create exam questions using AI ! Use another community
-                        question as a template, or upload your own !
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-                <Link href={`/library/${userId}/questions`}>
-                  <div className=" col-span-1 border p-5 h-full flex flex-col lg:flex-row items-center">
-                    {/* 2.2.2 */}
-                    <div className="me-2 ">
-                      <FaFileCircleQuestion size={34} />
-                    </div>
-                    <div className="flex flex-col">
-                      <div className=" font-bold text-xl ">Your Questions</div>
-                      <div>
-                        Choose exams from our community, or create your own
-                        variations using any questions you generate or find!
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <DashBoardProvider
+        initialProfileData={initialProfileData}
+        submissionCount={submissionCount || 0}
+        questionCount={questionCount || 0}
+      >
+        <DashBoardWrapper />
+      </DashBoardProvider>
     </NavigationWrapper>
   );
 }

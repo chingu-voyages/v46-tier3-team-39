@@ -93,3 +93,9 @@ export const GetQuestionsInfo = gql(`
     }
   }
 `);
+export const GetQuestionCountByCreatorId = gql(`
+    query AggregateQuestionResolver( $creatorId: StringFilter) {
+      aggregateQuestion(where: {creatorId: $creatorId}) {
+      _count {creatorId}
+    }}
+  `);
