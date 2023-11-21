@@ -14,7 +14,6 @@ import { Question } from "@prisma/client";
 import ObjectId from "bson-objectid";
 import { useLazyQuery } from "@apollo/client";
 import { GetQuestionAnswerById } from "@/gql/queries/questionQueries";
-
 // Create a new context
 const chosenId = ObjectId().toString();
 const blankQuestion: Partial<Question> = {

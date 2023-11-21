@@ -16,18 +16,23 @@ const QuestionList = ({ data }: { data: Partial<Question>[] }) => {
     />
   ));
 };
-const MemoizedQuestionList = memo(QuestionList);
+const MemoizedQuestionList = memo(QuestionList, (prevProps, nextProps) => {
+  return (
+    prevProps.data.every((prev, idx) => prev.id === nextProps.data[idx].id) &&
+    prevProps.data.length === nextProps.data.length
+  );
+});
 export default function QuestionsListContainer({
   questions,
   fetchMoreData,
   hasMore,
-  scrollableTarget
+  scrollableTarget,
 }: {
   questions: Partial<Question>[];
   fetchMoreData: () => Promise<QuestionStoreQuestionType[] | undefined>;
   hasMore: boolean;
   scrollableTarget?: string | React.ReactNode;
-}) {
+  }) {
   return (
     <PaginationWrapper
       fetchMoreData={fetchMoreData}
