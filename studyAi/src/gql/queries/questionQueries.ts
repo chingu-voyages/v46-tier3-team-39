@@ -23,6 +23,7 @@ export const QuestionInfoData = gql(`
 export const QuestionAnswerData = gql(`
   fragment QuestionAnswerData on Question {
     answer {
+        id
         correctAnswer {
           id
           value
