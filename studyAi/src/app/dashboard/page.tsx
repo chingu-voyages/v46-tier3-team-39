@@ -5,8 +5,10 @@ import { DashBoardProvider } from "./context/DashboardContext";
 import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
 import { GetQuestionCountByCreatorId } from "@/gql/queries/questionQueries";
 import { GetQuestionSubmissionCountByCreatorId } from "@/gql/queries/questionSubmissionQueries";
-import DashBoardWrapper from "./client/dashboardWrapper";
+import DashBoardWrapper from "./server/dashboardWrapper";
 import { Session } from "next-auth";
+
+export const generateMetadata = () => {}
 
 const getGreetingBannerInfo = async (session: Session, userId: string) => {
   const client = ServerGraphQLClient(session);

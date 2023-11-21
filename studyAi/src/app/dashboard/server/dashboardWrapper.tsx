@@ -1,6 +1,5 @@
-"use client";
-import Profile from "../server/profile";
-import GreetingBannerWrapper from "./greetingBannerWrapper";
+import Profile from "./profile";
+import GreetingBannerWrapper from "../client/greetingBannerWrapper";
 
 const DashBoardWrapper = () => {
   return (

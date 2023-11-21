@@ -117,7 +117,7 @@ const ProfileForm = () => {
         if (dashboardContext?.setProfileData) {
           dashboardContext?.setProfileData((prev: Partial<User>) => ({
             ...prev,
-            tags: e.map((e) => e.value),
+            tags: e.map((t) => t),
           }));
         }
       }}
