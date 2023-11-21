@@ -1,6 +1,7 @@
 "use client";
 import {
   QuestionStoreQuestionType,
+  QuestionsData,
   useQuestions,
 } from "@/app/stores/questionStore";
 import {
@@ -22,12 +23,16 @@ import {
 } from "../../../../../graphql/generated/graphql";
 import { GetQuestionsInfo } from "@/gql/queries/questionQueries";
 export type QuestionLibraryContextData = {
+  pageType: "user" | "public"; 
   error: ApolloError | undefined;
   questions: QuestionStoreQuestionType[];
   tabValue: "All" | "Public" | "Private";
   setTabValue: React.Dispatch<
     React.SetStateAction<"All" | "Public" | "Private">
   >;
+  addOrUpdateItems: (
+    items: QuestionStoreQuestionType[]
+  ) => QuestionsData["data"];
   sortOrder: SortOrder;
   setSortOrder: React.Dispatch<React.SetStateAction<SortOrder>>;
   sortValue: "title" | "date" | "likes";
@@ -58,11 +63,13 @@ const QuestionLibraryContext = createContext<QuestionLibraryContextData | null>(
 );
 export const QuestionLibraryProvider = ({
   children,
+  pageType,
 }: {
+  pageType: "user" | "public";
   children: React.ReactNode;
 }) => {
   const [tabValue, setTabValue] = useState<"All" | "Public" | "Private">("All");
-  const [questionsData, { resetItems }] = useQuestions();
+  const [questionsData, { resetItems, addOrUpdateItems }] = useQuestions();
   const [getQuestions, { loading, error }] = useLazyQuery(GetQuestionsInfo);
   const questions = questionsData.data.arr;
   const [sortOrder, setSortOrder] = useState(SortOrder.Desc);
@@ -75,6 +82,7 @@ export const QuestionLibraryProvider = ({
   return (
     <QuestionLibraryContext.Provider
       value={{
+        pageType,
         error,
         questions,
         tabValue,
@@ -88,6 +96,7 @@ export const QuestionLibraryProvider = ({
         loading,
         resetItems,
         getQuestions,
+        addOrUpdateItems,
       }}
     >
       {children}

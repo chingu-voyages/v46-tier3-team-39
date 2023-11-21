@@ -3,7 +3,7 @@ import { Question } from "@prisma/client";
 import { createStore, createHook, createContainer } from "react-sweet-state";
 import { addOrUpdateFunc, deleteItems } from "./helpers";
 export type QuestionStoreQuestionType = Partial<Question> & { id: string };
-type QuestionsData = {
+export type QuestionsData = {
   data: {
     map: { [key: string]: Partial<Question> & { id: string } };
     arr: QuestionStoreQuestionType[];

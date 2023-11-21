@@ -3,35 +3,76 @@ import Box from "@mui/material/Box";
 import { styles } from "./styles";
 import { QuestionsLibraryHeader } from "./questionLibraryHeader";
 import {
-  QuestionLibraryContextData,
   QuestionLibraryProvider,
   useQuestionLibraryData,
 } from "./context/questionLibraryContext";
-export const QuestionLibraryList = () =>
-  //   {
-  //   children,
-  // }: {
-  //   children: (props: QuestionLibraryContextData) => React.ReactNode;
-  //     }
-  {
-    const props = useQuestionLibraryData();
-    if (!props) return <></>;
-    return;
-    // return children(props);
+import QuestionsListContainer from "@/app/util/components/questionList/client/questionList";
+import { useSession } from "next-auth/react";
+import { determineSortQuery } from "./helpers/determineSortQuery";
+import { determinePrivateQuery } from "./helpers/determinePrivateQuery";
+import { determineCreatorIdQuery } from "./helpers/determineCreatorIdQuery";
+import { QuestionStoreQuestionType } from "@/app/stores/questionStore";
+export const QuestionLibraryList = () => {
+  const session = useSession();
+  const libraryData = useQuestionLibraryData();
+  if (!libraryData) return <></>;
+  const {
+    pageType,
+    cursor,
+    questions,
+    tabValue,
+    getQuestions,
+    setCursor,
+    addOrUpdateItems,
+    sortOrder,
+    sortValue,
+  } = libraryData;
+  const fetchMoreData = async () => {
+    const queryOptions = {
+      variables: {
+        cursor: {
+          id: cursor,
+        },
+        skip: cursor ? 1 : null,
+        private: determinePrivateQuery(tabValue),
+        creatorId: determineCreatorIdQuery(pageType, session),
+        orderBy: determineSortQuery(sortValue, sortOrder),
+      },
+    };
+    const { data: results } = await getQuestions(queryOptions);
+    if (!results) {
+      setCursor(null);
+      return [];
+    }
+    const newQuestionArr = results.questions as QuestionStoreQuestionType[];
+    addOrUpdateItems(newQuestionArr);
+    if (newQuestionArr.length <= 0) {
+      setCursor(null);
+      return newQuestionArr;
+    }
+    //means we have new items to update
+    const newNextCursor = newQuestionArr[newQuestionArr.length - 1].id;
+    setCursor(newNextCursor || null);
+    return newQuestionArr;
   };
+  return (
+    <QuestionsListContainer
+      questions={questions}
+      hasMore={!!cursor}
+      fetchMoreData={fetchMoreData}
+    />
+  );
+};
 export default function QuestionsLibraryContainer({
   pageType,
-}: // children,
-{
+}: {
   pageType: "user" | "public";
-  // children: (props: QuestionLibraryContextData) => React.ReactNode;
 }) {
   return (
     <Box className={styles.layout}>
-      <QuestionLibraryProvider>
-        <QuestionsLibraryHeader pageType={pageType} />
+      <QuestionLibraryProvider pageType={pageType}>
+        <QuestionsLibraryHeader />
         <QuestionLibraryList />
-        {/* <QuestionLibraryList>{children}</QuestionLibraryList> */}
       </QuestionLibraryProvider>
     </Box>
   );

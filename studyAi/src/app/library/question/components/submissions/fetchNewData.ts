@@ -57,7 +57,7 @@ const fetchItems =
         },
         skip: cursor ? 1 : null,
         orderBy: {
-          dateCreated: "desc" as SortOrder,
+          dateCreated: SortOrder.Desc,
         },
       },
     };
@@ -66,18 +66,16 @@ const fetchItems =
       setCursor(null);
       return [];
     }
-    const newData = addOrUpdateItems(
-      results.questionSubmissions as QuestionSubmissionStoreSubmissionType[],
-      "submitted"
-    );
-    if (results.questionSubmissions.length <= 0) {
+    const newSubmissionArr =
+      results.questionSubmissions as QuestionSubmissionStoreSubmissionType[];
+    addOrUpdateItems(newSubmissionArr, "submitted");
+    if (newSubmissionArr.length <= 0) {
       setCursor(null);
-      return results.questionSubmissions;
+      return newSubmissionArr;
     }
     //means we have new items to update
-    const newArr = newData.submittedData.arr?.[questionId] || null;
-    const newNextCursor = newArr?.[newArr.length - 1]?.id || null;
-    setCursor(newNextCursor);
-    return results.questionSubmissions;
+    const newNextCursor = newSubmissionArr[newSubmissionArr.length - 1].id;
+    setCursor(newNextCursor || null);
+    return newSubmissionArr;
   };
-export default fetchItems
+export default fetchItems;

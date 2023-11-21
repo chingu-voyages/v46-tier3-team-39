@@ -26,25 +26,27 @@ const QuestionListItem = ({
   tags,
 }: {
   id: string;
-  questionType: string;
-  title: string;
-  accessKey: boolean;
-  tags: string[];
+  questionType?: string;
+  title?: string;
+  accessKey?: boolean;
+  tags?: string[];
 }) => {
   return (
     <Link className={styles.layout} href={`/library/question/${id}`}>
       <div>
         <h4 className={styles.h4}>{questionType}</h4>
         <h3 className={styles.h3}>{title}</h3>
-        <Carousel>
-          {tags.map((tag, index) => {
-            return (
-              <span className={styles.tag} key={id + tag + index}>
-                {tag}
-              </span>
-            );
-          })}
-        </Carousel>
+        {tags && (
+          <Carousel>
+            {tags.map((tag, index) => {
+              return (
+                <span className={styles.tag} key={id + tag + index}>
+                  {tag}
+                </span>
+              );
+            })}
+          </Carousel>
+        )}
       </div>
       {accessKey ? <LockIcon /> : <PublicIcon />}
     </Link>

@@ -11,16 +11,16 @@ import { useSession } from "next-auth/react";
 import { styles } from "./styles";
 import { QuestionOrderByWithRelationInput } from "../../../../graphql/generated/graphql";
 import { useQuestionLibraryData } from "./context/questionLibraryContext";
+import { determineSortQuery } from "./helpers/determineSortQuery";
+import { determinePrivateQuery } from "./helpers/determinePrivateQuery";
+import { determineCreatorIdQuery } from "./helpers/determineCreatorIdQuery";
 
-export const QuestionsLibraryHeader = ({
-  pageType,
-}: {
-  pageType: "user" | "public";
-}) => {
+export const QuestionsLibraryHeader = () => {
   const session = useSession();
   const libraryData = useQuestionLibraryData();
   if (!libraryData) return <></>;
   const {
+    pageType,
     loading,
     tabValue,
     setTabValue,
@@ -51,35 +51,11 @@ export const QuestionsLibraryHeader = ({
         break;
     }
     try {
-      let sortObj: QuestionOrderByWithRelationInput = {};
-      switch (sortValue) {
-        case "date":
-          sortObj.dateCreated = sortOrder;
-          break;
-        case "likes":
-          sortObj.likeCounter = {};
-          sortObj.likeCounter.likes = sortOrder;
-          break;
-        case "title":
-          sortObj.questionInfo = {};
-          sortObj.questionInfo.title = sortOrder;
-          break;
-        default:
-          break;
-      }
       const { data: newQuestions } = await getQuestions({
         variables: {
-          private:
-            tabValue === "All"
-              ? null
-              : {
-                  equals: tabValue === "Private",
-                },
-          orderBy: sortObj,
-          creatorId:
-            pageType === "user" && session.status === "authenticated"
-              ? { equals: session.data?.user.id }
-              : null,
+          private: determinePrivateQuery(tabValue),
+          orderBy: determineSortQuery(sortValue, sortOrder),
+          creatorId: determineCreatorIdQuery(pageType, session),
           cursor: cursor
             ? {
                 id: cursor,
