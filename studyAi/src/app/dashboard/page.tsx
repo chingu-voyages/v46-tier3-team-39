@@ -2,11 +2,9 @@ import React from "react";
 import { protectRouteSSR } from "../api/utils/sessionFuncs";
 import NavigationWrapper from "../util/components/navigation/navigationWrapper";
 import { DashBoardProvider } from "./context/DashboardContext";
-import { sub } from "date-fns";
 import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
 import { GetQuestionCountByCreatorId } from "@/gql/queries/questionQueries";
 import { GetQuestionSubmissionCountByCreatorId } from "@/gql/queries/questionSubmissionQueries";
-import { SortOrder } from "../../../graphql/generated/graphql";
 import DashBoardWrapper from "./client/dashboardWrapper";
 import { Session } from "next-auth";
 
@@ -65,8 +63,8 @@ export default async function DashboardPage() {
     >
       <DashBoardProvider
         initialProfileData={initialProfileData}
-        submissionCount={submissionCount}
-        questionCount={questionCount}
+        submissionCount={submissionCount || 0}
+        questionCount={questionCount || 0}
       >
         <DashBoardWrapper />
       </DashBoardProvider>
