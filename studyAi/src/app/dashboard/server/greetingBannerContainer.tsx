@@ -1,4 +1,4 @@
-import GreetingBanner from "./greetingBanner";
+import GreetingBanner from "../client/greetingBanner";
 
 const GreetingBannerContainer = async () => {
   try {

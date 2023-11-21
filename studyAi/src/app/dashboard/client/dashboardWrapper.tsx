@@ -1,3 +1,4 @@
+"use client";
 import Profile from "../server/profile";
 import GreetingBannerWrapper from "./greetingBannerWrapper";
 

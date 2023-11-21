@@ -1,3 +1,4 @@
+"use client";
 import { BsStars } from "react-icons/bs";
 import { FaFileCircleQuestion } from "react-icons/fa6";
 import GreetingBannerContainer from "../server/greetingBannerContainer";
