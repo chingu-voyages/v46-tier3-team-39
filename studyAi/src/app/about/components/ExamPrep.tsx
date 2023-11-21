@@ -1,11 +1,9 @@
-import { options } from "@/app/api/auth/[...nextauth]/options";
-import QuestionModalWrapper from "@/app/util/components/questionModal/questionModalWrapper";
+import { options } from "@/authComponents/nextAuth/options";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
-
+import QuestionModalWrapper from "@/app/util/components/questionModal/questionModalWrapper";
+import { Button } from "@mui/material";
 const ExamPrep = async () => {
-  const session = await getServerSession(options);
-
   return (
     <div className="sm:flex justify-between items-center py-16 px-5 sm:py-28 sm:px-16 text-center sm:text-left">
       <div>
@@ -15,24 +13,21 @@ const ExamPrep = async () => {
         <h2 className="sm:text-xl mt-4">
           Unlock your full potential with our AI-powered practice questions
         </h2>
-      </div> 
+      </div>
       <div className="flex mt-4">
         <div className="mx-auto">
-          {session ? (
-            <QuestionModalWrapper>
-              <button className="bg-Black border text-White py-3 px-6 mr-4">
-                Try
-              </button>
-            </QuestionModalWrapper>
-          ) : (
-            <Link href={"/auth/signup"}>
-              <button className="border-2 py-3 px-6 sm:px-8 sm:py-4">
-                Sign Up
-              </button>
-            </Link>
-          )}
-
-          <button className="border py-3 px-6">learn More</button>
+          <Button
+            variant="contained"
+            className="text-White bg-Black py-3 px-6 rounded-none"
+            href={"/library/question/create"}
+            LinkComponent={Link}
+            sx={{
+              textTransform: "unset",
+            }}
+          >
+            Try
+          </Button>
+          <button className="border py-3 px-6">Learn More</button>
         </div>
       </div>
     </div>

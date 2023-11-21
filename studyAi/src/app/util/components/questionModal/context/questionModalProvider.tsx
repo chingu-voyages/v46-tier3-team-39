@@ -3,33 +3,43 @@ import {
   Dispatch,
   SetStateAction,
   createContext,
+  useCallback,
   useContext,
+  useEffect,
   useState,
 } from "react";
 import { useElementPos } from "../../../providers/elementPosProvider";
 import { ElementPostionType } from "../../../hooks/useElementSize";
 import { Question } from "@prisma/client";
+import ObjectId from "bson-objectid";
+import { useLazyQuery } from "@apollo/client";
+import { GetQuestionAnswerById } from "@/gql/queries/questionQueries";
 // Create a new context
+const chosenId = ObjectId().toString();
 const blankQuestion: Partial<Question> = {
   questionInfo: {
-    title: "",
-    description: "",
+    id: ObjectId().toString(),
+    title: "Addition",
+    description: "What is 1+1?",
     options: [
-      { id: "1", value: "Answer 1" },
-      { id: "2", value: "Answer 2" },
-      { id: "3", value: "Answer 3" },
-      { id: "4", value: "Answer 4" },
+      { id: chosenId, value: "2" },
+      { id: ObjectId().toString(), value: "1" },
+      { id: ObjectId().toString(), value: "3" },
+      { id: ObjectId().toString(), value: "5" },
     ],
   },
   questionType: "Multiple Choice",
-  tags: [],
+  tags: ["math"],
   answer: {
-    correctAnswer: [{ id: "1", value: "A" }],
+    id: ObjectId().toString(),
+    correctAnswer: [{ id: chosenId, value: "2" }],
   },
+  private: true,
 };
 
 export type QuestionModalDataType = {
   type: { type: "edit" | "create"; layout: "modal" | "page" };
+  loadingQuestionAnswerData: boolean;
   currElPos: ElementPostionType | null;
   isOpen: boolean;
   questionData: Partial<Question>;
@@ -56,19 +66,47 @@ export function QuestionModalProvider({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
+  //For future optimization,
+  // split the following data into different context providers
+  //and replace hooks for each input. We can then have one function
+  //at the top level that modifies the initial values of all the providers
+  //and each provider's stored value, is automatically re-rendered with the initial
+  //changes
   const [questionData, setQuestionData] = useState<Partial<Question>>(
     initialQuestionData ? { ...initialQuestionData } : blankQuestion
   );
   const currElPos = useElementPos();
-  const closeHandler = () => {
+  const [getQuestionAnswer, { loading, error, data: queryData }] = useLazyQuery(
+    GetQuestionAnswerById,
+    {
+      variables: { id: questionData?.id },
+    }
+  );
+  const questionId = questionData?.id;
+  useEffect(() => {
+    //we refresh data every time the modal is opened
+    //or the questionId changes
+    let currData = queryData?.question;
+    if (!questionId || !isOpen) return;
+    //if it exists simply update the data
+    if (currData) setQuestionData((prev) => ({ ...prev, ...currData }));
+    //if it doesn't exist, get the data
+    getQuestionAnswer().then((data) => {
+      currData = data?.data?.question;
+      if (!currData) return;
+      setQuestionData((prev) => ({ ...prev, ...currData }));
+    });
+  }, [queryData, questionId, isOpen, getQuestionAnswer]);
+  const closeHandler = useCallback(() => {
     setIsOpen(false);
     setQuestionData(
       initialQuestionData ? { ...initialQuestionData } : blankQuestion
     );
-  };
+  }, [initialQuestionData, questionId]);
   return (
     <QuestionModalContext.Provider
       value={{
+        loadingQuestionAnswerData: loading,
         isOpen,
         isGenerating,
         questionData,

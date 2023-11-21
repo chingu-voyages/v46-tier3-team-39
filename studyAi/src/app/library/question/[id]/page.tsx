@@ -1,95 +1,63 @@
-import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
-import QuestionPageContainer from "../components/page/client/questionPageContainer";
 import { Question } from "../../../../../prisma/generated/type-graphql";
 import { QuestionsContainer } from "@/app/stores/questionStore";
-import { QuestionTypes } from "@/app/util/types/UserData";
-import { gql } from "../../../../../graphql/generated";
 import { getServerSession } from "next-auth";
-import { options } from "@/app/api/auth/[...nextauth]/options";
+import { options } from "@/authComponents/nextAuth/options";
 import { Metadata, ResolvingMetadata } from "next";
+import { QuestionIdProvider } from "../context/QuestionIdContext";
+import { GetFullQuestion } from "@/gql/queries/questionQueries";
 import determineOriginUrl from "@/app/util/parsers/determineOriginUrl";
-const question: Partial<Question> & {
-  id: string;
-  questionType: (typeof QuestionTypes)[number];
-} = {
-  id: "6533f4c8489ef223ffc31a9b",
-  creatorId: "6533f4c7489ef223ffc31a99",
-  questionType: "Short Answer",
-  tags: [
-    "science",
-    "science",
-    "science",
-    "science",
-    "science",
-    "science",
-    "science",
-    "science",
-    "science",
-    "science",
-    "science",
-    "science",
-  ],
-  likeCounter: {
-    likes: 1500000000,
-    dislikes: 100000,
-  },
-  questionInfo: {
-    title: "Question 1",
-    description: "Question 2 is the world",
-    options: [
-      {
-        id: "1",
-        value: "Option 1",
-      },
-      {
-        id: "2",
-        value: "Option 1",
-      },
-    ],
-  },
-};
-const QuestionQueryById = gql(`
-  query GetFullQuestion($id: String) {
-    question(where: { id: $id }) {
-      id
-      creatorId
-      questionType
-      tags
-      questionInfo {
-        title
-        description
-        options {
-          id
-          value
-        }
-      }
-      likeCounter {
-        likes
-        dislikes
-      }
-    }
-  }
-`);
+import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
+import QuestionPageContainer from "../components/page/client/questionPageContainer";
+import { QuestionSubmissionsContainerWrapper } from "@/app/stores/questionSubmissionsStore";
+import { QuestionSubmission } from "@prisma/client";
+import { QueryFullQuestionSubmissions } from "@/gql/queries/questionSubmissionQueries";
+import { SortOrder } from "../../../../../graphql/generated/graphql";
 export default async function QuestionPage({
   params,
 }: {
   params: { id: string };
 }) {
   const questionId = params.id;
-  const query = {
-    query: QuestionQueryById,
+  const questionQuery = {
+    query: GetFullQuestion,
     variables: { id: questionId },
   };
   try {
-    // const session = await getServerSession(options)
-    // const client = ServerGraphQLClient(session);
-    // const { data: result } = await client.query(query);
-    // const data = result.question as (Partial<Question> & { id: string }) | null;
-    // console.log(data)
-    const data = question;
+    const session = await getServerSession(options);
+    const client = ServerGraphQLClient(session);
+    const submissionQuery = {
+      query: QueryFullQuestionSubmissions,
+      variables: {
+        questionId: { equals: questionId },
+        userId: session?.user.id || "",
+        orderBy: { dateCreated: "desc" as SortOrder },
+      },
+    };
+    const questionPromise = client.query(questionQuery);
+    const submissionPromise = client.query(submissionQuery);
+    const [{ data: question }, { data: submission }] = await Promise.all([
+      questionPromise,
+      submissionPromise,
+    ]);
+    const questionData = question.question as
+      | (Partial<Question> & { id: string })
+      | null;
+    const submissionData =
+      submission.questionSubmissions as (Partial<QuestionSubmission> & {
+        questionId: string;
+        id: string;
+      })[];
+    if (!questionData?.id) return <></>;
     return (
-      <QuestionsContainer initialItems={data ? [data] : []}>
-        <QuestionPageContainer questionId={data.id} />
+      <QuestionsContainer initialItems={questionData ? [questionData] : []}>
+        <QuestionSubmissionsContainerWrapper
+          initialItems={submissionData ? submissionData : []}
+          questionId={questionId}
+        >
+          <QuestionIdProvider questionId={questionData.id}>
+            <QuestionPageContainer />
+          </QuestionIdProvider>
+        </QuestionSubmissionsContainerWrapper>
       </QuestionsContainer>
     );
   } catch (err) {
@@ -107,7 +75,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const questionId = params.id;
   const query = {
-    query: QuestionQueryById,
+    query: GetFullQuestion,
     variables: { id: questionId },
   };
   const session = await getServerSession(options);

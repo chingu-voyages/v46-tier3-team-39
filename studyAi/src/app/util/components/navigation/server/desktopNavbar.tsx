@@ -5,14 +5,15 @@ import AuthenticationNav, {
   RecursiveClassNames,
 } from "../client/authentication";
 const links = [
-  {
-    href: "/dashboard",
-    text: "Dashboard",
-  },
+
   {
     href: "/library/questions",
-    text: "Question Library",
-  }
+    text: "Library",
+  },
+  {
+    href: "/about",
+    text: "About",
+  },
 ];
 
 export const NavbarLinks = ({

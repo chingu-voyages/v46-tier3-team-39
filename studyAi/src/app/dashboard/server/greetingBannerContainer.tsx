@@ -1,60 +1,18 @@
-import { options } from "@/app/api/auth/[...nextauth]/options";
+import { options } from "@/authComponents/nextAuth/options";
 import { getServerSession } from "next-auth";
 import GreetingBanner from "./greetingBanner";
 import { sub } from "date-fns";
 import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
 import { Question } from "@prisma/client";
 import { QuestionSubmission } from "@prisma/client";
-import { gql } from "../../../../graphql/generated";
-export const QueryUserGeneratedQuestions = gql(`
-  query QueryUserGeneratedQuestions(
-    $userId: String
-    $dateQuery: DateTimeFilter
-    $cursor: QuestionWhereUniqueInput
-    $skip: Int
-  ) {
-    questions(
-      where: {
-        creatorId: { equals: $userId }
-        dateCreated: $dateQuery
-      }
-      orderBy: { dateCreated: desc }
-      take: 1000
-      cursor: $cursor
-      skip: $skip
-    ) {
-      id
-      questionType
-      tags
-      questionInfo{
-        title
-      }
-      private
-    }
-  }
-`);
-const QueryQuestionSubmissions = gql(`
-  query QueryQuestionSubmissions(
-    $userId: String
-    $dateQuery: DateTimeFilter
-  ) {
-    questionSubmissions(
-      where: {
-        userId: { equals: $userId }
-        dateCreated: $dateQuery
-      }
-      orderBy: { dateCreated: desc }
-    ) {
-      id
-    }
-  }
-`);
+import { GetQuestionsInfo } from "@/gql/queries/questionQueries";
+import { QueryQuestionSubmissionsIdOnly } from "@/gql/queries/questionSubmissionQueries";
+import { SortOrder } from "../../../../graphql/generated/graphql";
 const GreetingBannerContainer = async () => {
   const session = await getServerSession(options);
   const client = ServerGraphQLClient(session);
   const userId = session?.user.id;
   const userName = session?.user.name;
-  console.log("userId: " + JSON.stringify(userId, null, 1));
   if (!userName || !userId) return <></>;
   const currDate = new Date();
   const weekPriorDate = sub(currDate, {
@@ -66,15 +24,19 @@ const GreetingBannerContainer = async () => {
       gte: weekPriorDate.toISOString(),
       lte: currDate.toISOString(),
     },
+    orderBy: {
+      dateCreated: "desc" as SortOrder,
+    },
   };
   const questionQuery = {
-    query: QueryUserGeneratedQuestions,
+    query: GetQuestionsInfo,
     variables: {
       ...queryVariables,
+      creatorId: { equals: userId },
     },
   };
   const submissionsQuery = {
-    query: QueryQuestionSubmissions,
+    query: QueryQuestionSubmissionsIdOnly,
     variables: {
       ...queryVariables,
     },
@@ -89,13 +51,10 @@ const GreetingBannerContainer = async () => {
     const questions = questionsResult.data.questions.map(
       (e: any) => e.id
     ) as Question["id"][];
-    console.log("questions: " + questions);
     const submissions = submissionsResult.data.questionSubmissions.map(
       (e: any) => e.id
     ) as QuestionSubmission["id"][];
-    console.log("submissions: " + submissions);
     const uniqueSubmissions = [...new Set(submissions)];
-    console.log("uniqueSubmissions: " + uniqueSubmissions);
     return (
       <div className="flex w-full border-2 border-blue-500">
         <GreetingBanner

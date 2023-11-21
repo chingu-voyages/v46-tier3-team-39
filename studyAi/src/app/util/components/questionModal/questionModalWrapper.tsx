@@ -1,6 +1,6 @@
 "use client";
 import QuestionEditForm from "./questionEditModal";
-import { IconButton, Modal } from "@mui/material";
+import { Modal } from "@mui/material";
 import { Question } from "../../../../../prisma/generated/type-graphql";
 import { ElementPosProvider } from "../../providers/elementPosProvider";
 import {
@@ -8,7 +8,11 @@ import {
   useQuestionModal,
 } from "./context/questionModalProvider";
 const defaultModalClasses = ["flex", "items-center", "justify-center"];
-const QuestionModal = ({ children }: { children: React.ReactNode }) => {
+const QuestionModal = ({
+  children,
+}: {
+  children: ({ onClick }: { onClick: () => void }) => React.ReactNode;
+}) => {
   const modalData = useQuestionModal();
   if (!modalData) return <></>;
   const { type, isOpen, setIsOpen, closeHandler } = modalData;
@@ -20,7 +24,7 @@ const QuestionModal = ({ children }: { children: React.ReactNode }) => {
     <>
       {type.layout === "modal" && (
         <>
-          <div onClick={() => setIsOpen(true)}>{children}</div>
+          {children({ onClick: () => setIsOpen(true) })}
           <Modal open={isOpen} className={styles.modal} onClose={closeHandler}>
             <>
               <QuestionEditForm />
@@ -42,7 +46,7 @@ const QuestionModalContainer = ({
   onSave,
 }: {
   initialQuestionData?: Partial<Question>;
-  children: React.ReactNode;
+  children: ({ onClick }: { onClick: () => void }) => React.ReactNode;
   type?: { type: "edit" | "create"; layout: "modal" | "page" };
   onSave?: (e: Partial<Question>) => void;
 }) => {
@@ -65,7 +69,7 @@ const QuestionModalWrapper = ({
     layout: "modal",
   },
 }: {
-  children: React.ReactNode;
+  children: ({ onClick }: { onClick: () => void }) => React.ReactNode;
   type?: { type: "edit" | "create"; layout: "modal" | "page" };
   initialQuestionData?: Partial<Question>;
   onSave?: (e: Partial<Question>) => void;

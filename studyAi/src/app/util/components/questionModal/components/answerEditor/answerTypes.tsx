@@ -36,7 +36,10 @@ export const MultipleChoice = () => {
     });
     setQuestionData({
       ...questionData,
-      answer: { correctAnswer: [{ id: id, value: value }] },
+      answer: {
+        id: questionData.answer?.id || ObjectId().toString(),
+        correctAnswer: [{ id: id, value: value }],
+      },
     });
   };
 
@@ -149,6 +152,7 @@ export const SelectAll = () => {
                 ? {
                     ...questionData,
                     answer: {
+                      id: currentAnswer?.id || ObjectId().toString(),
                       correctAnswer: currentAnswer.correctAnswer.concat({
                         id: option.id,
                         value: event.target.value,
@@ -168,7 +172,10 @@ export const SelectAll = () => {
               newCorrectAnswers
                 ? {
                     ...questionData,
-                    answer: { correctAnswer: newCorrectAnswers },
+                    answer: {
+                      id: currentAnswer?.id || ObjectId().toString(),
+                      correctAnswer: newCorrectAnswers,
+                    },
                   }
                 : questionData
             );
@@ -240,13 +247,23 @@ export const ShortAnswer = () => {
     else currInputClassNames.push("my-4");
   }
   const changeHandler = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const prevAnswer = questionData.answer
+      ? questionData.answer
+      : {
+          id: ObjectId().toString(),
+          correctAnswer: [
+            {
+              id: ObjectId().toString(),
+              value: "",
+            },
+          ],
+        };
     const newAnswer = {
-      id: questionData.answer?.correctAnswer[0].id as string,
+      id: prevAnswer.correctAnswer[0].id as string,
       value: event.target.value,
     };
     setQuestionData({
-      ...questionData,
-      answer: { correctAnswer: [newAnswer] },
+      answer: { ...prevAnswer, correctAnswer: [newAnswer] },
     });
   };
   return (
@@ -310,13 +327,13 @@ const deleteChoice = (
   }
   const newOptions = options?.toSpliced(index, 1) as AnswerOption[];
   const currentOption = options ? options[index] : undefined;
-  const currentAnswer = questionData.answer?.correctAnswer;
-  let newAnswer: AnswerOption[] = [];
-  currentAnswer?.forEach((answer) => {
-    if (answer.id != currentOption?.id) {
-      newAnswer.push(answer);
-    }
-  });
+  const currAnswerKey = questionData.answer
+    ? questionData.answer
+    : { id: ObjectId().toString(), correctAnswer: [] };
+  const currentAnswer = currAnswerKey.correctAnswer;
+  let newAnswer: AnswerOption[] = currentAnswer.filter(
+    (answer) => answer.id !== currentOption?.id
+  );
   if (
     newAnswer.length === 0 &&
     questionData.questionType === "Multiple Choice"
@@ -328,7 +345,7 @@ const deleteChoice = (
       ? {
           ...questionData,
           questionInfo: { ...questionData.questionInfo, options: newOptions },
-          answer: { correctAnswer: newAnswer },
+          answer: { ...currAnswerKey, correctAnswer: newAnswer },
         }
       : questionData
   );

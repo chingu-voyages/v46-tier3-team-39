@@ -1,8 +1,8 @@
 "use client";
-import { useParams } from "next/navigation";
 import { useQuestions } from "@/app/stores/questionStore";
 import { MultipleChoice, SelectMultiple } from "./answerInputs";
 import dynamic from "next/dynamic";
+import { useQuestionId } from "../../../context/QuestionIdContext";
 //this is needed since short answer uses auto-generated ids
 const ShortAnswer = dynamic(
   () => import("./answerInputs").then((module) => module.ShortAnswer),
@@ -10,10 +10,13 @@ const ShortAnswer = dynamic(
 );
 
 export const AnswerType = () => {
-  const params = useParams();
   const questions = useQuestions()[0].data;
+  const questionIdData = useQuestionId();
+  const questionId = questionIdData?.questionId;
   const question =
-    params.id && typeof params.id === "string" ? questions.map[params.id] : null;
+    questionId && typeof questionId === "string"
+      ? questions.map[questionId]
+      : null;
   if (!question) return <></>;
   if (!question.questionInfo) return <></>;
   const {

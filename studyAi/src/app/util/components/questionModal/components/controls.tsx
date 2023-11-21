@@ -46,11 +46,13 @@ const generateQuestion = async ({
   setQuestionData((prev) => ({
     ...prev,
     questionInfo: {
+      id: result?.data?.newQuestion?.questionInfo?.id || ObjectId().toString(),
       title: prev?.questionInfo?.title || "",
       description: result?.data?.newQuestion?.description || "",
       options: newOptions || [],
     },
     answer: {
+      id: result?.data?.newQuestion?.answer?.id || ObjectId().toString(),
       correctAnswer: newAnswers || [],
     },
   }));
@@ -82,14 +84,18 @@ const Controls = () => {
               type="button"
               onClick={async () => {
                 try {
-                  setIsGenerating(true);
+                  //this is a guard clause
                   if (isGenerating) return;
+                  setIsGenerating(true);
+                  //scroll to start
+                  currElPos?.elementRef?.scrollTo(0, 0);
                   await generateQuestion({
                     questionData: questionData || {},
                     setQuestionData,
                   });
                 } catch (err) {
                   setIsGenerating(false);
+                  console.error(err);
                 }
               }}
               className={"aspect-square p-2 h-full"}

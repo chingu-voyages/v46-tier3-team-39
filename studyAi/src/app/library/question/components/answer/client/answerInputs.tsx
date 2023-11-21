@@ -1,5 +1,4 @@
 "use client";
-import { TextareaAutosize } from "@mui/base/TextareaAutosize";
 import {
   Checkbox,
   FormControlLabel,
@@ -7,17 +6,12 @@ import {
   Radio,
   RadioGroup,
 } from "@mui/material";
-import {
-  InputHTMLAttributes,
-  SyntheticEvent,
-  useRef,
-} from "react";
+import { InputHTMLAttributes, SyntheticEvent, useRef } from "react";
 import { Question } from "../../../../../../../graphql/generated/graphql";
 import ReadOnlyInput from "@/app/util/components/inputs/ReadOnlyInput";
 import { useQuestionSubmissions } from "@/app/stores/questionSubmissionsStore";
 import ObjectId from "bson-objectid";
 import { TextAreaAutoResizeInput } from "@/app/util/components/inputs/TextAreaAutoResizeInput";
-
 
 export const MultipleChoice = ({
   options,
@@ -60,11 +54,15 @@ export const MultipleChoice = ({
           const dataProps = {
             "data-id": val.id,
           } as InputHTMLAttributes<HTMLInputElement>;
-
           return (
             <FormControlLabel
               key={val.id}
               value={val.value}
+              slotProps={{
+                typography: {
+                  className: "text-sm md:text-base",
+                },
+              }}
               control={
                 <Radio
                   inputProps={dataProps}
@@ -126,7 +124,7 @@ export const ShortAnswer = ({ questionId }: { questionId: string }) => {
         data-id={value[0].id}
         value={value[0].value}
         style={{ height: "100%", resize: "none" }}
-        className="px-[4%] py-4 pb-6 text-sm grow"
+        className="px-[4%] py-4 pb-6 grow text-sm md:text-base"
         placeholder="Type answer here"
         onChange={(e) => {
           //update state
@@ -189,6 +187,11 @@ export const SelectMultiple = ({
           <FormControlLabel
             key={val.id}
             value={val.value}
+            slotProps={{
+              typography: {
+                className: "text-sm md:text-base",
+              },
+            }}
             control={
               <Checkbox
                 inputProps={dataProps}
