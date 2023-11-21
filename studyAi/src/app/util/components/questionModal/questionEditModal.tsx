@@ -136,11 +136,13 @@ const QuestionEditFormLoadingBanner = ({ text }: { text: string }) => {
 };
 const QuestionEditForm = () => {
   const modalData = useQuestionModal();
-  const [mutationQuery, { loading, error, data }] = useMutation(AddQuestionMutation);
+  const [mutationQuery, { loading, error, data }] =
+    useMutation(AddQuestionMutation);
   const session = useSession();
   const creatorId = session?.data?.user.id;
   if (!modalData) return <></>;
-  const { type, currElPos, questionData, onSave, isGenerating } = modalData;
+  const { type, currElPos, questionData, onSave, isGenerating, setIsOpen } =
+    modalData;
   const currModalClasses = [...styles.modal];
   if (type.layout === "modal") {
     currModalClasses.push(
@@ -214,6 +216,7 @@ const QuestionEditForm = () => {
       id: newId ? newId : questionData.id,
     };
     if (onSave) onSave(newQuestion);
+    if (type.layout === "modal") setIsOpen(false);
   };
 
   return (
