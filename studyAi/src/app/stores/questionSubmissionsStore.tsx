@@ -17,11 +17,12 @@ const initialState: QuestionSubmissionsData = {
   },
   ongoingData: {},
 };
+export type QuestionSubmissionStoreSubmissionType = Partial<QuestionSubmission> & {
+  questionId: string;
+  id?: string;
+};
 export type QuestionSubmissionContainerProps = {
-  initialItems: (Partial<QuestionSubmission> & {
-    questionId: string;
-    id?: string;
-  })[];
+  initialItems: QuestionSubmissionStoreSubmissionType[];
   questionId?: string;
   children: React.ReactNode;
 };
@@ -35,13 +36,10 @@ const Store = createStore({
   actions: {
     addOrUpdateItems:
       (
-        items: (Partial<QuestionSubmission> & {
-          questionId: string;
-          id?: string;
-        })[],
+        items: QuestionSubmissionStoreSubmissionType[],
         submissionType: "ongoing" | "submitted"
       ) =>
-      async ({ setState, getState }) =>
+      ({ setState, getState }) =>
         addOrUpdateSubmissionsFunc({
           items,
           setState,
@@ -50,14 +48,8 @@ const Store = createStore({
           submissionTimeType: submissionType,
         }),
     deleteItems:
-      (
-        items: Partial<QuestionSubmission> &
-          {
-            questionId: string;
-            id?: string;
-          }[]
-      ) =>
-      async ({ setState, getState }) =>
+      (items: QuestionSubmissionStoreSubmissionType[]) =>
+      ({ setState, getState }) =>
         deleteSubmissionItems({ items, setState, getState }),
   },
   handlers: {

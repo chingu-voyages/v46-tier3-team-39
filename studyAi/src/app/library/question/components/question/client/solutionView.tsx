@@ -5,8 +5,10 @@ import { useQuestions } from "@/app/stores/questionStore";
 import { Container } from "../../page/server/containerBar";
 import { useQuestionId } from "../../../context/QuestionIdContext";
 import { GetQuestionAnswerById } from "@/gql/queries/questionQueries";
+import { useEffect } from "react";
 const SolutionView = () => {
-  const questions = useQuestions()[0].data;
+  const [questionsData, { addOrUpdateItems }] = useQuestions();
+  const questions = questionsData.data;
   const questionIdData = useQuestionId();
   const questionId = questionIdData?.questionId;
   const {
@@ -16,15 +18,24 @@ const SolutionView = () => {
   } = useQuery(GetQuestionAnswerById, {
     variables: { id: questionId },
   });
-  const answerData = queryData as
-    | undefined
-    | { question: Partial<Question> | null };
+  useEffect(() => {
+    const currData = queryData?.question;
+    if (!currData || !questionId) return;
+    addOrUpdateItems([
+      {
+        ...currData,
+        id: questionId,
+      },
+    ]);
+  }, [queryData, addOrUpdateItems, questionId]);
   const question = questions.map[questionId ? questionId : ""];
   return (
     <Container overflow className="px-[5%] py-5 grow">
-      {question?.answer?.correctAnswer.map((e) => {
-        return e.value;
-      })}
+      {question?.answer?.correctAnswer
+        .map((e) => {
+          return e.value;
+        })
+        .join(", ")}
     </Container>
   );
 };
