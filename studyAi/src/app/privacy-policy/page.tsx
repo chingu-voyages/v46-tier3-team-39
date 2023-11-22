@@ -139,7 +139,7 @@ export default async function PrivacyPolicy() {
           .
         </Container>
 
-        <Container>Last Updated: 16/11/2023</Container>
+        <Container className={styles.body}>Last Updated: 16/11/2023</Container>
       </Container>
     </NavigationWrapper>
   );
