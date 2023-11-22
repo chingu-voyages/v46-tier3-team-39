@@ -7,12 +7,14 @@ export default async function PrivacyPolicy() {
     h6: [
       "font-semibold",
       "text-lg",
-      "sm:text-xl"
+      "sm:text-xl",
+      "mb-2"
     ].join(" "),
     body: [
       "mb-8",
       "text-sm",
-      "sm:text-base"
+      "sm:text-base",
+      "px-0"
     ].join(" ")
   }
   return (
