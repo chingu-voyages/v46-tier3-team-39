@@ -9,7 +9,7 @@ import styles, {
   determineModalStyle,
 } from "./ModalStyles";
 import { Question } from "../../../../../prisma/generated/type-graphql";
-import { SetStateAction } from "react";
+import { SetStateAction, useTransition } from "react";
 import { useQuestionModal } from "./context/questionModalProvider";
 import {
   Button,
@@ -20,10 +20,7 @@ import {
 } from "@mui/material";
 import { FileUploadOutlined } from "@mui/icons-material";
 import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
-import { useMutation } from "@apollo/client";
-import { useSession } from "next-auth/react";
-import ObjectID from "bson-objectid";
-import { AddQuestionMutation } from "@/gql/mutations/questionMutation";
+import { uploadQuestionToDb } from "./actions";
 export interface QuestionProps {
   questionData: Partial<Question>;
   closeHandler: () => void;
@@ -136,10 +133,7 @@ const QuestionEditFormLoadingBanner = ({ text }: { text: string }) => {
 };
 const QuestionEditForm = () => {
   const modalData = useQuestionModal();
-  const [mutationQuery, { loading, error, data }] =
-    useMutation(AddQuestionMutation);
-  const session = useSession();
-  const creatorId = session?.data?.user.id;
+  const [pending, startTransition] = useTransition();
   if (!modalData) return <></>;
   const { type, currElPos, questionData, onSave, isGenerating, setIsOpen } =
     modalData;
@@ -155,7 +149,7 @@ const QuestionEditForm = () => {
       "py-[calc(max(4%,2rem))]",
       "relative"
     );
-    if (loading || isGenerating) currModalClasses.push("overflow-y-hidden");
+    if (pending || isGenerating) currModalClasses.push("overflow-y-hidden");
     else currModalClasses.push("overflow-y-auto");
   } else currModalClasses.push("w-full", "min-h-full");
   if (currElPos) determineModalStyle(currElPos.position, currModalClasses);
@@ -171,52 +165,15 @@ const QuestionEditForm = () => {
     e.stopPropagation();
     //scroll to start
     currElPos?.elementRef?.scrollTo(0, 0);
-    if (loading) return;
-    const variables = {
-      questionType: questionData?.questionType
-        ? questionData.questionType
-        : "Short Answer",
-      tags: {
-        set: questionData?.tags ? questionData.tags : [],
-      },
-      questionInfo: {
-        set: questionData?.questionInfo
-          ? {
-              ...questionData.questionInfo,
-            }
-          : {
-              id: ObjectID().toString(),
-              title: "",
-              description: "",
-              options: [],
-            },
-      },
-      creatorId: creatorId ? creatorId : "",
-      likeCounter: {
-        set: {
-          id: ObjectID().toString(),
-          likes: 0,
-          dislikes: 0,
-        },
-      },
-      answer: {
-        set: {
-          id: ObjectID().toString(),
-          correctAnswer: questionData?.answer?.correctAnswer
-            ? questionData?.answer?.correctAnswer
-            : [],
-        },
-      },
-      private: !!questionData?.private,
-    };
-    const result = await mutationQuery({ variables });
-    const newId = result.data?.createOneQuestion.id;
-    const newQuestion = {
-      ...questionData,
-      id: newId ? newId : questionData.id,
-    };
-    if (onSave) onSave(newQuestion);
-    if (type.layout === "modal") setIsOpen(false);
+    if (pending) return;
+    startTransition(async () => {
+      const result = await uploadQuestionToDb({
+        questionData,
+      });
+      if (!result) return;
+      if (onSave) onSave(result);
+      if (type.layout === "modal") setIsOpen(false);
+    });
   };
 
   return (
@@ -225,7 +182,7 @@ const QuestionEditForm = () => {
       ref={currElPos ? currElPos.setRef : null}
     >
       {isGenerating && <QuestionEditFormLoadingBanner text="Generating..." />}
-      {loading && (
+      {pending && (
         <QuestionEditFormLoadingBanner
           text={
             type.type === "create"

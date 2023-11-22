@@ -11,7 +11,7 @@ import { useDashBoard } from "../context/DashboardContext";
 
 const ProfileForm = () => {
   const dashboardContext = useDashBoard();
-
+  console.log(dashboardContext, "context");
   const [mutationQuery, { loading, error, data }] = useMutation(
     UpdateUserProfileInfo,
     {
@@ -104,20 +104,27 @@ const ProfileForm = () => {
         : "N/A"}
     </div>
   );
-
+  const tags = dashboardContext?.profileData.tags || [];
   const tagsEditElement = (
     <CreatableSelect
       isMulti
-      options={dashboardContext?.profileData.tags || []}
+      options={tags.map((e) => ({
+        value: e,
+        label: e,
+      }))}
       isClearable
       name="tags"
-      value={dashboardContext?.profileData.tags || []}
+      value={tags.map((e) => ({
+        value: e,
+        label: e,
+      }))}
+      // value={dashboardContext?.profileData.tags || []}
       className="w-full"
       onChange={(e) => {
         if (dashboardContext?.setProfileData) {
           dashboardContext?.setProfileData((prev: Partial<User>) => ({
             ...prev,
-            tags: e.map((t) => t),
+            tags: e.map((t) => t.value),
           }));
         }
       }}
