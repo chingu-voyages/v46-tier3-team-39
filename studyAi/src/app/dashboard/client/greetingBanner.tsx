@@ -21,9 +21,9 @@ const GreetingMessage = () => {
         variant="h6"
         className="flex justify-center font-medium w-full tracking-tight"
       >
-        You’ve attempted {greetingBannerData.submissionCount.toString()}{" "}
+        You’ve attempted {greetingBannerData.weeklySubmissionCount.toString()}{" "}
         questions this week and generated{" "}
-        {greetingBannerData.questionCount.toString()} ! Keep it up and improve
+        {greetingBannerData.weeklyQuestionCount.toString()} ! Keep it up and improve
         your results!
       </Typography>
     </div>

@@ -52,10 +52,10 @@ const ProfileWrapper = () => {
                 <FaClipboardQuestion />
               </div>
               <div>
-                Answered: {greetingBannerData.submissionCount.toString()}
+                Answered: {profileData.questionData?.answered}
               </div>
               <div>
-                Generated: {greetingBannerData.questionCount.toString()}
+                Generated: {profileData.questionData?.generated}
               </div>
             </div>
           </div>
