@@ -7,13 +7,18 @@ import { GetQuestionCountByCreatorId } from "@/gql/queries/questionQueries";
 import { GetQuestionSubmissionCountByCreatorId } from "@/gql/queries/questionSubmissionQueries";
 import DashBoardWrapper from "./server/dashboardWrapper";
 import { Session } from "next-auth";
-
-export const generateMetadata = () => {}
+import { subWeeks } from "date-fns";
+export const generateMetadata = () => {};
 
 const getGreetingBannerInfo = async (session: Session, userId: string) => {
+  const currDate = new Date();
   const client = ServerGraphQLClient(session);
   const variables = {
     creatorId: { equals: userId },
+    dateQuery: {
+      gte: subWeeks(currDate, 1).toISOString(),
+      lte: currDate.toISOString(),
+    },
   };
   const questionQuery = {
     query: GetQuestionCountByCreatorId,
