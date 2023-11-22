@@ -11,7 +11,6 @@ import { useDashBoard } from "../context/DashboardContext";
 
 const ProfileForm = () => {
   const dashboardContext = useDashBoard();
-  console.log(dashboardContext, "context");
   const [mutationQuery, { loading, error, data }] = useMutation(
     UpdateUserProfileInfo,
     {
@@ -24,8 +23,7 @@ const ProfileForm = () => {
       },
     }
   );
-
-  const submitted = useRef(false);
+  const submitted = useRef(false); 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (submitted.current) return;
