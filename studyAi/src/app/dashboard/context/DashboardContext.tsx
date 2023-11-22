@@ -26,6 +26,7 @@ export interface GreetingBannerType {
 }
 
 export type DashBoardProps = {
+  initialProfileData: Partial<User>;
   isEditable: boolean;
   profileData: Partial<User>;
   greetingBannerData: GreetingBannerType;
@@ -61,6 +62,7 @@ export const DashBoardProvider = ({
   return (
     <DashBoardContext.Provider
       value={{
+        initialProfileData,
         isEditable,
         profileData,
         greetingBannerData,

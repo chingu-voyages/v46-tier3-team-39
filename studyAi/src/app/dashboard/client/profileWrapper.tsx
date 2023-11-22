@@ -12,8 +12,13 @@ const ProfileWrapper = () => {
     profileData,
     setIsEditable,
     setProfileData,
-    greetingBannerData,
+    initialProfileData,
   } = dashboardContext;
+
+  const editCancelClick = () => {
+    if (isEditable) setProfileData(initialProfileData);
+    setIsEditable((prev: boolean) => !prev);
+  };
 
   return (
     <div>
@@ -29,7 +34,7 @@ const ProfileWrapper = () => {
       </div>
       <button
         className="border rounded-lg border-Black text-primary-primary50 flex w-full py-3 justify-center mb-5"
-        onClick={() => setIsEditable((prev: boolean) => !prev)}
+        onClick={() => editCancelClick()}
       >
         {isEditable ? "Cancel Editing" : "Edit Profile"}
       </button>
@@ -51,12 +56,8 @@ const ProfileWrapper = () => {
               <div className=" invisible">
                 <FaClipboardQuestion />
               </div>
-              <div>
-                Answered: {profileData.questionData?.answered}
-              </div>
-              <div>
-                Generated: {profileData.questionData?.generated}
-              </div>
+              <div>Answered: {profileData.questionData?.answered}</div>
+              <div>Generated: {profileData.questionData?.generated}</div>
             </div>
           </div>
         </div>

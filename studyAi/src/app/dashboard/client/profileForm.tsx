@@ -24,13 +24,10 @@ const ProfileForm = () => {
     }
   );
   const submitted = useRef(false);
-  const [formData, setFormData] = useState({school: "", tags: []});
 
   if (!dashboardContext) return <></>;
   const { profileData, setProfileData, isEditable, setIsEditable } =
     dashboardContext;
-
-  // setFormData({school: profileData.school || "", tags: profileData.tags || []});
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -71,7 +68,7 @@ const ProfileForm = () => {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.currentTarget;
-    setFormData((prev) => ({
+    setProfileData((prev) => ({
       ...prev,
       [name]: value,
     }));
@@ -82,7 +79,7 @@ const ProfileForm = () => {
   //     size="small"
   //     name="location"
   //     variant="outlined"
-  //     defaultValue={formData.location?.locationName || "N/A"}
+  //     defaultValue={profileData.location?.locationName || "N/A"}
   //     onChange={changeForm}
   //   />
   // ) : (
@@ -94,14 +91,14 @@ const ProfileForm = () => {
       size="small"
       name="school"
       variant="outlined"
-      defaultValue={formData.school || "N/A"}
+      defaultValue={profileData.school || "N/A"}
       onChange={changeForm}
     />
   ) : (
     <div>{profileData.school ? profileData.school : "N/A"}</div>
   );
 
-  const tags = formData.tags?.map((e) => ({
+  const tags = profileData.tags?.map((e) => ({
     value: e,
     label: e,
   }));
@@ -115,7 +112,7 @@ const ProfileForm = () => {
       value={tags}
       className="w-full"
       onChange={(e) => {
-        setFormData((prev) => ({
+        setProfileData((prev) => ({
           ...prev,
           tags: e.map((t) => t.value),
         }));
@@ -139,6 +136,14 @@ const ProfileForm = () => {
 
   return (
     <form className="w-full" onSubmit={handleSubmit}>
+      {isEditable && (
+        <button
+          type="submit"
+          className="border rounded-lg border-Black text-primary-primary50 flex w-full py-3 justify-center mb-5"
+        >
+          Submit
+        </button>
+      )}
       <div className="mb-5 flex flex-col gap-2">
         {/* <div className="flex items-center">
           <div className="mr-2">
@@ -163,14 +168,6 @@ const ProfileForm = () => {
           <div className="flex flex-row items-center w-full">{tagsElement}</div>
         </div>
       </div>
-      {isEditable && (
-        <button
-          type="submit"
-          className="border rounded-lg border-Black text-primary-primary50 flex w-full py-3 justify-center mb-5"
-        >
-          Submit
-        </button>
-      )}
     </form>
   );
 };
