@@ -3,14 +3,7 @@ import Box from "@mui/material/Box";
 import { styles } from "./styles";
 import { QuestionsLibraryHeader } from "./questionLibraryHeader";
 import { QuestionLibraryProvider } from "./context/questionLibraryContext";
-import dynamic from "next/dynamic";
-const QuestionLibraryList = dynamic(
-  () =>
-    import("./questionLibraryList").then(
-      (module) => module.QuestionLibraryList
-    ),
-  { ssr: false }
-);
+import { QuestionLibraryList } from "./questionLibraryList";
 export default function QuestionsLibraryContainer({
   pageType,
 }: {

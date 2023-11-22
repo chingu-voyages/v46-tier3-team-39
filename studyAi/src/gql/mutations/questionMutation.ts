@@ -1,4 +1,20 @@
 import { gql } from "../../../graphql/generated";
+export const UpdateQuestionLikeCounter = gql(`
+  mutation UpdateQuestionLikeCounter(
+    $id: String!
+    $data: LikeCounterUpdateEnvelopeInput
+  ){
+    updateOneQuestion(
+      where: { id: $id }
+      data: {
+        likeCounter: $data
+      }
+    )
+    {
+      ...QuestionLikeCounterData
+    }
+  }
+`);
 export const DeleteQuestionMutation = gql(`
   mutation DeleteSingleQuestion($id: String!, $userId: String!) {
     deleteOneQuestion(

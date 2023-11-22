@@ -63,7 +63,7 @@ export const SubscribeAction = () => {
           height: inputHeight + "px",
         }}
         size="large"
-        className="rounded-none w-full ml-0 sm:ml-4 sm:w-auto text-Black"
+        className="border-Black rounded-none w-full ml-0 sm:ml-4 sm:w-auto text-Black"
         variant={"outlined"}
         aria-label={"subscribe"}
         disabled={loading}

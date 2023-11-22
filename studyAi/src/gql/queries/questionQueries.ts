@@ -7,6 +7,15 @@ export const GeneralQuestionData = gql(`
       private
   }
 `);
+export const QuestionLikeCounterData = gql(`
+  fragment QuestionLikeCounterData on Question {
+      likeCounter {
+        id
+        likes
+        dislikes
+      }
+  }
+`);
 export const QuestionInfoData = gql(`
   fragment QuestionInfoData on Question {
       questionInfo {
@@ -31,17 +40,20 @@ export const QuestionAnswerData = gql(`
       }
   }
 `);
+export const GetQuestionLikeCounterData = gql(`
+  query GetQuestionLikeCounterData($id: String) {
+    question(where: { id: $id }) {
+      ...QuestionLikeCounterData
+    }
+  }
+`);
 export const GetFullQuestion = gql(`
   query GetFullQuestion($id: String) {
     question(where: { id: $id }) {
       ...GeneralQuestionData
       ...QuestionInfoData
+      ...QuestionLikeCounterData
       creatorId
-      likeCounter {
-        id
-        likes
-        dislikes
-      }
     }
   }
 `);
@@ -73,14 +85,17 @@ export const GetQuestionsInfo = gql(`
       skip: $skip
     ) {
       ...GeneralQuestionData
+      ...QuestionLikeCounterData
       questionInfo{
         title
       }
-      likeCounter {
-        id
-        likes
-        dislikes
-      }
+      
     }
   }
 `);
+export const GetQuestionCountByCreatorId = gql(`
+    query AggregateQuestionResolver( $creatorId: StringFilter) {
+      aggregateQuestion(where: {creatorId: $creatorId}) {
+      _count {creatorId}
+    }}
+  `);
