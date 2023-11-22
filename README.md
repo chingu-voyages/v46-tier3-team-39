@@ -49,8 +49,10 @@ After completing these steps, you should be able to run the project using `npm r
 - [LinkedIn](https://www.linkedin.com/in/irha-ali-522039105/)
 
 ### Tiffany
+- [LinkedIn](https://www.linkedin.com/in/pui-yi-tiffany-chan-2a35271a5/)
 
 ### Fung
+- [LinkedIn](https://www.linkedin.com/in/fung-au-689a80239/)
 
 ### Connor
 - [LinkedIn](https://www.linkedin.com/in/connor-crump-b83166264/)

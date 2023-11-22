@@ -21,11 +21,12 @@ const blankProfileData = {
 };
 
 export interface GreetingBannerType {
-  submissionCount: number;
-  questionCount: number;
+  weeklySubmissionCount: number;
+  weeklyQuestionCount: number;
 }
 
 export type DashBoardProps = {
+  initialProfileData: Partial<User>;
   isEditable: boolean;
   profileData: Partial<User>;
   greetingBannerData: GreetingBannerType;
@@ -38,13 +39,13 @@ const DashBoardContext = createContext<DashBoardProps | null>(null);
 
 export const DashBoardProvider = ({
   initialProfileData,
-  submissionCount,
-  questionCount,
+  weeklySubmissionCount,
+  weeklyQuestionCount,
   children,
 }: {
   initialProfileData: Partial<User>;
-  submissionCount: number;
-  questionCount: number;
+  weeklySubmissionCount: number;
+  weeklyQuestionCount: number;
   children: React.ReactNode;
 }) => {
   const [profileData, setProfileData] = useState(
@@ -52,8 +53,8 @@ export const DashBoardProvider = ({
   );
 
   const [greetingBannerData, setGreetingBannerData] = useState({
-    submissionCount: submissionCount || 0,
-    questionCount: questionCount || 0,
+    weeklySubmissionCount: weeklySubmissionCount || 0,
+    weeklyQuestionCount: weeklyQuestionCount || 0,
   });
 
   const [isEditable, setIsEditable] = useState(false);
@@ -61,6 +62,7 @@ export const DashBoardProvider = ({
   return (
     <DashBoardContext.Provider
       value={{
+        initialProfileData,
         isEditable,
         profileData,
         greetingBannerData,

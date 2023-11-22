@@ -28,7 +28,7 @@ export default function Team() {
           <TeamMember
             name="Arky"
             role="Developer"
-            avatarURL="/avatar.png"
+            avatarURL="/Arky.png"
             linkedInURL="https://www.linkedin.com/in/arky-asmal/"
           />
         </Grid>
@@ -44,7 +44,7 @@ export default function Team() {
           <TeamMember
             name="Connor"
             role="Developer"
-            avatarURL="/avatar.png"
+            avatarURL="/Connor.png"
             linkedInURL="https://www.linkedin.com/in/connor-crump-b83166264/"
           />
         </Grid>
@@ -52,7 +52,7 @@ export default function Team() {
           <TeamMember
             name="Tiffany"
             role="Developer"
-            avatarURL="/avatar.png"
+            avatarURL="/Tiffany.png"
             linkedInURL="https://www.linkedin.com/in/pui-yi-tiffany-chan-2a35271a5/"
           />
         </Grid>

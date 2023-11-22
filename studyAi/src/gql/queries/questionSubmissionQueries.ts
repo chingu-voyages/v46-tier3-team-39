@@ -72,8 +72,8 @@ export const QueryQuestionSubmissionsIdOnly = gql(`
   }
 `);
 export const GetQuestionSubmissionCountByCreatorId = gql(`
-    query AggregateQuestionSubmissionResolver( $creatorId: StringFilter) {
-      aggregateQuestionSubmission(where: {userId: $creatorId}) {
+    query AggregateQuestionSubmissionResolver( $creatorId: StringFilter,$dateQuery: DateTimeFilter) {
+      aggregateQuestionSubmission(where: {userId: $creatorId, dateCreated: $dateQuery}) {
       _count {userId} 
     }}
   `);

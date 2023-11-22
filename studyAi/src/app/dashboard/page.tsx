@@ -36,14 +36,14 @@ const getGreetingBannerInfo = async (session: Session, userId: string) => {
       questionPromise,
       submissionsPromise,
     ]);
-    const submissionCount =
+    const weeklySubmissionCount =
       submissionsResult.data.aggregateQuestionSubmission._count?.userId;
-    const questionCount =
+    const weeklyQuestionCount =
       questionsResult.data.aggregateQuestion._count?.creatorId;
-    return { submissionCount, questionCount };
+    return { weeklySubmissionCount, weeklyQuestionCount };
   } catch (err: any) {
     console.error(err?.networkError?.result);
-    return { submissionCount: 0, questionCount: 0 };
+    return { weeklySubmissionCount: 0, weeklyQuestionCount: 0 };
   }
 };
 
@@ -55,10 +55,8 @@ export default async function DashboardPage() {
   if (!userId || !userName) return <></>;
 
   const initialProfileData = session.user;
-  const { submissionCount, questionCount } = await getGreetingBannerInfo(
-    session,
-    userId
-  );
+  const { weeklySubmissionCount, weeklyQuestionCount } =
+    await getGreetingBannerInfo(session, userId);
 
   return (
     <NavigationWrapper
@@ -70,8 +68,8 @@ export default async function DashboardPage() {
     >
       <DashBoardProvider
         initialProfileData={initialProfileData}
-        submissionCount={submissionCount || 0}
-        questionCount={questionCount || 0}
+        weeklySubmissionCount={weeklySubmissionCount || 0}
+        weeklyQuestionCount={weeklyQuestionCount || 0}
       >
         <DashBoardWrapper />
       </DashBoardProvider>

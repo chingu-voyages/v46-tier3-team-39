@@ -1,7 +1,7 @@
 "use client";
 import { FaLocationDot, FaTag, FaGraduationCap } from "react-icons/fa6";
 import { useMutation } from "@apollo/client";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import TextField from "@mui/material/TextField";
 import CreatableSelect from "react-select/creatable";
 import Chip from "@mui/material/Chip";
@@ -15,7 +15,7 @@ const ProfileForm = () => {
     UpdateUserProfileInfo,
     {
       onCompleted: (data) => {
-        dashboardContext?.setProfileData((prev: Partial<User>) => ({
+        setProfileData((prev: Partial<User>) => ({
           ...prev,
           tags: data.updateOneUser?.tags || prev.tags,
           school: data.updateOneUser?.school || prev.school,
@@ -23,33 +23,36 @@ const ProfileForm = () => {
       },
     }
   );
-  const submitted = useRef(false); 
+  const submitted = useRef(false);
+
+  if (!dashboardContext) return <></>;
+  const { profileData, setProfileData, isEditable, setIsEditable } =
+    dashboardContext;
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (submitted.current) return;
     try {
       await mutationQuery({
         variables: {
-          id: dashboardContext?.profileData?.id || "",
+          id: profileData?.id || "",
           tags: {
-            set: dashboardContext?.profileData
-              ? dashboardContext?.profileData.tags
-              : [],
+            set: profileData ? profileData.tags : [],
           },
           name: {
-            set: dashboardContext?.profileData?.name,
+            set: profileData?.name,
           },
           school: {
-            set: dashboardContext?.profileData?.school,
+            set: profileData?.school,
           },
           // location: {
           //   set: {
           //     locationType:
-          //       dashboardContext?.profileData.location.locationType || location.locationType,
+          //       profileData.location.locationType || location.locationType,
           //     coordinates: {
-          //       set: dashboardContext?.profileData?.location.coordinates || location.coordinates,
+          //       set: profileData?.location.coordinates || location.coordinates,
           //     },
-          //     locationName: dashboardContext?.profileData?.locationName || location.locationName,
+          //     locationName: profileData?.locationName || location.locationName,
           //   },
           // },
         },
@@ -58,83 +61,71 @@ const ProfileForm = () => {
     } catch (err) {
       console.log(err);
     }
-    dashboardContext?.setIsEditable((prev: boolean) => !prev);
+    setIsEditable((prev: boolean) => !prev);
   };
 
   const changeForm = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.currentTarget;
-    if (dashboardContext?.setProfileData) {
-      dashboardContext?.setProfileData((prev: Partial<User>) => ({
-        ...prev,
-        [name]: value,
-      }));
-    }
+    setProfileData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  const locationElement = dashboardContext?.isEditable ? (
-    <TextField
-      size="small"
-      name="location"
-      variant="outlined"
-      defaultValue={
-        dashboardContext?.profileData.location?.locationName || "N/A"
-      }
-      onChange={changeForm}
-    />
-  ) : (
-    <div>{dashboardContext?.profileData.location?.locationName || "N/A"}</div>
-  );
+  // const locationElement = isEditable ? (
+  //   <TextField
+  //     size="small"
+  //     name="location"
+  //     variant="outlined"
+  //     defaultValue={profileData.location?.locationName || "N/A"}
+  //     onChange={changeForm}
+  //   />
+  // ) : (
+  //   <div>{profileData.location?.locationName || "N/A"}</div>
+  // );
 
-  const schoolElement = dashboardContext?.isEditable ? (
+  const schoolElement = isEditable ? (
     <TextField
       size="small"
       name="school"
       variant="outlined"
-      defaultValue={dashboardContext?.profileData.school || "N/A"}
+      defaultValue={profileData.school || "N/A"}
       onChange={changeForm}
     />
   ) : (
-    <div>
-      {dashboardContext?.profileData.school
-        ? dashboardContext?.profileData.school
-        : "N/A"}
-    </div>
+    <div>{profileData.school ? profileData.school : "N/A"}</div>
   );
-  const tags = dashboardContext?.profileData.tags || [];
+
+  const tags = profileData.tags?.map((e) => ({
+    value: e,
+    label: e,
+  }));
+
   const tagsEditElement = (
     <CreatableSelect
       isMulti
-      options={tags.map((e) => ({
-        value: e,
-        label: e,
-      }))}
+      options={tags}
       isClearable
       name="tags"
-      value={tags.map((e) => ({
-        value: e,
-        label: e,
-      }))}
-      // value={dashboardContext?.profileData.tags || []}
+      value={tags}
       className="w-full"
       onChange={(e) => {
-        if (dashboardContext?.setProfileData) {
-          dashboardContext?.setProfileData((prev: Partial<User>) => ({
-            ...prev,
-            tags: e.map((t) => t.value),
-          }));
-        }
+        setProfileData((prev) => ({
+          ...prev,
+          tags: e.map((t) => t.value),
+        }));
       }}
     />
   );
 
-  const tagsElement = dashboardContext?.isEditable ? (
+  const tagsElement = isEditable ? (
     tagsEditElement
   ) : (
     <div className="flex flex-row gap-1 flex-wrap">
-      {Array.isArray(dashboardContext?.profileData.tags) ? (
-        dashboardContext?.profileData.tags.map((tag: string, index: number) => (
+      {Array.isArray(profileData.tags) ? (
+        profileData.tags.map((tag: string, index: number) => (
           <Chip key={tag + index} label={tag}></Chip>
         ))
       ) : (
@@ -145,6 +136,14 @@ const ProfileForm = () => {
 
   return (
     <form className="w-full" onSubmit={handleSubmit}>
+      {isEditable && (
+        <button
+          type="submit"
+          className="border rounded-lg border-Black text-primary-primary50 flex w-full py-3 justify-center mb-5"
+        >
+          Submit
+        </button>
+      )}
       <div className="mb-5 flex flex-col gap-2">
         {/* <div className="flex items-center">
           <div className="mr-2">
@@ -169,14 +168,6 @@ const ProfileForm = () => {
           <div className="flex flex-row items-center w-full">{tagsElement}</div>
         </div>
       </div>
-      {dashboardContext?.isEditable && (
-        <button
-          type="submit"
-          className="border rounded-lg border-Black text-primary-primary50 flex w-full py-3 justify-center mb-5"
-        >
-          Submit
-        </button>
-      )}
     </form>
   );
 };
