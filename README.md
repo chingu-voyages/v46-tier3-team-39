@@ -4,6 +4,9 @@
 
 StudyAI was made as a tier 3 project of Chingu's Voyage 46, a program that connects developers to create a minimum viable product (MVP) at the end of a six-week incremental sprint process. The vision for this project is to utilize AI technology to create an infinite exam prep generator using previous questions as a template. For example, a student could take a practice exam given by their teacher and use StudyAI to generate similar questions to get more vital practice before the actual exam.
 
+## Tech Stack
+![image info](./ArchitectureDiagram.jpg)
+
 ## Features
 - A landing page that describes the project, introduces the team and directs the user to sign up
 - User authentication with Google account integration
