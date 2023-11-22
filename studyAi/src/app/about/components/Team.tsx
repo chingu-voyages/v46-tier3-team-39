@@ -61,15 +61,7 @@ export default function Team() {
             name="Fung"
             role="Developer"
             avatarURL="/avatar.png"
-            linkedInURL=""
-          />
-        </Grid>
-        <Grid item xs={6} sm={4}>
-          <TeamMember
-            name="Vincent"
-            role="Developer"
-            avatarURL="/avatar.png"
-            linkedInURL=""
+            linkedInURL="https://www.linkedin.com/in/fung-au-689a80239/ "
           />
         </Grid>
       </Grid>
