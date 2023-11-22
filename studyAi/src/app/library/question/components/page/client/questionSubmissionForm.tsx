@@ -1,26 +1,19 @@
 "use client";
-import React, { useRef } from "react";
+import React, { useTransition } from "react";
 import { useQuestions } from "@/app/stores/questionStore";
-import { useSession } from "next-auth/react";
-import { useMutation } from "@apollo/client";
-import createQuestionSubmissionDoc from "../utils/createQuestionSubmission";
 import { useQuestionSubmissions } from "@/app/stores/questionSubmissionsStore";
 import { useQuestionId } from "../../../context/QuestionIdContext";
-import { UploadNewQuestionSubmissionQuery } from "@/gql/mutations/questionSubmissionMutation";
+import { uploadQuestionSubmisison } from "../server/actions";
 const QuestionFormWrapper = ({ children }: { children: React.ReactNode }) => {
   // define hooks
-  const session = useSession();
   const questions = useQuestions()[0].data;
-  const isSubmitting = useRef<boolean | null>(null);
   const questionIdData = useQuestionId();
   const questionId = questionIdData?.questionId;
   const question =
     questionId && typeof questionId === "string"
       ? questions.map[questionId]
       : null;
-  const [mutationQuery, { loading, error, data }] = useMutation(
-    UploadNewQuestionSubmissionQuery
-  );
+  const [pending, startTransition] = useTransition();
   const [currSubmissions, { deleteItems }] = useQuestionSubmissions();
   if (!question) return <></>;
   const submission = currSubmissions.ongoingData[question.id];
@@ -28,29 +21,19 @@ const QuestionFormWrapper = ({ children }: { children: React.ReactNode }) => {
     e.preventDefault();
     e.stopPropagation();
     //prevent multiple submissions
-    if (isSubmitting.current) return;
-    isSubmitting.current = true;
-    const doc = createQuestionSubmissionDoc({
-      session: session.data,
-      event: e,
-      submission,
-    });
-    if (!doc) return (isSubmitting.current = false);
-    try {
-      await mutationQuery({
-        variables: {
-          questionSubmission: doc,
-        },
+    if (pending) return;
+    startTransition(async () => {
+      const result = await uploadQuestionSubmisison({
+        event: e,
+        submission,
       });
+      if (!result) return;
       deleteItems([
         {
           questionId: question.id,
         },
       ]);
-    } catch (err) {
-      console.error(err);
-    }
-    isSubmitting.current = false;
+    });
   };
   return (
     <form className="flex flex-col w-full grow h-full" onSubmit={onSubmit}>
