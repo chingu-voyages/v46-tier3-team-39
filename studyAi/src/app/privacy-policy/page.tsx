@@ -7,12 +7,14 @@ export default async function PrivacyPolicy() {
     h6: [
       "font-semibold",
       "text-lg",
-      "sm:text-xl"
+      "sm:text-xl",
+      "mb-2"
     ].join(" "),
     body: [
       "mb-8",
       "text-sm",
-      "sm:text-base"
+      "sm:text-base",
+      "px-0"
     ].join(" ")
   }
   return (
@@ -137,7 +139,7 @@ export default async function PrivacyPolicy() {
           .
         </Container>
 
-        <Container>Last Updated: 16/11/2023</Container>
+        <Container className={styles.body}>Last Updated: 16/11/2023</Container>
       </Container>
     </NavigationWrapper>
   );
