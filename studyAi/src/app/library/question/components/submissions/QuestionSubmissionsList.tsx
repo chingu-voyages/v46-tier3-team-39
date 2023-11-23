@@ -22,9 +22,6 @@ const QuestionSubmissionListHeader = () => {
   const itemClasses = [...styles.header.text];
   return (
     <Container className={containerClasses.join(" ")}>
-      {/* <Typography>
-        Question
-      </Typography> */}
       <Typography className={itemClasses.join(" ")}>Score</Typography>
       <Typography className={itemClasses.join(" ")}>Time Elapsed</Typography>
       {!isMobile && (
@@ -116,7 +113,21 @@ const QuestionSubmissionsList = ({
     </label>
   );
   if (!questionId) return noDataPlaceholder;
-  const data = questionSubmissionsArrMap[questionId];
+  const mockData = Array(1000).fill({
+    id: "id",
+    dateCreated: new Date(),
+    score: {
+      actualScore: 2,
+      maxScore: 100,
+      id: "id",
+    },
+    time: {
+      timeType: 'timer',
+      timeTaken: 10000,
+      totalTimeGiven: 10000000,
+    }
+  })
+  const data = mockData//questionSubmissionsArrMap[questionId];
   return (
     <SubmissionListProvider layout={layout}>
       <QuestionSubmissionListHeader />

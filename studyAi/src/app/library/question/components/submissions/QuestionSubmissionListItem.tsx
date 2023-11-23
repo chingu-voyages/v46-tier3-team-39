@@ -42,7 +42,7 @@ const QuestionSubmissionsListItem = (
 ) => {
   const windowWidth = useWindowWidth();
   const isMobile = windowWidth < 480;
-  const { questionName, dateCreated, time, score } = props;
+  const { dateCreated, time, score } = props;
   const { actualScore, maxScore } = score || {};
   //calculate score data
   const scoreExists = actualScore && maxScore;
@@ -54,7 +54,7 @@ const QuestionSubmissionsListItem = (
   const { timeType, timeTaken, totalTimeGiven } = time || {};
   const { normalizedTimeTaken } = calculateTimeData({
     timeType,
-    timeTaken: 10000000,
+    timeTaken,
     totalTimeGiven,
   });
   const listItemContainer = [...styles.listContainer.item.container];
