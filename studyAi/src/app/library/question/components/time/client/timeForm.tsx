@@ -13,14 +13,10 @@ import { Button, Tab, Tabs, TextField, Typography } from "@mui/material";
 import removeNonIntegerChars from "@/app/util/parsers/removeNonIntegerChars";
 import { unstable_batchedUpdates } from "react-dom";
 import { extractTime } from "@/app/util/parsers/formatMilliseconds";
-export const timeLabelData: {
-  abbrev: "h" | "m" | "s";
-  label: "hours" | "minutes" | "seconds";
-}[] = [
-  { abbrev: "h", label: "hours" },
-  { abbrev: "m", label: "minutes" },
-  { abbrev: "s", label: "seconds" },
-];
+import {
+  timeLabelData,
+  splitTimeStrBy2,
+} from "@/app/util/parsers/createTimeStringFromMilliseconds";
 const determineNewVal = (
   newValArr: string[],
   name: string,
@@ -44,14 +40,7 @@ const determineNewVal = (
   }
   return newVal;
 };
-export const splitTimeStrBy2 = (str: string) => {
-  const arr = [];
-  for (let i = 0; i < str.length; i += 2) {
-    const chunk = str.slice(i, i + 2);
-    arr.push(chunk);
-  }
-  return arr;
-};
+
 const FieldInput = ({
   onChange,
   value,

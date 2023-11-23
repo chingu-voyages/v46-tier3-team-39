@@ -25,16 +25,21 @@ export default async function QuestionPage({
   try {
     const session = await getServerSession(options);
     const client = ServerGraphQLClient(session);
-    const submissionQuery = {
-      query: QueryFullQuestionSubmissions,
-      variables: {
-        questionId: { equals: questionId },
-        userId: session?.user.id || "",
-        orderBy: { dateCreated: "desc" as SortOrder },
-      },
-    };
     const questionPromise = client.query(questionQuery);
-    const submissionPromise = client.query(submissionQuery);
+    const submissionPromise = session
+      ? client.query({
+          query: QueryFullQuestionSubmissions,
+          variables: {
+            questionId: { equals: questionId },
+            userId: session.user.id,
+            orderBy: { dateCreated: "desc" as SortOrder },
+          },
+        })
+      : {
+          data: {
+            questionSubmissions: null,
+          },
+        };
     const [{ data: question }, { data: submission }] = await Promise.all([
       questionPromise,
       submissionPromise,
