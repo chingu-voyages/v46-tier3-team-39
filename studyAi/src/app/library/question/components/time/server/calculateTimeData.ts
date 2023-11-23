@@ -1,3 +1,5 @@
+import { createTimeStringFromMilliseconds } from "@/app/util/parsers/createTimeStringFromMilliseconds";
+
 export const calculateTimeData = ({
   timeTaken,
   timeType,
@@ -34,8 +36,15 @@ export const calculateTimeData = ({
         normalizedTimeTaken: "N/A",
       };
   }
+  let parsedTimeTaken = "N/A";
+  let parsedTimeRemaining = "N/A";
+  if (typeof normalizedTimeTaken === "number")
+    parsedTimeTaken = createTimeStringFromMilliseconds(normalizedTimeTaken);
+  if (typeof timeRemaining === "number")
+    parsedTimeRemaining = createTimeStringFromMilliseconds(timeRemaining);
+
   return {
-    normalizedTimeTaken,
-    timeRemaining,
+    normalizedTimeTaken: parsedTimeTaken,
+    timeRemaining: parsedTimeRemaining,
   };
 };

@@ -1,5 +1,4 @@
 "use server";
-
 import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
 import { options } from "@/authComponents/nextAuth/options";
 import { getServerSession } from "next-auth";

@@ -6,7 +6,7 @@ import { Button, IconButton, Modal, Typography } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { TimeOptions } from "../../../../../../../prisma/generated/type-graphql";
-import TimeForm, { splitTimeStrBy2 } from "./timeForm";
+import TimeForm from "./timeForm";
 import { unstable_batchedUpdates } from "react-dom";
 import { getLocalStorageObj } from "@/app/util/parsers/localStorageWrappers";
 import {
@@ -15,9 +15,9 @@ import {
 } from "@/app/util/components/time/context/useTimeContext";
 import onTimeEventChangeHandler from "../../../eventHandlers/onTimeEventChangeHandler";
 import formatMilliseconds from "@/app/util/parsers/formatMilliseconds";
-import { timeLabelData } from "./timeForm";
 import removeNonIntegerChars from "@/app/util/parsers/removeNonIntegerChars";
 import ReadOnlyInput from "@/app/util/components/inputs/ReadOnlyInput";
+import { createTimeStringFromMilliseconds } from "@/app/util/parsers/createTimeStringFromMilliseconds";
 //we can manage time on the frontend
 //because time measurements are only
 //for the user's benefit
@@ -37,13 +37,8 @@ export const TimerFinishedModal = ({
   setTimerCompleteModalOpen: Dispatch<SetStateAction<boolean>>;
 }) => {
   const timeContext = useTimeHook();
-  const timeElapsed = formatMilliseconds(totalTimeGiven) as string;
-  const timeStr = removeNonIntegerChars(timeElapsed);
-  const timeArr = splitTimeStrBy2(timeStr);
   //this creates the new total time string
-  const parsedTimeElapsed =
-    timeArr.reduce((a, b, idx) => a + timeLabelData[idx - 1].abbrev + " " + b) +
-    timeLabelData[timeLabelData.length - 1].abbrev;
+  const parsedTimeElapsed = createTimeStringFromMilliseconds(totalTimeGiven)
   return (
     <Modal
       open={modalOpen}

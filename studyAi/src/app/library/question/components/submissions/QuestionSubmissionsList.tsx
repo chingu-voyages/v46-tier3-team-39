@@ -11,8 +11,26 @@ import { useQuestions } from "@/app/stores/questionStore";
 import { QuestionSubmission } from "@prisma/client";
 import { useQuestionSubmissions } from "@/app/stores/questionSubmissionsStore";
 import fetchItems from "./fetchNewData";
+import { Container, Typography } from "@mui/material";
+import { styles } from "./styles";
+import useWindowWidth from "@/app/util/hooks/useWindowWidth";
 type ArrOneOrMore<T> = [T, ...T[]];
-const SubmissionList = ({
+const QuestionSubmissionListHeader = () => {
+  const windowWidth = useWindowWidth();
+  const isMobile = windowWidth < 480;
+  const containerClasses = [...styles.header.container];
+  const itemClasses = [...styles.header.text];
+  return (
+    <Container className={containerClasses.join(" ")}>
+      <Typography className={itemClasses.join(" ")}>Score</Typography>
+      <Typography className={itemClasses.join(" ")}>Time Elapsed</Typography>
+      {!isMobile && (
+        <Typography className={itemClasses.join(" ")}>Submitted</Typography>
+      )}
+    </Container>
+  );
+};
+const QueststionSubmissionsDataList = ({
   data,
   questionName,
 }: {
@@ -42,12 +60,15 @@ const SubmissionList = ({
     />
   ));
 };
-const MemoizedSubmissionsList = memo(SubmissionList, (prevProps, newProps) => {
-  const isDataEqual =
-    prevProps.data.every((val, idx) => val.id === newProps.data[idx].id) &&
-    prevProps.data.length === newProps.data.length;
-  return prevProps.questionName === newProps.questionName && isDataEqual;
-});
+const MemoizedQuestionSubmissionsDataList = memo(
+  QueststionSubmissionsDataList,
+  (prevProps, newProps) => {
+    const isDataEqual =
+      prevProps.data.every((val, idx) => val.id === newProps.data[idx].id) &&
+      prevProps.data.length === newProps.data.length;
+    return prevProps.questionName === newProps.questionName && isDataEqual;
+  }
+);
 const QuestionSubmissionsList = ({
   layout,
   containerId,
@@ -72,7 +93,7 @@ const QuestionSubmissionsList = ({
       : null
   );
   const userId = session ? session.user.id : "";
-  //memoized function to fetch new data
+  //memoized functio n to fetch new data
   const savedFetchSubmissionsFunc = useCallback(
     fetchItems({
       userId,
@@ -92,25 +113,42 @@ const QuestionSubmissionsList = ({
     </label>
   );
   if (!questionId) return noDataPlaceholder;
-  const data = questionSubmissionsArrMap[questionId];
+  const mockData = Array(1000).fill({
+    id: "id",
+    dateCreated: new Date(),
+    score: {
+      actualScore: 2,
+      maxScore: 100,
+      id: "id",
+    },
+    time: {
+      timeType: 'timer',
+      timeTaken: 10000,
+      totalTimeGiven: 10000000,
+    }
+  })
+  const data = mockData//questionSubmissionsArrMap[questionId];
   return (
     <SubmissionListProvider layout={layout}>
-      <PaginationWrapper
-        hasMore={!!cursor}
-        fetchMoreData={savedFetchSubmissionsFunc}
-        dataLength={data ? data.length : 0}
-        hasChildren
-        scrollableTarget={containerId}
-      >
-        {questionName && data && data.length > 0 && data[0] ? (
-          <MemoizedSubmissionsList
-            questionName={questionName}
-            data={data as ArrOneOrMore<Partial<QuestionSubmission>>}
-          />
-        ) : (
-          noDataPlaceholder
-        )}
-      </PaginationWrapper>
+      <QuestionSubmissionListHeader />
+      <div className={styles.listContainer.container.join(" ")}>
+        <PaginationWrapper
+          hasMore={!!cursor}
+          fetchMoreData={savedFetchSubmissionsFunc}
+          dataLength={data ? data.length : 0}
+          hasChildren
+          scrollableTarget={containerId}
+        >
+          {questionName && data && data.length > 0 && data[0] ? (
+            <MemoizedQuestionSubmissionsDataList
+              questionName={questionName}
+              data={data as ArrOneOrMore<Partial<QuestionSubmission>>}
+            />
+          ) : (
+            noDataPlaceholder
+          )}
+        </PaginationWrapper>
+      </div>
     </SubmissionListProvider>
   );
 };
