@@ -1,5 +1,4 @@
 "use client";
-import { UserProfile } from "@/app/util/components/navigation/client/userProfile";
 import ProfileForm from "./profileForm";
 import { FaClipboardQuestion, FaPeopleGroup } from "react-icons/fa6";
 import { useDashBoard } from "../context/DashboardContext";
@@ -7,40 +6,11 @@ import { useDashBoard } from "../context/DashboardContext";
 const ProfileWrapper = () => {
   const dashboardContext = useDashBoard();
   if (!dashboardContext) return <></>;
-  const {
-    isEditable,
-    profileData,
-    setIsEditable,
-    setProfileData,
-    initialProfileData,
-  } = dashboardContext;
-
-  const editCancelClick = () => {
-    if (isEditable) setProfileData(initialProfileData);
-    setIsEditable((prev: boolean) => !prev);
-  };
+  const { profileData } = dashboardContext;
 
   return (
     <div>
-      <div className=" mb-5">
-        <UserProfile
-          setFormData={setProfileData}
-          isEditable={isEditable}
-          name={profileData.name}
-          email={profileData.email}
-          image={profileData.image}
-          showUserInfo
-        />
-      </div>
-      <button
-        className="border rounded-lg border-Black text-primary-primary50 flex w-full py-3 justify-center mb-5"
-        onClick={() => editCancelClick()}
-      >
-        {isEditable ? "Cancel Editing" : "Edit Profile"}
-      </button>
       {<ProfileForm />}
-      <div className="border-0 border-black" />
-
       <div>
         <h2 className="font-bold text-lg mb-1">Activity</h2>
         <div className="flex flex-col">

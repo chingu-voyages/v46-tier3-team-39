@@ -1,5 +1,5 @@
 "use client";
-import { FaLocationDot, FaTag, FaGraduationCap } from "react-icons/fa6";
+import { FaLocationDot, FaTag, FaGraduationCap, FaT } from "react-icons/fa6";
 import { useMutation } from "@apollo/client";
 import { useRef, useState } from "react";
 import TextField from "@mui/material/TextField";
@@ -8,6 +8,8 @@ import Chip from "@mui/material/Chip";
 import { User } from "@prisma/client";
 import { UpdateUserProfileInfo } from "@/gql/queries/userQueries";
 import { useDashBoard } from "../context/DashboardContext";
+import { UserProfile } from "@/app/util/components/navigation/client/userProfile";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
 
 const ProfileForm = () => {
   const dashboardContext = useDashBoard();
@@ -26,8 +28,13 @@ const ProfileForm = () => {
   const submitted = useRef(false);
 
   if (!dashboardContext) return <></>;
-  const { profileData, setProfileData, isEditable, setIsEditable } =
-    dashboardContext;
+  const {
+    profileData,
+    setProfileData,
+    isEditable,
+    setIsEditable,
+    initialProfileData,
+  } = dashboardContext;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -88,9 +95,10 @@ const ProfileForm = () => {
 
   const schoolElement = isEditable ? (
     <TextField
-      size="small"
+      id="filled-basic"
       name="school"
-      variant="outlined"
+      size="small"
+      variant="filled"
       defaultValue={profileData.school || "N/A"}
       onChange={changeForm}
     />
@@ -134,18 +142,29 @@ const ProfileForm = () => {
     </div>
   );
 
+  const editCancelClick = () => {
+    // if (isEditable) setProfileData(initialProfileData);
+    setIsEditable((prev: boolean) => !prev);
+  };
+
   return (
-    <form className="w-full" onSubmit={handleSubmit}>
-      {isEditable && (
-        <button
-          type="submit"
-          className="border rounded-lg border-Black text-primary-primary50 flex w-full py-3 justify-center mb-5"
-        >
-          Submit
-        </button>
-      )}
-      <div className="mb-5 flex flex-col gap-2">
-        {/* <div className="flex items-center">
+    <>
+      <div className=" mb-5">
+        <div className="flex flex-row justify-between">
+          <UserProfile
+            setFormData={setProfileData}
+            isEditable={isEditable}
+            name={profileData.name}
+            email={profileData.email}
+            image={profileData.image}
+            showUserInfo
+          />
+          {!isEditable && <ModeEditIcon onClick={() => editCancelClick()} />}
+        </div>
+      </div>
+      <form className="w-full" onSubmit={handleSubmit}>
+        <div className="mb-5 flex flex-col gap-2">
+          {/* <div className="flex items-center">
           <div className="mr-2">
             <FaLocationDot />
           </div>
@@ -153,22 +172,51 @@ const ProfileForm = () => {
             {locationElement}
           </div>
         </div> */}
-        <div className="flex items-center">
-          <div className="mr-2">
-            <FaGraduationCap />
+          <div
+            className={"flex items-center" + (isEditable ? " flex-col" : "")}
+          >
+            <div
+              className={"mr-2 flex flex-row" + (isEditable ? " w-full" : "")}
+            >
+              <FaGraduationCap />
+              {isEditable && <text>School</text>}
+            </div>
+            <div className="flex flex-row gap-1 items-center w-full">
+              {schoolElement}
+            </div>
           </div>
-          <div className="flex flex-row gap-1 items-center w-full">
-            {schoolElement}
+          <div
+            className={"flex items-center" + (isEditable ? " flex-col" : "")}
+          >
+            <div
+              className={"mr-2 flex flex-row" + (isEditable ? " w-full" : "")}
+            >
+              <FaTag />
+              {isEditable && <text>Tags</text>}
+            </div>
+            <div className="flex flex-row items-center w-full">
+              {tagsElement}
+            </div>
           </div>
+          {isEditable && (
+            <div className="flex flex-row">
+              <button
+                className="border border-Black  h-10 px-5 m-2 rounded-lg"
+                type="submit"
+              >
+                Save
+              </button>
+              <button
+                className="border border-Black  h-10 px-5 m-2 rounded-lg"
+                onClick={() => editCancelClick()}
+              >
+                Cancel
+              </button>
+            </div>
+          )}
         </div>
-        <div className="flex w-full gap-1 items-center">
-          <div className="mr-2 item-center">
-            <FaTag />
-          </div>
-          <div className="flex flex-row items-center w-full">{tagsElement}</div>
-        </div>
-      </div>
-    </form>
+      </form>
+    </>
   );
 };
 export default ProfileForm;

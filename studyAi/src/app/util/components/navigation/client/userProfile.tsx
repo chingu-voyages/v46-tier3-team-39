@@ -58,7 +58,15 @@ export const UserProfile = ({
   };
 
   const nameElement = isEditable ? (
-    <TextField variant="outlined" defaultValue={name} onChange={changeName} />
+    <TextField
+      id="filled-basic"
+      label="Name"
+      name="name"
+      size="small"
+      variant="filled"
+      defaultValue={name || "N/A"}
+      onChange={changeName}
+    />
   ) : (
     <span className="text-Black font-bold tracking-tight text-lg">{name}</span>
   );
@@ -79,11 +87,7 @@ export const UserProfile = ({
       </Avatar>
       {showUserInfo && (
         <div ref={setRef} className="flex flex-col w-full ml-4 py-1 space-y-0">
-          {name && (
-            <span className="text-Black font-bold tracking-tight text-lg">
-              {name}
-            </span>
-          )}
+          {nameElement}
           <span className="text-Black font-regular tracking-tight text-xs">
             {email}
           </span>
