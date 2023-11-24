@@ -113,21 +113,7 @@ const QuestionSubmissionsList = ({
     </label>
   );
   if (!questionId) return noDataPlaceholder;
-  const mockData = Array(1000).fill({
-    id: "id",
-    dateCreated: new Date(),
-    score: {
-      actualScore: 2,
-      maxScore: 100,
-      id: "id",
-    },
-    time: {
-      timeType: 'timer',
-      timeTaken: 10000,
-      totalTimeGiven: 10000000,
-    }
-  })
-  const data = mockData//questionSubmissionsArrMap[questionId];
+  const data = questionSubmissionsArrMap[questionId];
   return (
     <SubmissionListProvider layout={layout}>
       <QuestionSubmissionListHeader />

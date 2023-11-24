@@ -44,7 +44,7 @@ const ContainerBar = ({
   return (
     <div
       className={
-        "flex justify-between items-center bg-White h-11 md:h-14 w-full px-3" +
+        "flex justify-between items-center bg-White min-h-[3rem] h-12 md:h-14 w-full px-3" +
         borderClasses
       }
     >

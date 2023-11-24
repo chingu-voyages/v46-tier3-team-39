@@ -1,9 +1,11 @@
 "use client";
 import useWindowWidth from "@/app/util/hooks/useWindowWidth";
 import DesktopNavbar from "../server/desktopNavbar";
-import MobileNavbar from "../client/mobileNavbar";
 import { AppBar } from "@mui/material";
 import { Logo } from "../../logo/client/Logo";
+import dynamic from "next/dynamic";
+const MobileNavbar = dynamic(() => import("../client/mobileNavbar"), { ssr: false });
+
 const Navbar = () => {
   const windowWidth = useWindowWidth();
   return (
