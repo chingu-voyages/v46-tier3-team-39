@@ -12,8 +12,7 @@ import TextField from "@mui/material/TextField";
 import NextLink from "next/link";
 import { useSession } from "next-auth/react";
 import { unstable_batchedUpdates } from "react-dom";
-import { Dispatch, SetStateAction } from "react";
-import { Session } from "next-auth";
+import { ChangeEventHandler } from "react";
 const userItemLinks = (userId?: string) => [
   {
     href: `/dashboard`,
@@ -36,26 +35,20 @@ const userItemLinks = (userId?: string) => [
   //   icon: <FontAwesomeIcon icon={faUserCircle} className="aspect-square" />,
   // },
 ];
+
 export const UserProfile = ({
-  setFormData,
+  changeForm,
   isEditable,
   name,
   email,
   image,
   showUserInfo = false,
 }: {
-  setFormData?: Dispatch<SetStateAction<Partial<Session["user"]>>>;
+  changeForm?: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
   isEditable?: boolean;
   showUserInfo?: boolean;
 } & Partial<UserInfo>) => {
   const { setRef, position: infoPos } = useElementPosition();
-  const changeName = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    name = e.target.value;
-    if (setFormData)
-      setFormData((prevFormData) => ({ ...prevFormData, name: name }));
-  };
 
   const nameElement = isEditable ? (
     <TextField
@@ -65,7 +58,7 @@ export const UserProfile = ({
       size="small"
       variant="filled"
       defaultValue={name || "N/A"}
-      onChange={changeName}
+      onChange={changeForm}
     />
   ) : (
     <span className="text-Black font-bold tracking-tight text-lg">{name}</span>

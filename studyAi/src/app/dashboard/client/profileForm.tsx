@@ -1,7 +1,7 @@
 "use client";
 import { FaLocationDot, FaTag, FaGraduationCap, FaT } from "react-icons/fa6";
 import { useMutation } from "@apollo/client";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import TextField from "@mui/material/TextField";
 import CreatableSelect from "react-select/creatable";
 import Chip from "@mui/material/Chip";
@@ -19,22 +19,25 @@ const ProfileForm = () => {
       onCompleted: (data) => {
         setProfileData((prev: Partial<User>) => ({
           ...prev,
+          name: data.updateOneUser?.name || prev.name,
           tags: data.updateOneUser?.tags || prev.tags,
           school: data.updateOneUser?.school || prev.school,
         }));
+        setIsEditable((prev: boolean) => !prev);
       },
     }
   );
+  const formData = useRef({ school: "", tags: [""], name: "" });
   const submitted = useRef(false);
 
   if (!dashboardContext) return <></>;
-  const {
-    profileData,
-    setProfileData,
-    isEditable,
-    setIsEditable,
-    initialProfileData,
-  } = dashboardContext;
+  const { profileData, setProfileData, isEditable, setIsEditable } =
+    dashboardContext;
+  formData.current = {
+    name: profileData.name || "",
+    school: profileData.school || "",
+    tags: profileData.tags || [],
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -42,43 +45,39 @@ const ProfileForm = () => {
     try {
       await mutationQuery({
         variables: {
-          id: profileData?.id || "",
+          id: profileData.id || "",
           tags: {
-            set: profileData ? profileData.tags : [],
+            set: formData.current.tags || [],
           },
           name: {
-            set: profileData?.name,
+            set: formData.current.name,
           },
           school: {
-            set: profileData?.school,
+            set: formData.current.school,
           },
           // location: {
-          //   set: {
-          //     locationType:
-          //       profileData.location.locationType || location.locationType,
-          //     coordinates: {
-          //       set: profileData?.location.coordinates || location.coordinates,
-          //     },
-          //     locationName: profileData?.locationName || location.locationName,
-          //   },
-          // },
+          //   set: formData.current.name,
+          // }
         },
       });
       submitted.current = false;
     } catch (err) {
       console.log(err);
     }
-    setIsEditable((prev: boolean) => !prev);
   };
 
   const changeForm = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.currentTarget;
-    setProfileData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    switch (name) {
+      case "school":
+        formData.current.school = value;
+        break;
+      case "name":
+        formData.current.name = value;
+        break;
+    }
   };
 
   // const locationElement = isEditable ? (
@@ -99,14 +98,14 @@ const ProfileForm = () => {
       name="school"
       size="small"
       variant="filled"
-      defaultValue={profileData.school || "N/A"}
+      defaultValue={formData.current.school || "N/A"}
       onChange={changeForm}
     />
   ) : (
     <div>{profileData.school ? profileData.school : "N/A"}</div>
   );
 
-  const tags = profileData.tags?.map((e) => ({
+  const tags = formData.current.tags.map((e) => ({
     value: e,
     label: e,
   }));
@@ -120,10 +119,8 @@ const ProfileForm = () => {
       value={tags}
       className="w-full"
       onChange={(e) => {
-        setProfileData((prev) => ({
-          ...prev,
-          tags: e.map((t) => t.value),
-        }));
+        const tags = e.map((t) => t.value);
+        formData.current.tags = tags;
       }}
     />
   );
@@ -142,27 +139,26 @@ const ProfileForm = () => {
     </div>
   );
 
-  const editCancelClick = () => {
-    // if (isEditable) setProfileData(initialProfileData);
-    setIsEditable((prev: boolean) => !prev);
-  };
-
   return (
     <>
-      <div className=" mb-5">
-        <div className="flex flex-row justify-between">
-          <UserProfile
-            setFormData={setProfileData}
-            isEditable={isEditable}
-            name={profileData.name}
-            email={profileData.email}
-            image={profileData.image}
-            showUserInfo
-          />
-          {!isEditable && <ModeEditIcon onClick={() => editCancelClick()} />}
-        </div>
-      </div>
       <form className="w-full" onSubmit={handleSubmit}>
+        <div className=" mb-5">
+          <div className="flex flex-row justify-between">
+            <UserProfile
+              isEditable={isEditable}
+              name={formData.current.name}
+              email={profileData.email}
+              image={profileData.image}
+              changeForm={changeForm}
+              showUserInfo
+            />
+            {!isEditable && (
+              <ModeEditIcon
+                onClick={() => setIsEditable((prev: boolean) => !prev)}
+              />
+            )}
+          </div>
+        </div>
         <div className="mb-5 flex flex-col gap-2">
           {/* <div className="flex items-center">
           <div className="mr-2">
@@ -179,7 +175,7 @@ const ProfileForm = () => {
               className={"mr-2 flex flex-row" + (isEditable ? " w-full" : "")}
             >
               <FaGraduationCap />
-              {isEditable && <text>School</text>}
+              {isEditable && "School"}
             </div>
             <div className="flex flex-row gap-1 items-center w-full">
               {schoolElement}
@@ -192,7 +188,7 @@ const ProfileForm = () => {
               className={"mr-2 flex flex-row" + (isEditable ? " w-full" : "")}
             >
               <FaTag />
-              {isEditable && <text>Tags</text>}
+              {isEditable && "Tags"}
             </div>
             <div className="flex flex-row items-center w-full">
               {tagsElement}
@@ -208,7 +204,7 @@ const ProfileForm = () => {
               </button>
               <button
                 className="border border-Black  h-10 px-5 m-2 rounded-lg"
-                onClick={() => editCancelClick()}
+                onClick={() => setIsEditable((prev: boolean) => !prev)}
               >
                 Cancel
               </button>
