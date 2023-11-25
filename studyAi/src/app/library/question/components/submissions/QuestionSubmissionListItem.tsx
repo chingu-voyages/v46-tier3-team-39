@@ -1,62 +1,23 @@
 "use client";
 import { QuestionSubmission } from "@prisma/client";
 import { memo } from "react";
-import { calculateTimeData } from "../time/server/calculateTimeData";
 import { Container, Typography } from "@mui/material";
 import { styles } from "./styles";
 import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
 import { AccessAlarm } from "@mui/icons-material";
-import useWindowWidth from "@/app/util/hooks/useWindowWidth";
 import ConditionalWrapper from "@/app/util/components/conditionalWrapper/conditionalWrapper";
-//since we're memoizing, so we define our custom logic comparison
-const arePropsEqual = (
-  prevProps: Partial<QuestionSubmission>,
-  newProps: Partial<QuestionSubmission>
-) => {
-  const { answerProvided } = prevProps;
-  const { answerProvided: newAnswerProvided } = newProps;
-  const isArrEqual =
-    answerProvided && newAnswerProvided
-      ? answerProvided.every(
-          (value, index) =>
-            value.id === newAnswerProvided[index].id &&
-            value.value === newAnswerProvided[index].value
-        ) && newAnswerProvided.length === answerProvided.length
-      : newAnswerProvided || answerProvided
-      ? false
-      : newAnswerProvided === answerProvided;
-  return (
-    prevProps.id === newProps.id &&
-    prevProps.questionId === newProps.questionId &&
-    prevProps.userId === newProps.userId &&
-    prevProps.score?.actualScore === newProps.score?.actualScore &&
-    prevProps.score?.maxScore === newProps.score?.maxScore &&
-    prevProps.time?.timeTaken === newProps.time?.timeTaken &&
-    prevProps.time?.timeType === newProps.time?.timeType &&
-    prevProps.time?.totalTimeGiven === newProps.time?.totalTimeGiven &&
-    isArrEqual
-  );
-};
+import useQuestionSubmissionsData from "@/app/util/components/submissions/hooks/useQuestionSubmissionsData";
+import { arePropsEqual } from "@/app/util/components/submissions/questionSubmissionListItem/arePropsEqual";
 const QuestionSubmissionsListItem = (
-  props: Partial<QuestionSubmission> & { questionName: string }
+  props: Partial<QuestionSubmission>
 ) => {
-  const windowWidth = useWindowWidth();
-  const isMobile = windowWidth < 480;
-  const { dateCreated, time, score } = props;
-  const { actualScore, maxScore } = score || {};
-  //calculate score data
-  const scoreExists = actualScore && maxScore;
-  const currScore = scoreExists ? actualScore / maxScore : 0;
-  const normalizedScore = scoreExists
-    ? (currScore * 100).toFixed(2) + "%"
-    : "N/A";
-  //calculate time data
-  const { timeType, timeTaken, totalTimeGiven } = time || {};
-  const { normalizedTimeTaken } = calculateTimeData({
+  const {
+    normalizedDateCreated,
+    normalizedScore,
+    isMobile,
     timeType,
-    timeTaken,
-    totalTimeGiven,
-  });
+    normalizedTimeTaken,
+  } = useQuestionSubmissionsData(props);
   const listItemContainer = [...styles.listContainer.item.container];
   const listItemContainerTextDesktop = [
     "justify-center",
@@ -73,13 +34,6 @@ const QuestionSubmissionsListItem = (
     ...listItemContainerTextDesktop,
     "text-lg",
   ];
-  const normalizedDateCreated = dateCreated
-    ? new Date(dateCreated).toLocaleDateString("en-us", {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-      })
-    : "N/A";
   //mobile styles only
   const dateListItemContainerMobile = [
     ...styles.listContainer.item.text,

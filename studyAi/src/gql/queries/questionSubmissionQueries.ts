@@ -38,6 +38,7 @@ export const QueryFullQuestionSubmissions = gql(`
       dateCreated
       questionId
       userId
+      questionName
       answerProvided {
         id
         value

@@ -1,25 +1,9 @@
 import { gql } from "../../../graphql/generated";
-export const UpdateUserProfileInfo = gql(`
-  mutation UpdateUserProfileInfo (
-    $id: String!,
-    $tags: UserUpdatetagsInput,
-    $name: StringFieldUpdateOperationsInput,
-    $school: NullableStringFieldUpdateOperationsInput,
-    $location: LocationDataNullableUpdateEnvelopeInput
-  ) {
-    updateOneUser(
-      where: { id: $id },
-      data: {
-        tags: $tags,
-        name: $name,
-        school: $school
-        location: $location
-      },
-    )
-    {
-      tags
+export const GetUserInfo = gql(`
+  query GetUserInfo($userId: String!){
+    user(where:{id:$userId}){
+      id
       name
-      school
     }
   }
 `);

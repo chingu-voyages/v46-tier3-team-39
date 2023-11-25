@@ -6,7 +6,7 @@ import TextField from "@mui/material/TextField";
 import CreatableSelect from "react-select/creatable";
 import Chip from "@mui/material/Chip";
 import { User } from "@prisma/client";
-import { UpdateUserProfileInfo } from "@/gql/queries/userQueries";
+import { UpdateUserProfileInfo } from "@/gql/mutations/userMutation";
 import { useDashBoard } from "../context/DashboardContext";
 
 const ProfileForm = () => {

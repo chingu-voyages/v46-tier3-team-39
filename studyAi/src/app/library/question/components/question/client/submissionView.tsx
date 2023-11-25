@@ -8,7 +8,7 @@ const containerId = uuid();
 export const SubmissionView = () => {
   return (
     <Container id={containerId} overflow className="px-[5%] py-5 grow">
-      <QuestionSubmissionsList containerId={containerId} layout="tabbed" />
+      <QuestionSubmissionsList containerId={containerId} />
     </Container>
   );
 };

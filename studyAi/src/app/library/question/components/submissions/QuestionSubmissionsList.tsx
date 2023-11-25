@@ -1,6 +1,5 @@
 "use client";
 import PaginationWrapper from "@/app/util/components/pagination/paginationWrapper";
-import { SubmissionListProvider } from "./context/SubmissionsListProvider";
 import { useSession } from "next-auth/react";
 import { useLazyQuery } from "@apollo/client";
 import { useQuestionId } from "../../context/QuestionIdContext";
@@ -32,14 +31,11 @@ const QuestionSubmissionListHeader = () => {
 };
 const QueststionSubmissionsDataList = ({
   data,
-  questionName,
 }: {
-  questionName: string;
   data: ArrOneOrMore<Partial<QuestionSubmission>>;
 }) => {
   return data.map((submission) => (
     <MemoizedQuestionSubmissionsListItem
-      questionName={questionName ? questionName : ""}
       key={submission.id}
       dateCreated={submission.dateCreated}
       id={submission.id}
@@ -66,23 +62,17 @@ const MemoizedQuestionSubmissionsDataList = memo(
     const isDataEqual =
       prevProps.data.every((val, idx) => val.id === newProps.data[idx].id) &&
       prevProps.data.length === newProps.data.length;
-    return prevProps.questionName === newProps.questionName && isDataEqual;
+    return isDataEqual;
   }
 );
-const QuestionSubmissionsList = ({
-  layout,
-  containerId,
-}: {
-  containerId: string;
-  layout: "page" | "tabbed";
-}) => {
+const QuestionSubmissionsList = ({ containerId }: { containerId: string }) => {
   const { data: session } = useSession();
   const questionIdData = useQuestionId();
+  const questionId = questionIdData?.questionId;
   const questions = useQuestions()[0].data;
   const [questionSubmissions, { addOrUpdateItems }] = useQuestionSubmissions();
   const [getSubmission, {}] = useLazyQuery(QueryFullQuestionSubmissions);
   const questionSubmissionsArrMap = questionSubmissions.submittedData.arr;
-  const questionId = questionIdData?.questionId;
   const currSubmissionsArr =
     questionId && questionSubmissionsArrMap[questionId]
       ? questionSubmissionsArrMap[questionId]
@@ -93,7 +83,7 @@ const QuestionSubmissionsList = ({
       : null
   );
   const userId = session ? session.user.id : "";
-  //memoized functio n to fetch new data
+  //memoized function to fetch new data
   const savedFetchSubmissionsFunc = useCallback(
     fetchItems({
       userId,
@@ -115,7 +105,7 @@ const QuestionSubmissionsList = ({
   if (!questionId) return noDataPlaceholder;
   const data = questionSubmissionsArrMap[questionId];
   return (
-    <SubmissionListProvider layout={layout}>
+    <>
       <QuestionSubmissionListHeader />
       <div className={styles.listContainer.container.join(" ")}>
         <PaginationWrapper
@@ -127,7 +117,6 @@ const QuestionSubmissionsList = ({
         >
           {questionName && data && data.length > 0 && data[0] ? (
             <MemoizedQuestionSubmissionsDataList
-              questionName={questionName}
               data={data as ArrOneOrMore<Partial<QuestionSubmission>>}
             />
           ) : (
@@ -135,7 +124,7 @@ const QuestionSubmissionsList = ({
           )}
         </PaginationWrapper>
       </div>
-    </SubmissionListProvider>
+    </>
   );
 };
 export default QuestionSubmissionsList;
