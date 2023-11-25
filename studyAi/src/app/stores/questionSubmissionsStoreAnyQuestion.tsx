@@ -4,6 +4,8 @@ import { addOrUpdateSubmissionsAnyParentFunc } from "./helpers";
 import { QuestionSubmission } from "@prisma/client";
 import { SubmissionsDataAnyParentItem } from "../util/types/SubmissionsData";
 import { QuestionSubmissionStoreSubmissionType } from "./questionSubmissionsStore";
+import { useRef } from "react";
+import { useIsClient } from "../util/providers/isClientProvider";
 export type QuestionSubmissionsData = SubmissionsDataAnyParentItem<
   Partial<QuestionSubmission>
 >;
@@ -99,5 +101,22 @@ const Store = createStore({
   // optional, unique, mostly used for easy debugging
   name: "questionSubmissionsAnyQuestion",
 });
-
+export const QuestionSubmissionsAnyQuestionContainerWrapper = ({
+  questionId,
+  children,
+  initialItems,
+}: QuestionSubmissionContainerProps) => {
+  const initData = useRef(initialItems ? initialItems : []);
+  const isClient = useIsClient();
+  if (!isClient) return <></>;
+  //ensures we only render container with hydration when on client side
+  return (
+    <QuestionSubmissionsAnyParentContainer
+      initialItems={initData.current}
+      questionId={questionId}
+    >
+      {children}
+    </QuestionSubmissionsAnyParentContainer>
+  );
+};
 export const useQuestionSubmissionsAnyQuestion = createHook(Store);

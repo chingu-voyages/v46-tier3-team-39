@@ -9,10 +9,11 @@ import MemoizedQuestionSubmissionsListItem from "./QuestionSubmissionListItem";
 import { useQuestions } from "@/app/stores/questionStore";
 import { QuestionSubmission } from "@prisma/client";
 import { useQuestionSubmissions } from "@/app/stores/questionSubmissionsStore";
-import fetchItems from "./fetchNewData";
+import fetchItems from "@/app/util/components/submissions/fetchNewData";
 import { Container, Typography } from "@mui/material";
 import { styles } from "./styles";
 import useWindowWidth from "@/app/util/hooks/useWindowWidth";
+import { arePropsEqual } from "@/app/util/components/submissions/questionSubmissionList/arePropsEqual";
 type ArrOneOrMore<T> = [T, ...T[]];
 const QuestionSubmissionListHeader = () => {
   const windowWidth = useWindowWidth();
@@ -58,12 +59,7 @@ const QueststionSubmissionsDataList = ({
 };
 const MemoizedQuestionSubmissionsDataList = memo(
   QueststionSubmissionsDataList,
-  (prevProps, newProps) => {
-    const isDataEqual =
-      prevProps.data.every((val, idx) => val.id === newProps.data[idx].id) &&
-      prevProps.data.length === newProps.data.length;
-    return isDataEqual;
-  }
+  arePropsEqual
 );
 const QuestionSubmissionsList = ({ containerId }: { containerId: string }) => {
   const { data: session } = useSession();
@@ -78,8 +74,8 @@ const QuestionSubmissionsList = ({ containerId }: { containerId: string }) => {
       ? questionSubmissionsArrMap[questionId]
       : [];
   const [cursor, setCursor] = useState(
-    currSubmissionsArr.length > 0 && currSubmissionsArr[0].id
-      ? currSubmissionsArr[0].id
+    currSubmissionsArr.length > 0
+      ? currSubmissionsArr[currSubmissionsArr.length - 1].id || null
       : null
   );
   const userId = session ? session.user.id : "";

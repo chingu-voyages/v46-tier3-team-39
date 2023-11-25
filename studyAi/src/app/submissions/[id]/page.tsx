@@ -3,20 +3,16 @@ import { protectRouteSSR } from "@/app/api/utils/sessionFuncs";
 import NavigationWrapper from "@/app/util/components/navigation/navigationWrapper";
 import { generateMetadataProps } from "@/app/util/metadata/generateMetadataProps";
 import { QueryFullQuestionSubmissions } from "@/gql/queries/questionSubmissionQueries";
-import { ResolvingMetadata } from "next";
-import {
-  QuestionSubmissionStoreSubmissionType,
-  QuestionSubmissionsContainerWrapper,
-} from "@/app/stores/questionSubmissionsStore";
 import QuestionSubmissionsPageList from "../components/client/QuestionSubmissionPageList";
+import {
+  QuestionSubmissionStoreSubmissionAnyParentType,
+  QuestionSubmissionsAnyQuestionContainerWrapper,
+} from "@/app/stores/questionSubmissionsStoreAnyQuestion";
 type Props = {
   params: { id: string };
   searchParams: { [key: string]: string | string[] | undefined };
 };
-export const generateMetadata = (
-  { params }: Props,
-  parent: ResolvingMetadata
-) => {
+export const generateMetadata = () => {
   return generateMetadataProps({
     title: `Your Submissions - Study AI`,
     description: `A record of your question and quiz submissions`,
@@ -35,8 +31,8 @@ const QuestionsSubmissionsPage = async () => {
   });
   const currData =
     (data &&
-      (data.questionSubmissions as QuestionSubmissionStoreSubmissionType[])) ||
-    ([] as QuestionSubmissionStoreSubmissionType[]);
+      (data.questionSubmissions as QuestionSubmissionStoreSubmissionAnyParentType[])) ||
+    ([] as QuestionSubmissionStoreSubmissionAnyParentType[]);
   return (
     <NavigationWrapper
       appBars={{
@@ -44,9 +40,9 @@ const QuestionsSubmissionsPage = async () => {
         navbar: true,
       }}
     >
-      <QuestionSubmissionsContainerWrapper initialItems={currData}>
+      <QuestionSubmissionsAnyQuestionContainerWrapper initialItems={currData}>
         <QuestionSubmissionsPageList />
-      </QuestionSubmissionsContainerWrapper>
+      </QuestionSubmissionsAnyQuestionContainerWrapper>
     </NavigationWrapper>
   );
 };
