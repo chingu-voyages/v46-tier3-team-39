@@ -38,11 +38,11 @@ export const SchoolInput = ({
 }) => {
   return (
     <div className={"flex items-center" + (isEditable ? " flex-col" : "")}>
-      <div className={"mr-2 flex flex-row" + (isEditable ? " w-full" : "")}>
+      <div className={"flex flex-row" + (isEditable ? " w-full" : "")}>
         <SchoolOutlinedIcon className="text-4xl flex justify-center items-center w-7" />
         {isEditable && <span className="ml-2"> School</span>}
       </div>
-      <div className="flex flex-row gap-1 items-center w-full">
+      <div className="flex flex-row items-center w-full">
         {isEditable ? (
           <TextField
             id="filled-basic"
@@ -51,9 +51,16 @@ export const SchoolInput = ({
             variant="filled"
             defaultValue={school || "N/A"}
             onChange={changeForm}
+            className="w-full mt-2"
+            inputProps={{
+              className: "text-sm px-2 py-0 h-9",
+            }}
+            sx={{
+              minHeight: "unset",
+            }}
           />
         ) : (
-          <Typography className="text-sm">
+          <Typography className="text-sm ml-2">
             {school ? school : "N/A"}{" "}
           </Typography>
         )}
@@ -82,7 +89,7 @@ export const TagsInput = ({
   }));
   return (
     <div className={"flex items-center" + (isEditable ? " flex-col" : "")}>
-      <div className={"mr-2 flex flex-row" + (isEditable ? " w-full" : "")}>
+      <div className={"flex flex-row" + (isEditable ? " w-full" : "")}>
         <SellOutlinedIcon className="text-3xl w-7 flex justify-center items-center" />
         {isEditable && <span className="ml-2">Tags</span>}
       </div>
@@ -94,7 +101,7 @@ export const TagsInput = ({
             isClearable
             name="tags"
             value={tags}
-            className="w-full"
+            className="w-full mt-2"
             onChange={(e) => {
               const tags = e.map((t) => t.value);
               setFormData((e) => ({
@@ -104,7 +111,7 @@ export const TagsInput = ({
             }}
           />
         ) : (
-          <div className="flex flex-row gap-1 flex-wrap">
+          <div className="flex flex-row flex-wrap ml-2">
             {Array.isArray(tags) && tags.length > 0 ? (
               tags.map((tag, index) => (
                 <Chip key={tag.value + index} label={tag.value}></Chip>

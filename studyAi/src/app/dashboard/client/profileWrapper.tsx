@@ -5,6 +5,25 @@ import { Typography } from "@mui/material";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
 import { parseInteger } from "@/app/util/parsers/parseInt";
+const ProfileInfoItem = ({
+  icon,
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+  icon: React.ReactNode;
+}) => {
+  return (
+    <div className="flex">
+      <div className="mr-2 text-3xl w-7 flex justify-center">{icon}</div>
+      <div className="flex flex-col">
+        <Typography className="font-semibold text-base">{title}</Typography>
+        {children}
+      </div>
+    </div>
+  );
+};
 const QuestionInfo = ({
   answered,
   generated,
@@ -13,39 +32,27 @@ const QuestionInfo = ({
   generated?: string;
 }) => {
   return (
-    <div className="flex">
-      <div className="mr-2 text-3xl w-7 flex justify-center">
-        <HelpOutlineIcon />
+    <ProfileInfoItem icon={<HelpOutlineIcon />} title={"Question"}>
+      <div className="flex flex-row space-x-4">
+        <Typography className="text-sm tracking-normal">
+          Answered: {answered}
+        </Typography>
+        <Typography className="text-sm tracking-normal">
+          Generated: {generated}
+        </Typography>
       </div>
-      <div className="flex flex-col">
-        <Typography className="font-semibold text-base">Question</Typography>
-        <div className="flex flex-row space-x-4">
-          <Typography className="text-sm tracking-normal">
-            Answered: {answered}
-          </Typography>
-          <Typography className="text-sm tracking-normal">
-            Generated: {generated}
-          </Typography>
-        </div>
-      </div>
-    </div>
+    </ProfileInfoItem>
   );
 };
 const UsersReached = ({ usersReached }: { usersReached: string }) => {
   return (
-    <div className="flex">
-      <div className="mr-2 text-3xl w-7 flex justify-center">
-        <GroupsOutlinedIcon />
+    <ProfileInfoItem icon={<GroupsOutlinedIcon />} title={"Community"}>
+      <div className="flex flex-row">
+        <Typography className="text-sm">
+          Impacted {usersReached} users
+        </Typography>
       </div>
-      <div className="flex flex-col">
-        <Typography className="font-semibold text-base">Community</Typography>
-        <div className="flex flex-row gap-1">
-          <Typography className="text-sm">
-            Impacted {usersReached} users
-          </Typography>
-        </div>
-      </div>
-    </div>
+    </ProfileInfoItem>
   );
 };
 const ProfileWrapper = () => {

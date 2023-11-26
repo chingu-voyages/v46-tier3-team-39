@@ -57,6 +57,18 @@ export const UserProfile = ({
       name="name"
       size="small"
       variant="filled"
+      inputProps={{
+        className: "text-sm px-2",
+      }}
+      InputLabelProps={{
+        className: "text-sm",
+        style: {
+          transform: "translate(0.5rem, 4px) scale(0.75)",
+        },
+      }}
+      sx={{
+        minHeight: "unset",
+      }}
       defaultValue={name || "N/A"}
       onChange={changeForm}
     />
