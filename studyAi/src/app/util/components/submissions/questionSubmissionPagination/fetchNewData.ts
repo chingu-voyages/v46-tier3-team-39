@@ -9,7 +9,7 @@ import {
   SortOrder,
   StringFilter,
   Exact,
-} from "../../../../../graphql/generated/graphql";
+} from "../../../../../../graphql/generated/graphql";
 export type FetchSubmissionProps<T, A> = {
   userId: string;
   questionId?: string;

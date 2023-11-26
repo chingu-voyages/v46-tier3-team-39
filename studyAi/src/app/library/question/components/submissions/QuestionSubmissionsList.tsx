@@ -9,11 +9,12 @@ import MemoizedQuestionSubmissionsListItem from "./QuestionSubmissionListItem";
 import { useQuestions } from "@/app/stores/questionStore";
 import { QuestionSubmission } from "@prisma/client";
 import { useQuestionSubmissions } from "@/app/stores/questionSubmissionsStore";
-import fetchItems from "@/app/util/components/submissions/fetchNewData";
+import fetchItems from "@/app/util/components/submissions/questionSubmissionPagination/fetchNewData";
 import { Container, Typography } from "@mui/material";
 import { styles } from "./styles";
 import useWindowWidth from "@/app/util/hooks/useWindowWidth";
 import { arePropsEqual } from "@/app/util/components/submissions/questionSubmissionList/arePropsEqual";
+import { listItemProps } from "@/app/util/components/submissions/questionSubmissionListItem/listItemProps";
 type ArrOneOrMore<T> = [T, ...T[]];
 const QuestionSubmissionListHeader = () => {
   const windowWidth = useWindowWidth();
@@ -36,25 +37,7 @@ const QueststionSubmissionsDataList = ({
   data: ArrOneOrMore<Partial<QuestionSubmission>>;
 }) => {
   return data.map((submission) => (
-    <MemoizedQuestionSubmissionsListItem
-      key={submission.id}
-      dateCreated={submission.dateCreated}
-      id={submission.id}
-      time={{
-        id: submission.time?.id || "",
-        timeTaken:
-          typeof submission.time?.timeTaken === "number"
-            ? submission.time.timeTaken
-            : null,
-        totalTimeGiven:
-          typeof submission.time?.totalTimeGiven === "number"
-            ? submission.time?.totalTimeGiven
-            : null,
-        timeType: submission.time?.timeType || "stopwatch",
-      }}
-      answerProvided={submission.answerProvided}
-      score={submission.score}
-    />
+    <MemoizedQuestionSubmissionsListItem {...listItemProps(submission)} />
   ));
 };
 const MemoizedQuestionSubmissionsDataList = memo(
