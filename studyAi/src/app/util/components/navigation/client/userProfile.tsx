@@ -65,7 +65,7 @@ export const UserProfile = ({
   );
 
   return (
-    <div className="flex items-center h-full">
+    <div className="flex items-center h-full w-full">
       <Avatar
         ref={setRef}
         className="bg-Black h-full aspect-square w-auto"

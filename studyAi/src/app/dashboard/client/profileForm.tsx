@@ -1,66 +1,62 @@
 "use client";
-import { FaLocationDot, FaTag, FaGraduationCap, FaT } from "react-icons/fa6";
 import { useMutation } from "@apollo/client";
-import { useRef } from "react";
-import TextField from "@mui/material/TextField";
-import CreatableSelect from "react-select/creatable";
-import Chip from "@mui/material/Chip";
 import { User } from "@prisma/client";
 import { UpdateUserProfileInfo } from "@/gql/mutations/userMutation";
 import { useDashBoard } from "../context/DashboardContext";
 import { UserProfile } from "@/app/util/components/navigation/client/userProfile";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import { useState } from "react";
+import { Button, IconButton } from "@mui/material";
+import { SchoolInput, TagsInput } from "./inputs";
 
 const ProfileForm = () => {
   const dashboardContext = useDashBoard();
-  const [mutationQuery, { loading, error, data }] = useMutation(
-    UpdateUserProfileInfo,
-    {
-      onCompleted: (data) => {
-        setProfileData((prev: Partial<User>) => ({
-          ...prev,
-          name: data.updateOneUser?.name || prev.name,
-          tags: data.updateOneUser?.tags || prev.tags,
-          school: data.updateOneUser?.school || prev.school,
-        }));
-        setIsEditable((prev: boolean) => !prev);
-      },
-    }
+  const [mutationQuery, { loading, error }] = useMutation(
+    UpdateUserProfileInfo
   );
-  const formData = useRef({ school: "", tags: [""], name: "" });
-  const submitted = useRef(false);
-
   if (!dashboardContext) return <></>;
   const { profileData, setProfileData, isEditable, setIsEditable } =
     dashboardContext;
-  formData.current = {
+  const [formData, setFormData] = useState({
+    tags: profileData.tags || [],
     name: profileData.name || "",
     school: profileData.school || "",
-    tags: profileData.tags || [],
-  };
-
+  });
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (submitted.current) return;
+    if (loading) return;
     try {
-      await mutationQuery({
+      const { data: result } = await mutationQuery({
         variables: {
           id: profileData.id || "",
           tags: {
-            set: formData.current.tags || [],
+            set: formData.tags || [],
           },
           name: {
-            set: formData.current.name,
+            set: formData.name,
           },
           school: {
-            set: formData.current.school,
+            set: formData.school,
           },
           // location: {
           //   set: formData.current.name,
           // }
         },
       });
-      submitted.current = false;
+      const data = result?.updateOneUser;
+      if (!data)
+        return setFormData({
+          tags: profileData.tags || [],
+          name: profileData.name || "",
+          school: profileData.school || "",
+        });
+      setProfileData((prev: Partial<User>) => ({
+        ...prev,
+        name: data.name || prev.name,
+        tags: data.tags || prev.tags,
+        school: data.school || prev.school,
+      }));
+      setIsEditable((prev: boolean) => !prev);
     } catch (err) {
       console.log(err);
     }
@@ -72,146 +68,74 @@ const ProfileForm = () => {
     const { name, value } = e.currentTarget;
     switch (name) {
       case "school":
-        formData.current.school = value;
+        formData.school = value;
         break;
       case "name":
-        formData.current.name = value;
+        formData.name = value;
         break;
     }
   };
-
-  // const locationElement = isEditable ? (
-  //   <TextField
-  //     size="small"
-  //     name="location"
-  //     variant="outlined"
-  //     defaultValue={profileData.location?.locationName || "N/A"}
-  //     onChange={changeForm}
-  //   />
-  // ) : (
-  //   <div>{profileData.location?.locationName || "N/A"}</div>
-  // );
-
-  const schoolElement = isEditable ? (
-    <TextField
-      id="filled-basic"
-      name="school"
-      size="small"
-      variant="filled"
-      defaultValue={formData.current.school || "N/A"}
-      onChange={changeForm}
-    />
-  ) : (
-    <div>{profileData.school ? profileData.school : "N/A"}</div>
-  );
-
-  const tags = formData.current.tags.map((e) => ({
-    value: e,
-    label: e,
-  }));
-
-  const tagsEditElement = (
-    <CreatableSelect
-      isMulti
-      options={tags}
-      isClearable
-      name="tags"
-      value={tags}
-      className="w-full"
-      onChange={(e) => {
-        const tags = e.map((t) => t.value);
-        formData.current.tags = tags;
-      }}
-    />
-  );
-
-  const tagsElement = isEditable ? (
-    tagsEditElement
-  ) : (
-    <div className="flex flex-row gap-1 flex-wrap">
-      {Array.isArray(profileData.tags) ? (
-        profileData.tags.map((tag: string, index: number) => (
-          <Chip key={tag + index} label={tag}></Chip>
-        ))
-      ) : (
-        <div className="text-sm">No tags</div>
-      )}
-    </div>
-  );
-
   return (
     <>
       <form className="w-full" onSubmit={handleSubmit}>
-        <div className=" mb-5">
+        <div className={`mb-5`}>
           <div className="flex flex-row justify-between">
             <UserProfile
               isEditable={isEditable}
-              name={formData.current.name}
+              name={formData.name}
               email={profileData.email}
               image={profileData.image}
               changeForm={changeForm}
               showUserInfo
             />
             {!isEditable && (
-              <ModeEditIcon
+              <IconButton
+                type="button"
                 onClick={() => setIsEditable((prev: boolean) => !prev)}
-              />
+              >
+                <EditOutlinedIcon />
+              </IconButton>
             )}
           </div>
         </div>
-        <div className="mb-5 flex flex-col gap-2">
-          {/* <div className="flex items-center">
-          <div className="mr-2">
-            <FaLocationDot />
-          </div>
-          <div className="flex flex-row gap-1 items-center w-full">
-            {locationElement}
-          </div>
-        </div> */}
-          <div
-            className={"flex items-center" + (isEditable ? " flex-col" : "")}
-          >
-            <div
-              className={"mr-2 flex flex-row" + (isEditable ? " w-full" : "")}
-            >
-              <FaGraduationCap />
-              {isEditable && "School"}
-            </div>
-            <div className="flex flex-row gap-1 items-center w-full">
-              {schoolElement}
-            </div>
-          </div>
-          <div
-            className={"flex items-center" + (isEditable ? " flex-col" : "")}
-          >
-            <div
-              className={"mr-2 flex flex-row" + (isEditable ? " w-full" : "")}
-            >
-              <FaTag />
-              {isEditable && "Tags"}
-            </div>
-            <div className="flex flex-row items-center w-full">
-              {tagsElement}
-            </div>
-          </div>
-          {isEditable && (
-            <div className="flex flex-row">
-              <button
-                className="border border-Black  h-10 px-5 m-2 rounded-lg"
-                type="submit"
-              >
-                Save
-              </button>
-              <button
-                className="border border-Black  h-10 px-5 m-2 rounded-lg"
-                onClick={() => setIsEditable((prev: boolean) => !prev)}
-              >
-                Cancel
-              </button>
-            </div>
-          )}
+        <div
+          className={` flex flex-col ${
+            isEditable ? "mb-7 space-y-5" : "mb-5 space-y-3"
+          }`}
+        >
+          <SchoolInput
+            school={formData.school}
+            changeForm={changeForm}
+            isEditable={isEditable}
+          />
+          <TagsInput
+            isEditable={isEditable}
+            passedTags={formData.tags}
+            setFormData={setFormData}
+          />
         </div>
+        {isEditable && (
+          <div className="flex flex-row space-x-2 mb-7">
+            <Button
+              type="submit"
+              variant="contained"
+              className="rounded-none"
+              color="primary"
+            >
+              Save
+            </Button>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => setIsEditable((prev: boolean) => !prev)}
+              className="rounded-none"
+            >
+              Cancel
+            </Button>
+          </div>
+        )}
       </form>
+      <div className="border-b border-b-neutral-neutral90 mb-5" />
     </>
   );
 };
