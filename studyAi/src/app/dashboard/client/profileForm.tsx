@@ -92,6 +92,10 @@ const ProfileForm = () => {
               <IconButton
                 type="button"
                 onClick={() => setIsEditable((prev: boolean) => !prev)}
+                className="aspect-square h-8 p-0"
+                sx={{
+                  minHeight: "unset",
+                }}
               >
                 <EditOutlinedIcon />
               </IconButton>

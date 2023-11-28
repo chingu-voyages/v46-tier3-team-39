@@ -1,5 +1,6 @@
 "use client";
-import { Avatar, Link, Menu, MenuItem, styled } from "@mui/material";
+import { Avatar, Link, Menu, MenuItem } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import { UserInfo } from "../../../types/UserData";
 import useElementPosition from "@/app/util/hooks/useElementSize";
 import useDropdown from "@/app/util/hooks/useDropdown";
