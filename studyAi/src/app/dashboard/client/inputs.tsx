@@ -101,7 +101,11 @@ export const TagsInput = ({
             isClearable
             name="tags"
             value={tags}
-            className="w-full mt-2"
+            classNames={{
+              control: () => "min-h-0 items-center h-full",
+              valueContainer: () => "pt-0",
+            }}
+            className="h-9 w-full mt-2"
             onChange={(e) => {
               const tags = e.map((t) => t.value);
               setFormData((e) => ({
