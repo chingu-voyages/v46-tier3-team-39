@@ -1,8 +1,4 @@
 import { Dispatch, SetStateAction } from "react";
-import {
-  QuestionSubmissionStoreSubmissionType,
-  QuestionSubmissionsData,
-} from "@/app/stores/questionSubmissionsStore";
 import { LazyQueryExecFunction } from "@apollo/client";
 import {
   DateTimeFilter,
@@ -14,43 +10,44 @@ import {
   StringFilter,
   Exact,
 } from "../../../../../../graphql/generated/graphql";
+export type FetchSubmissionProps<T, A> = {
+  userId: string;
+  questionId?: string;
+  addOrUpdateItems: (
+    items: (T & { id: string })[],
+    type: "ongoing" | "submitted"
+  ) => A;
+  cursor: string | null;
+  setCursor: Dispatch<SetStateAction<string | null>>;
+  getSubmission: LazyQueryExecFunction<
+    QueryFullQuestionSubmissionsQuery,
+    Exact<{
+      userId: string;
+      dateQuery?: InputMaybe<DateTimeFilter>;
+      questionId?: InputMaybe<StringFilter>;
+      orderBy?: InputMaybe<
+        | QuestionSubmissionOrderByWithRelationInput
+        | QuestionSubmissionOrderByWithRelationInput[]
+      >;
+      cursor?: InputMaybe<QuestionSubmissionWhereUniqueInput>;
+      skip?: InputMaybe<number>;
+    }>
+  >;
+};
 const fetchItems =
-  ({
+  <T, A>({
     userId,
     questionId,
     addOrUpdateItems,
     cursor,
     setCursor,
     getSubmission,
-  }: {
-    userId: string;
-    questionId?: string;
-    addOrUpdateItems: (
-      items: QuestionSubmissionStoreSubmissionType[],
-      type: "ongoing" | "submitted"
-    ) => QuestionSubmissionsData;
-    cursor: string | null;
-    setCursor: Dispatch<SetStateAction<string | null>>;
-    getSubmission: LazyQueryExecFunction<
-      QueryFullQuestionSubmissionsQuery,
-      Exact<{
-        userId: string;
-        dateQuery?: InputMaybe<DateTimeFilter>;
-        questionId?: InputMaybe<StringFilter>;
-        orderBy?: InputMaybe<
-          | QuestionSubmissionOrderByWithRelationInput
-          | QuestionSubmissionOrderByWithRelationInput[]
-        >;
-        cursor?: InputMaybe<QuestionSubmissionWhereUniqueInput>;
-        skip?: InputMaybe<number>;
-      }>
-    >;
-  }) =>
+  }: FetchSubmissionProps<T, A>) =>
   async () => {
-    if (!questionId) return;
     const queryOptions = {
       variables: {
-        questionId: { equals: questionId === "string" ? questionId : "" },
+        questionId:
+          typeof questionId === "string" ? { equals: questionId } : undefined,
         userId: userId,
         cursor: cursor
           ? {
@@ -68,8 +65,9 @@ const fetchItems =
       setCursor(null);
       return [];
     }
-    const newSubmissionArr =
-      results.questionSubmissions as QuestionSubmissionStoreSubmissionType[];
+    const newSubmissionArr = results.questionSubmissions as unknown as (T & {
+      id: string;
+    })[];
     if (newSubmissionArr.length <= 0) {
       setCursor(null);
       return newSubmissionArr;

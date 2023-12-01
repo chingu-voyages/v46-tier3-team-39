@@ -1,6 +1,6 @@
 import { Question, QuizLike, QuizSubmission, Subscriber } from "@prisma/client";
 import { prismaDb, allQuestions } from "./seedData";
-import { ObjectId } from "bson"
+import { ObjectId } from "bson";
 
 async function main() {
   const deleteArrPromise = [
@@ -13,7 +13,7 @@ async function main() {
     prismaDb.quizSubmission.deleteMany({}),
     prismaDb.quizSubmission.deleteMany({}),
   ];
-  
+
   await Promise.all(deleteArrPromise);
   try {
     //update user default keys
@@ -32,7 +32,7 @@ async function main() {
   }
 
   // Question
-  const {subscribers, allUserQuestions} = await allQuestions();
+  const { subscribers, allUserQuestions } = await allQuestions();
   const questionPromise: Promise<Question>[] = [];
   const subscriberPromise: Promise<Subscriber>[] = [];
   for (let i = 0; i < allUserQuestions.length; i++) {
@@ -57,6 +57,7 @@ async function main() {
       maxScore: 1,
       actualScore: 1,
     },
+    questionName: question.questionInfo.title,
     time: null,
     answerProvided: [
       {
@@ -105,6 +106,7 @@ async function main() {
       const item = {
         userId: quiz.creatorId,
         quizId: quiz.id,
+        quizName: quiz.name,
         score: {
           id: new ObjectId().toString(),
           maxScore: 1,

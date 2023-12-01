@@ -8,8 +8,7 @@ import { GetFullQuestion } from "@/gql/queries/questionQueries";
 import determineOriginUrl from "@/app/util/parsers/determineOriginUrl";
 import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
 import QuestionPageContainer from "../components/page/client/questionPageContainer";
-import { QuestionSubmissionsContainerWrapper } from "@/app/stores/questionSubmissionsStore";
-import { QuestionSubmission } from "@prisma/client";
+import { QuestionSubmissionStoreSubmissionType, QuestionSubmissionsContainerWrapper } from "@/app/stores/questionSubmissionsStore";
 import { QueryFullQuestionSubmissions } from "@/gql/queries/questionSubmissionQueries";
 import { SortOrder } from "../../../../../graphql/generated/graphql";
 export default async function QuestionPage({
@@ -32,7 +31,7 @@ export default async function QuestionPage({
           variables: {
             questionId: { equals: questionId },
             userId: session.user.id,
-            orderBy: { dateCreated: "desc" as SortOrder },
+            orderBy: { dateCreated: SortOrder.Desc },
           },
         })
       : {
@@ -48,10 +47,7 @@ export default async function QuestionPage({
       | (Partial<Question> & { id: string })
       | null;
     const submissionData =
-      submission.questionSubmissions as (Partial<QuestionSubmission> & {
-        questionId: string;
-        id: string;
-      })[];
+      submission.questionSubmissions as QuestionSubmissionStoreSubmissionType[];
     if (!questionData?.id) return <></>;
     return (
       <QuestionsContainer initialItems={questionData ? [questionData] : []}>

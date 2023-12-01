@@ -124,10 +124,10 @@ model QuestionSubmission {
   dateCreated    DateTime       @default(now())
   userId         String         @db.ObjectId
   questionId     String         @db.ObjectId
+  questionName   String
   time           TimeOptions?
   score          Score?
   answerProvided AnswerOption[]
-
   @@index([userId, questionId])
 }
 
@@ -138,6 +138,7 @@ model QuizSubmission {
   dateCreated DateTime     @default(now())
   userId      String       @db.ObjectId
   quizId      String       @db.ObjectId
+  quizName    String
 
   @@index([userId, quizId])
 }

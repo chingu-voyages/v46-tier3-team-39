@@ -1,8 +1,60 @@
 "use client";
 import ProfileForm from "./profileForm";
-import { FaClipboardQuestion, FaPeopleGroup } from "react-icons/fa6";
 import { useDashBoard } from "../context/DashboardContext";
-
+import { Typography } from "@mui/material";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
+import { parseInteger } from "@/app/util/parsers/parseInt";
+const ProfileInfoItem = ({
+  icon,
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+  icon: React.ReactNode;
+}) => {
+  return (
+    <div className="flex">
+      <div className="mr-2 text-3xl w-7 flex justify-center">{icon}</div>
+      <div className="flex flex-col">
+        <Typography className="font-semibold text-base">{title}</Typography>
+        {children}
+      </div>
+    </div>
+  );
+};
+const QuestionInfo = ({
+  answered,
+  generated,
+}: {
+  answered?: string;
+  generated?: string;
+}) => {
+  return (
+    <ProfileInfoItem icon={<HelpOutlineIcon />} title={"Question"}>
+      <div className="flex flex-row space-x-4">
+        <Typography className="text-sm tracking-normal">
+          Answered: {answered}
+        </Typography>
+        <Typography className="text-sm tracking-normal">
+          Generated: {generated}
+        </Typography>
+      </div>
+    </ProfileInfoItem>
+  );
+};
+const UsersReached = ({ usersReached }: { usersReached: string }) => {
+  return (
+    <ProfileInfoItem icon={<GroupsOutlinedIcon />} title={"Community"}>
+      <div className="flex flex-row">
+        <Typography className="text-sm">
+          Impacted {usersReached} users
+        </Typography>
+      </div>
+    </ProfileInfoItem>
+  );
+};
 const ProfileWrapper = () => {
   const dashboardContext = useDashBoard();
   if (!dashboardContext) return <></>;
@@ -12,38 +64,15 @@ const ProfileWrapper = () => {
     <div>
       {<ProfileForm />}
       <div>
-        <h2 className="font-bold text-lg mb-1">Activity</h2>
-        <div className="flex flex-col">
-          <div className="mr-2 flex">
-            <div className=" border-0 flex justify-center items-center mr-2 ">
-              <FaClipboardQuestion />
-            </div>
-            <div className="font-bold text-md">Question</div>
-          </div>
-          <div className=" flex flex-col">
-            <div className=" flex flex-row gap-1">
-              {" "}
-              <div className=" invisible">
-                <FaClipboardQuestion />
-              </div>
-              <div>Answered: {profileData.questionData?.answered}</div>
-              <div>Generated: {profileData.questionData?.generated}</div>
-            </div>
-          </div>
-        </div>
-        <div className="flex flex-col mt-2">
-          <div className="mr-2 flex ">
-            <div className=" border-0 flex justify-center items-center mr-2">
-              <FaPeopleGroup />
-            </div>
-            <div className="font-bold text-md">Community</div>
-          </div>
-          <div className=" flex flex-row">
-            <div className="invisible mr-2">
-              <FaPeopleGroup />
-            </div>
-            <div>Impacted {profileData.usersReached} users</div>
-          </div>
+        <Typography className="font-semibold text-lg mb-4">Activity</Typography>
+        <div className="flex flex-col w-full space-y-3">
+          <QuestionInfo
+            answered={parseInteger(profileData.questionData?.answered || 0)}
+            generated={parseInteger(profileData.questionData?.generated || 0)}
+          />
+          <UsersReached
+            usersReached={parseInteger(profileData.usersReached || 0)}
+          />
         </div>
       </div>
     </div>

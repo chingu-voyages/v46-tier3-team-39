@@ -169,6 +169,7 @@ const QuestionEditForm = () => {
     startTransition(async () => {
       const result = await uploadQuestionToDb({
         questionData,
+        questionId: type.type === "edit" ? questionData.id : undefined,
       });
       if (!result) return;
       if (onSave) onSave(result);

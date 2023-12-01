@@ -25,6 +25,31 @@ export const DeleteQuestionMutation = gql(`
     }
   }
 `);
+export const UpdateQuestionMutation = gql(`
+  mutation UpdateSingleQuestion(
+    $id: String!,
+    $questionType: StringFieldUpdateOperationsInput,
+    $tags: QuestionUpdatetagsInput,
+    $questionInfo: QuestionInfoDataUpdateEnvelopeInput,
+    $answer: AnswerDataUpdateEnvelopeInput,
+    $likeCounter: LikeCounterCreateEnvelopeInput,
+    $private: BoolFieldUpdateOperationsInput
+  ){
+    updateOneQuestion(
+      where: { id: $id }
+      data: {
+        questionType: $questionType,
+        tags: $tags,
+        questionInfo: $questionInfo,
+        answer: $answer,
+        private: $private
+      })
+      {
+        id
+    }
+  }
+  `);
+
 export const AddQuestionMutation = gql(`
   mutation AddSingleQuestion(
     $creatorId: String!,

@@ -1,5 +1,6 @@
 "use client";
 import { Avatar, Link, Menu, MenuItem } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import { UserInfo } from "../../../types/UserData";
 import useElementPosition from "@/app/util/hooks/useElementSize";
 import useDropdown from "@/app/util/hooks/useDropdown";
@@ -35,7 +36,14 @@ const userItemLinks = (userId?: string) => [
   //   icon: <FontAwesomeIcon icon={faUserCircle} className="aspect-square" />,
   // },
 ];
-
+const StyledTextField = styled(TextField)({
+  "& .MuiInputLabel-root.MuiInputLabel-shrink": {
+    transform: "translate(0.5rem, 4px) scale(0.65)",
+  },
+  "& .MuiInputLabel-root": {
+    transform: "translate(12px, 0.75rem) scale(1)",
+  },
+});
 export const UserProfile = ({
   changeForm,
   isEditable,
@@ -51,12 +59,20 @@ export const UserProfile = ({
   const { setRef, position: infoPos } = useElementPosition();
 
   const nameElement = isEditable ? (
-    <TextField
-      id="filled-basic"
+    <StyledTextField
       label="Name"
       name="name"
       size="small"
       variant="filled"
+      inputProps={{
+        className: "text-sm px-2 pt-4",
+      }}
+      InputLabelProps={{
+        className: "text-sm",
+      }}
+      sx={{
+        minHeight: "unset",
+      }}
       defaultValue={name || "N/A"}
       onChange={changeForm}
     />
@@ -65,7 +81,7 @@ export const UserProfile = ({
   );
 
   return (
-    <div className="flex items-center h-full">
+    <div className="flex items-center h-full w-full">
       <Avatar
         ref={setRef}
         className="bg-Black h-full aspect-square w-auto"
@@ -76,7 +92,7 @@ export const UserProfile = ({
             : undefined
         }
       >
-        {name?.[0].toUpperCase()}
+        {name?.[0]?.toUpperCase()}
       </Avatar>
       {showUserInfo && (
         <div ref={setRef} className="flex flex-col w-full ml-4 py-1 space-y-0">

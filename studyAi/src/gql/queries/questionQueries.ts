@@ -57,6 +57,15 @@ export const GetFullQuestion = gql(`
     }
   }
 `);
+export const GetQuestionCreator = gql(`
+    query GetQuestionCreator($id: String!) {
+        question(
+            where: {id: $id}
+        ){
+            creatorId
+        }
+    }
+`);
 export const GetQuestionAnswerById = gql(`
   query GetQuestionAnswerById($id: String) {
     question(where: { id: $id }) {
@@ -93,6 +102,7 @@ export const GetQuestionsInfo = gql(`
     }
   }
 `);
+
 export const GetQuestionCountByCreatorId = gql(`
     query AggregateQuestionResolver( $creatorId: StringFilter,$dateQuery: DateTimeFilter
 ) {

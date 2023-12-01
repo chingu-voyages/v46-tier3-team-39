@@ -13,7 +13,7 @@ const GreetingBannerWrapper = () => {
   return (
     <div className="col-span-2">
       <div className="grid grid-rows-2 ">
-        <div className="row-span-1 border p-5 flex w-full">
+        <div className="row-span-1 border flex w-full">
           <GreetingBannerContainer />
         </div>
         <div className=" row-span-1 flex item-center py-5">

@@ -1,7 +1,10 @@
 "use client";
 import { GetState, SetState } from "react-sweet-state";
 import { cloneDeep, debounce } from "lodash";
-import { SubmissionsData } from "../util/types/SubmissionsData";
+import {
+  SubmissionsData,
+  SubmissionsDataAnyParentItem,
+} from "../util/types/SubmissionsData";
 import {
   addLocalStorageObj,
   deleteLocalStorageObj,
@@ -17,6 +20,13 @@ export type SubmissionTypeMapAsGeneric<
 > = {
   [P in K]: SubmissionTypeMap[P];
 }[K];
+type AddOrUpdateFuncSubmissionProps<T> = {
+  items: (T & { id?: string; questionId?: string; quizId?: string })[];
+  getState: GetState<SubmissionsData<T>>;
+  setState: SetState<SubmissionsData<T>>;
+  submissionTimeType: "ongoing" | "submitted";
+  submissionType?: "question" | "quiz";
+};
 export const saveAnswerToLocalStorage = ({
   id,
   submission,
@@ -130,13 +140,7 @@ export const addOrUpdateSubmissionsFunc = <T>({
   setState,
   submissionType,
   submissionTimeType,
-}: {
-  items: (T & { id?: string; questionId?: string; quizId?: string })[];
-  getState: GetState<SubmissionsData<T>>;
-  setState: SetState<SubmissionsData<T>>;
-  submissionTimeType: "ongoing" | "submitted";
-  submissionType?: "question" | "quiz";
-}) => {
+}: AddOrUpdateFuncSubmissionProps<T>) => {
   const currState = getState();
   const copiedData = cloneDeep(currState) as SubmissionsData<T>;
   //go through items and update or add them
@@ -153,6 +157,12 @@ export const addOrUpdateSubmissionsFunc = <T>({
       }
       //check if we need to update
       const currItem = submissionMap[id];
+      //grab index of id in arr
+      let arr = copiedData.submittedData.arr[submissionTypeId];
+      if (!arr) {
+        copiedData.submittedData.arr[submissionTypeId] = [];
+        arr = copiedData.submittedData.arr[submissionTypeId];
+      }
       const newItem = currItem
         ? {
             ...currItem,
@@ -160,13 +170,11 @@ export const addOrUpdateSubmissionsFunc = <T>({
             id: id,
           }
         : { ...item, id };
+      //add since it doesn't exist
+      if (!currItem) arr.push(newItem);
       submissionMap[id] = newItem;
-      //grab index of id in arr
-      let arr = copiedData.submittedData.arr[submissionTypeId];
-      if (!arr) {
-        copiedData.submittedData.arr[submissionTypeId] = [];
-        arr = copiedData.submittedData.arr[submissionTypeId];
-      }
+      if (!currItem) return;
+      //update it in arr
       let idx = findById(arr, newItem.id);
       copiedData.submittedData.arr[submissionTypeId][idx] = newItem;
     }
@@ -186,6 +194,79 @@ export const addOrUpdateSubmissionsFunc = <T>({
           submission: newItem,
           submissionType,
         });
+    }
+  });
+  setState(copiedData);
+  return copiedData;
+};
+export const addOrUpdateSubmissionsAnyParentFunc = <T>({
+  items,
+  getState,
+  setState,
+  submissionType,
+  submissionTimeType,
+}: Omit<AddOrUpdateFuncSubmissionProps<T>, "getState" | "setState"> & {
+  getState: GetState<SubmissionsDataAnyParentItem<T>>;
+  setState: SetState<SubmissionsDataAnyParentItem<T>>;
+}) => {
+  const currState = getState();
+  const copiedData = cloneDeep(currState) as SubmissionsDataAnyParentItem<T>;
+  //go through items and update or add them
+  items.forEach((item) => {
+    const { id } = item;
+    const submissionTypeId = id as string;
+    const inOngoing = submissionTimeType === "ongoing";
+    const inSubmitted = submissionTimeType === "submitted";
+    if (inSubmitted && id) {
+      let submissionMap = currState.submittedData.map;
+      //check if we need to update
+      const currItem = submissionMap[id];
+      //grab index of id in arr
+      let arr = copiedData.submittedData.arr;
+      const newItem = currItem
+        ? {
+            ...currItem,
+            ...item,
+            id: id,
+          }
+        : { ...item, id };
+      submissionMap[id] = newItem;
+      //add since it doesn't exist
+      if (!currItem) arr.push(newItem);
+      submissionMap[id] = newItem;
+      if (!currItem) return;
+      let idx = findById(arr, newItem.id);
+      copiedData.submittedData.arr[idx] = newItem;
+    }
+    if (inOngoing) {
+      //check if we need to update
+      const currItem = currState.ongoingData.map[submissionTypeId];
+      //grab index of id in arr
+      let arr = copiedData.ongoingData.arr;
+      if (!arr) {
+        copiedData.ongoingData.arr = [];
+        arr = copiedData.ongoingData.arr;
+      }
+      const newItem = currItem
+        ? {
+            ...currItem,
+            ...item,
+            id: submissionTypeId,
+          }
+        : { ...item, id: submissionTypeId };
+      //add since it doesn't exist
+      if (!currItem) arr.push(newItem);
+      copiedData.ongoingData.map[submissionTypeId] = newItem;
+      if (submissionType)
+        debouncedSaveAnswerToLocalStorage({
+          id: submissionTypeId,
+          submission: newItem,
+          submissionType,
+        });
+      if (!currItem) return;
+      //update it in arr
+      let idx = findById(arr, newItem.id);
+      copiedData.submittedData.arr[idx] = newItem;
     }
   });
   setState(copiedData);

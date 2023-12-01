@@ -1,6 +1,5 @@
 "use client";
 import PaginationWrapper from "@/app/util/components/pagination/paginationWrapper";
-import { SubmissionListProvider } from "./context/SubmissionsListProvider";
 import { useSession } from "next-auth/react";
 import { useLazyQuery } from "@apollo/client";
 import { useQuestionId } from "../../context/QuestionIdContext";
@@ -10,10 +9,12 @@ import MemoizedQuestionSubmissionsListItem from "./QuestionSubmissionListItem";
 import { useQuestions } from "@/app/stores/questionStore";
 import { QuestionSubmission } from "@prisma/client";
 import { useQuestionSubmissions } from "@/app/stores/questionSubmissionsStore";
-import fetchItems from "./fetchNewData";
+import fetchItems from "@/app/util/components/submissions/questionSubmissionPagination/fetchNewData";
 import { Container, Typography } from "@mui/material";
 import { styles } from "./styles";
 import useWindowWidth from "@/app/util/hooks/useWindowWidth";
+import { arePropsEqual } from "@/app/util/components/submissions/questionSubmissionList/arePropsEqual";
+import { listItemProps } from "@/app/util/components/submissions/questionSubmissionListItem/listItemProps";
 type ArrOneOrMore<T> = [T, ...T[]];
 const QuestionSubmissionListHeader = () => {
   const windowWidth = useWindowWidth();
@@ -32,68 +33,36 @@ const QuestionSubmissionListHeader = () => {
 };
 const QueststionSubmissionsDataList = ({
   data,
-  questionName,
 }: {
-  questionName: string;
   data: ArrOneOrMore<Partial<QuestionSubmission>>;
 }) => {
   return data.map((submission) => (
-    <MemoizedQuestionSubmissionsListItem
-      questionName={questionName ? questionName : ""}
-      key={submission.id}
-      dateCreated={submission.dateCreated}
-      id={submission.id}
-      time={{
-        id: submission.time?.id || "",
-        timeTaken:
-          typeof submission.time?.timeTaken === "number"
-            ? submission.time.timeTaken
-            : null,
-        totalTimeGiven:
-          typeof submission.time?.totalTimeGiven === "number"
-            ? submission.time?.totalTimeGiven
-            : null,
-        timeType: submission.time?.timeType || "stopwatch",
-      }}
-      answerProvided={submission.answerProvided}
-      score={submission.score}
-    />
+    <MemoizedQuestionSubmissionsListItem {...listItemProps(submission)} />
   ));
 };
 const MemoizedQuestionSubmissionsDataList = memo(
   QueststionSubmissionsDataList,
-  (prevProps, newProps) => {
-    const isDataEqual =
-      prevProps.data.every((val, idx) => val.id === newProps.data[idx].id) &&
-      prevProps.data.length === newProps.data.length;
-    return prevProps.questionName === newProps.questionName && isDataEqual;
-  }
+  arePropsEqual
 );
-const QuestionSubmissionsList = ({
-  layout,
-  containerId,
-}: {
-  containerId: string;
-  layout: "page" | "tabbed";
-}) => {
+const QuestionSubmissionsList = ({ containerId }: { containerId: string }) => {
   const { data: session } = useSession();
   const questionIdData = useQuestionId();
+  const questionId = questionIdData?.questionId;
   const questions = useQuestions()[0].data;
   const [questionSubmissions, { addOrUpdateItems }] = useQuestionSubmissions();
   const [getSubmission, {}] = useLazyQuery(QueryFullQuestionSubmissions);
   const questionSubmissionsArrMap = questionSubmissions.submittedData.arr;
-  const questionId = questionIdData?.questionId;
   const currSubmissionsArr =
     questionId && questionSubmissionsArrMap[questionId]
       ? questionSubmissionsArrMap[questionId]
       : [];
   const [cursor, setCursor] = useState(
-    currSubmissionsArr.length > 0 && currSubmissionsArr[0].id
-      ? currSubmissionsArr[0].id
+    currSubmissionsArr.length > 0
+      ? currSubmissionsArr[currSubmissionsArr.length - 1].id || null
       : null
   );
   const userId = session ? session.user.id : "";
-  //memoized functio n to fetch new data
+  //memoized function to fetch new data
   const savedFetchSubmissionsFunc = useCallback(
     fetchItems({
       userId,
@@ -113,23 +82,9 @@ const QuestionSubmissionsList = ({
     </label>
   );
   if (!questionId) return noDataPlaceholder;
-  const mockData = Array(1000).fill({
-    id: "id",
-    dateCreated: new Date(),
-    score: {
-      actualScore: 2,
-      maxScore: 100,
-      id: "id",
-    },
-    time: {
-      timeType: 'timer',
-      timeTaken: 10000,
-      totalTimeGiven: 10000000,
-    }
-  })
-  const data = mockData//questionSubmissionsArrMap[questionId];
+  const data = questionSubmissionsArrMap[questionId];
   return (
-    <SubmissionListProvider layout={layout}>
+    <>
       <QuestionSubmissionListHeader />
       <div className={styles.listContainer.container.join(" ")}>
         <PaginationWrapper
@@ -141,7 +96,6 @@ const QuestionSubmissionsList = ({
         >
           {questionName && data && data.length > 0 && data[0] ? (
             <MemoizedQuestionSubmissionsDataList
-              questionName={questionName}
               data={data as ArrOneOrMore<Partial<QuestionSubmission>>}
             />
           ) : (
@@ -149,7 +103,7 @@ const QuestionSubmissionsList = ({
           )}
         </PaginationWrapper>
       </div>
-    </SubmissionListProvider>
+    </>
   );
 };
 export default QuestionSubmissionsList;

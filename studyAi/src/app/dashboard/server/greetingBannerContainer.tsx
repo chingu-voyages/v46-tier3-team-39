@@ -3,7 +3,7 @@ import GreetingBanner from "../client/greetingBanner";
 const GreetingBannerContainer = () => {
   try {
     return (
-      <div className="flex w-full border-2 border-blue-500">
+      <div className="flex w-full">
         <GreetingBanner />
       </div>
     );
