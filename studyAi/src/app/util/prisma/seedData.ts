@@ -16,13 +16,12 @@ const questions: Omit<Question, "id" | "creatorId" | "dateCreated">[] = [
     tags: ["Science", "Chemistry"],
     questionInfo: {
       id: new ObjectId().toString(),
-      title: "Molecular Compound",
-      description: "What is the molecular compound of water?",
+      title: "Nomenclature",
+      description: "What is the molecular name of water?",
       options: [],
     },
     answer: {
       id: new ObjectId().toString(),
-
       correctAnswer: createOptions(["H20"]),
     },
     likeCounter: {
@@ -92,5 +91,5 @@ export const allQuestions = async () => {
     }
   }
 
-  return { allUserQuestions, subscribers };
+  return { allUserQuestions, subscribers, totalQuestions: questions.length };
 };
