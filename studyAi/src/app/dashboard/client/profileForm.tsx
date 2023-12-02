@@ -135,6 +135,7 @@ const ProfileForm = () => {
               variant="contained"
               className="rounded-none"
               color="primary"
+              disabled={loading}
             >
               Save
             </Button>
