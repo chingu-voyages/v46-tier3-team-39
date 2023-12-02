@@ -75,6 +75,7 @@ export const UserProfile = ({
       }}
       defaultValue={name || "N/A"}
       onChange={changeForm}
+      required
     />
   ) : (
     <span className="text-Black font-bold tracking-tight text-lg">{name}</span>
