@@ -4,52 +4,61 @@ import { FaFileCircleQuestion } from "react-icons/fa6";
 import GreetingBannerContainer from "../server/greetingBannerContainer";
 import Link from "next/link";
 import { useDashBoard } from "../context/DashboardContext";
+import useWindowWidth from "@/app/util/hooks/useWindowWidth";
+import ConditionalWrapper from "@/app/util/components/conditionalWrapper/conditionalWrapper";
 
+const GreetingBannerCard = ({
+  icon,
+  title,
+  description,
+  link,
+}: {
+  icon: React.ReactNode;
+  link: string;
+  title: string;
+  description: string;
+}) => {
+  return (
+    <Link href={link}>
+      <div className="border flex flex-col h-full items-center p-4">
+        <div className="flex items-center w-full">
+          <div className="">{icon}</div>
+          <div className="font-bold text-lg ml-2">{title}</div>
+        </div>
+        <div className="pt-2 text-sm">{description}</div>
+      </div>
+    </Link>
+  );
+};
 const GreetingBannerWrapper = () => {
   const dashboardContext = useDashBoard();
+  const windowWidth = useWindowWidth();
   if (!dashboardContext) return <></>;
   const { profileData } = dashboardContext;
 
   return (
-    <div className="col-span-2">
-      <div className="grid grid-rows-2 ">
-        <div className="row-span-1 border flex w-full">
-          <GreetingBannerContainer />
-        </div>
-        <div className=" row-span-1 flex item-center py-5">
-          <div className=" grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <Link href={`/library/question/create`}>
-              <div className=" col-span-1 border p-5 flex flex-col lg:flex-row h-full items-center">
-                <div className="me-2 ">
-                  <BsStars size={34} />
-                </div>
-                <div className="flex flex-col">
-                  <div className=" font-bold text-xl">Generate Questions</div>
-                  <div>
-                    Create exam questions using AI ! Use another community
-                    question as a template, or upload your own !
-                  </div>
-                </div>
-              </div>
-            </Link>
-            <Link href={`/library/${profileData.id}/questions`}>
-              <div className=" col-span-1 border p-5 h-full flex flex-col lg:flex-row items-center">
-                <div className="me-2 ">
-                  <FaFileCircleQuestion size={34} />
-                </div>
-                <div className="flex flex-col">
-                  <div className=" font-bold text-xl ">Your Questions</div>
-                  <div>
-                    Choose exams from our community, or create your own
-                    variations using any questions you generate or find!
-                  </div>
-                </div>
-              </div>
-            </Link>
-          </div>
-        </div>
+    <ConditionalWrapper
+      condition={windowWidth > 768}
+      wrapper={(children) => (
+        <div className="flex flex-col w-full space-y-5">{children}</div>
+      )}
+    >
+      <GreetingBannerContainer />
+      <div className="flex justify-between item-center">
+        <GreetingBannerCard
+          icon={<BsStars className={"text-2xl"} />}
+          title="Create Questions"
+          description="Create exam questions using AI! Use another community question as a template, or upload your own!"
+          link={`/library/question/create`}
+        />
+        <GreetingBannerCard
+          icon={<FaFileCircleQuestion className={"text-2xl"} />}
+          title="Your Questions"
+          description="Choose exams from our community, or create your own variations using any questions you generate or find!"
+          link={`/library/${profileData.id}/questions`}
+        />
       </div>
-    </div>
+    </ConditionalWrapper>
   );
 };
 

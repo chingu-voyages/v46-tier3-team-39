@@ -3,7 +3,7 @@ import GreetingBannerWrapper from "../client/greetingBannerWrapper";
 
 const DashBoardWrapper = () => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 p-5 m-5 md:gap-5 w-full sm:gap-y-5">
+    <div className="flex flex-col w-full space-y-5 md:flex-row md:space-x-[3%]">
       <Profile />
       <GreetingBannerWrapper />
     </div>
