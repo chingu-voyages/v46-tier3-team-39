@@ -80,14 +80,16 @@ const ProfileForm = () => {
       <form className="w-full" onSubmit={handleSubmit}>
         <div className={`mb-5`}>
           <div className="flex flex-row justify-between">
-            <UserProfile
-              isEditable={isEditable}
-              name={formData.name}
-              email={profileData.email}
-              image={profileData.image}
-              changeForm={changeForm}
-              showUserInfo
-            />
+            <div className="flex justify-center items-center h-14">
+              <UserProfile
+                isEditable={isEditable}
+                name={formData.name}
+                email={profileData.email}
+                image={profileData.image}
+                changeForm={changeForm}
+                showUserInfo
+              />
+            </div>
             {!isEditable && (
               <IconButton
                 type="button"
@@ -97,7 +99,7 @@ const ProfileForm = () => {
                   minHeight: "unset",
                 }}
               >
-                <EditOutlinedIcon />
+                <EditOutlinedIcon className="text-lg" />
               </IconButton>
             )}
           </div>

@@ -18,7 +18,9 @@ const ProfileInfoItem = ({
     <div className="flex">
       <div className="mr-2 text-3xl w-7 flex justify-center">{icon}</div>
       <div className="flex flex-col">
-        <Typography className="font-semibold text-base">{title}</Typography>
+        <Typography className="font-semibold text-sm tracking-normal">
+          {title}
+        </Typography>
         {children}
       </div>
     </div>
@@ -34,10 +36,10 @@ const QuestionInfo = ({
   return (
     <ProfileInfoItem icon={<HelpOutlineIcon />} title={"Question"}>
       <div className="flex flex-row space-x-4">
-        <Typography className="text-sm tracking-normal">
+        <Typography className="text-xs tracking-normal">
           Answered: {answered}
         </Typography>
-        <Typography className="text-sm tracking-normal">
+        <Typography className="text-xs tracking-normal">
           Generated: {generated}
         </Typography>
       </div>
@@ -48,7 +50,7 @@ const UsersReached = ({ usersReached }: { usersReached: string }) => {
   return (
     <ProfileInfoItem icon={<GroupsOutlinedIcon />} title={"Community"}>
       <div className="flex flex-row">
-        <Typography className="text-sm">
+        <Typography className="text-xs">
           Impacted {usersReached} users
         </Typography>
       </div>
@@ -61,9 +63,9 @@ const ProfileWrapper = () => {
   const { profileData } = dashboardContext;
 
   return (
-    <div>
+    <div className="flex flex-col w-full">
       {<ProfileForm />}
-      <div>
+      <div className="flex flex-col w-full">
         <Typography className="font-semibold text-lg mb-4">Activity</Typography>
         <div className="flex flex-col w-full space-y-3">
           <QuestionInfo
