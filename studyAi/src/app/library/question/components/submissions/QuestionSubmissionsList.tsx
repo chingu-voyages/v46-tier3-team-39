@@ -35,9 +35,9 @@ const QueststionSubmissionsDataList = ({
   data,
 }: {
   data: ArrOneOrMore<Partial<QuestionSubmission>>;
-}) => {
+  }) => {
   return data.map((submission) => (
-    <MemoizedQuestionSubmissionsListItem {...listItemProps(submission)} />
+    <MemoizedQuestionSubmissionsListItem {...listItemProps(submission)} key={submission.id} />
   ));
 };
 const MemoizedQuestionSubmissionsDataList = memo(

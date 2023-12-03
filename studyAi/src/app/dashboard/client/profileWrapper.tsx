@@ -65,7 +65,7 @@ const ProfileWrapper = () => {
   return (
     <div className="flex flex-col w-full">
       {<ProfileForm />}
-      <div className="flex flex-col w-full">
+      <div className="flex flex-col w-full pb-4">
         <Typography className="font-semibold text-lg mb-4">Activity</Typography>
         <div className="flex flex-col w-full space-y-3">
           <QuestionInfo
