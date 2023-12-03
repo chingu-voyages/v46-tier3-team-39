@@ -42,6 +42,7 @@ const questions: Omit<Question, "id" | "creatorId" | "dateCreated">[] = [
         "When the loop ends.",
         "When the loop starts.",
         "At the second iteration.",
+        "When we reach base case."
       ]),
     },
     answer: {
