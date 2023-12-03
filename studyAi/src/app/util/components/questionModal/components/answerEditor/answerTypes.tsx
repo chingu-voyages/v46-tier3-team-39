@@ -262,9 +262,10 @@ export const ShortAnswer = () => {
       id: prevAnswer.correctAnswer[0].id as string,
       value: event.target.value,
     };
-    setQuestionData({
+    setQuestionData((prev) => ({
+      ...prev,
       answer: { ...prevAnswer, correctAnswer: [newAnswer] },
-    });
+    }));
   };
   return (
     <TextAreaAutoResizeInput
@@ -285,17 +286,16 @@ const NewAnswer = ({
 }: Pick<QuestionProps, "questionData" | "setQuestionData">) => {
   const clickHandler = () => {
     const options = questionData.questionInfo?.options;
-    const questionInfo = questionData.questionInfo;
-    setQuestionData(
-      options && questionInfo
+    setQuestionData((prev) =>
+      options && prev.questionInfo
         ? {
-            ...questionData,
+            ...prev,
             questionInfo: {
-              ...questionInfo,
+              ...prev.questionInfo,
               options: options.concat({ id: ObjectId().toString(), value: "" }),
             },
           }
-        : questionData
+        : prev
     );
   };
   return (
@@ -340,13 +340,13 @@ const deleteChoice = (
   ) {
     newAnswer = [newOptions[0]];
   }
-  setQuestionData(
-    questionData.questionInfo && options
+  setQuestionData((prev) =>
+    prev.questionInfo && options
       ? {
-          ...questionData,
-          questionInfo: { ...questionData.questionInfo, options: newOptions },
+          ...prev,
+          questionInfo: { ...prev.questionInfo, options: newOptions },
           answer: { ...currAnswerKey, correctAnswer: newAnswer },
         }
-      : questionData
+      : prev
   );
 };

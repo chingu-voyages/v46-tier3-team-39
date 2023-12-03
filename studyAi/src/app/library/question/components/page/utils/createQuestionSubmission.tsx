@@ -19,6 +19,7 @@ const createQuestionSubmissionDoc = ({
     userId: session.user.id,
     questionId: submission.questionId as string,
     dateCreated: new Date(),
+    questionName: submission.questionName as string,
     time:
       typeof timeInputType === "string" && typeof timeTaken === "string"
         ? {
