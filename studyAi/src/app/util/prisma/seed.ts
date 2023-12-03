@@ -1,4 +1,10 @@
-import { Question, QuizLike, QuizSubmission, Subscriber } from "@prisma/client";
+import {
+  Question,
+  QuizLike,
+  QuizSubmission,
+  Subscriber,
+  User,
+} from "@prisma/client";
 import { prismaDb, allQuestions } from "./seedData";
 import { ObjectId } from "bson";
 
@@ -32,7 +38,8 @@ async function main() {
   }
 
   // Question
-  const { subscribers, allUserQuestions } = await allQuestions();
+  const { subscribers, allUserQuestions, totalQuestions } =
+    await allQuestions();
   const questionPromise: Promise<Question>[] = [];
   const subscriberPromise: Promise<Subscriber>[] = [];
   for (let i = 0; i < allUserQuestions.length; i++) {
@@ -40,11 +47,13 @@ async function main() {
       prismaDb.question.create({ data: allUserQuestions[i] })
     );
   }
+
   for (let i = 0; i < subscribers.length; i++) {
     subscriberPromise.push(
       prismaDb.subscriber.create({ data: subscribers[i] })
     );
   }
+
   await Promise.all(subscriberPromise);
   const questionInfo = await Promise.all(questionPromise);
 
@@ -59,12 +68,7 @@ async function main() {
     },
     questionName: question.questionInfo.title,
     time: null,
-    answerProvided: [
-      {
-        id: new ObjectId().toString(),
-        value: "hello",
-      },
-    ],
+    answerProvided: question.answer.correctAnswer,
   }));
   const questionLikesData = questionInfo.map((question) => ({
     userId: question.creatorId,
@@ -122,6 +126,19 @@ async function main() {
     data: submission,
   });
   await Promise.all([quizLikePromise, submissionPromise]);
+  await prismaDb.user.updateMany({
+    where: {
+      email: {
+        contains: "@",
+      },
+    },
+    data: {
+      questionData: {
+        generated: totalQuestions,
+        answered: totalQuestions,
+      },
+    },
+  });
 }
 
 main()

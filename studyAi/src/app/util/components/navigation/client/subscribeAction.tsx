@@ -1,19 +1,18 @@
 "use client";
-import { TextFieldInput } from "@/authComponents/server/formInputs";
 import useElementPosition from "@/app/util/hooks/useElementSize";
 import { useMutation } from "@apollo/client";
-import { Button } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import { AddSubscriber } from "@/gql/mutations/subscriberMutation";
+import { useState } from "react";
 export const SubscribeAction = () => {
   const {
     setRef,
     position: { height: inputHeight },
   } = useElementPosition();
 
-  const [mutationQuery, { loading, error, data }] = useMutation(
-    AddSubscriber
-  );
-  
+  const [mutationQuery, { loading, error, data }] = useMutation(AddSubscriber);
+  const [email, setEmail] = useState("");
+
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     if (loading) return;
     e.preventDefault();
@@ -21,13 +20,13 @@ export const SubscribeAction = () => {
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData.entries());
     const { email } = data;
-    
     try {
       await mutationQuery({
         variables: {
           email: email.toString(),
         },
       });
+      setEmail("");
     } catch (err) {
       console.error(err);
     }
@@ -38,15 +37,15 @@ export const SubscribeAction = () => {
       onSubmit={onSubmit}
       className="flex flex-col space-y-3 items-end sm:flex-row sm:space-y-0"
     >
-      <TextFieldInput
+      <TextField
         ref={setRef}
+        onChange={(e) => setEmail(e.target.value)}
+        value={email}
         size={"small"}
-        labelContainerClassNames="mb-3 font-semibold text-md text-Black tracking-tight"
-        label="Join us"
+        label="Enter your email"
         id="email"
         name="email"
         type="email"
-        placeholder="Enter your email"
         className=" w-full h-full rounded-none [&>*]:rounded-none"
         autoComplete="email"
         InputProps={{
@@ -73,4 +72,3 @@ export const SubscribeAction = () => {
     </form>
   );
 };
-

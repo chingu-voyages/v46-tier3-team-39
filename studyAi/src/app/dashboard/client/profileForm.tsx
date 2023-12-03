@@ -75,6 +75,16 @@ const ProfileForm = () => {
         break;
     }
   };
+
+  const cancel = () => {
+    setIsEditable((prev: boolean) => !prev);
+    setFormData({
+      tags: profileData.tags || [],
+      name: profileData.name || "",
+      school: profileData.school || "",
+    });
+  };
+
   return (
     <>
       <form className="w-full" onSubmit={handleSubmit}>
@@ -127,13 +137,14 @@ const ProfileForm = () => {
               variant="contained"
               className="rounded-none"
               color="primary"
+              disabled={loading}
             >
               Save
             </Button>
             <Button
               variant="contained"
               color="error"
-              onClick={() => setIsEditable((prev: boolean) => !prev)}
+              onClick={() => cancel()}
               className="rounded-none"
             >
               Cancel

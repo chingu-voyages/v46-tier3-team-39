@@ -94,9 +94,9 @@ const Controls = () => {
                     setQuestionData,
                   });
                 } catch (err) {
-                  setIsGenerating(false);
                   console.error(err);
                 }
+                setIsGenerating(false);
               }}
               className={"aspect-square p-2 h-full"}
               disabled={isGenerating}
