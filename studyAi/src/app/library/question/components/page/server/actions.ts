@@ -22,7 +22,7 @@ export const uploadQuestionSubmisison = async ({
   const userId = session?.user?.id;
   if (!userId) return;
   const client = ServerGraphQLClient(session);
-  const questionSubmission = createQuestionSubmissionDoc({
+  const questionSubmission = await createQuestionSubmissionDoc({
     session: session,
     submission,
     timeInputs

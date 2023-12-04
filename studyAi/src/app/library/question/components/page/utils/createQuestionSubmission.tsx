@@ -2,7 +2,7 @@ import { AnswerOption, QuestionSubmission } from "@prisma/client";
 import { Session } from "next-auth";
 import { QuestionSubmissionCreateInput } from "../../../../../../../graphql/generated/graphql";
 import { TimeInputsProps } from "../server/actions";
-import { ObjectId } from "bson";
+import ObjectId from "bson-objectid";
 import { GetQuestionAnswerById } from "@/gql/queries/questionQueries";
 import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
 import { AnswerData } from "../../../../../../../prisma/generated/type-graphql";
@@ -34,8 +34,8 @@ const createQuestionSubmissionDoc = async ({
     query: GetQuestionAnswerById,
     variables: { id: submission.questionId },
   };
-  let actualScore = null;
-  let maxScore = null;
+  let actualScore = undefined;
+  let maxScore = undefined;
 
   try {
     const client = ServerGraphQLClient(session);
@@ -43,8 +43,8 @@ const createQuestionSubmissionDoc = async ({
     const [{ data: answer }] = await Promise.all([answerPromise]);
     const answerData = answer.question?.answer as
       | (AnswerData & { id: string })
-      | null;
-    actualScore = getScore(submission.answerProvided || null, answerData);
+      | undefined;
+    actualScore = getScore(submission.answerProvided || null, answerData || null);
     maxScore = answerData?.correctAnswer.length;
   } catch (err) {
     console.error(err);
@@ -64,16 +64,15 @@ const createQuestionSubmissionDoc = async ({
               totalTimeGiven:
                 typeof totalTimeGiven === "string"
                   ? parseInt(totalTimeGiven)
-                  : null,
+                  : undefined,
             },
           }
-        : null,
+        : undefined,
     answerProvided: submission.answerProvided,
-    // score: {
-    //   id: new ObjectId().toString(),
-    //   maxScore,
-    //   actualScore,
-    // },
+    score:
+      maxScore && actualScore
+        ? { set: { id: ObjectId().toString(), maxScore, actualScore } }
+        : undefined,
   };
   return newSubmission;
 };
