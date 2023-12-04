@@ -64,7 +64,7 @@ export default async function DashboardPage() {
         navbar: true,
         footer: true,
       }}
-      usePadding
+      usePadding={false}
     >
       <DashBoardProvider
         initialProfileData={initialProfileData}

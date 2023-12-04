@@ -19,14 +19,12 @@ const GreetingBannerCard = ({
   description: string;
 }) => {
   return (
-    <Link href={link}>
-      <div className="border flex flex-col h-full items-center p-4">
-        <div className="flex items-center w-full">
-          <div className="">{icon}</div>
-          <div className="font-bold text-lg ml-2">{title}</div>
-        </div>
-        <div className="pt-2 text-sm">{description}</div>
+    <Link href={link} className="border flex flex-col h-full items-center p-4">
+      <div className="flex items-center w-full">
+        <div className="">{icon}</div>
+        <div className="font-bold text-lg ml-2">{title}</div>
       </div>
+      <div className="pt-2 text-sm">{description}</div>
     </Link>
   );
 };
