@@ -167,10 +167,11 @@ const QuestionEditForm = () => {
     currElPos?.elementRef?.scrollTo(0, 0);
     if (pending) return;
     startTransition(async () => {
-      const result = await uploadQuestionToDb({
+      const data = {
         questionData,
         questionId: type.type === "edit" ? questionData.id : undefined,
-      });
+      };
+      const result = await uploadQuestionToDb(data);
       if (!result) return;
       if (onSave) onSave(result);
       if (type.layout === "modal") setIsOpen(false);

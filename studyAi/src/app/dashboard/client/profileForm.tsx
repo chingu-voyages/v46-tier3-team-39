@@ -75,34 +75,42 @@ const ProfileForm = () => {
         break;
     }
   };
+
+  const cancel = () => {
+    setIsEditable((prev: boolean) => !prev);
+    setFormData({
+      tags: profileData.tags || [],
+      name: profileData.name || "",
+      school: profileData.school || "",
+    });
+  };
+
   return (
     <>
       <form className="w-full" onSubmit={handleSubmit}>
-        <div className={`mb-5`}>
-          <div className="flex flex-row justify-between">
-            <div className="flex justify-center items-center h-14">
-              <UserProfile
-                isEditable={isEditable}
-                name={formData.name}
-                email={profileData.email}
-                image={profileData.image}
-                changeForm={changeForm}
-                showUserInfo
-              />
-            </div>
-            {!isEditable && (
-              <IconButton
-                type="button"
-                onClick={() => setIsEditable((prev: boolean) => !prev)}
-                className="aspect-square h-8 p-0"
-                sx={{
-                  minHeight: "unset",
-                }}
-              >
-                <EditOutlinedIcon className="text-lg" />
-              </IconButton>
-            )}
+        <div className="flex flex-row justify-between mb-5">
+          <div className="flex justify-center items-center h-14">
+            <UserProfile
+              isEditable={isEditable}
+              name={formData.name}
+              email={profileData.email}
+              image={profileData.image}
+              changeForm={changeForm}
+              showUserInfo
+            />
           </div>
+          {!isEditable && (
+            <IconButton
+              type="button"
+              onClick={() => setIsEditable((prev: boolean) => !prev)}
+              className="aspect-square h-8 p-0"
+              sx={{
+                minHeight: "unset",
+              }}
+            >
+              <EditOutlinedIcon className="text-lg" />
+            </IconButton>
+          )}
         </div>
         <div
           className={` flex flex-col ${
@@ -127,13 +135,14 @@ const ProfileForm = () => {
               variant="contained"
               className="rounded-none"
               color="primary"
+              disabled={loading}
             >
               Save
             </Button>
             <Button
               variant="contained"
               color="error"
-              onClick={() => setIsEditable((prev: boolean) => !prev)}
+              onClick={() => cancel()}
               className="rounded-none"
             >
               Cancel

@@ -3,7 +3,7 @@ import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
 import { options } from "@/authComponents/nextAuth/options";
 import { getServerSession } from "next-auth";
 import { Question } from "@prisma/client";
-import { ObjectId } from "bson";
+import ObjectId from "bson-objectid";
 import {
   AddQuestionMutation,
   UpdateQuestionMutation,
@@ -15,13 +15,11 @@ import {
 } from "../../../../../graphql/generated/graphql";
 import { GetQuestionCreator } from "@/gql/queries/questionQueries";
 import removeTypename from "../../parsers/removeTypename";
-export const uploadQuestionToDb = async ({
-  questionData,
-  questionId,
-}: {
+export const uploadQuestionToDb = async (data: {
   questionData: Partial<Question>;
   questionId?: string;
 }) => {
+  const { questionData, questionId } = data;
   const session = await getServerSession(options);
   if (!session) return null;
   const client = ServerGraphQLClient(session);
@@ -47,10 +45,13 @@ export const uploadQuestionToDb = async ({
     questionInfo: {
       set: questionData?.questionInfo
         ? {
-            ...questionData.questionInfo,
+            id: questionData.questionInfo.id,
+            title: questionData.questionInfo.title,
+            description: questionData.questionInfo.description,
+            options: questionData.questionInfo.options,
           }
         : {
-            id: new ObjectId().toString(),
+            id: ObjectId().toString(),
             title: "",
             description: "",
             options: [],
@@ -59,16 +60,19 @@ export const uploadQuestionToDb = async ({
     creatorId: creatorId ? creatorId : "",
     likeCounter: {
       set: {
-        id: new ObjectId().toString(),
+        id: ObjectId().toString(),
         likes: 0,
         dislikes: 0,
       },
     },
     answer: {
       set: {
-        id: new ObjectId().toString(),
+        id: ObjectId().toString(),
         correctAnswer: questionData?.answer?.correctAnswer
-          ? questionData?.answer?.correctAnswer
+          ? questionData?.answer?.correctAnswer.map((e) => ({
+              id: e.id,
+              value: e.value,
+            }))
           : [],
       },
     },
@@ -125,8 +129,8 @@ export const uploadQuestionToDb = async ({
           mutation: AddQuestionMutation,
           variables: removeTypename(variables),
         }),
-    //increment user data count
-    questionId
+    //increment user data count since this is a new question
+    !questionId
       ? client.mutate({
           mutation: UpdateUserData,
           variables: {

@@ -32,7 +32,6 @@ export const UpdateQuestionMutation = gql(`
     $tags: QuestionUpdatetagsInput,
     $questionInfo: QuestionInfoDataUpdateEnvelopeInput,
     $answer: AnswerDataUpdateEnvelopeInput,
-    $likeCounter: LikeCounterCreateEnvelopeInput,
     $private: BoolFieldUpdateOperationsInput
   ){
     updateOneQuestion(

@@ -6,11 +6,16 @@ import createQuestionSubmissionDoc from "../utils/createQuestionSubmission";
 import { QuestionSubmission } from "@prisma/client";
 import { UploadNewQuestionSubmissionQuery } from "@/gql/mutations/questionSubmissionMutation";
 import { UpdateUserData } from "@/gql/mutations/userMutation";
+export type TimeInputsProps = {
+    timeInputType?: string;
+    timeTaken?: string;
+    totalTimeGiven?: string;
+  }
 export const uploadQuestionSubmisison = async ({
-  event,
   submission,
+  timeInputs
 }: {
-  event: React.FormEvent<HTMLFormElement>;
+  timeInputs: TimeInputsProps
   submission: Partial<QuestionSubmission>;
 }) => {
   const session = await getServerSession(options);
@@ -19,8 +24,8 @@ export const uploadQuestionSubmisison = async ({
   const client = ServerGraphQLClient(session);
   const questionSubmission = createQuestionSubmissionDoc({
     session: session,
-    event,
     submission,
+    timeInputs
   });
   if (!questionSubmission) return null;
   const questionSubmissionMutationOptions = {
