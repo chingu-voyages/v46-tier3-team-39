@@ -1,4 +1,3 @@
-import React from "react";
 import { QuestionSubmission } from "@prisma/client";
 import { Session } from "next-auth";
 import { QuestionSubmissionCreateInput } from "../../../../../../../graphql/generated/graphql";

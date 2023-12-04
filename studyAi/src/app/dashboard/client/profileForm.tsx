@@ -88,31 +88,29 @@ const ProfileForm = () => {
   return (
     <>
       <form className="w-full" onSubmit={handleSubmit}>
-        <div className={`mb-5`}>
-          <div className="flex flex-row justify-between">
-            <div className="flex justify-center items-center h-14">
-              <UserProfile
-                isEditable={isEditable}
-                name={formData.name}
-                email={profileData.email}
-                image={profileData.image}
-                changeForm={changeForm}
-                showUserInfo
-              />
-            </div>
-            {!isEditable && (
-              <IconButton
-                type="button"
-                onClick={() => setIsEditable((prev: boolean) => !prev)}
-                className="aspect-square h-8 p-0"
-                sx={{
-                  minHeight: "unset",
-                }}
-              >
-                <EditOutlinedIcon className="text-lg" />
-              </IconButton>
-            )}
+        <div className="flex flex-row justify-between mb-5">
+          <div className="flex justify-center items-center h-14">
+            <UserProfile
+              isEditable={isEditable}
+              name={formData.name}
+              email={profileData.email}
+              image={profileData.image}
+              changeForm={changeForm}
+              showUserInfo
+            />
           </div>
+          {!isEditable && (
+            <IconButton
+              type="button"
+              onClick={() => setIsEditable((prev: boolean) => !prev)}
+              className="aspect-square h-8 p-0"
+              sx={{
+                minHeight: "unset",
+              }}
+            >
+              <EditOutlinedIcon className="text-lg" />
+            </IconButton>
+          )}
         </div>
         <div
           className={` flex flex-col ${
