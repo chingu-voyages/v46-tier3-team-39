@@ -1,9 +1,25 @@
-import React from "react";
-import { QuestionSubmission } from "@prisma/client";
+import { AnswerOption, QuestionSubmission } from "@prisma/client";
 import { Session } from "next-auth";
 import { QuestionSubmissionCreateInput } from "../../../../../../../graphql/generated/graphql";
 import { TimeInputsProps } from "../server/actions";
-const createQuestionSubmissionDoc = ({
+import { ObjectId } from "bson";
+import { GetQuestionAnswerById } from "@/gql/queries/questionQueries";
+import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
+import { AnswerData } from "../../../../../../../prisma/generated/type-graphql";
+const getScore = (
+  answerProvided: AnswerOption[] | null,
+  correctAnswer: AnswerData | null
+) => {
+  if (!(answerProvided && correctAnswer)) return;
+  let score = 0;
+  for (const chosen of answerProvided) {
+    for (const correctOptions of correctAnswer?.correctAnswer) {
+      if (chosen.value === correctOptions.value) score++;
+    }
+  }
+  return score;
+};
+const createQuestionSubmissionDoc = async ({
   session,
   submission,
   timeInputs,
@@ -14,6 +30,26 @@ const createQuestionSubmissionDoc = ({
 }) => {
   const { timeInputType, timeTaken, totalTimeGiven } = timeInputs;
   if (!session) return;
+  const answerQuery = {
+    query: GetQuestionAnswerById,
+    variables: { id: submission.questionId },
+  };
+  let actualScore = null;
+  let maxScore = null;
+
+  try {
+    const client = ServerGraphQLClient(session);
+    const answerPromise = client.query(answerQuery);
+    const [{ data: answer }] = await Promise.all([answerPromise]);
+    const answerData = answer.question?.answer as
+      | (AnswerData & { id: string })
+      | null;
+    actualScore = getScore(submission.answerProvided || null, answerData);
+    maxScore = answerData?.correctAnswer.length;
+  } catch (err) {
+    console.error(err);
+  }
+
   const newSubmission: QuestionSubmissionCreateInput = {
     userId: session.user.id,
     questionId: submission.questionId as string,
@@ -33,6 +69,11 @@ const createQuestionSubmissionDoc = ({
           }
         : null,
     answerProvided: submission.answerProvided,
+    // score: {
+    //   id: new ObjectId().toString(),
+    //   maxScore,
+    //   actualScore,
+    // },
   };
   return newSubmission;
 };
