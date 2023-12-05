@@ -1,11 +1,11 @@
 "use client";
 import { BsStars } from "react-icons/bs";
 import { FaFileCircleQuestion } from "react-icons/fa6";
-import GreetingBannerContainer from "../server/greetingBannerContainer";
 import Link from "next/link";
 import { useDashBoard } from "../context/DashboardContext";
 import useWindowWidth from "@/app/util/hooks/useWindowWidth";
 import ConditionalWrapper from "@/app/util/components/conditionalWrapper/conditionalWrapper";
+import GreetingBanner from "./greetingBanner";
 
 const GreetingBannerCard = ({
   icon,
@@ -44,7 +44,7 @@ const GreetingBannerWrapper = () => {
         <div className="flex flex-col w-full space-y-6">{children}</div>
       )}
     >
-      <GreetingBannerContainer />
+      <GreetingBanner />
       <div className="flex flex-col justify-between item-center space-y-5 xs:space-y-0 xs:space-x-5 md:space-x-6 xs:flex-row">
         <GreetingBannerCard
           icon={<BsStars className={"text-2xl"} />}

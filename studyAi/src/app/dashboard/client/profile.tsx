@@ -10,7 +10,7 @@ import useWindowWidth from "@/app/util/hooks/useWindowWidth";
 const determineContainerClasses = (isCollapsed: boolean, isMobile: boolean) => {
   const isMobileClasses = !isMobile
     ? ["h-[calc(100vh-3.5rem)]", "border-r"]
-    : ["border"];
+    : ["border", "mt-5"];
   const isCollapsedClasses = ["overflow-hidden", "md:max-w-[2.5rem]"];
   const isNotCollapsedClasses = ["overflow-y-auto", "md:max-w-[17rem]"];
   const containerClasses = [
