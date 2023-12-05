@@ -13,12 +13,12 @@ const NavigationWrapper = ({
     navbar: boolean;
     footer: boolean;
   };
-}) => {
+  }) => {
   return (
     <>
       {appBars ? (
         <>
-          {appBars.navbar && <Navbar />}
+          {appBars.navbar && <Navbar limitWidth={limitWidth} />}
           <main
             className={`bg-White flex flex-col h-full w-full text-Black ${
               usePadding ? "px-[3%] md:px-[5%] items-center" : ""
