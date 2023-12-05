@@ -11,6 +11,7 @@ import { useState } from "react";
 import { Button, IconButton, Typography } from "@mui/material";
 import { SchoolInput, TagsInput } from "./inputs";
 import useWindowWidth from "@/app/util/hooks/useWindowWidth";
+import BtnLabelDropdown from "@/app/util/components/btnLabelDropdown/btnLabelDropdown";
 export const ProfileFormAtnBtns = ({
   isCollapsed,
   setIsCollapsed,
@@ -31,32 +32,57 @@ export const ProfileFormAtnBtns = ({
   return (
     <div className={atnBtnClassNames.join(" ")}>
       {!isEditable && (
-        <IconButton
-          type="button"
-          onClick={() => {
-            if (setIsEditable) setIsEditable((prev: boolean) => !prev);
-            setIsCollapsed(false);
-          }}
-          className="aspect-square h-8 p-0"
-          sx={{
-            minHeight: "unset",
-          }}
-        >
-          <EditOutlinedIcon className="text-lg" />
-        </IconButton>
+        <BtnLabelDropdown text={"Edit Profile"} pointerEvents={false}>
+          {(props) => (
+            <IconButton
+              ref={props.setAnchorEl}
+              onPointerEnter={(e) => {
+                if (e.pointerType === "mouse") props.handleClick(e);
+              }}
+              onPointerLeave={(e) => {
+                if (e.pointerType === "mouse") props.handleClose();
+              }}
+              type="button"
+              onClick={() => {
+                if (setIsEditable) setIsEditable((prev: boolean) => !prev);
+                setIsCollapsed(false);
+              }}
+              className="aspect-square h-8 p-0"
+              sx={{
+                minHeight: "unset",
+              }}
+            >
+              <EditOutlinedIcon className="text-lg" />
+            </IconButton>
+          )}
+        </BtnLabelDropdown>
       )}
       {!isMobile && (
-        <IconButton
-          type="button"
-          className="aspect-square h-8 p-0"
-          onClick={() => setIsCollapsed((prev) => !prev)}
+        <BtnLabelDropdown
+          text={isCollapsed ? "Show Profile" : "Hide Profile"}
+          pointerEvents={false}
         >
-          {isCollapsed ? (
-            <KeyboardArrowRightIcon className="text-lg" />
-          ) : (
-            <KeyboardArrowLeftIcon className="text-lg" />
+          {(props) => (
+            <IconButton
+              ref={props.setAnchorEl}
+              onPointerEnter={(e) => {
+                if (e.pointerType === "mouse") props.handleClick(e);
+              }}
+              onPointerLeave={(e) => {
+                if (e.pointerType === "mouse") props.handleClose();
+              }}
+              type="button"
+              className="aspect-square h-8 p-0"
+              onClick={() => setIsCollapsed((prev) => !prev)}
+            >
+              {isCollapsed ? (
+                <KeyboardArrowRightIcon className="text-lg" />
+              ) : (
+                <KeyboardArrowLeftIcon className="text-lg" />
+              )}
+            </IconButton>
           )}
-        </IconButton>
+        </BtnLabelDropdown>
       )}
     </div>
   );

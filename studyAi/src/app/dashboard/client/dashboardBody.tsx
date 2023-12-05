@@ -4,7 +4,7 @@ import ConditionalWrapper from "@/app/util/components/conditionalWrapper/conditi
 import GreetingBanner from "./greetingBanner/greetingBanner";
 import ActionCards from "./actionCards/actionCards";
 
-const GreetingBannerWrapper = () => {
+const DashboardBody = () => {
   const windowWidth = useWindowWidth();
 
   return (
@@ -24,4 +24,4 @@ const GreetingBannerWrapper = () => {
   );
 };
 
-export default GreetingBannerWrapper;
+export default DashboardBody;
