@@ -7,7 +7,6 @@ import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
 import { parseInteger } from "@/app/util/parsers/parseInt";
 import { useEffect, useState } from "react";
 import useWindowWidth from "@/app/util/hooks/useWindowWidth";
-import dynamic from "next/dynamic";
 const determineContainerClasses = (isCollapsed: boolean, isMobile: boolean) => {
   const isMobileClasses = !isMobile
     ? ["h-[calc(100vh-3.5rem)]", "border-r"]

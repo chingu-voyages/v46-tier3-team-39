@@ -10,6 +10,7 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { useState } from "react";
 import { Button, IconButton, Typography } from "@mui/material";
 import { SchoolInput, TagsInput } from "./inputs";
+import useWindowWidth from "@/app/util/hooks/useWindowWidth";
 export const ProfileFormAtnBtns = ({
   isCollapsed,
   setIsCollapsed,
@@ -21,6 +22,8 @@ export const ProfileFormAtnBtns = ({
   isEditable?: boolean;
   setIsEditable?: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
+  const windowWidth = useWindowWidth();
+  const isMobile = windowWidth < 768;
   const collapsedClassNames = isCollapsed
     ? ["flex-col-reverse", "w-[calc(2.5rem-1px)]", "justify-center", "pt-2"]
     : ["flex-row"];
@@ -42,17 +45,19 @@ export const ProfileFormAtnBtns = ({
           <EditOutlinedIcon className="text-lg" />
         </IconButton>
       )}
-      <IconButton
-        type="button"
-        className="aspect-square h-8 p-0"
-        onClick={() => setIsCollapsed((prev) => !prev)}
-      >
-        {isCollapsed ? (
-          <KeyboardArrowRightIcon className="text-lg" />
-        ) : (
-          <KeyboardArrowLeftIcon className="text-lg" />
-        )}
-      </IconButton>
+      {!isMobile && (
+        <IconButton
+          type="button"
+          className="aspect-square h-8 p-0"
+          onClick={() => setIsCollapsed((prev) => !prev)}
+        >
+          {isCollapsed ? (
+            <KeyboardArrowRightIcon className="text-lg" />
+          ) : (
+            <KeyboardArrowLeftIcon className="text-lg" />
+          )}
+        </IconButton>
+      )}
     </div>
   );
 };
