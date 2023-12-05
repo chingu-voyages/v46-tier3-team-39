@@ -44,7 +44,10 @@ const createQuestionSubmissionDoc = async ({
     const answerData = answer.question?.answer as
       | (AnswerData & { id: string })
       | undefined;
-    actualScore = getScore(submission.answerProvided || null, answerData || null);
+    actualScore = getScore(
+      submission.answerProvided || null,
+      answerData || null
+    );
     maxScore = answerData?.correctAnswer.length;
   } catch (err) {
     console.error(err);
@@ -70,7 +73,7 @@ const createQuestionSubmissionDoc = async ({
         : undefined,
     answerProvided: submission.answerProvided,
     score:
-      maxScore && actualScore
+      typeof maxScore === "number" && typeof actualScore === "number"
         ? { set: { id: ObjectId().toString(), maxScore, actualScore } }
         : undefined,
   };
