@@ -4,9 +4,11 @@ const NavigationWrapper = ({
   children,
   appBars,
   usePadding = false,
+  limitWidth = true,
 }: {
   children: React.ReactNode;
   usePadding?: boolean;
+  limitWidth?: boolean;
   appBars?: {
     navbar: boolean;
     footer: boolean;
@@ -26,13 +28,17 @@ const NavigationWrapper = ({
             }}
           >
             {usePadding && (
-              <div className="flex flex-col grow w-full max-w-screen-xl pt-2 h-full">
+              <div
+                className={`flex flex-col grow w-full pt-2 h-full ${
+                  limitWidth ? "max-w-screen-xl" : ""
+                }`}
+              >
                 {children}
               </div>
             )}
             {!usePadding && children}
           </main>
-          {appBars.footer && <Footer />}
+          {appBars.footer && <Footer limitWidth={limitWidth} />}
         </>
       ) : (
         children

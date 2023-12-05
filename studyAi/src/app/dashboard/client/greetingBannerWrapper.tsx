@@ -41,7 +41,11 @@ const GreetingBannerWrapper = () => {
     <ConditionalWrapper
       condition={windowWidth > 768}
       wrapper={(children) => (
-        <div className="flex flex-col w-full space-y-6">{children}</div>
+        <div className="flex flex-col items-center w-full">
+          <div className="flex flex-col w-full max-w-screen-xl space-y-6">
+            {children}
+          </div>
+        </div>
       )}
     >
       <GreetingBanner />

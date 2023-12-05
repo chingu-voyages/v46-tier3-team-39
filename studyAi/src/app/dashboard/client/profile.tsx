@@ -92,7 +92,7 @@ const Profile = () => {
       });
   }, [isMobile]);
   const containerClasses = determineContainerClasses(isCollapsed, isMobile);
-  const isMobileClasses = isMobile ? [] : ["min-w-[calc(17rem-1px)]"];
+  const isMobileClasses = isMobile ? [] : ["min-w-[15rem] max-w-[calc(17rem-1px)]"];
   const innerContainerClassesCollapsed = !isCollapsed ? ["p-5"] : [];
   const innerContainerClasses = [
     "flex",
