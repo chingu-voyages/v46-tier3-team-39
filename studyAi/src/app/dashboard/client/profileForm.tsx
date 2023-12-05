@@ -5,22 +5,74 @@ import { UpdateUserProfileInfo } from "@/gql/mutations/userMutation";
 import { useDashBoard } from "../context/DashboardContext";
 import { UserProfile } from "@/app/util/components/navigation/client/userProfile";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { useState } from "react";
-import { Button, IconButton } from "@mui/material";
+import { Button, IconButton, Typography } from "@mui/material";
 import { SchoolInput, TagsInput } from "./inputs";
-
-const ProfileForm = () => {
+export const ProfileFormAtnBtns = ({
+  isCollapsed,
+  setIsCollapsed,
+  isEditable,
+  setIsEditable,
+}: {
+  isCollapsed: boolean;
+  setIsCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
+  isEditable?: boolean;
+  setIsEditable?: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
+  const collapsedClassNames = isCollapsed
+    ? ["flex-col-reverse", "w-[calc(2.5rem-1px)]", "justify-center", "pt-2"]
+    : ["flex-row"];
+  const atnBtnClassNames = ["flex", "items-center", ...collapsedClassNames];
+  return (
+    <div className={atnBtnClassNames.join(" ")}>
+      {!isEditable && (
+        <IconButton
+          type="button"
+          onClick={() => {
+            if (setIsEditable) setIsEditable((prev: boolean) => !prev);
+            setIsCollapsed(false);
+          }}
+          className="aspect-square h-8 p-0"
+          sx={{
+            minHeight: "unset",
+          }}
+        >
+          <EditOutlinedIcon className="text-lg" />
+        </IconButton>
+      )}
+      <IconButton
+        type="button"
+        className="aspect-square h-8 p-0"
+        onClick={() => setIsCollapsed((prev) => !prev)}
+      >
+        {isCollapsed ? (
+          <KeyboardArrowRightIcon className="text-lg" />
+        ) : (
+          <KeyboardArrowLeftIcon className="text-lg" />
+        )}
+      </IconButton>
+    </div>
+  );
+};
+const ProfileForm = ({
+  isCollapsed,
+  setIsCollapsed,
+}: {
+  isCollapsed: boolean;
+  setIsCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const dashboardContext = useDashBoard();
   const [mutationQuery, { loading, error }] = useMutation(
     UpdateUserProfileInfo
   );
-  if (!dashboardContext) return <></>;
   const { profileData, setProfileData, isEditable, setIsEditable } =
-    dashboardContext;
+    dashboardContext || {};
   const [formData, setFormData] = useState({
-    tags: profileData.tags || [],
-    name: profileData.name || "",
-    school: profileData.school || "",
+    tags: profileData?.tags || [],
+    name: profileData?.name || "",
+    school: profileData?.school || "",
   });
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -28,7 +80,7 @@ const ProfileForm = () => {
     try {
       const { data: result } = await mutationQuery({
         variables: {
-          id: profileData.id || "",
+          id: profileData?.id || "",
           tags: {
             set: formData.tags || [],
           },
@@ -46,17 +98,18 @@ const ProfileForm = () => {
       const data = result?.updateOneUser;
       if (!data)
         return setFormData({
-          tags: profileData.tags || [],
-          name: profileData.name || "",
-          school: profileData.school || "",
+          tags: profileData?.tags || [],
+          name: profileData?.name || "",
+          school: profileData?.school || "",
         });
-      setProfileData((prev: Partial<User>) => ({
-        ...prev,
-        name: data.name || prev.name,
-        tags: data.tags || prev.tags,
-        school: data.school || prev.school,
-      }));
-      setIsEditable((prev: boolean) => !prev);
+      if (setProfileData)
+        setProfileData((prev: Partial<User>) => ({
+          ...prev,
+          name: data.name || prev.name,
+          tags: data.tags || prev.tags,
+          school: data.school || prev.school,
+        }));
+      if (setIsEditable) setIsEditable((prev: boolean) => !prev);
     } catch (err) {
       console.log(err);
     }
@@ -77,40 +130,38 @@ const ProfileForm = () => {
   };
 
   const cancel = () => {
-    setIsEditable((prev: boolean) => !prev);
-    setFormData({
-      tags: profileData.tags || [],
-      name: profileData.name || "",
-      school: profileData.school || "",
-    });
+    if (setIsEditable) setIsEditable((prev: boolean) => !prev);
+    if (setFormData)
+      setFormData({
+        tags: profileData?.tags || [],
+        name: profileData?.name || "",
+        school: profileData?.school || "",
+      });
   };
-
+  if (!dashboardContext) return <></>;
   return (
     <>
-      <form className="w-full" onSubmit={handleSubmit}>
+      <form className="flex flex-col w-full" onSubmit={handleSubmit}>
+        <div className="flex items-center justify-between mb-3">
+          <Typography variant="h6">Your Profile</Typography>
+          <ProfileFormAtnBtns
+            isCollapsed={isCollapsed}
+            setIsCollapsed={setIsCollapsed}
+            isEditable={isEditable}
+            setIsEditable={setIsEditable}
+          />
+        </div>
         <div className="flex flex-row justify-between mb-5">
-          <div className="flex justify-center items-center h-14">
+          <div className="flex justify-center items-center h-14 w-full">
             <UserProfile
               isEditable={isEditable}
               name={formData.name}
-              email={profileData.email}
-              image={profileData.image}
+              email={profileData?.email}
+              image={profileData?.image}
               changeForm={changeForm}
               showUserInfo
             />
           </div>
-          {!isEditable && (
-            <IconButton
-              type="button"
-              onClick={() => setIsEditable((prev: boolean) => !prev)}
-              className="aspect-square h-8 p-0"
-              sx={{
-                minHeight: "unset",
-              }}
-            >
-              <EditOutlinedIcon className="text-lg" />
-            </IconButton>
-          )}
         </div>
         <div
           className={` flex flex-col ${
@@ -120,10 +171,10 @@ const ProfileForm = () => {
           <SchoolInput
             school={formData.school}
             changeForm={changeForm}
-            isEditable={isEditable}
+            isEditable={!!isEditable}
           />
           <TagsInput
-            isEditable={isEditable}
+            isEditable={!!isEditable}
             passedTags={formData.tags}
             setFormData={setFormData}
           />

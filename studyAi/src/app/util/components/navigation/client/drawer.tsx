@@ -3,7 +3,6 @@ import { Transition } from "react-transition-group";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import useElementSize from "@/app/util/hooks/useElementSize";
-
 const Drawer = ({
   children,
   id,
