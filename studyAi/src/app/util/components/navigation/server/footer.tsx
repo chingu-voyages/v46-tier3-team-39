@@ -45,10 +45,22 @@ export const PrivacyPolicyWrapper = ({
     </div>
   );
 };
-export const FooterBody = () => {
+export const FooterBody = ({ limitWidth = true }: { limitWidth: boolean }) => {
+  const containerClasses = [
+    "flex",
+    "flex-col",
+    "justify-center",
+    "space-y-10",
+    "w-full",
+    "py-14",
+    "sm:flex-row",
+    "sm:justify-between",
+    "sm:space-y-0",
+  ];
+  if (limitWidth) containerClasses.push("max-w-screen-xl");
   return (
-    <div className="flex flex-col justify-center space-y-10 w-full py-14 max-w-screen-xl sm:flex-row sm:justify-between sm:space-y-0">
-      <div className="flex flex-col justify-center grow space-y-10 sm:space-y-6">
+    <div className={containerClasses.join(" ")}>
+      <div className="flex flex-col justify-center grow space-y-8 sm:space-y-6">
         <div className="flex w-full h-12 justify-center sm:justify-start">
           <Logo showLabel />
         </div>
@@ -100,9 +112,28 @@ export const FooterBody = () => {
     </div>
   );
 };
-export const FooterBottom = () => {
+export const FooterBottom = ({
+  limitWidth = true,
+}: {
+  limitWidth: boolean;
+}) => {
+  const containerClasses = [
+    "text-Black",
+    "flex",
+    "flex-col",
+    "w-full",
+    "py-6",
+    "items-center",
+    "sm:items-start",
+    "sm:flex-row",
+    "tracking-tighter",
+    "text-xs",
+    "space-y-3",
+    "sm:space-y-0",
+  ];
+  if (limitWidth) containerClasses.push("max-w-screen-xl");
   return (
-    <div className="text-Black flex flex-col w-full py-6 items-center sm:items-start sm:flex-row tracking-tighter text-xs space-y-3 sm:space-y-0 max-w-screen-xl">
+    <div className={containerClasses.join(" ")}>
       <div className="grow flex flex-row">
         {footerServiceLinks.map((link) => (
           <NextLink href={link.href} key={link.href} className="mr-2 underline">
@@ -114,17 +145,17 @@ export const FooterBottom = () => {
     </div>
   );
 };
-export const Footer = () => {
+export const Footer = ({ limitWidth = true }: { limitWidth?: boolean }) => {
   return (
     <footer className="bg-White flex flex-col items-center px-[3%] sm:px-[5%] border-Black border-solid border-t">
-      <FooterBody />
+      <FooterBody limitWidth={limitWidth} />
       <div
         style={{
           height: "1px",
         }}
         className="bg-Black w-full"
       />
-      <FooterBottom />
+      <FooterBottom limitWidth={limitWidth} />
     </footer>
   );
 };

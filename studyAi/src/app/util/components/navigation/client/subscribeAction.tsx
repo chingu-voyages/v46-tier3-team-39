@@ -1,11 +1,13 @@
 "use client";
 import useElementPosition from "@/app/util/hooks/useElementSize";
 import { useMutation } from "@apollo/client";
-import { Button, TextField } from "@mui/material";
+import { Button } from "@mui/material";
 import { AddSubscriber } from "@/gql/mutations/subscriberMutation";
 import { useState } from "react";
+import { TextFieldInput } from "@/authComponents/server/formInputs";
 export const SubscribeAction = () => {
   const {
+    elementRef: inputRef,
     setRef,
     position: { height: inputHeight },
   } = useElementPosition();
@@ -20,6 +22,8 @@ export const SubscribeAction = () => {
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData.entries());
     const { email } = data;
+    if (!inputRef) return;
+    const input = inputRef.querySelector("input") as HTMLInputElement;
     try {
       await mutationQuery({
         variables: {
@@ -30,6 +34,8 @@ export const SubscribeAction = () => {
     } catch (err) {
       console.error(err);
     }
+    //clear input value
+    input.value = "";
   };
 
   return (
@@ -37,12 +43,12 @@ export const SubscribeAction = () => {
       onSubmit={onSubmit}
       className="flex flex-col space-y-3 items-end sm:flex-row sm:space-y-0"
     >
-      <TextField
+      <TextFieldInput
         ref={setRef}
         onChange={(e) => setEmail(e.target.value)}
-        value={email}
         size={"small"}
-        label="Enter your email"
+        // label="Enter your email"
+        placeholder="Enter your email"
         id="email"
         name="email"
         type="email"
