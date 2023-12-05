@@ -19,14 +19,15 @@ const GreetingBannerCard = ({
   description: string;
 }) => {
   return (
-    <Link href={link}>
-      <div className="border flex flex-col h-full items-center justify-center p-6">
-        <div className="flex items-center w-full">
-          <div className="">{icon}</div>
-          <div className="font-bold text-lg ml-2">{title}</div>
-        </div>
-        <div className="pt-2 text-sm">{description}</div>
+    <Link
+      href={link}
+      className="border flex flex-col min-h-[10rem] items-center justify-center p-6"
+    >
+      <div className="flex items-center w-full">
+        <div className="">{icon}</div>
+        <div className="font-bold text-lg ml-2">{title}</div>
       </div>
+      <div className="pt-2 text-sm">{description}</div>
     </Link>
   );
 };
@@ -44,7 +45,7 @@ const GreetingBannerWrapper = () => {
       )}
     >
       <GreetingBannerContainer />
-      <div className="flex flex-col justify-between item-center space-y-5 xs:space-y-0 xs:space-x-5 md:space-x-6 xs:flex-row h-full">
+      <div className="flex flex-col justify-between item-center space-y-5 xs:space-y-0 xs:space-x-5 md:space-x-6 xs:flex-row">
         <GreetingBannerCard
           icon={<BsStars className={"text-2xl"} />}
           title="Create Questions"
