@@ -2,7 +2,7 @@
 import { useMutation } from "@apollo/client";
 import { User } from "@prisma/client";
 import { UpdateUserProfileInfo } from "@/gql/mutations/userMutation";
-import { useDashBoard } from "../context/DashboardContext";
+import { useDashBoard } from "../../context/DashboardContext";
 import { UserProfile } from "@/app/util/components/navigation/client/userProfile";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";

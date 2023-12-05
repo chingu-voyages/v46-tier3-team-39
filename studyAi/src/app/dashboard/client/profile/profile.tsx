@@ -1,6 +1,6 @@
 "use client";
 import ProfileForm, { ProfileFormAtnBtns } from "./profileForm";
-import { useDashBoard } from "../context/DashboardContext";
+import { useDashBoard } from "../../context/DashboardContext";
 import { Typography } from "@mui/material";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
@@ -92,7 +92,9 @@ const Profile = () => {
       });
   }, [isMobile]);
   const containerClasses = determineContainerClasses(isCollapsed, isMobile);
-  const isMobileClasses = isMobile ? [] : ["min-w-[15rem] max-w-[calc(17rem-1px)]"];
+  const isMobileClasses = isMobile
+    ? []
+    : ["min-w-[15rem] max-w-[calc(17rem-1px)]"];
   const innerContainerClassesCollapsed = !isCollapsed ? ["p-5"] : [];
   const innerContainerClasses = [
     "flex",

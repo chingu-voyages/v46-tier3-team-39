@@ -5,7 +5,7 @@ import { DashBoardProvider } from "./context/DashboardContext";
 import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
 import { GetQuestionCountByCreatorId } from "@/gql/queries/questionQueries";
 import { GetQuestionSubmissionCountByCreatorId } from "@/gql/queries/questionSubmissionQueries";
-import DashBoardWrapper from "./server/dashboardWrapper";
+import DashBoardWrapper from "./server/dashboardContainer";
 import { Session } from "next-auth";
 import { subWeeks } from "date-fns";
 export const generateMetadata = () => {};
