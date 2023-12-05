@@ -7,7 +7,8 @@ const useQuestionSubmissionsData = (props: Partial<QuestionSubmission>) => {
   const { dateCreated, time, score } = props;
   const { actualScore, maxScore } = score || {};
   //calculate score data
-  const scoreExists = actualScore && maxScore;
+  const scoreExists =
+    typeof actualScore === "number" && typeof maxScore === "number";
   const currScore = scoreExists ? actualScore / maxScore : 0;
   const normalizedScore = scoreExists
     ? (currScore * 100).toFixed(2) + "%"
