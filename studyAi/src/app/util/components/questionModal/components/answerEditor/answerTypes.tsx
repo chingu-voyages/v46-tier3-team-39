@@ -26,30 +26,30 @@ export const MultipleChoice = () => {
   if (!modalData) return <></>;
   const { questionData, setQuestionData } = modalData;
   const options = questionData.questionInfo?.options as AnswerOption[];
-  const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const id = (e.target as HTMLInputElement).value;
-    let value = "";
+  const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>, value: string) => {
+    const id = value;
+    let newValue = ''
     questionData?.questionInfo?.options.forEach((option) => {
       if (option.id === id) {
-        value = option.value;
+        newValue = option.value;
       }
     });
     setQuestionData({
       ...questionData,
       answer: {
         id: questionData.answer?.id || ObjectId().toString(),
-        correctAnswer: [{ id: id, value: value }],
+        correctAnswer: [{ id: id, value: newValue }],
       },
     });
   };
-
+  const currAnswer = questionData.answer?.correctAnswer[0].id || options[0].id;
   return (
     <>
       <RadioGroup
         className="mt-2"
         defaultValue="outlined"
         name="radio-buttons-group"
-        value={questionData.answer?.correctAnswer[0].id}
+        value={currAnswer}
         onChange={handleRadioChange}
       >
         {options.map((_option, index) => {
