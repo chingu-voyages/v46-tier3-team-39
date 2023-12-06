@@ -41,18 +41,22 @@ After completing these steps, you should be able to run the project using `npm r
 - [React Sweet State](https://www.npmjs.com/package/react-sweet-state)
 
 ## Contributors
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/aasmal97"><img src="https://avatars.githubusercontent.com/u/74555081?v=4?s=100" width="100px;" alt="Arky Asmal"/><br /><sub><b>Arky Asmal</b></sub></a><br /><a href="https://github.com/chingu-voyages/v46-tier3-team-39/commits?author=aasmal97" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://uwaterloo.ca/scholar/i37ali"><img src="https://avatars.githubusercontent.com/u/114361467?v=4?s=100" width="100px;" alt="Irha Ali"/><br /><sub><b>Irha Ali</b></sub></a><br /><a href="https://github.com/chingu-voyages/v46-tier3-team-39/commits?author=IrhaAli" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/ccrump1280"><img src="https://avatars.githubusercontent.com/u/43482257?v=4?s=100" width="100px;" alt="ccrump1280"/><br /><sub><b>ccrump1280</b></sub></a><br /><a href="https://github.com/chingu-voyages/v46-tier3-team-39/commits?author=ccrump1280" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/TiffanyChan614"><img src="https://avatars.githubusercontent.com/u/68774129?v=4?s=100" width="100px;" alt="Tiffany Chan"/><br /><sub><b>Tiffany Chan</b></sub></a><br /><a href="https://github.com/chingu-voyages/v46-tier3-team-39/commits?author=TiffanyChan614" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/aufung1999"><img src="https://avatars.githubusercontent.com/u/78595669?v=4?s=100" width="100px;" alt="aufung1999"/><br /><sub><b>aufung1999</b></sub></a><br /><a href="https://github.com/chingu-voyages/v46-tier3-team-39/commits?author=aufung1999" title="Code">💻</a></td>
+    </tr>
+  </tbody>
+</table>
 
-### Arky Asmal
-- [LinkedIn](https://www.linkedin.com/in/arky-asmal/)
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
 
-### Irha
-- [LinkedIn](https://www.linkedin.com/in/irha-ali-522039105/)
-
-### Tiffany
-- [LinkedIn](https://www.linkedin.com/in/pui-yi-tiffany-chan-2a35271a5/)
-
-### Fung
-- [LinkedIn](https://www.linkedin.com/in/fung-au-689a80239/)
-
-### Connor
-- [LinkedIn](https://www.linkedin.com/in/connor-crump-b83166264/)
+<!-- ALL-CONTRIBUTORS-LIST:END -->

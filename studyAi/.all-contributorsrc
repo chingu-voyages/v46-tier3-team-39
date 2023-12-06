@@ -1,0 +1,61 @@
+{
+  "projectName": "v46-tier3-team-39",
+  "projectOwner": "chingu-voyages",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "commitConvention": "eslint",
+  "contributors": [
+    {
+      "login": "aasmal97",
+      "name": "Arky Asmal",
+      "avatar_url": "https://avatars.githubusercontent.com/u/74555081?v=4",
+      "profile": "https://github.com/aasmal97",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "IrhaAli",
+      "name": "Irha Ali",
+      "avatar_url": "https://avatars.githubusercontent.com/u/114361467?v=4",
+      "profile": "https://uwaterloo.ca/scholar/i37ali",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "ccrump1280",
+      "name": "ccrump1280",
+      "avatar_url": "https://avatars.githubusercontent.com/u/43482257?v=4",
+      "profile": "https://github.com/ccrump1280",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "TiffanyChan614",
+      "name": "Tiffany Chan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/68774129?v=4",
+      "profile": "https://github.com/TiffanyChan614",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "aufung1999",
+      "name": "aufung1999",
+      "avatar_url": "https://avatars.githubusercontent.com/u/78595669?v=4",
+      "profile": "https://github.com/aufung1999",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "linkToUsage": false
+}
