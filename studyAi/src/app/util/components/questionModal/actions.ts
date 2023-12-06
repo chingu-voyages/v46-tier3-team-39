@@ -116,18 +116,21 @@ export const uploadQuestionToDb = async (data: {
             : undefined,
       }
     : null;
-
+  const filteredUpdateQuestionVariables = updateQuestionVariables
+    ? removeTypename(updateQuestionVariables)
+    : null;
+  const filteredCreateQuestionVariables = removeTypename(variables);
   const [questionResult, _] = await Promise.all([
     //update question doc
     //if question id is present, update the question doc
-    questionId && updateQuestionVariables
+    questionId && filteredUpdateQuestionVariables
       ? client.mutate({
           mutation: UpdateQuestionMutation,
-          variables: removeTypename(updateQuestionVariables),
+          variables: filteredUpdateQuestionVariables,
         })
       : client.mutate({
           mutation: AddQuestionMutation,
-          variables: removeTypename(variables),
+          variables: filteredCreateQuestionVariables,
         }),
     //increment user data count since this is a new question
     !questionId
