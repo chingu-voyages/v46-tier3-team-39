@@ -4,19 +4,9 @@ import { Container, Typography } from "@mui/material";
 
 export default async function PrivacyPolicy() {
   const styles = {
-    h6: [
-      "font-semibold",
-      "text-lg",
-      "sm:text-xl",
-      "mb-2"
-    ].join(" "),
-    body: [
-      "mb-8",
-      "text-sm",
-      "sm:text-base",
-      "px-0"
-    ].join(" ")
-  }
+    h6: ["font-semibold", "text-lg", "sm:text-xl", "mb-2"].join(" "),
+    body: ["mb-8", "text-sm", "sm:text-base", "px-0"].join(" "),
+  };
   return (
     <NavigationWrapper
       appBars={{
@@ -25,7 +15,11 @@ export default async function PrivacyPolicy() {
       }}
     >
       <Container className="py-16 px-8">
-        <Typography variant="h4" component="h2" className="mb-8 font-bold text-4xl sm:text-6xl">
+        <Typography
+          variant="h4"
+          component="h2"
+          className="mb-8 font-bold text-4xl sm:text-6xl"
+        >
           Privacy Policy
         </Typography>
 
