@@ -2,20 +2,29 @@
 import PaginationWrapper from "@/app/util/components/pagination/paginationWrapper";
 import { useSession } from "next-auth/react";
 import { useLazyQuery } from "@apollo/client";
-import { useQuestionId } from "../../context/QuestionIdContext";
 import { QueryFullQuestionSubmissions } from "@/gql/queries/questionSubmissionQueries";
-import { memo, useCallback, useState } from "react";
-import MemoizedQuestionSubmissionsListItem from "./QuestionSubmissionListItem";
-import { useQuestions } from "@/app/stores/questionStore";
+import { Dispatch, SetStateAction, memo, useCallback, useState } from "react";
+import MemoizedQuestionSubmissionsListItem from "./QuestionSubmissionsListItem";
 import { QuestionSubmission } from "@prisma/client";
-import { useQuestionSubmissions } from "@/app/stores/questionSubmissionsStore";
 import fetchItems from "@/app/util/components/submissions/questionSubmissionPagination/fetchNewData";
 import { Container, Typography } from "@mui/material";
-import { styles } from "./styles";
 import useWindowWidth from "@/app/util/hooks/useWindowWidth";
 import { arePropsEqual } from "@/app/util/components/submissions/questionSubmissionList/arePropsEqual";
 import { listItemProps } from "@/app/util/components/submissions/questionSubmissionListItem/listItemProps";
+import styles from "../styles";
 type ArrOneOrMore<T> = [T, ...T[]];
+const addOrUpdateItems =
+  (
+    setQuestionSubmissions: Dispatch<
+      SetStateAction<Partial<QuestionSubmission>[]>
+    >
+  ) =>
+  (
+    items: {
+      id: string;
+    }[],
+    type: "ongoing" | "submitted"
+  ) => {};
 const QuestionSubmissionListHeader = () => {
   const windowWidth = useWindowWidth();
   const isMobile = windowWidth < 480;
@@ -35,22 +44,29 @@ const QueststionSubmissionsDataList = ({
   data,
 }: {
   data: ArrOneOrMore<Partial<QuestionSubmission>>;
-  }) => {
+}) => {
   return data.map((submission) => (
-    <MemoizedQuestionSubmissionsListItem {...listItemProps(submission)} key={submission.id} />
+    <MemoizedQuestionSubmissionsListItem
+      {...listItemProps(submission)}
+      key={submission.id}
+    />
   ));
 };
 const MemoizedQuestionSubmissionsDataList = memo(
   QueststionSubmissionsDataList,
   arePropsEqual
 );
-const QuestionSubmissionsList = ({ containerId }: { containerId: string }) => {
+const RecentQuestionSubmissionsList = ({
+  initialData,
+}: {
+  initialData?: Partial<QuestionSubmission>[];
+}) => {
   const { data: session } = useSession();
-  const questionIdData = useQuestionId();
-  const questionId = questionIdData?.questionId;
-  const questions = useQuestions()[0].data;
-  const [questionSubmissions, { addOrUpdateItems }] = useQuestionSubmissions();
-  const [getSubmission, {loading}] = useLazyQuery(QueryFullQuestionSubmissions);
+  const [questionSubmissions, setQuestionSubmissions] = useState(
+    initialData || []
+  );
+  // const [questionSubmissions, { addOrUpdateItems }] = useQuestionSubmissions();
+  const [getSubmission, {}] = useLazyQuery(QueryFullQuestionSubmissions);
   const questionSubmissionsArrMap = questionSubmissions.submittedData.arr;
   const currSubmissionsArr =
     questionId && questionSubmissionsArrMap[questionId]
@@ -66,13 +82,12 @@ const QuestionSubmissionsList = ({ containerId }: { containerId: string }) => {
   const savedFetchSubmissionsFunc = useCallback(
     fetchItems({
       userId,
-      questionId,
       getSubmission,
       cursor,
       setCursor,
-      addOrUpdateItems,
+      addOrUpdateItems: addOrUpdateItems(setQuestionSubmissions),
     }),
-    [userId, questionId, getSubmission, cursor, setCursor, addOrUpdateItems]
+    [userId, getSubmission, cursor, setCursor]
   );
   const question = questionId ? questions.map[questionId] : null;
   const questionName = question?.questionInfo?.title;
@@ -81,7 +96,6 @@ const QuestionSubmissionsList = ({ containerId }: { containerId: string }) => {
       No submissions found
     </label>
   );
-  if (!questionId) return noDataPlaceholder;
   const data = questionSubmissionsArrMap[questionId];
   return (
     <>
@@ -106,4 +120,4 @@ const QuestionSubmissionsList = ({ containerId }: { containerId: string }) => {
     </>
   );
 };
-export default QuestionSubmissionsList;
+export default RecentQuestionSubmissionsList;
