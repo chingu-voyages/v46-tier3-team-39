@@ -13,11 +13,16 @@ const getScore = (
   if (!(answerProvided && correctAnswer)) return;
   let score = 0;
   for (const chosen of answerProvided) {
+    let foundCorrect = false;
     for (const correctOptions of correctAnswer?.correctAnswer) {
-      if (chosen.value === correctOptions.value) score++;
+      if (chosen.value === correctOptions.value) {
+        foundCorrect = true;
+        break;
+      }
     }
+    foundCorrect ? score++ : score--;
   }
-  return score;
+  return score >= 0 ? score : 0;
 };
 const createQuestionSubmissionDoc = async ({
   session,
