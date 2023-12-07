@@ -76,27 +76,27 @@ export function QuestionModalProvider({
     initialQuestionData ? { ...initialQuestionData } : blankQuestion
   );
   const currElPos = useElementPos();
-  const [getQuestionAnswer, { loading, error, data: queryData }] = useLazyQuery(
+  const [getQuestionAnswer, { loading, error }] = useLazyQuery(
     GetQuestionAnswerById,
-    {
-      variables: { id: questionData?.id },
-    }
   );
   const questionId = questionData?.id;
   useEffect(() => {
     //we refresh data every time the modal is opened
     //or the questionId changes
-    let currData = queryData?.question;
     if (!questionId || !isOpen) return;
-    //if it exists simply update the data
-    if (currData) setQuestionData((prev) => ({ ...prev, ...currData }));
-    //if it doesn't exist, get the data
-    getQuestionAnswer().then((data) => {
-      currData = data?.data?.question;
-      if (!currData) return;
-      setQuestionData((prev) => ({ ...prev, ...currData }));
-    });
-  }, [queryData, questionId, isOpen, getQuestionAnswer]);
+    getQuestionAnswer({
+      variables: { id: questionData?.id },
+      fetchPolicy: 'no-cache'
+    })
+      .then((data) => {
+        const currData = data?.data?.question;
+        if (!currData) return;
+        setQuestionData((prev) => ({ ...prev, ...currData }));
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [questionId, isOpen, getQuestionAnswer]);
   const closeHandler = useCallback(() => {
     setIsOpen(false);
     setQuestionData(

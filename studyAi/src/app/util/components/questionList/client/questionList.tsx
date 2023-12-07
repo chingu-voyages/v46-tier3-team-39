@@ -18,7 +18,7 @@ const QuestionList = ({ data }: { data: Partial<Question>[] }) => {
 };
 const MemoizedQuestionList = memo(QuestionList, (prevProps, nextProps) => {
   return (
-    prevProps.data.every((prev, idx) => prev.id === nextProps.data[idx].id) &&
+    prevProps.data.every((prev, idx) => prev.id === nextProps.data[idx]?.id) &&
     prevProps.data.length === nextProps.data.length
   );
 });

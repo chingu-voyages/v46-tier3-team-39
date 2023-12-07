@@ -41,9 +41,12 @@ export const TextFieldInput = forwardRef(
     return (
       <div className={containerClassNames}>
         <div className={labelContainerClassNames}>
-          <label htmlFor={props.name} className={labelClassNames}>
-            {props.label?.toString() + (props.required ? " *" : "")}
-          </label>
+          {props.label && (
+            <label htmlFor={props.name} className={labelClassNames}>
+              {props.label?.toString() + (props.required ? " *" : "")}
+            </label>
+          )}
+
           {props.headerLink && (
             <NextLink {...props.headerLink}>{props.headerLink.text}</NextLink>
           )}

@@ -56,8 +56,6 @@ export const UserProfile = ({
   isEditable?: boolean;
   showUserInfo?: boolean;
 } & Partial<UserInfo>) => {
-  const { setRef, position: infoPos } = useElementPosition();
-
   const nameElement = isEditable ? (
     <StyledTextField
       label="Name"
@@ -84,19 +82,13 @@ export const UserProfile = ({
   return (
     <div className="flex items-center h-full w-full">
       <Avatar
-        ref={setRef}
-        className="bg-Black h-full aspect-square w-auto"
+        className="bg-Black h-full aspect-square w-auto max-h-[3rem]"
         src={image ? image : undefined}
-        style={
-          showUserInfo && infoPos?.height && infoPos.height > 0
-            ? { height: infoPos.height }
-            : undefined
-        }
       >
         {name?.[0]?.toUpperCase()}
       </Avatar>
       {showUserInfo && (
-        <div ref={setRef} className="flex flex-col w-full ml-4 py-1 space-y-0">
+        <div  className="flex flex-col w-full ml-4 py-1 space-y-0">
           {nameElement}
           <span className="text-Black font-regular tracking-tight text-xs">
             {email}
@@ -237,7 +229,7 @@ export const UserProfileNav = ({
       )}
       {!dropdown && <UserProfile {...userProfileProps} showUserInfo />}
       {!dropdown && (
-        <div className="flex flex-col mt-10 space-y-4">
+        <div className="flex flex-col mt-7 space-y-4">
           {userItemLinks(userProfileProps.id).map((link) => (
             <NextLink
               key={link.text}

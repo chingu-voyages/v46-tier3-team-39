@@ -1,61 +1,33 @@
 import React from "react";
+import { questions } from "./questions";
+import SingleQuestion from "./SingleQuestion";
 import NavigationWrapper from "../util/components/navigation/navigationWrapper";
 import { Container, Typography } from "@mui/material";
+import "./index.css";
 
-export default async function FAQs() {
+export default function App() {
   return (
-    <>
-      <NavigationWrapper
-        appBars={{
-          navbar: true,
-          footer: true,
-        }}
-      >
-        <Container>
-          <Typography variant="h4" component="h2">
-            Frequently Asked Questions
-          </Typography>
+    <NavigationWrapper
+      appBars={{
+        navbar: true,
+        footer: true,
+      }}
+    >
+      <Container className="py-16 px-8">
+        <Typography
+          variant="h4"
+          component="h2"
+          className="mb-8 font-bold text-4xl sm:text-6xl"
+        >
+          Frequently Asked Questions
+        </Typography>
 
-          
-            <Typography variant="h6" component="h2">Q: How do I start a quiz?</Typography>
-            <Container>
-              A: To start a quiz, click on the "Start Quiz" button on the
-              homepage.
-            </Container>
-          
-
-          
-            <Typography variant="h6" component="h2">Q: Can I skip a question?</Typography>
-            <Container>
-              A: Yes, you can skip a question and come back to it later. Use the
-              navigation buttons to move between questions.
-            </Container>
-          
-
-          
-            <Typography variant="h6" component="h2">Q: How do I submit my answers?</Typography>
-            <Container>
-              A: Click on the "Submit" button after answering each question
-              to submit your quiz answers.
-            </Container>
-          
-
-          
-            <Typography variant="h6" component="h2">Q: Can I review my quiz results?</Typography>
-            <Container>
-              A: Yes, after submitting the quiz, you can review your results,
-              including correct and incorrect answers.
-            </Container>
-          
-
-            <Typography variant="h6" component="h2">Q: Is there a time limit for quizzes?</Typography>
-            <Container>
-              A: The time limit for quizzes may vary. Check the quiz
-              instructions for information on time constraints.
-            </Container>
-          
-        </Container>
-      </NavigationWrapper>
-    </>
+        <section className="grid grid-cols-1 gap-8">
+          {questions.map((card, index) => (
+            <SingleQuestion {...card} key={index} />
+          ))}
+        </section>
+      </Container>
+    </NavigationWrapper>
   );
 }

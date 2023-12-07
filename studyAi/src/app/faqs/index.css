@@ -1,0 +1,14 @@
+@import url("https://fonts.googleapis.com/css2?family=Barlow:wght@500&family=Heebo&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+h1,
+h2 {
+  font-family: "Barlow", sans-serif;
+}
+
+p {
+  line-height: 1.8;
+}

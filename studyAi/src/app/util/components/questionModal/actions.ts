@@ -14,6 +14,7 @@ import {
   UpdateSingleQuestionMutation,
 } from "../../../../../graphql/generated/graphql";
 import { GetQuestionCreator } from "@/gql/queries/questionQueries";
+import removeTypename from "../../parsers/removeTypename";
 export const uploadQuestionToDb = async (data: {
   questionData: Partial<Question>;
   questionId?: string;
@@ -77,52 +78,59 @@ export const uploadQuestionToDb = async (data: {
     },
     private: !!questionData?.private,
   };
+  const updateQuestionVariables = questionId
+    ? {
+        id: questionId,
+        questionInfo: questionData.questionInfo
+          ? {
+              update: {
+                title: questionData.questionInfo.title
+                  ? { set: questionData.questionInfo.title }
+                  : undefined,
+                description: questionData.questionInfo.description
+                  ? { set: questionData.questionInfo.description }
+                  : undefined,
+                options: questionData.questionInfo.options,
+              },
+            }
+          : undefined,
+        answer:
+          questionData.answer && questionData.answer.correctAnswer
+            ? {
+                update: {
+                  correctAnswer: questionData.answer.correctAnswer,
+                },
+              }
+            : undefined,
+        tags: questionData.tags
+          ? {
+              set: questionData.tags,
+            }
+          : undefined,
+        questionType: questionData.questionType
+          ? { set: questionData.questionType }
+          : undefined,
+        private:
+          typeof questionData.private === "boolean"
+            ? { set: questionData.private }
+            : undefined,
+      }
+    : null;
+  const filteredUpdateQuestionVariables = updateQuestionVariables
+    ? removeTypename(updateQuestionVariables)
+    : null;
+  const filteredCreateQuestionVariables = removeTypename(variables);
   const [questionResult, _] = await Promise.all([
     //update question doc
     //if question id is present, update the question doc
-    questionId
+    questionId && filteredUpdateQuestionVariables
       ? client.mutate({
           mutation: UpdateQuestionMutation,
-          variables: {
-            id: questionId,
-            questionInfo: questionData.questionInfo
-              ? {
-                  update: {
-                    title: questionData.questionInfo.title
-                      ? { set: questionData.questionInfo.title }
-                      : undefined,
-                    description: questionData.questionInfo.description
-                      ? { set: questionData.questionInfo.description }
-                      : undefined,
-                    options: questionData.questionInfo.options,
-                  },
-                }
-              : undefined,
-            answer:
-              questionData.answer && questionData.answer.correctAnswer
-                ? {
-                    update: {
-                      correctAnswer: questionData.answer.correctAnswer,
-                    },
-                  }
-                : undefined,
-            tags: questionData.tags
-              ? {
-                  set: questionData.tags,
-                }
-              : undefined,
-            questionType: questionData.questionType
-              ? { set: questionData.questionType }
-              : undefined,
-            private:
-              typeof questionData.private === "boolean"
-                ? { set: questionData.private }
-                : undefined,
-          },
+          variables: filteredUpdateQuestionVariables,
         })
       : client.mutate({
           mutation: AddQuestionMutation,
-          variables: variables,
+          variables: filteredCreateQuestionVariables,
         }),
     //increment user data count since this is a new question
     !questionId
