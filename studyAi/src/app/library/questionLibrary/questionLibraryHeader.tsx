@@ -78,7 +78,7 @@ export const QuestionsLibraryHeader = () => {
     }
   };
   return (
-    <Box className={styles.controlsLayout}>
+    <Box className={styles.controlsLayout + ` justify-${(pageType === "user") ? "between" : "end"}`}>
       {pageType === "user" && (
         <Tabs
           value={tabValue}
