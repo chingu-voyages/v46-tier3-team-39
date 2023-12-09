@@ -3,7 +3,6 @@ export const styles = {
   controlsLayout: [
     "flex",
     "w-full",
-    "justify-between",
     "items-center",
     "sm: px-4",
   ].join(" "),
