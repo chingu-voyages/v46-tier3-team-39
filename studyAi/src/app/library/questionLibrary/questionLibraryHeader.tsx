@@ -120,7 +120,6 @@ export const QuestionsLibraryHeader = () => {
           </QuestionModalWrapper>
         )}
       </BtnLabelDropdown>
-      <IconButton></IconButton>
     </Box>
   );
 };
