@@ -5,8 +5,7 @@ import { Session } from "@prisma/client";
 
 const renderHero = async (authenticated: boolean) => {
   let serverSession: Partial<Session> | null;
-  authenticated ? serverSession = mockSession : serverSession = null
-  jest.unmock("next-auth");
+  authenticated ? serverSession = mockSession : serverSession = null;
   mockGetServerSession(serverSession);
   const component = await Hero();
   render(component);
