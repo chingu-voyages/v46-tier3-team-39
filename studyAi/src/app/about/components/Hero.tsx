@@ -14,14 +14,17 @@ const Hero = async () => {
         Learn more about our story and mission.
       </p>
       <div className="flex m-auto my-6 justify-center">
-        <Link href={"#video"}>
-          <button className="bg-Black py-3 px-6 sm:px-7 sm:py-3 mx-2 sm:text-0.75xl">
+        <Link 
+          href={"#video"}
+          className="bg-Black py-3 px-6 sm:px-7 sm:py-3 mx-2 sm:text-0.75xl"
+          data-testid="learn-more-button"
+          >
             Learn More
-          </button>
         </Link>
         <Link
           href={session ? "/dashboard" : "/auth/signup"}
           className="border-2 py-3 px-6 sm:px-6 sm:py-2.5 sm:text-0.75xl"
+          data-testid="sign-up-button"
         >
           Get Started
         </Link>

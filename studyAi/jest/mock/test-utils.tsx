@@ -1,8 +1,9 @@
+import type { Session } from "@prisma/client";
 // **Global Mocks**
 // Any mocks included here, in `@/__tests__/test-utils`, apply to all tests.
 // Due to Jest transformer issues, we mock next-auth's useSession hook directly:
 export const mockSession = {
-  expires: new Date(Date.now() + 2 * 86400).toISOString(),
+  expires: new Date(Date.now() + 2 * 86400),
   user: {
     location: null,
     questionData: { generated: 3, answered: 3 },
@@ -18,6 +19,7 @@ export const mockSession = {
       "https://lh3.googleusercontent.com/a/ACg8ocJd8XtC4Rx_2sDVZ2V5Wbxyxz8ADpBTzpl3okklRBE8=s96-c",
   },
 };
+
 jest.mock("next-auth/react", () => {
   const originalModule = jest.requireActual("next-auth/react");
   return {
@@ -29,19 +31,27 @@ jest.mock("next-auth/react", () => {
     })),
   };
 });
+
 // Reference: https://github.com/nextauthjs/next-auth/discussions/4185#discussioncomment-2397318
 // We also need to mock the whole next-auth package, since it's used in
 // our various pages via the `export { getServerSideProps }` function.
-jest.mock("next-auth", () => ({
-  __esModule: true,
-  default: jest.fn(),
-  getServerSession: jest.fn(
-    () =>
-      new Promise((resolve) => {
-        resolve(mockSession);
+
+//use jest.mock with this function with session set to null to test unauthenticated session
+export function mockGetServerSession(session: Partial<Session> | null) {
+  const mockObject = {
+    __esModule: true,
+    default: jest.fn(),
+    getServerSession: jest.fn(
+      () =>
+        new Promise((resolve) => {
+          resolve(session);
       })
-  ),
-}));
+    )
+  }
+  jest.mock("next-auth", () => mockObject);
+}
+//this code lets tests run but have to mock with a specific session;
+mockGetServerSession(mockSession);
 
 // Mock Next.js's useRouter hook using the "next-router-mock" package:
 jest.mock("next/dist/client/router", () =>
