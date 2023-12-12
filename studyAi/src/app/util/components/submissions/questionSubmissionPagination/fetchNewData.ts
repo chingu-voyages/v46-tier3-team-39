@@ -10,15 +10,19 @@ import {
   StringFilter,
   Exact,
 } from "../../../../../../graphql/generated/graphql";
+import { handleCursor } from "@/app/util/components/pagination/handleCursor";
 export type FetchSubmissionProps<T, A> = {
   userId: string;
   questionId?: string;
+  loading: boolean;
   addOrUpdateItems: (
     items: (T & { id: string })[],
-    type: "ongoing" | "submitted"
+    type: "ongoing" | "submitted",
+    setCursor?: Dispatch<SetStateAction<string | null>>
   ) => A;
   cursor: string | null;
   setCursor: Dispatch<SetStateAction<string | null>>;
+  setCursorAfterFetch?: boolean;
   getSubmission: LazyQueryExecFunction<
     QueryFullQuestionSubmissionsQuery,
     Exact<{
@@ -34,16 +38,19 @@ export type FetchSubmissionProps<T, A> = {
     }>
   >;
 };
-const fetchItems =
-  <T, A>({
-    userId,
-    questionId,
-    addOrUpdateItems,
-    cursor,
-    setCursor,
-    getSubmission,
-  }: FetchSubmissionProps<T, A>) =>
-  async () => {
+
+function fetchItems<T, A>({
+  userId,
+  questionId,
+  addOrUpdateItems,
+  cursor,
+  setCursor,
+  getSubmission,
+  loading,
+  setCursorAfterFetch = true,
+}: FetchSubmissionProps<T, A>) {
+  return async () => {
+    if (loading) return;
     const queryOptions = {
       variables: {
         questionId:
@@ -68,14 +75,11 @@ const fetchItems =
     const newSubmissionArr = results.questionSubmissions as unknown as (T & {
       id: string;
     })[];
-    if (newSubmissionArr.length <= 0) {
-      setCursor(null);
-      return newSubmissionArr;
-    }
-    //means we have new items to update
-    const newNextCursor = newSubmissionArr[newSubmissionArr.length - 1].id;
-    setCursor(newNextCursor || null);
-    addOrUpdateItems(newSubmissionArr, "submitted");
+    if (setCursorAfterFetch)
+      handleCursor({ setCursor, newArr: newSubmissionArr });
+    addOrUpdateItems(newSubmissionArr, "submitted", setCursor);
     return newSubmissionArr;
   };
+}
+
 export default fetchItems;

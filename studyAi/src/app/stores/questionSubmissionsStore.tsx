@@ -37,7 +37,7 @@ const Store = createStore({
     addOrUpdateItems:
       (
         items: QuestionSubmissionStoreSubmissionType[],
-        submissionType: "ongoing" | "submitted"
+        submissionType: "ongoing" | "submitted",
       ) =>
       ({ setState, getState }) =>
         addOrUpdateSubmissionsFunc({

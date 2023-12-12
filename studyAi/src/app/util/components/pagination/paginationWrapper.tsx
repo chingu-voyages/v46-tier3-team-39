@@ -8,6 +8,7 @@ type PaginationProps<T> = {
   hasChildren: boolean;
   fetchMoreData: () => Promise<T>;
   scrollableTarget?: string | React.ReactNode;
+  scrollThreshold?: number;
 };
 const PaginationWrapper = <T extends unknown>({
   children,
@@ -16,7 +17,9 @@ const PaginationWrapper = <T extends unknown>({
   fetchMoreData,
   hasChildren,
   scrollableTarget,
+  scrollThreshold,
 }: PaginationProps<T>) => {
+  if (typeof scrollThreshold !== "number") scrollThreshold = 0.75;
   return (
     <InfiniteScroll
       dataLength={dataLength}
@@ -30,7 +33,7 @@ const PaginationWrapper = <T extends unknown>({
       hasMore={hasMore}
       hasChildren={hasChildren}
       scrollableTarget={scrollableTarget}
-      scrollThreshold={0.75}
+      scrollThreshold={scrollThreshold}
     >
       {children}
     </InfiniteScroll>

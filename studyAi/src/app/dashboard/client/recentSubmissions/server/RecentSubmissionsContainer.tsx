@@ -1,10 +1,14 @@
 import { getServerSession } from "next-auth";
-import RecentQuestionSubmissionsList from "../client/RecentSubmissions";
+import { RecentQuestionSubmissionsContainerWrapper } from "@/app/stores/recentSubmissionsStore";
 import { options } from "@/authComponents/nextAuth/options";
 import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
 import { QueryFullQuestionSubmissions } from "@/gql/queries/questionSubmissionQueries";
 import { QuestionSubmission } from "@prisma/client";
-const RecentSubmissionsContainer = async () => {
+const RecentSubmissionsContainer = async ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   try {
     const session = await getServerSession(options);
     if (!session) return <></>;
@@ -17,9 +21,15 @@ const RecentSubmissionsContainer = async () => {
     };
     const { data } = await client.query(query);
     const questionSubmissions =
-      data.questionSubmissions as Partial<QuestionSubmission>[];
+      data.questionSubmissions as (Partial<QuestionSubmission> & {
+        id: string;
+      })[];
     return (
-      <RecentQuestionSubmissionsList initialData={questionSubmissions || []} />
+      <RecentQuestionSubmissionsContainerWrapper
+        initialItems={questionSubmissions}
+      >
+        {children}
+      </RecentQuestionSubmissionsContainerWrapper>
     );
   } catch (err) {
     console.error(err);

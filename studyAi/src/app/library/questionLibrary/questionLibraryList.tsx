@@ -6,6 +6,8 @@ import { determineSortQuery } from "./helpers/determineSortQuery";
 import { determinePrivateQuery } from "./helpers/determinePrivateQuery";
 import { determineCreatorIdQuery } from "./helpers/determineCreatorIdQuery";
 import { QuestionStoreQuestionType } from "@/app/stores/questionStore";
+import { handleCursor } from "@/app/util/components/pagination/handleCursor";
+
 export const QuestionLibraryList = () => {
   const session = useSession();
   const libraryData = useQuestionLibraryData();
@@ -43,13 +45,7 @@ export const QuestionLibraryList = () => {
       return [];
     }
     const newQuestionArr = results.questions as QuestionStoreQuestionType[];
-    if (newQuestionArr.length <= 0) {
-      setCursor(null);
-      return newQuestionArr;
-    }
-    //means we have new items to update
-    const newNextCursor = newQuestionArr[newQuestionArr.length - 1].id;
-    setCursor(newNextCursor || null);
+    handleCursor({ newArr: newQuestionArr, setCursor });
     addOrUpdateItems(newQuestionArr);
     return newQuestionArr;
   };

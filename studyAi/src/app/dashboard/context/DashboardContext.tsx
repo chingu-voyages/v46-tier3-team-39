@@ -35,9 +35,9 @@ export type DashBoardProps = {
   setGreetingBannerData: Dispatch<SetStateAction<GreetingBannerType>>;
 };
 
-const DashBoardContext = createContext<DashBoardProps | null>(null);
+const DashboardContext = createContext<DashBoardProps | null>(null);
 
-export const DashBoardProvider = ({
+export const DashboardProvider = ({
   initialProfileData,
   weeklySubmissionCount,
   weeklyQuestionCount,
@@ -60,7 +60,7 @@ export const DashBoardProvider = ({
   const [isEditable, setIsEditable] = useState(false);
 
   return (
-    <DashBoardContext.Provider
+    <DashboardContext.Provider
       value={{
         initialProfileData,
         isEditable,
@@ -72,10 +72,10 @@ export const DashBoardProvider = ({
       }}
     >
       {children}
-    </DashBoardContext.Provider>
+    </DashboardContext.Provider>
   );
 };
 
 export function useDashBoard() {
-  return useContext(DashBoardContext);
+  return useContext(DashboardContext);
 }

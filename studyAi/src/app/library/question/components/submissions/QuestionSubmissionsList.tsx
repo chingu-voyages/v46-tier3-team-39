@@ -71,8 +71,9 @@ const QuestionSubmissionsList = ({ containerId }: { containerId: string }) => {
       cursor,
       setCursor,
       addOrUpdateItems,
+      loading
     }),
-    [userId, questionId, getSubmission, cursor, setCursor, addOrUpdateItems]
+    [userId, questionId, getSubmission, cursor, setCursor, addOrUpdateItems, loading]
   );
   const question = questionId ? questions.map[questionId] : null;
   const questionName = question?.questionInfo?.title;

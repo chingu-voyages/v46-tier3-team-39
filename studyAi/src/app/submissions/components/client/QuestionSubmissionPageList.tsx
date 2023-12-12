@@ -33,7 +33,7 @@ const QuestionSubmissionsPageList = () => {
     },
     { addOrUpdateItems },
   ] = useQuestionSubmissionsAnyQuestion();
-  const [getSubmissions, {}] = useLazyQuery(QueryFullQuestionSubmissions);
+  const [getSubmissions, {loading}] = useLazyQuery(QueryFullQuestionSubmissions);
   const [cursor, setCursor] = useState(
     currSubmissionsArr.length > 0
       ? currSubmissionsArr[currSubmissionsArr.length - 1].id || null
@@ -47,6 +47,7 @@ const QuestionSubmissionsPageList = () => {
       cursor,
       setCursor,
       addOrUpdateItems,
+      loading
     }),
     [userId, getSubmissions, cursor, setCursor, addOrUpdateItems]
   );

@@ -1,11 +1,11 @@
 import React from "react";
 import { protectRouteSSR } from "../api/utils/sessionFuncs";
 import NavigationWrapper from "../util/components/navigation/navigationWrapper";
-import { DashBoardProvider } from "./context/DashboardContext";
+import { DashboardProvider } from "./context/DashboardContext";
 import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
 import { GetQuestionCountByCreatorId } from "@/gql/queries/questionQueries";
 import { GetQuestionSubmissionCountByCreatorId } from "@/gql/queries/questionSubmissionQueries";
-import DashBoardWrapper from "./server/dashboardContainer";
+import DashboardContainer from "./server/dashboardContainer";
 import { Session } from "next-auth";
 import { subWeeks } from "date-fns";
 export const generateMetadata = () => {};
@@ -67,13 +67,13 @@ export default async function DashboardPage() {
       usePadding={false}
       limitWidth={false}
     >
-      <DashBoardProvider
+      <DashboardProvider
         initialProfileData={initialProfileData}
         weeklySubmissionCount={weeklySubmissionCount || 0}
         weeklyQuestionCount={weeklyQuestionCount || 0}
       >
-        <DashBoardWrapper />
-      </DashBoardProvider>
+        <DashboardContainer />
+      </DashboardProvider>
     </NavigationWrapper>
   );
 }
