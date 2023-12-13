@@ -58,11 +58,19 @@ const RecentQuestionSubmissionsList = () => {
       : null
   );
   const userId = session ? session.user.id : "";
-  // //memoized function to fetch new data
-  // const savedFetchSubmissionsFunc = useCallback(
-
-  //   [userId, getSubmission, cursor, setCursor, addOrUpdateItems, loading]
-  // );
+  //memoized function to fetch new data
+  const savedFetchSubmissionsFunc = useCallback(
+    fetchItems({
+      userId,
+      getSubmission,
+      cursor,
+      setCursor,
+      addOrUpdateItems,
+      // setCursorAfterFetch: false,
+      loading,
+    }),
+    [userId, getSubmission, cursor, setCursor, addOrUpdateItems, loading]
+  );
   const noDataPlaceholder = (
     <label className="text-Black flex h-full w-full items-center justify-center grow py-5">
       No submissions found
@@ -75,18 +83,10 @@ const RecentQuestionSubmissionsList = () => {
       <div className={styles.listContainer.container.join(" ")}>
         <PaginationWrapper
           hasMore={!!cursor}
-          fetchMoreData={fetchItems({
-            userId,
-            getSubmission,
-            cursor,
-            setCursor,
-            addOrUpdateItems,
-            // setCursorAfterFetch: false,
-            loading,
-          })}
+          fetchMoreData={savedFetchSubmissionsFunc}
           dataLength={data ? data.length : 0}
           hasChildren
-          scrollThreshold={0.9}
+          scrollThreshold={0.5}
         >
           {data && data.length > 0 && data[0] ? (
             <MemoizedQuestionSubmissionsDataList

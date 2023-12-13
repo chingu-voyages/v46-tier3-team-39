@@ -16,7 +16,7 @@ export const ScoreData = gql(`
 `);
 export const QueryFullQuestionSubmissions = gql(`
   query QueryFullQuestionSubmissions(
-    $userId: String!
+    $userId: StringFilter!
     $dateQuery: DateTimeFilter
     $questionId: StringFilter
     $orderBy: [QuestionSubmissionOrderByWithRelationInput!]
@@ -25,14 +25,14 @@ export const QueryFullQuestionSubmissions = gql(`
   ) {
     questionSubmissions(
       where: {
-        userId: { equals: $userId }
+        userId: $userId
         dateCreated: $dateQuery
         questionId: $questionId
       }
+      orderBy: $orderBy
       take: 15
       cursor: $cursor
       skip: $skip
-      orderBy: $orderBy
     ) {
       id
       dateCreated

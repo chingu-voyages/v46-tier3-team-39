@@ -32,19 +32,12 @@ const Store = createStore({
       (
         items: QuestionSubmissionStoreSubmissionType[],
         submissionType: "ongoing" | "submitted",
-        setCursor?: React.Dispatch<React.SetStateAction<string | null>>
       ) =>
       ({ setState, getState }) => {
         const updatedItems = items;
         const prev = getState();
         const mergedArr = [...prev.data, ...updatedItems];
-        const newArr = removeDuplicatesUsingId(mergedArr);
-        if (setCursor) {
-          handleCursor({
-            newArr,
-            setCursor,
-          });
-        }
+        const [newArr] = removeDuplicatesUsingId(mergedArr);
         setState({ data: newArr });
         return newArr;
       },

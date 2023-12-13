@@ -26,7 +26,7 @@ export type FetchSubmissionProps<T, A> = {
   getSubmission: LazyQueryExecFunction<
     QueryFullQuestionSubmissionsQuery,
     Exact<{
-      userId: string;
+      userId: StringFilter;
       dateQuery?: InputMaybe<DateTimeFilter>;
       questionId?: InputMaybe<StringFilter>;
       orderBy?: InputMaybe<
@@ -55,7 +55,7 @@ function fetchItems<T, A>({
       variables: {
         questionId:
           typeof questionId === "string" ? { equals: questionId } : undefined,
-        userId: userId,
+        userId: {equals: userId},
         cursor: cursor
           ? {
               id: cursor,

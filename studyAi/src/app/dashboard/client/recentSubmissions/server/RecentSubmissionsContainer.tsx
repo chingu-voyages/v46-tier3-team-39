@@ -4,6 +4,7 @@ import { options } from "@/authComponents/nextAuth/options";
 import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
 import { QueryFullQuestionSubmissions } from "@/gql/queries/questionSubmissionQueries";
 import { QuestionSubmission } from "@prisma/client";
+import { SortOrder } from "../../../../../../graphql/generated/graphql";
 const RecentSubmissionsContainer = async ({
   children,
 }: {
@@ -16,7 +17,10 @@ const RecentSubmissionsContainer = async ({
     const query = {
       query: QueryFullQuestionSubmissions,
       variables: {
-        userId: session.user.id,
+        userId: { equals: session.user.id },
+        orderBy: {
+          dateCreated: SortOrder.Desc
+        }
       },
     };
     const { data } = await client.query(query);
