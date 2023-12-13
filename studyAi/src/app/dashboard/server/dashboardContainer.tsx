@@ -4,7 +4,7 @@ import RecentSubmissionsContainer from "../client/recentSubmissions/server/Recen
 const DashboardWrapper = () => {
   return (
     <RecentSubmissionsContainer>
-      <div className="flex flex-col w-full h-full grow space-y-5 px-[4%] md:px-0 md:space-y-0 md:flex-row md:space-x-[3%] md:pr-[3%]">
+      <div className="flex flex-col w-full h-full grow space-y-5 px-[4%] md:px-0 md:space-y-0 md:flex-row md:pr-[3%]">
         <Profile />
         <DashboardBody />
       </div>

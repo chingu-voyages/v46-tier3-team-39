@@ -10,7 +10,7 @@ const DashboardBody = () => {
     <ConditionalWrapper
       condition={windowWidth > 768}
       wrapper={(children) => (
-        <div className="flex flex-col items-center w-full">
+        <div className="flex flex-col items-center w-full border-l md:pl-[3%]">
           <div className="flex flex-col w-full max-w-screen-lg space-y-6">
             {children}
           </div>
