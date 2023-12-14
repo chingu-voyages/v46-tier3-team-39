@@ -66,7 +66,6 @@ const RecentQuestionSubmissionsList = () => {
       cursor,
       setCursor,
       addOrUpdateItems,
-      // setCursorAfterFetch: false,
       loading,
     }),
     [userId, getSubmission, cursor, setCursor, addOrUpdateItems, loading]
