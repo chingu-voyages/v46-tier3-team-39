@@ -4,6 +4,15 @@ const nextConfig = {
     "@mui/icons-material/?(((\\w*)?/?)*)": {
       transform: "@mui/icons-material/{{ matches.[1] }}/{{member}}",
     },
+    "react-icons/?(((\\w*)?/?)*)": {
+      transform: "react-icons/{{ matches.[1] }}/{{member}}",
+    },
+    // "@fortawesome/free-solid-svg-icons": {
+    //   transform: "@fortawesome/free-solid-svg-icons/{{member}}",
+    // },
+    // "@fortawesome/free-regular-svg-icons": {
+    //   transform: "@fortawesome/free-regular-svg-icons/{{member}}",
+    // },
   },
   experimental: {
     serverActions: {
@@ -12,4 +21,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig
+module.exports = nextConfig;

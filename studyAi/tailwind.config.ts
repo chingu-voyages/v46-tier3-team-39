@@ -2,7 +2,6 @@ import type { Config } from 'tailwindcss'
 import figmaTheme from './theme'
 const config: Config = {
   content: [
-    // "./src/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/authComponents/**/*.{js,ts,jsx,tsx,mdx}",

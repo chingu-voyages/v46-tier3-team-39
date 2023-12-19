@@ -1,5 +1,5 @@
 "use client";
-import { BsStars } from "react-icons/bs";
+import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import QuestionAnswerOutlinedIcon from "@mui/icons-material/QuestionAnswerOutlined";
 import Link from "next/link";
 import { useDashBoard } from "../../context/DashboardContext";
@@ -35,7 +35,7 @@ const ActionCards = () => {
   return (
     <div className="flex flex-col justify-between item-center space-y-5 xs:space-y-0 xs:space-x-5 md:space-x-6 xs:flex-row">
       <ActionCard
-        icon={<BsStars className={"text-2xl"} />}
+        icon={<AutoAwesomeIcon className={"text-2xl"} />}
         title="Create Questions"
         description="Create exam questions using AI! Use another community question as a template, or upload your own!"
         link={`/library/question/create`}
@@ -49,4 +49,4 @@ const ActionCards = () => {
     </div>
   );
 };
-export default ActionCards
+export default ActionCards;

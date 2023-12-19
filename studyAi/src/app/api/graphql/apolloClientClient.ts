@@ -4,10 +4,11 @@ import {
   InMemoryCache,
 } from "@apollo/client";
 const env = process.env.NODE_ENV;
+const cache = new InMemoryCache();
 export const createGraphQLClient = (url: string) =>
   new ApolloClient({
     uri: url,
-    cache: new InMemoryCache(),
+    cache: cache,
     credentials: "same-origin",
   });
 export const generateURL = () => {

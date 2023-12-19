@@ -1,11 +1,9 @@
 "use client";
 import { Button, IconButton } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons";
-import {
-  faCirclePause,
-  faCirclePlay,
-} from "@fortawesome/free-regular-svg-icons";
+import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons/faArrowsRotate";
+import { faCirclePlay } from "@fortawesome/free-regular-svg-icons/faCirclePlay";
+import { faCirclePause } from "@fortawesome/free-regular-svg-icons/faCirclePause";
 import TimerIcon from "../../icons/timerIcon";
 import { MouseEvent, useEffect, useRef, useState } from "react";
 import { useTimeHook } from "./context/useTimeContext";

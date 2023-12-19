@@ -8,7 +8,10 @@ import { GetFullQuestion } from "@/gql/queries/questionQueries";
 import determineOriginUrl from "@/app/util/parsers/determineOriginUrl";
 import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
 import QuestionPageContainer from "../components/page/client/questionPageContainer";
-import { QuestionSubmissionStoreSubmissionType, QuestionSubmissionsContainerWrapper } from "@/app/stores/questionSubmissionsStore";
+import {
+  QuestionSubmissionStoreSubmissionType,
+  QuestionSubmissionsContainerWrapper,
+} from "@/app/stores/questionSubmissionsStore";
 import { QueryFullQuestionSubmissions } from "@/gql/queries/questionSubmissionQueries";
 import { SortOrder } from "../../../../../graphql/generated/graphql";
 export default async function QuestionPage({
@@ -30,7 +33,7 @@ export default async function QuestionPage({
           query: QueryFullQuestionSubmissions,
           variables: {
             questionId: { equals: questionId },
-            userId: session.user.id,
+            userId: { equals: session.user.id },
             orderBy: { dateCreated: SortOrder.Desc },
           },
         })

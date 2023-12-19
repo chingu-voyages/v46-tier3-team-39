@@ -1,7 +1,7 @@
 "use client"
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLinkedin } from '@fortawesome/free-brands-svg-icons'
+import { faLinkedin } from '@fortawesome/free-brands-svg-icons/faLinkedin'
 import useWindowWidth from "@/app/util/hooks/useWindowWidth";
 
 const LinkedInIcon = () => {

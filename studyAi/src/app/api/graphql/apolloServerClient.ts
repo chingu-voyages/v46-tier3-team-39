@@ -7,22 +7,31 @@ import {
 import { IncomingHttpHeaders } from "http";
 import { Session } from "next-auth";
 import { cookies } from "next/headers";
-import { createGraphQLClient, generateURL } from "./apolloClientClient";
-const createServerGraphQLClient = (
-  cookie: IncomingHttpHeaders["cookie"],
-  url: string
-) => {
-  if (!cookie) return createGraphQLClient(generateURL());
+import {
+  generateURL
+} from "./apolloClientClient";
+const cache = new InMemoryCache();
+const serverLink = (url: string, cookie?: string) =>
+  createHttpLink({
+    uri: url,
+    credentials: "same-origin",
+    headers: cookie
+      ? {
+          cookie: cookie,
+        }
+      : undefined,
+  });
+const createServerGraphQLClient = ({
+  cookie,
+  url,
+}: {
+  cookie?: IncomingHttpHeaders["cookie"];
+  url: string;
+}) => {
   return new ApolloClient({
     ssrMode: true,
-    link: createHttpLink({
-      uri: url,
-      credentials: "same-origin",
-      headers: {
-        cookie: cookie,
-      },
-    }),
-    cache: new InMemoryCache(),
+    link: serverLink(url, cookie),
+    cache: cache,
   });
 };
 
@@ -31,7 +40,7 @@ class ServerGraphQLClientClass {
   hasCookieSet?: IncomingHttpHeaders["cookie"];
   constructor(cookie?: IncomingHttpHeaders["cookie"]) {
     this.client = cookie
-      ? createServerGraphQLClient(cookie, generateURL())
+      ? createServerGraphQLClient({ cookie, url: generateURL() })
       : null;
     this.hasCookieSet = cookie;
   }
@@ -43,12 +52,19 @@ class ServerGraphQLClientClass {
       return this.client;
     //create new apollo client with new cookie
     if (!!cookie && !!session) {
-      this.client = createServerGraphQLClient(cookie, generateURL());
+      //set new link with cookie
+      if (this.client) this.client.setLink(serverLink(generateURL(), cookie));
+      else {
+        this.client = createServerGraphQLClient({ cookie, url: generateURL() });
+      }
       this.hasCookieSet = cookie;
     }
     //this is a public client, since we are not authenticated, so no session
     else {
-      this.client = createGraphQLClient(generateURL());
+      if (this.client) this.client.setLink(serverLink(generateURL()));
+      else {
+        this.client = createServerGraphQLClient({ url: generateURL() });
+      }
       this.hasCookieSet = undefined;
     }
     return this.client;

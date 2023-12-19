@@ -3,11 +3,9 @@ import { useQuestions } from "@/app/stores/questionStore";
 import ContainerBar, { Container } from "../../page/server/containerBar";
 import { Button, IconButton } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faDownLeftAndUpRightToCenter,
-  faRefresh,
-  faUpRightAndDownLeftFromCenter,
-} from "@fortawesome/free-solid-svg-icons";
+import { faDownLeftAndUpRightToCenter } from "@fortawesome/free-solid-svg-icons/faDownLeftAndUpRightToCenter";
+import { faRefresh } from "@fortawesome/free-solid-svg-icons/faRefresh";
+import { faUpRightAndDownLeftFromCenter } from "@fortawesome/free-solid-svg-icons/faUpRightAndDownLeftFromCenter";
 import { QuestionTypes } from "@/app/util/types/UserData";
 import { useFullscreen } from "@/app/util/providers/FullscreenProvider";
 import React from "react";

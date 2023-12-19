@@ -1,6 +1,6 @@
 "use client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faXmark } from "@fortawesome/free-solid-svg-icons/faXmark";
 import AnswerEditor from "./components/answerEditor/answerEditor";
 import QuestionEditor from "./components/questionEditor/questionEditor";
 import Controls from "./components/controls";

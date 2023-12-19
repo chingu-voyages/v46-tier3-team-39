@@ -11,20 +11,20 @@ import {
 import { useQuestions } from "@/app/stores/questionStore";
 import { usePathname } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Share } from "@mui/icons-material";
-import { faThumbsUp, faThumbsDown } from "@fortawesome/free-regular-svg-icons";
+import Share from "@mui/icons-material/Share";
+import { faThumbsUp } from "@fortawesome/free-regular-svg-icons/faThumbsUp";
+import { faThumbsDown } from "@fortawesome/free-regular-svg-icons/faThumbsDown";
 import { parseInteger } from "@/app/util/parsers/parseInt";
 import { Carousel } from "@/app/util/components/carousel/carousel";
 import { MouseEvent, useState, useTransition } from "react";
 import useOrigin from "@/app/util/hooks/useOrigin";
-import {
-  faFacebook,
-  faLinkedin,
-  faReddit,
-  faTwitter,
-  faWhatsapp,
-} from "@fortawesome/free-brands-svg-icons";
-import { faCheck, faLink } from "@fortawesome/free-solid-svg-icons";
+import { faFacebook } from "@fortawesome/free-brands-svg-icons/faFacebook";
+import { faLinkedin } from "@fortawesome/free-brands-svg-icons/faLinkedin";
+import { faReddit } from "@fortawesome/free-brands-svg-icons/faReddit";
+import { faTwitter } from "@fortawesome/free-brands-svg-icons/faTwitter";
+import { faWhatsapp } from "@fortawesome/free-brands-svg-icons/faWhatsapp";
+import { faCheck } from "@fortawesome/free-solid-svg-icons/faCheck";
+import { faLink } from "@fortawesome/free-solid-svg-icons/faLink";
 import useDropdown from "@/app/util/hooks/useDropdown";
 import BtnLabelDropdown from "@/app/util/components/btnLabelDropdown/btnLabelDropdown";
 import { useQuestionId } from "../../../context/QuestionIdContext";

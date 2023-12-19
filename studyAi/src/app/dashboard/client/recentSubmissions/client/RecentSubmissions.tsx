@@ -17,14 +17,42 @@ const QuestionSubmissionListHeader = () => {
   const windowWidth = useWindowWidth();
   const isMobile = windowWidth < 480;
   const containerClasses = [...styles.header.container];
-  const itemClasses = [...styles.header.text];
+  const headerItemClasses = [...styles.header.text];
+  const subHeaderContainerClasses = [...styles.header.subHeader.container];
+  const subHeaderItemClasses = [...styles.header.subHeader.text];
+  //for all but questions
+  const subHeaderItemClassesGeneral = [...subHeaderItemClasses, "min-w-[7rem]"];
+  const subHeaderItemQuestionClasses = [
+    ...subHeaderItemClasses,
+    "min-w-[9rem]",
+  ];
   return (
     <Container className={containerClasses.join(" ")}>
-      <Typography className={itemClasses.join(" ")}>Score</Typography>
-      <Typography className={itemClasses.join(" ")}>Time Elapsed</Typography>
-      {!isMobile && (
+      <Container className="flex w-full border-b py-3 px-4">
+        <Typography className={headerItemClasses.join(" ")}>
+          Recent Submissions
+        </Typography>
+      </Container>
+      <Container className={subHeaderContainerClasses.join(" ")}>
+        <Typography className={subHeaderItemClassesGeneral.join(" ")}>
+          Submitted
+        </Typography>
+        <Typography className={subHeaderItemQuestionClasses.join(" ")}>
+          Question
+        </Typography>
+        <Typography className={subHeaderItemClassesGeneral.join(" ")}>
+          Type
+        </Typography>
+        <Typography className={subHeaderItemClassesGeneral.join(" ")}>
+          Score
+        </Typography>
+        <Typography className={subHeaderItemClassesGeneral.join(" ")}>
+          Time Elapsed
+        </Typography>
+      </Container>
+      {/* {!isMobile && (
         <Typography className={itemClasses.join(" ")}>Submitted</Typography>
-      )}
+      )} */}
     </Container>
   );
 };
@@ -77,15 +105,15 @@ const RecentQuestionSubmissionsList = () => {
   );
   const data = questionSubmissions;
   return (
-    <>
+    <Container className="border px-0">
       <QuestionSubmissionListHeader />
-      <div className={styles.listContainer.container.join(" ")}>
+      <Container className={styles.listContainer.container.join(" ")}>
         <PaginationWrapper
           hasMore={!!cursor}
           fetchMoreData={savedFetchSubmissionsFunc}
           dataLength={data ? data.length : 0}
           hasChildren
-          scrollThreshold={0.5}
+          scrollThreshold={0.8}
         >
           {data && data.length > 0 && data[0] ? (
             <MemoizedQuestionSubmissionsDataList
@@ -95,8 +123,8 @@ const RecentQuestionSubmissionsList = () => {
             noDataPlaceholder
           )}
         </PaginationWrapper>
-      </div>
-    </>
+      </Container>
+    </Container>
   );
 };
 export default RecentQuestionSubmissionsList;

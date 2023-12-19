@@ -4,13 +4,11 @@ import { memo } from "react";
 import { Container, Typography } from "@mui/material";
 import { styles } from "./styles";
 import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
-import { AccessAlarm } from "@mui/icons-material";
+import AccessAlarm from "@mui/icons-material/AccessAlarm";
 import ConditionalWrapper from "@/app/util/components/conditionalWrapper/conditionalWrapper";
 import useQuestionSubmissionsData from "@/app/util/components/submissions/hooks/useQuestionSubmissionsData";
 import { arePropsEqual } from "@/app/util/components/submissions/questionSubmissionListItem/arePropsEqual";
-const QuestionSubmissionsListItem = (
-  props: Partial<QuestionSubmission>
-) => {
+const QuestionSubmissionsListItem = (props: Partial<QuestionSubmission>) => {
   const {
     normalizedDateCreated,
     normalizedScore,

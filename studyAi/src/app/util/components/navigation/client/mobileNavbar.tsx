@@ -2,7 +2,8 @@
 import React from "react";
 import { Button } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faClose } from "@fortawesome/free-solid-svg-icons";
+import { faBars } from "@fortawesome/free-solid-svg-icons/faBars";
+import { faClose } from "@fortawesome/free-solid-svg-icons/faClose";
 import dynamic from "next/dynamic";
 import AuthenticationNav, {
   LogoutBtn,
@@ -33,7 +34,7 @@ export const NavDrawer = ({ children }: { children: React.ReactNode }) => {
         aria-label="open-drawer"
         onClick={toggleDrawer(true)}
         className="aspect-square text-2xl"
-        sx={{ minWidth: 'unset'}}
+        sx={{ minWidth: "unset" }}
       >
         <FontAwesomeIcon icon={faBars} />
       </Button>
@@ -77,8 +78,8 @@ const userProfClassNames: RecursiveClassNames = {
   },
 };
 const MobileNavbar = () => {
-    const session = useSession();
-    const isLoggedIn = session.status === "authenticated";
+  const session = useSession();
+  const isLoggedIn = session.status === "authenticated";
   return (
     <NavDrawer>
       <div className="grow flex flex-col w-full py-[10%] px-[10%]">

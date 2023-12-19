@@ -4,7 +4,9 @@ import StopWatch from "@/app/util/components/time/stopwatch";
 import Timer from "@/app/util/components/time/timer";
 import { Button, IconButton, Modal, Typography } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faPlus } from "@fortawesome/free-solid-svg-icons/faPlus";
+import { faTrash } from "@fortawesome/free-solid-svg-icons/faTrash";
+
 import { TimeOptions } from "../../../../../../../prisma/generated/type-graphql";
 import TimeForm from "./timeForm";
 import { unstable_batchedUpdates } from "react-dom";
