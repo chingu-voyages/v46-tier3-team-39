@@ -11,7 +11,6 @@ import {
   getLocalStorageObj,
 } from "@/app/util/parsers/localStorageWrappers";
 import { QuestionSubmission } from "@prisma/client";
-import { Dispatch } from "react";
 export type SubmissionTypeMap = {
   question: Partial<QuestionSubmission>;
   quiz: Partial<QuestionSubmission>;

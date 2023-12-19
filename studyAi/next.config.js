@@ -7,12 +7,12 @@ const nextConfig = {
     "react-icons/?(((\\w*)?/?)*)": {
       transform: "react-icons/{{ matches.[1] }}/{{member}}",
     },
-    // "@fortawesome/free-solid-svg-icons": {
-    //   transform: "@fortawesome/free-solid-svg-icons/{{member}}",
-    // },
-    // "@fortawesome/free-regular-svg-icons": {
-    //   transform: "@fortawesome/free-regular-svg-icons/{{member}}",
-    // },
+    "@mui/material": {
+      transform: "@mui/material/{{member}}",
+    },
+    "lodash": {
+      transform: "lodash/{{member}}",
+    }
   },
   experimental: {
     serverActions: {
