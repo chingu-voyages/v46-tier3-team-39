@@ -10,9 +10,12 @@ const nextConfig = {
     "@mui/material": {
       transform: "@mui/material/{{member}}",
     },
-    "lodash": {
+    lodash: {
       transform: "lodash/{{member}}",
-    }
+    },
+    "date-fns": {
+      transform: "date-fns/{{member}}",
+    },
   },
   experimental: {
     serverActions: {

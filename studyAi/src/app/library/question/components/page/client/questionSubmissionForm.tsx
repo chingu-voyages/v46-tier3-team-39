@@ -20,15 +20,15 @@ const QuestionFormWrapper = ({ children }: { children: React.ReactNode }) => {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     e.stopPropagation();
+    //prevent multiple submissions
+    if (pending) return;
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData.entries());
     const { timeInputType, timeTaken, totalTimeGiven } = data;
-    //prevent multiple submissions
-    if (pending) return;
     startTransition(async () => {
       const result = await uploadQuestionSubmisison({
         submission: {
-          ...submission, 
+          ...submission,
           questionName: question?.questionInfo?.title,
         },
         timeInputs: {

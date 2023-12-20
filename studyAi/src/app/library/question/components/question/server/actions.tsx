@@ -1,6 +1,6 @@
 "use server";
-import { getServerSession } from "next-auth";
 import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
+import { getServerSession } from "next-auth";
 import { options } from "@/authComponents/nextAuth/options";
 import { GetQuestionLikeDoc } from "@/gql/queries/questionLikeQueries";
 import {
@@ -8,10 +8,22 @@ import {
   EditQuestionLikeDoc,
 } from "@/gql/mutations/questionLikeMutation";
 import { UpdateQuestionLikeCounter } from "@/gql/mutations/questionMutation";
+import {
+  CreateQuestionLikeDocMutation,
+  EditQuestionLikeDocMutation,
+} from "../../../../../../../graphql/generated/graphql";
+import { Question, QuestionLike, QuestionSubmission } from "@prisma/client";
 export const performLikeAction = async (
   type: "like" | "dislike",
   questionId?: string
-) => {
+): Promise<
+  | [
+      Pick<QuestionLike, "id" | "dislike"> | undefined | null,
+      Question["likeCounter"] | undefined | null
+    ]
+  | null
+  | undefined
+> => {
   const session = await getServerSession(options);
   if (!session || !questionId) return null;
   const userId = session.user.id;
@@ -30,7 +42,7 @@ export const performLikeAction = async (
       ? result.questionLikes[0]
       : null;
   //if record exists with same value, ignore call.
-  if (doc && doc.dislike === Boolean(type === "dislike")) return null;
+  if (doc && doc.dislike === (type === "dislike")) return null;
   //configure question like mutation options
   const newQuestionLikeDocOptions = {
     dateCreated: { set: currDate },
@@ -86,12 +98,22 @@ export const performLikeAction = async (
       },
     },
   };
-  const [_, questionMutation] = await Promise.all([
+  const [userLikeMutation, questionMutation] = await Promise.all([
     //either an edit or create new like submission doc
     doc?.id ? client.mutate(likeEditOptions) : client.mutate(likeCreateOptions),
     //update question counter in question
     client.mutate(questionMutationVar),
   ]);
   const { data: newQuestionLikeData } = questionMutation;
-  return newQuestionLikeData?.updateOneQuestion?.likeCounter;
+  const { data: userLikeData } = userLikeMutation;
+  const userLikeMutationResult = userLikeData as
+    | (CreateQuestionLikeDocMutation & EditQuestionLikeDocMutation)
+    | null
+    | undefined;
+  const userLikeResult = userLikeMutationResult?.updateOneQuestionLike
+    ? userLikeMutationResult.updateOneQuestionLike
+    : userLikeMutationResult?.createOneQuestionLike;
+  const questionDataResult =
+    newQuestionLikeData?.updateOneQuestion?.likeCounter;
+  return [userLikeResult, questionDataResult];
 };

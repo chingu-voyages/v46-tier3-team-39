@@ -63,6 +63,7 @@ const createQuestionSubmissionDoc = async ({
     questionId: submission.questionId as string,
     dateCreated: new Date(),
     questionName: submission.questionName as string,
+    questionType: submission.questionType as string,
     time:
       typeof timeInputType === "string" && typeof timeTaken === "string"
         ? {

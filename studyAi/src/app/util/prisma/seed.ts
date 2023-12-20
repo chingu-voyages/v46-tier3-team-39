@@ -66,6 +66,7 @@ async function main() {
       maxScore: 1,
       actualScore: 1,
     },
+    questionType: question.questionType,
     questionName: question.questionInfo.title,
     time: null,
     answerProvided: question.answer.correctAnswer,
@@ -105,7 +106,7 @@ async function main() {
       return item;
     }
   );
-  const submission: Omit<QuizSubmission, "id" | "dateCreated">[] = quizInfo.map(
+  const submission: Omit<QuizSubmission, "id" | "dateCreated" | "quizType">[] = quizInfo.map(
     (quiz) => {
       const item = {
         userId: quiz.creatorId,

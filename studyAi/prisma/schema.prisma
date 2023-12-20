@@ -125,6 +125,7 @@ model QuestionSubmission {
   userId         String         @db.ObjectId
   questionId     String         @db.ObjectId
   questionName   String
+  questionType   String
   time           TimeOptions?
   score          Score?
   answerProvided AnswerOption[]
@@ -139,7 +140,7 @@ model QuizSubmission {
   userId      String       @db.ObjectId
   quizId      String       @db.ObjectId
   quizName    String
-
+  quizType    String?
   @@index([userId, quizId])
 }
 

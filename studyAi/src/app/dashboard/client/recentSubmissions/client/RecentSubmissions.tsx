@@ -13,6 +13,16 @@ import { arePropsEqual } from "@/app/util/components/submissions/questionSubmiss
 import { listItemProps } from "@/app/util/components/submissions/questionSubmissionListItem/listItemProps";
 import styles from "../styles";
 import { useRecentSubmissions } from "@/app/stores/recentSubmissionsStore";
+export const recentQuestionSubmissionColumnNames = () => {
+  const defaultOrder: [string, keyof QuestionSubmission][] = [
+    ["Submitted", "dateCreated"],
+    ["Question", "questionName"],
+    ["Type", "questionType"],
+    ["Score", "score"],
+    ["Time Elapsed", "time"],
+  ];
+  return defaultOrder;
+};
 const QuestionSubmissionListHeader = () => {
   const windowWidth = useWindowWidth();
   const isMobile = windowWidth < 480;
@@ -34,25 +44,19 @@ const QuestionSubmissionListHeader = () => {
         </Typography>
       </Container>
       <Container className={subHeaderContainerClasses.join(" ")}>
-        <Typography className={subHeaderItemClassesGeneral.join(" ")}>
-          Submitted
-        </Typography>
-        <Typography className={subHeaderItemQuestionClasses.join(" ")}>
-          Question
-        </Typography>
-        <Typography className={subHeaderItemClassesGeneral.join(" ")}>
-          Type
-        </Typography>
-        <Typography className={subHeaderItemClassesGeneral.join(" ")}>
-          Score
-        </Typography>
-        <Typography className={subHeaderItemClassesGeneral.join(" ")}>
-          Time Elapsed
-        </Typography>
+        {recentQuestionSubmissionColumnNames().map((column) => (
+          <Typography
+            className={
+              column[0] === "Question"
+                ? subHeaderItemQuestionClasses.join(" ")
+                : subHeaderItemClassesGeneral.join(" ")
+            }
+            key={column[0]}
+          >
+            {column}
+          </Typography>
+        ))}
       </Container>
-      {/* {!isMobile && (
-        <Typography className={itemClasses.join(" ")}>Submitted</Typography>
-      )} */}
     </Container>
   );
 };
