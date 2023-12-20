@@ -7,15 +7,15 @@ import { QuestionSubmission } from "@prisma/client";
 import { UploadNewQuestionSubmissionQuery } from "@/gql/mutations/questionSubmissionMutation";
 import { UpdateUserData } from "@/gql/mutations/userMutation";
 export type TimeInputsProps = {
-    timeInputType?: string;
-    timeTaken?: string;
-    totalTimeGiven?: string;
-  }
+  timeInputType?: string;
+  timeTaken?: string;
+  totalTimeGiven?: string;
+};
 export const uploadQuestionSubmisison = async ({
   submission,
-  timeInputs
+  timeInputs,
 }: {
-  timeInputs: TimeInputsProps
+  timeInputs: TimeInputsProps;
   submission: Partial<QuestionSubmission>;
 }) => {
   const session = await getServerSession(options);
@@ -25,7 +25,7 @@ export const uploadQuestionSubmisison = async ({
   const questionSubmission = await createQuestionSubmissionDoc({
     session: session,
     submission,
-    timeInputs
+    timeInputs,
   });
   if (!questionSubmission) return null;
   const questionSubmissionMutationOptions = {
@@ -53,5 +53,8 @@ export const uploadQuestionSubmisison = async ({
     client.mutate(questionSubmissionMutationOptions),
     client.mutate(userAnsweredMutationOptions),
   ]);
-  return newQuestionSubmission.data;
+  return newQuestionSubmission.data?.createOneQuestionSubmission as
+    | Partial<QuestionSubmission>
+    | null
+    | undefined;
 };

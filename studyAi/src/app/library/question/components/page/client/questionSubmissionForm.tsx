@@ -4,6 +4,7 @@ import { useQuestions } from "@/app/stores/questionStore";
 import { useQuestionSubmissions } from "@/app/stores/questionSubmissionsStore";
 import { useQuestionId } from "../../../context/QuestionIdContext";
 import { uploadQuestionSubmisison } from "../server/actions";
+import ObjectID from "bson-objectid";
 const QuestionFormWrapper = ({ children }: { children: React.ReactNode }) => {
   // define hooks
   const questions = useQuestions()[0].data;
@@ -14,7 +15,8 @@ const QuestionFormWrapper = ({ children }: { children: React.ReactNode }) => {
       ? questions.map[questionId]
       : null;
   const [pending, startTransition] = useTransition();
-  const [currSubmissions, { deleteItems }] = useQuestionSubmissions();
+  const [currSubmissions, { deleteItems, addOrUpdateItems }] =
+    useQuestionSubmissions();
   if (!question) return <></>;
   const submission = currSubmissions.ongoingData[question.id];
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -38,6 +40,15 @@ const QuestionFormWrapper = ({ children }: { children: React.ReactNode }) => {
         },
       });
       if (!result) return;
+      addOrUpdateItems(
+        [
+          {
+            ...result,
+            questionId: result.questionId || ObjectID().toString(),
+          },
+        ],
+        "submitted"
+      );
       deleteItems([
         {
           questionId: question.id,
