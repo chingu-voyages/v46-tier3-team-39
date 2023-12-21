@@ -3,7 +3,7 @@ import useWindowWidth from "@/app/util/hooks/useWindowWidth";
 import ConditionalWrapper from "@/app/util/components/conditionalWrapper/conditionalWrapper";
 // import GreetingBanner from "./greetingBanner/greetingBanner";
 import ActionCards from "./actionCards/actionCards";
-import RecentQuestionSubmissionsList from "./recentSubmissions/client/RecentSubmissions";
+import RecentQuestionSubmissionsListContainer from "./recentSubmissions/client/RecentSubmissions";
 const DashboardBody = () => {
   const windowWidth = useWindowWidth();
   return (
@@ -19,7 +19,7 @@ const DashboardBody = () => {
     >
       {/* <GreetingBanner /> */}
       <ActionCards />
-      <RecentQuestionSubmissionsList />
+      <RecentQuestionSubmissionsListContainer />
     </ConditionalWrapper>
   );
 };

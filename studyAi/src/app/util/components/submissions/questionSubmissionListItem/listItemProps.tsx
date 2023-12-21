@@ -20,4 +20,5 @@ export const listItemProps = (submission: Partial<QuestionSubmission>) => ({
   score: submission.score,
   questionName: submission.questionName,
   questionId: submission.questionId,
+  questionType: submission.questionType,
 });
