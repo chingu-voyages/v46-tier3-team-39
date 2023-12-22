@@ -41,7 +41,7 @@ const QuestionFormHeader = () => {
     else if (width > 480) currHeaderClasses.push("text-3xl");
     else currHeaderClasses.push("text-2xl", "text-center");
     //handle container margins
-    if (width > 640) currHeaderContainerClasses.push("mb-7");
+    if (width > 640) currHeaderContainerClasses.push("mb-5");
     else if (width > 480) currHeaderContainerClasses.push("mb-4");
     else {
       currHeaderContainerClasses.push("mb-3");
@@ -96,7 +96,7 @@ const QuestionFormMainContent = () => {
 const QuestionEditFormLoadingBanner = ({ text }: { text: string }) => {
   const modalData = useQuestionModal();
   if (!modalData) return <></>;
-  const { type, currElPos } = modalData;
+  const { type } = modalData;
   const generalBannerStyles = [
     "flex",
     "flex-col",

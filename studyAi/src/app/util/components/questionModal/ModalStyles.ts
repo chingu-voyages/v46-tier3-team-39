@@ -25,7 +25,7 @@ export const determineMainContentLayoutStyle = (
 ) => {
   const width = position.width;
   //determine flex
-  if (width > 1024) arr.push("flex-row", 'space-x-[5%]');
+  if (width > 900) arr.push("flex-row", 'space-x-[5%]');
   else arr.push("flex-col");
 };
 const styles = {

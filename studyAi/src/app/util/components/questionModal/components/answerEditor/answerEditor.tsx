@@ -15,7 +15,6 @@ import RadioButtonCheckedOutlinedIcon from "@mui/icons-material/RadioButtonCheck
 import CheckBoxOutlinedIcon from "@mui/icons-material/CheckBoxOutlined";
 import SegmentIcon from "@mui/icons-material/Segment";
 import ObjectId from "bson-objectid";
-const styles = modalStyles.mainContentLayout.answerEditor;
 const AnswerSelectDropdownInput = () => {
   const modalData = useQuestionModal();
   if (!modalData) return <></>;
@@ -25,17 +24,19 @@ const AnswerSelectDropdownInput = () => {
   ];
   const currInputClassNames = [
     ...modalStyles.mainContentLayout.questionEditor.inputField.input({}),
+    "flex",
+    "items-center",
   ];
 
   if (currElPos) {
     const width = currElPos.position.width;
     //determine margins
-    if (width > 1024) currInputFieldContainerClassNames.push("mt-12");
+    if (width > 900) currInputFieldContainerClassNames.push("mt-10");
     else if (width > 640) currInputFieldContainerClassNames.push("mt-7");
     else currInputFieldContainerClassNames.push("mt-6");
     //determine padding
     if (width > 640) {
-      currInputClassNames.push("p-3", "text-lg");
+      currInputClassNames.push("p-3", "text-base");
     } else {
       currInputClassNames.push("p-2.5", "text-base");
     }
@@ -120,7 +121,7 @@ const AnswerSelectDropdownInput = () => {
 export default function AnswerEditor() {
   const modalData = useQuestionModal();
   if (!modalData) return <></>;
-  const { questionData, currElPos } = modalData;
+  const { questionData } = modalData;
   const questionType = questionData?.questionType;
   let answerType: React.ReactNode;
   switch (questionType) {
@@ -137,7 +138,6 @@ export default function AnswerEditor() {
       answerType = <ShortAnswer />;
       break;
   }
-  const width = currElPos?.position?.width;
   return (
     <Box className="flex flex-col w-full">
       <AnswerSelectDropdownInput />

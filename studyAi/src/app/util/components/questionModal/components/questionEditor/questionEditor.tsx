@@ -67,15 +67,18 @@ const QuestionEditor = () => {
   const { questionData, setQuestionData, currElPos } = modalData;
   const currLabelClassNames = [...styles.inputField.label];
   const currInputClassNames = [...styles.inputField.input({})];
+  const selectInputClassNames = [...currInputClassNames];
   const currInputFieldContainerClassNames = [...styles.inputField.container];
   if (currElPos) {
     const width = currElPos.position.width;
     if (width > 640) {
-      currLabelClassNames.push("text-lg", "mb-3");
+      currLabelClassNames.push("text-lg", "mb-2");
       currInputClassNames.push("py-3", "px-3");
-      currInputFieldContainerClassNames.push("my-3");
+      selectInputClassNames.push("py-2", "px-2");
+      currInputFieldContainerClassNames.push("my-2");
     } else {
       currLabelClassNames.push("text-sm", "mb-2");
+      selectInputClassNames.push("py-1", "px-1");
       currInputClassNames.push("py-2", "px-2");
       currInputFieldContainerClassNames.push("my-2");
     }
@@ -109,7 +112,7 @@ const QuestionEditor = () => {
       <QuestionTagsInput
         currLabelClassNames={currLabelClassNames}
         currInputFieldContainerClassNames={currInputFieldContainerClassNames}
-        currInputClassNames={currInputClassNames}
+        currInputClassNames={selectInputClassNames}
       />
       <QuestionDescriptionInput
         currLabelClassNames={currLabelClassNames}
