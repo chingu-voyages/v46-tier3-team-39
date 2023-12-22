@@ -1,7 +1,7 @@
 "use client";
 import useWindowWidth from "@/app/util/hooks/useWindowWidth";
 import ConditionalWrapper from "@/app/util/components/conditionalWrapper/conditionalWrapper";
-// import GreetingBanner from "./greetingBanner/greetingBanner";
+import GreetingBanner from "./greetingBanner/greetingBanner";
 import ActionCards from "./actionCards/actionCards";
 import RecentQuestionSubmissionsListContainer from "./recentSubmissions/client/RecentSubmissions";
 const DashboardBody = () => {
@@ -17,9 +17,9 @@ const DashboardBody = () => {
         </div>
       )}
     >
-      {/* <div className="md:mt-6 flex flex-col w-full">
+      <div className="md:mt-6 flex flex-col w-full">
         <GreetingBanner />
-      </div> */}
+      </div>
       <ActionCards />
       <div className={`flex flex-col w-full pb-6`}>
         <RecentQuestionSubmissionsListContainer />
