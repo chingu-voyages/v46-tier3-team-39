@@ -1,6 +1,7 @@
 "use client";
+import LinesEllipsis from "react-lines-ellipsis";
 import { QuestionSubmission } from "@prisma/client";
-import { Container, Typography } from "@mui/material";
+import { Chip, Container, Typography, setRef } from "@mui/material";
 import React, { memo } from "react";
 import { recentQuestionSubmissionColumnNames } from "./RecentSubmissions";
 import useQuestionSubmissionsData from "@/app/util/components/submissions/hooks/useQuestionSubmissionsData";
@@ -9,6 +10,9 @@ import AccessAlarm from "@mui/icons-material/AccessAlarm";
 import styles from "../styles";
 import { useElementPos } from "@/app/util/providers/elementPosProvider";
 import ConditionalWrapper from "@/app/util/components/conditionalWrapper/conditionalWrapper";
+import responsiveHOC from "react-lines-ellipsis/lib/responsiveHOC";
+const ResponsiveEllipsis = responsiveHOC()(LinesEllipsis);
+
 const determineListItemStyles = (width: number) => {
   const desktopItemClassNames = [
     "justify-center",
@@ -28,31 +32,31 @@ const determineListItemStyles = (width: number) => {
   const questionClasses = [];
   switch (true) {
     case width > 1000:
+      containerItemClasses.push("py-2");
       classesGeneral.push("w-[9rem]");
       questionClasses.push("w-[14rem]");
       break;
     case width > 800:
+      containerItemClasses.push("py-2");
       classesGeneral.push("w-[7rem]");
       questionClasses.push("w-[12rem]");
       break;
     case width > 700:
+      containerItemClasses.push("py-2");
       classesGeneral.push("w-[6rem]");
       questionClasses.push("w-[10rem]");
       break;
     case width > 600:
+      containerItemClasses.push("py-2");
       classesGeneral.push("w-[5.5rem]");
       questionClasses.push("w-[9rem]");
       break;
-    case width > 400:
-      containerItemClasses.push("flex-col");
-      itemClassNames.push("w-full");
-      break;
     case width > 300:
-      containerItemClasses.push("flex-col");
+      containerItemClasses.push("py-4", "space-y-1", "flex-col");
       itemClassNames.push("w-full");
       break;
     default:
-      containerItemClasses.push("flex-col");
+      containerItemClasses.push("py-4", "space-y-1", "flex-col");
       itemClassNames.push("w-full");
       break;
   }
@@ -78,18 +82,34 @@ const QuestionSubmissionsListItemInner = ({
     <>
       <Container key={columnName[1]} className={classNames.join(" ")}>
         {containerWidth <= 600 && (
-          <Typography className="w-[8rem]">{columnName[0]}</Typography>
+          <Typography className="flex items-center w-[8rem]">
+            {columnName[0]}
+          </Typography>
         )}
         <ConditionalWrapper
           condition={containerWidth <= 600}
           wrapper={(children) => (
-            <Container className="w-full px-1">{children}</Container>
+            <Container className="flex w-full px-1 items-center break-all">
+              {children}
+            </Container>
           )}
         >
           {children}
         </ConditionalWrapper>
       </Container>
     </>
+  );
+};
+const QuestionNameContainer = ({ value }: { value?: string }) => {
+  return (
+    <ResponsiveEllipsis
+      className="break-all"
+      text={value || "Untitled"}
+      ellipsis="..."
+      trimRight
+      basedOn="letters"
+      maxLine={2}
+    />
   );
 };
 const QuestionSubmissionsListItem = (props: Partial<QuestionSubmission>) => {
@@ -101,6 +121,7 @@ const QuestionSubmissionsListItem = (props: Partial<QuestionSubmission>) => {
     timeType,
     normalizedTimeTaken,
   } = useQuestionSubmissionsData(props);
+
   const {
     itemClassNames,
     classesGeneral,
@@ -117,14 +138,26 @@ const QuestionSubmissionsListItem = (props: Partial<QuestionSubmission>) => {
           case "questionName":
             classNames.push(...questionClasses);
             if (containerWidth > 600) classNames.push("text-xs");
-            innerChild = value?.toString() || "Untitled";
+            innerChild = <QuestionNameContainer value={value?.toString()} />;
             break;
           case "questionType":
             classNames.push(...classesGeneral);
-            innerChild = value?.toString() || "N/A";
+            if (containerWidth > 600) classNames.push("text-xs");
+            innerChild =
+              (
+                <Chip
+                  label={value?.toString()}
+                  size="small"
+                  className="mr-3 my-1 text-xs h-auto py-0.5"
+                  sx={{
+                    minHeight: "unset",
+                  }}
+                />
+              ) || "N/A";
             break;
           case "time":
             classNames.push(...classesGeneral);
+            if (containerWidth > 600) classNames.push("text-sm");
             innerChild = (
               <>
                 {timeType === "stopwatch" && (
@@ -149,10 +182,12 @@ const QuestionSubmissionsListItem = (props: Partial<QuestionSubmission>) => {
             break;
           case "score":
             classNames.push(...classesGeneral);
+            if (containerWidth > 600) classNames.push("text-base");
             innerChild = normalizedScore;
             break;
           case "dateCreated":
             classNames.push(...classesGeneral);
+            if (containerWidth > 600) classNames.push("text-sm");
             innerChild = normalizedDateCreated;
             break;
           default:

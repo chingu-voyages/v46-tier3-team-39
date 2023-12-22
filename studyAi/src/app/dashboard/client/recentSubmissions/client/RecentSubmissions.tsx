@@ -60,14 +60,6 @@ const determineListHeaderStyles = (width: number) => {
     case width > 600:
       subHeaderItemClassesGeneral.push("w-[5.5rem]");
       subHeaderItemQuestionClasses.push("w-[9rem]");
-      // subHeaderItemClassesGeneral.push("w-full");
-      // subHeaderItemQuestionClasses.push("w-full");
-      break;
-    case width > 400:
-      // subHeaderItemClassesGeneral.push("w-full");
-      // subHeaderItemQuestionClasses.push("w-full");
-      break;
-    case width > 300:
       break;
     default:
       break;

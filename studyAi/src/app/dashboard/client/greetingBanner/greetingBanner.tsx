@@ -45,7 +45,7 @@ const GreetingMessage = () => {
 const GreetingBanner = () => {
   const windowWidth = useWindowWidth();
   return (
-    <div className="flex w-full flex-col-reverse min-h-[7rem] border xs:min-h-[10rem] xs:flex-row md:mt-6">
+    <div className="flex w-full flex-col-reverse min-h-[7rem] border xs:min-h-[10rem] xs:flex-row">
       <GreetingMessage />
       <div className="flex flex-col w-full h-full justify-center min-h-[7rem] items-center xs:flex-row xs:pl-[max(2%,1rem)] lg:pr-[max(3.5%,1.5rem)] pt-[max(3.5%,1.5rem)] xs:pt-[max(2%,1rem)] lg:max-h-none">
         <Image

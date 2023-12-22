@@ -155,7 +155,15 @@ export const TagsInput = ({
         <div className="flex flex-row flex-wrap ml-2">
           {Array.isArray(tags) && tags.length > 0 ? (
             tags.map((tag, index) => (
-              <Chip key={tag.value + index} label={tag.value}></Chip>
+              <Chip
+                key={tag.value + index}
+                label={tag.value}
+                size="small"
+                className="mr-3 my-1 text-xs h-auto py-0.5"
+                sx={{
+                  minHeight: "unset",
+                }}
+              />
             ))
           ) : (
             <Typography className="text-sm">No tags</Typography>

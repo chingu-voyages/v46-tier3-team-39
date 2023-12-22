@@ -26,7 +26,6 @@ const styles = {
       "justify-between",
       "border-b",
       "last:border-b-0",
-      "py-2",
     ],
     columnItem: [
       "flex",

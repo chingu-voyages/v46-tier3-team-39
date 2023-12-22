@@ -17,9 +17,13 @@ const DashboardBody = () => {
         </div>
       )}
     >
-      {/* <GreetingBanner /> */}
+      {/* <div className="md:mt-6 flex flex-col w-full">
+        <GreetingBanner />
+      </div> */}
       <ActionCards />
-      <RecentQuestionSubmissionsListContainer />
+      <div className={`flex flex-col w-full pb-6`}>
+        <RecentQuestionSubmissionsListContainer />
+      </div>
     </ConditionalWrapper>
   );
 };
