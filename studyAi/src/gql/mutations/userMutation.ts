@@ -1,4 +1,4 @@
-import { gql } from "../../../graphql/generated";
+import { gql } from "@/gql/generated";
 export const UpdateUserData = gql(`
     mutation UpdateUserData($id: String!,$data: UserUpdateInput!) {
         updateOneUser(

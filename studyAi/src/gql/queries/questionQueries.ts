@@ -1,4 +1,4 @@
-import { gql } from "../../../graphql/generated";
+import { gql } from "@/gql/generated";
 export const GeneralQuestionData = gql(`
   fragment GeneralQuestionData on Question {
       id

@@ -6,7 +6,7 @@ import type { Question } from "@prisma/client";
 import { QuestionsContainer } from "@/app/stores/questionStore";
 import { protectRouteSSR } from "@/app/api/utils/sessionFuncs";
 import { GetQuestionsInfo } from "@/gql/queries/questionQueries";
-import { SortOrder } from "../../../../../graphql/generated/graphql";
+import { SortOrder } from "@/gql/generated/graphql";
 
 export default async function QuestionLibrary() {
   const sessionData = await protectRouteSSR("/auth/login");

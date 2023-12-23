@@ -1,4 +1,4 @@
-import { gql } from "../../../graphql/generated";
+import { gql } from "@/gql/generated";
 export const TimeData = gql(`
   fragment TimeData on TimeOptions {
     id

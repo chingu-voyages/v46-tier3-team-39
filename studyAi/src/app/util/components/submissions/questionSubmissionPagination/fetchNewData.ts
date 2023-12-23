@@ -9,7 +9,7 @@ import {
   SortOrder,
   StringFilter,
   Exact,
-} from "../../../../../../graphql/generated/graphql";
+} from "@/gql/generated/graphql";
 import { handleCursor } from "@/app/util/components/pagination/handleCursor";
 export type FetchSubmissionProps<T, A> = {
   userId: string;
@@ -55,7 +55,7 @@ function fetchItems<T, A>({
       variables: {
         questionId:
           typeof questionId === "string" ? { equals: questionId } : undefined,
-        userId: {equals: userId},
+        userId: { equals: userId },
         cursor: cursor
           ? {
               id: cursor,

@@ -12,7 +12,7 @@ import { UpdateUserData } from "@/gql/mutations/userMutation";
 import {
   AddSingleQuestionMutation,
   UpdateSingleQuestionMutation,
-} from "../../../../../graphql/generated/graphql";
+} from "@/gql/generated/graphql";
 import { GetQuestionCreator } from "@/gql/queries/questionQueries";
 import removeTypename from "../../parsers/removeTypename";
 export const uploadQuestionToDb = async (data: {

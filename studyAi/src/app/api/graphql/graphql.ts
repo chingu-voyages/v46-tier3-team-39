@@ -4,7 +4,7 @@ import { startServerAndCreateNextHandler } from "./lib/startServerAndCreateNextH
 import { prismaDb } from "@/app/util/prisma/connection";
 import { Session } from "next-auth";
 import { NextApiRequest, NextApiResponse } from "next";
-import { createSchema } from "../../../../graphql/createSchema";
+import { createSchema } from "@/gql/createSchema";
 import validateAuthRequirementInQuery, {
   getSession,
 } from "./validateAuthRequirementInQuery";

@@ -1,4 +1,4 @@
-import { gql } from "../../../graphql/generated";
+import { gql } from "@/gql/generated";
 export const UpdateQuestionLikeCounter = gql(`
   mutation UpdateQuestionLikeCounter(
     $id: String!

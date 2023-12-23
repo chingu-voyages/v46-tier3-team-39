@@ -5,7 +5,7 @@ import FormGroup from "@mui/material/FormGroup";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import { InputHTMLAttributes, SyntheticEvent, useRef } from "react";
-import { Question } from "../../../../../../../graphql/generated/graphql";
+import { Question } from "@/gql/generated/graphql";
 import ReadOnlyInput from "@/app/util/components/inputs/ReadOnlyInput";
 import { useQuestionSubmissions } from "@/app/stores/questionSubmissionsStore";
 import ObjectId from "bson-objectid";

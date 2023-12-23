@@ -20,7 +20,7 @@ import {
   QuestionWhereUniqueInput,
   SortOrder,
   StringFilter,
-} from "../../../../../graphql/generated/graphql";
+} from "@/gql/generated/graphql";
 import { GetQuestionsInfo } from "@/gql/queries/questionQueries";
 export type QuestionLibraryContextData = {
   pageType: "user" | "public";

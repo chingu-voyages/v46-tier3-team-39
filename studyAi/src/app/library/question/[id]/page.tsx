@@ -13,7 +13,7 @@ import {
   QuestionSubmissionsContainerWrapper,
 } from "@/app/stores/questionSubmissionsStore";
 import { QueryFullQuestionSubmissions } from "@/gql/queries/questionSubmissionQueries";
-import { SortOrder } from "../../../../../graphql/generated/graphql";
+import { SortOrder } from "@/gql/generated/graphql";
 export default async function QuestionPage({
   params,
 }: {

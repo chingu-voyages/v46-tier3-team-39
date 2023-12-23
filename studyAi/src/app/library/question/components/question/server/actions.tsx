@@ -11,7 +11,7 @@ import { UpdateQuestionLikeCounter } from "@/gql/mutations/questionMutation";
 import {
   CreateQuestionLikeDocMutation,
   EditQuestionLikeDocMutation,
-} from "../../../../../../../graphql/generated/graphql";
+} from "@/gql/generated/graphql";
 import { Question, QuestionLike, QuestionSubmission } from "@prisma/client";
 export const performLikeAction = async (
   type: "like" | "dislike",

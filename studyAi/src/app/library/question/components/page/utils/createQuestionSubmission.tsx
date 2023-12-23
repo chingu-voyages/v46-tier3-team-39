@@ -1,6 +1,6 @@
 import { AnswerOption, QuestionSubmission } from "@prisma/client";
 import { Session } from "next-auth";
-import { QuestionSubmissionCreateInput } from "../../../../../../../graphql/generated/graphql";
+import { QuestionSubmissionCreateInput } from "@/gql/generated/graphql";
 import { TimeInputsProps } from "../server/actions";
 import ObjectId from "bson-objectid";
 import { GetQuestionAnswerById } from "@/gql/queries/questionQueries";
