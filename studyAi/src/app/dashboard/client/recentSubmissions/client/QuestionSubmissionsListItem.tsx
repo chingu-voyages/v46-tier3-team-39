@@ -1,7 +1,9 @@
 "use client";
 import LinesEllipsis from "react-lines-ellipsis";
 import { QuestionSubmission } from "@prisma/client";
-import { Chip, Container, Typography, setRef } from "@mui/material";
+import Chip from "@mui/material/Chip";
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
 import React, { memo } from "react";
 import { recentQuestionSubmissionColumnNames } from "./RecentSubmissions";
 import useQuestionSubmissionsData from "@/app/util/components/submissions/hooks/useQuestionSubmissionsData";

@@ -1,8 +1,8 @@
 import React from "react";
-import NavigationWrapper from "../util/components/navigation/navigationWrapper";
-import { Container, Typography } from "@mui/material";
-
-export default async function Terms() {
+import NavigationWrapper from "@/app/util/components/navigation/navigationWrapper";
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
+export default function TermsPage() {
   const styles = {
     h6: ["font-semibold", "text-lg", "sm:text-xl", "mb-2"].join(" "),
     body: ["mb-8", "text-sm", "sm:text-base", "px-0"].join(" "),
@@ -130,7 +130,6 @@ export default async function Terms() {
           <a href={`mailto:${process.env.NEXT_PUBLIC_EMAIL}`}>
             <u>here</u>
           </a>
-          .
         </Container>
 
         <Container className={styles.body}>Last Updated: 16/11/2023</Container>

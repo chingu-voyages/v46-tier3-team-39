@@ -1,11 +1,9 @@
 "use client";
-import {
-  Checkbox,
-  FormControlLabel,
-  FormGroup,
-  Radio,
-  RadioGroup,
-} from "@mui/material";
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormGroup from "@mui/material/FormGroup";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
 import { InputHTMLAttributes, SyntheticEvent, useRef } from "react";
 import { Question } from "../../../../../../../graphql/generated/graphql";
 import ReadOnlyInput from "@/app/util/components/inputs/ReadOnlyInput";

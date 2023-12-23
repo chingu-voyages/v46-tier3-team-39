@@ -1,5 +1,6 @@
 "use client";
-import { Button, IconButton } from "@mui/material";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons/faArrowsRotate";
 import { faCirclePlay } from "@fortawesome/free-regular-svg-icons/faCirclePlay";
@@ -22,7 +23,7 @@ const TimeControlsWrapper = ({
   const playAuto = useRef(timeContext && timeContext.autoPlay);
   useEffect(() => {
     if (playAuto.current && timeContext) timeContext.startTimer();
-    //es-lint-disable-next-line
+    //eslint-disable-next-line
   }, []);
 
   const showTimeVisibility =

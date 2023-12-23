@@ -1,6 +1,6 @@
 "use client";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { CircularProgress } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
 type PaginationProps<T> = {
   children: React.ReactNode;
   dataLength: number;

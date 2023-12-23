@@ -34,7 +34,7 @@ export function useDebounce<T>(
         }
       }, wait);
     },
-    [callback]
+    [callback, wait]
   );
   return debounced;
 }

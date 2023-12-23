@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Button } from "@mui/material";
+import Button from "@mui/material/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons/faBars";
 import { faClose } from "@fortawesome/free-solid-svg-icons/faClose";

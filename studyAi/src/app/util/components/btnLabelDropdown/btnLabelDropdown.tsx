@@ -1,4 +1,5 @@
-import { Menu, MenuProps, Typography } from "@mui/material";
+import Menu, {MenuProps} from "@mui/material/Menu";
+import Typography from "@mui/material/Typography";
 import useDropdown from "../../hooks/useDropdown";
 import { Dispatch, MouseEvent, SetStateAction } from "react";
 type BtnLabelDropdownProps = {

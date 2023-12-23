@@ -5,7 +5,7 @@ import { UserProfileNav } from "@/app/util/components/navigation/client/userProf
 import useWindowWidth from "@/app/util/hooks/useWindowWidth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons/faRightFromBracket";
-import { Button, ButtonProps } from "@mui/material";
+import Button, { ButtonProps } from "@mui/material/Button";
 export type RecursiveClassNames = {
   [key: string]: RecursiveClassNames | string | null;
   value: string | null;

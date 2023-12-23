@@ -1,6 +1,6 @@
 "use client";
 import QuestionEditForm from "./questionEditModal";
-import { Modal } from "@mui/material";
+import Modal from "@mui/material/Modal";
 import { Question } from "../../../../../prisma/generated/type-graphql";
 import { ElementPosProvider } from "../../providers/elementPosProvider";
 import {

@@ -12,15 +12,13 @@ import QuestionModalWrapper from "@/app/util/components/questionModal/questionMo
 import { useQuestionId } from "../../../context/QuestionIdContext";
 import { useMutation } from "@apollo/client";
 import { DeleteQuestionMutation } from "@/gql/mutations/questionMutation";
-import {
-  Alert,
-  Button,
-  IconButton,
-  Modal,
-  Tab,
-  Tabs,
-  Typography,
-} from "@mui/material";
+import Alert from "@mui/material/Alert";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import Modal from "@mui/material/Modal";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
+import Typography from "@mui/material/Typography";
 import { useRouter } from "next/navigation";
 
 const EditBtn = ({

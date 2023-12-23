@@ -3,14 +3,12 @@ import modalStyles from "../../ModalStyles";
 import { QuestionProps } from "../../questionEditModal";
 import type { AnswerOption } from "../../../../../../../prisma/generated/type-graphql";
 import ObjectId from "bson-objectid";
-import {
-  Radio,
-  RadioGroup,
-  Checkbox,
-  IconButton,
-  TextField,
-  Button,
-} from "@mui/material";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import Checkbox from "@mui/material/Checkbox";
+import IconButton from "@mui/material/IconButton";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import { CheckBoxOutlineBlankOutlined } from "@mui/icons-material";

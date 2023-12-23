@@ -1,7 +1,8 @@
 "use client";
 import { QuestionSubmission } from "@prisma/client";
 import { memo } from "react";
-import { Container, Typography } from "@mui/material";
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
 import { styles } from "./styles";
 import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
 import AccessAlarm from "@mui/icons-material/AccessAlarm";

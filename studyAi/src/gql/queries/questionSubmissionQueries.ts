@@ -50,7 +50,6 @@ export const QueryFullQuestionSubmissions = gql(`
       score {
        ...ScoreData
       }
-      
     }
   }
 `);

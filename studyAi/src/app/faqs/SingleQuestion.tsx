@@ -1,9 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import { BiMinus } from "react-icons/bi";
-import { BsPlusLg } from "react-icons/bs";
-import { string } from "zod";
-
+import Remove from "@mui/icons-material/Remove";
+import Add from "@mui/icons-material/Add";
 export default function SingleQuestion({
   question,
   answer,
@@ -12,7 +10,6 @@ export default function SingleQuestion({
   answer: string;
 }) {
   const [showAnswer, setShowAnswer] = useState(false);
-
   return (
     <div className="bg-white">
       <article className="flex items-center justify-between p-4 lg:p-6">
@@ -26,14 +23,14 @@ export default function SingleQuestion({
           {!showAnswer && (
             <li>
               <button onClick={() => setShowAnswer(true)}>
-                <BsPlusLg />
+                <Add />
               </button>
             </li>
           )}
           {showAnswer && (
             <li>
               <button onClick={() => setShowAnswer(false)}>
-                <BiMinus />
+                <Remove />
               </button>
             </li>
           )}

@@ -1,3 +1,3 @@
 export default function ExamPage() {
-  return <></>;
+  return <div></div>;
 }

@@ -1,5 +1,7 @@
 "use client";
-import { TextareaAutosize, TextareaAutosizeProps } from "@mui/material";
+import TextareaAutosize, {
+  TextareaAutosizeProps,
+} from "@mui/material/TextareaAutosize";
 import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
 export const adjustScroll = (
   event: ChangeEvent<HTMLTextAreaElement> | KeyboardEvent<HTMLTextAreaElement>

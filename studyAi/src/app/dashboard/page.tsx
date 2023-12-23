@@ -8,7 +8,6 @@ import { GetQuestionSubmissionCountByCreatorId } from "@/gql/queries/questionSub
 import DashboardContainer from "./server/dashboardContainer";
 import { Session } from "next-auth";
 import { subWeeks } from "date-fns";
-export const generateMetadata = () => {};
 
 const getGreetingBannerInfo = async (session: Session, userId: string) => {
   const currDate = new Date();
@@ -53,11 +52,9 @@ export default async function DashboardPage() {
   const userId = session?.user.id;
   const userName = session?.user.name;
   if (!userId || !userName) return <></>;
-
   const initialProfileData = session.user;
   const { weeklySubmissionCount, weeklyQuestionCount } =
     await getGreetingBannerInfo(session, userId);
-
   return (
     <NavigationWrapper
       appBars={{

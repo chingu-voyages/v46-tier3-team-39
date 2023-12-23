@@ -3,7 +3,7 @@ import useWindowWidth from "@/app/util/hooks/useWindowWidth";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons/faArrowLeft";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons/faArrowRight";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button } from "@mui/material";
+import Button from "@mui/material/Button";
 import { MouseEvent } from "react";
 import { TimeComponent } from "../../time/client/timeModal";
 import ConditionalWrapper from "@/app/util/components/conditionalWrapper/conditionalWrapper";

@@ -2,11 +2,13 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import StopWatch from "@/app/util/components/time/stopwatch";
 import Timer from "@/app/util/components/time/timer";
-import { Button, IconButton, Modal, Typography } from "@mui/material";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import Modal from "@mui/material/Modal";
+import Typography from "@mui/material/Typography";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons/faPlus";
 import { faTrash } from "@fortawesome/free-solid-svg-icons/faTrash";
-
 import { TimeOptions } from "../../../../../../../prisma/generated/type-graphql";
 import TimeForm from "./timeForm";
 import { unstable_batchedUpdates } from "react-dom";
@@ -16,8 +18,6 @@ import {
   useTimeHook,
 } from "@/app/util/components/time/context/useTimeContext";
 import onTimeEventChangeHandler from "../../../eventHandlers/onTimeEventChangeHandler";
-import formatMilliseconds from "@/app/util/parsers/formatMilliseconds";
-import removeNonIntegerChars from "@/app/util/parsers/removeNonIntegerChars";
 import ReadOnlyInput from "@/app/util/components/inputs/ReadOnlyInput";
 import { createTimeStringFromMilliseconds } from "@/app/util/parsers/createTimeStringFromMilliseconds";
 //we can manage time on the frontend
@@ -40,7 +40,7 @@ export const TimerFinishedModal = ({
 }) => {
   const timeContext = useTimeHook();
   //this creates the new total time string
-  const parsedTimeElapsed = createTimeStringFromMilliseconds(totalTimeGiven)
+  const parsedTimeElapsed = createTimeStringFromMilliseconds(totalTimeGiven);
   return (
     <Modal
       open={modalOpen}
@@ -145,7 +145,7 @@ export const TimeComponent = ({ props }: { props?: TimeProps }) => {
       Pick<TimeProps, "initialTime" | "timeType">
     >(`${id}-timer-data`);
     if (storedData) setCurrInitTime(storedData.initialTime);
-  }, []);
+  }, [id]);
   switch (currType) {
     case "stopwatch":
       return (

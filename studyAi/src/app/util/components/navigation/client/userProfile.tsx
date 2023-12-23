@@ -1,5 +1,8 @@
 "use client";
-import { Avatar, Link, Menu, MenuItem } from "@mui/material";
+import Avatar from "@mui/material/Avatar";
+import Link from "@mui/material/Link";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import { styled } from "@mui/material/styles";
 import { UserInfo } from "../../../types/UserData";
 import useElementPosition from "@/app/util/hooks/useElementSize";
@@ -89,7 +92,7 @@ export const UserProfile = ({
         {name?.[0]?.toUpperCase()}
       </Avatar>
       {showUserInfo && (
-        <div  className="flex flex-col w-full ml-4 py-1 space-y-0">
+        <div className="flex flex-col w-full ml-4 py-1 space-y-0">
           {nameElement}
           <span className="text-Black font-regular tracking-tight text-xs">
             {email}

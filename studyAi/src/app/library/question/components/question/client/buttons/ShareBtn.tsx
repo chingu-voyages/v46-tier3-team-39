@@ -1,10 +1,7 @@
 "use client";
-import {
-  IconButton,
-  Menu,
-  MenuProps,
-  Typography,
-} from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import Menu, {MenuProps} from "@mui/material/Menu";
+import Typography from "@mui/material/Typography";
 import { usePathname } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Share from "@mui/icons-material/Share";
@@ -181,4 +178,4 @@ const ShareBtn = () => {
     </>
   );
 };
-export default ShareBtn
+export default ShareBtn;

@@ -85,7 +85,7 @@ export function QuestionModalProvider({
     //or the questionId changes
     if (!questionId || !isOpen) return;
     getQuestionAnswer({
-      variables: { id: questionData?.id },
+      variables: { id: questionId },
       fetchPolicy: 'no-cache'
     })
       .then((data) => {
@@ -93,7 +93,7 @@ export function QuestionModalProvider({
         if (!currData) return;
         setQuestionData((prev) => ({ ...prev, ...currData }));
       })
-      .catch((err) => {
+      .catch((err) => {        
         console.error(err);
       });
   }, [questionId, isOpen, getQuestionAnswer]);
@@ -102,7 +102,7 @@ export function QuestionModalProvider({
     setQuestionData(
       initialQuestionData ? { ...initialQuestionData } : blankQuestion
     );
-  }, [initialQuestionData, questionId]);
+  }, [initialQuestionData]);
   return (
     <QuestionModalContext.Provider
       value={{

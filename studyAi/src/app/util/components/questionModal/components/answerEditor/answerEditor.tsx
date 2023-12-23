@@ -3,14 +3,11 @@ import { MultipleChoice, SelectAll, ShortAnswer } from "./answerTypes";
 import modalStyles from "../../ModalStyles";
 import type { AnswerOption } from "../../../../../../../prisma/generated/type-graphql";
 import { useQuestionModal } from "../../context/questionModalProvider";
-import {
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  Box,
-} from "@mui/material";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Box from "@mui/material/Box";
 import RadioButtonCheckedOutlinedIcon from "@mui/icons-material/RadioButtonCheckedOutlined";
 import CheckBoxOutlinedIcon from "@mui/icons-material/CheckBoxOutlined";
 import SegmentIcon from "@mui/icons-material/Segment";

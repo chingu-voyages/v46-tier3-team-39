@@ -1,6 +1,8 @@
 "use client";
 import React from "react";
-import { MenuItem, Menu, Link } from "@mui/material";
+import MenuItem from "@mui/material/MenuItem";
+import Menu from "@mui/material/Menu";
+import Link from "@mui/material/Link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons/faCaretDown";
 import useRemToPixel from "@/app/util/hooks/useRemToPixel";
@@ -102,7 +104,6 @@ export const GenerateDropdown = () => {
                 <span className="ml-3">{link.text}</span>
               </>
             )}
-
           </MenuItem>
         ))}
       </Menu>

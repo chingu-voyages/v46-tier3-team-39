@@ -19,8 +19,8 @@ const RecentSubmissionsContainer = async ({
       variables: {
         userId: { equals: session.user.id },
         orderBy: {
-          dateCreated: SortOrder.Desc
-        }
+          dateCreated: SortOrder.Desc,
+        },
       },
     };
     const { data } = await client.query(query);
@@ -35,7 +35,7 @@ const RecentSubmissionsContainer = async ({
         {children}
       </RecentQuestionSubmissionsContainerWrapper>
     );
-  } catch (err) {
+  } catch (err: any) {
     console.error(err);
     return <></>;
   }

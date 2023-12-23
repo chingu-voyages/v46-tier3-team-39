@@ -1,7 +1,8 @@
 "use client";
 import { useQuestions } from "@/app/stores/questionStore";
 import ContainerBar, { Container } from "../../page/server/containerBar";
-import { Button, IconButton } from "@mui/material";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownLeftAndUpRightToCenter } from "@fortawesome/free-solid-svg-icons/faDownLeftAndUpRightToCenter";
 import { faRefresh } from "@fortawesome/free-solid-svg-icons/faRefresh";

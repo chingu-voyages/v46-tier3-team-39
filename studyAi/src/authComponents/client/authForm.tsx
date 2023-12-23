@@ -1,6 +1,7 @@
 "use client";
 import { TextFieldInput } from "@/authComponents/server/formInputs";
-import { Alert, Button } from "@mui/material";
+import Alert from "@mui/material/Alert";
+import Button from "@mui/material/Button";
 import { signIn } from "next-auth/react";
 import axios from "axios";
 import { useRouter, NextRouter } from "next/router";

@@ -11,13 +11,11 @@ import styles, {
 import { Question } from "../../../../../prisma/generated/type-graphql";
 import { SetStateAction, useTransition } from "react";
 import { useQuestionModal } from "./context/questionModalProvider";
-import {
-  Button,
-  CircularProgress,
-  IconButton,
-  Modal,
-  Typography,
-} from "@mui/material";
+import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
+import IconButton from "@mui/material/IconButton";
+import Modal from "@mui/material/Modal";
+import Typography from "@mui/material/Typography";
 import { FileUploadOutlined } from "@mui/icons-material";
 import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
 import { uploadQuestionToDb } from "./actions";

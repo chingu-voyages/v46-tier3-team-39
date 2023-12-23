@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "@mui/material";
+import Button from "@mui/material/Button";
 import { useQuestions } from "@/app/stores/questionStore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp } from "@fortawesome/free-regular-svg-icons/faThumbsUp";
@@ -45,7 +45,7 @@ const LikeCounterBtns = () => {
         dislike: data.dislike,
       });
     });
-  }, [questionId, userId]);
+  }, [questionId, userId, getQuestionLike]);
   const handleClick = async (
     e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
   ) => {

@@ -1,5 +1,5 @@
 "use client";
-import { Typography } from "@mui/material";
+import Typography from "@mui/material/Typography";
 import Image from "next/image";
 import WelcomeImg from "../../images/welcomeBack.png";
 import { useDashBoard } from "../../context/DashboardContext";

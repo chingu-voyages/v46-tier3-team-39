@@ -1,7 +1,7 @@
 "use client";
 import useElementPosition from "@/app/util/hooks/useElementSize";
 import { useMutation } from "@apollo/client";
-import { Button } from "@mui/material";
+import Button from "@mui/material/Button";
 import { AddSubscriber } from "@/gql/mutations/subscriberMutation";
 import { useState } from "react";
 import { TextFieldInput } from "@/authComponents/server/formInputs";

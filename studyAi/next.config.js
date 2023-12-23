@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
+});
+const nextConfig = withBundleAnalyzer({
   modularizeImports: {
     "@mui/icons-material/?(((\\w*)?/?)*)": {
       transform: "@mui/icons-material/{{ matches.[1] }}/{{member}}",
@@ -19,9 +22,9 @@ const nextConfig = {
   },
   experimental: {
     serverActions: {
-      bodySizeLimit: "2mb",
+      bodySizeLimit: "3mb",
     },
   },
-};
+});
 
 module.exports = nextConfig;

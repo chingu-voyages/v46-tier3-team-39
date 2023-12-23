@@ -1,6 +1,6 @@
 "use client";
 import { Container } from "../../page/server/containerBar";
-import { Chip } from "@mui/material";
+import Chip from "@mui/material/Chip";
 import { useQuestions } from "@/app/stores/questionStore";
 import { Carousel } from "@/app/util/components/carousel/carousel";
 import { useQuestionId } from "../../../context/QuestionIdContext";

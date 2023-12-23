@@ -1,11 +1,11 @@
 import React from "react";
 import { questions } from "./questions";
 import SingleQuestion from "./SingleQuestion";
-import NavigationWrapper from "../util/components/navigation/navigationWrapper";
-import { Container, Typography } from "@mui/material";
+import NavigationWrapper from "@/app/util/components/navigation/navigationWrapper";
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
 import "./index.css";
-
-export default function App() {
+export default function FaqsPage() {
   return (
     <NavigationWrapper
       appBars={{
@@ -13,6 +13,7 @@ export default function App() {
         footer: true,
       }}
     >
+      <></>
       <Container className="py-16 px-8">
         <Typography
           variant="h4"

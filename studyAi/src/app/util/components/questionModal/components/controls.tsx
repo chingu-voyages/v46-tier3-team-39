@@ -7,7 +7,7 @@ import axios from "axios";
 import { SetStateAction } from "react";
 import Switch from "@mui/material/Switch";
 import ObjectId from "bson-objectid";
-import { IconButton } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
 import { Stars } from "@/app/util/icons/stars";
 import { useQuestionModal } from "../context/questionModalProvider";
 import BtnLabelDropdown from "../../btnLabelDropdown/btnLabelDropdown";

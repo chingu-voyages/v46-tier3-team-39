@@ -1,8 +1,6 @@
-"use client";
 import TeamMember from "./TeamMember";
-import { Grid } from "@mui/material";
+import Grid from "@mui/material/Grid";
 import NextLink from "next/link";
-
 export default function Team() {
   return (
     <div className="py-16 px-5 sm:py-24 sm:px-16 text-center">

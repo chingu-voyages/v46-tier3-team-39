@@ -9,7 +9,11 @@ import {
   useRef,
   useState,
 } from "react";
-import { Button, Tab, Tabs, TextField, Typography } from "@mui/material";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
 import removeNonIntegerChars from "@/app/util/parsers/removeNonIntegerChars";
 import { unstable_batchedUpdates } from "react-dom";
 import { extractTime } from "@/app/util/parsers/formatMilliseconds";

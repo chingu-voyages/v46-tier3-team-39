@@ -5,7 +5,7 @@ import TextField from "@mui/material/TextField";
 import CreatableSelect from "react-select/creatable";
 import Chip from "@mui/material/Chip";
 import { Dispatch, SetStateAction } from "react";
-import { Typography } from "@mui/material";
+import Typography from "@mui/material/Typography";
 export const InputWrapper = ({
   isEditable,
   title,

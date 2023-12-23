@@ -6,7 +6,7 @@ import QuestionModalWrapper from "@/app/util/components/questionModal/questionMo
 import { QuestionStoreQuestionType } from "@/app/stores/questionStore";
 import AddIcon from "@mui/icons-material/Add";
 import BtnLabelDropdown from "@/app/util/components/btnLabelDropdown/btnLabelDropdown";
-import { IconButton } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
 import { useSession } from "next-auth/react";
 import { styles } from "./styles";
 import { useQuestionLibraryData } from "./context/questionLibraryContext";
