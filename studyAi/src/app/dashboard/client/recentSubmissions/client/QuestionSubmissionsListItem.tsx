@@ -29,7 +29,7 @@ const determineListItemStyles = (width: number) => {
   const itemClassNames =
     width > 600
       ? [...styles.listItem.columnItem, ...desktopItemClassNames]
-      : [...styles.listItem.columnItem];
+      : [...styles.listItem.columnItem, "text-sm"];
   const classesGeneral = [];
   const questionClasses = [];
   switch (true) {
@@ -54,11 +54,11 @@ const determineListItemStyles = (width: number) => {
       questionClasses.push("w-[9rem]");
       break;
     case width > 300:
-      containerItemClasses.push("py-4", "space-y-1", "flex-col");
+      containerItemClasses.push("py-4", "space-y-2", "flex-col");
       itemClassNames.push("w-full");
       break;
     default:
-      containerItemClasses.push("py-4", "space-y-1", "flex-col");
+      containerItemClasses.push("py-4", "space-y-2", "flex-col");
       itemClassNames.push("w-full");
       break;
   }
@@ -84,7 +84,7 @@ const QuestionSubmissionsListItemInner = ({
     <>
       <Container key={columnName[1]} className={classNames.join(" ")}>
         {containerWidth <= 600 && (
-          <Typography className="flex items-center w-[8rem]">
+          <Typography className="flex items-center w-[8rem] text-sm">
             {columnName[0]}
           </Typography>
         )}
@@ -150,7 +150,7 @@ const QuestionSubmissionsListItem = (props: Partial<QuestionSubmission>) => {
                 <Chip
                   label={value?.toString()}
                   size="small"
-                  className="mr-3 my-1 text-xs h-auto py-0.5"
+                  className="text-xs h-auto py-0.5"
                   sx={{
                     minHeight: "unset",
                   }}
@@ -160,6 +160,7 @@ const QuestionSubmissionsListItem = (props: Partial<QuestionSubmission>) => {
           case "time":
             classNames.push(...classesGeneral);
             if (containerWidth > 600) classNames.push("text-sm");
+            else classNames.push("[&>:last-child]:ml-[-0.15rem]");
             innerChild = (
               <>
                 {timeType === "stopwatch" && (
@@ -185,6 +186,7 @@ const QuestionSubmissionsListItem = (props: Partial<QuestionSubmission>) => {
           case "score":
             classNames.push(...classesGeneral);
             if (containerWidth > 600) classNames.push("text-base");
+            else classNames.push("[&>:last-child]:text-base");
             innerChild = normalizedScore;
             break;
           case "dateCreated":

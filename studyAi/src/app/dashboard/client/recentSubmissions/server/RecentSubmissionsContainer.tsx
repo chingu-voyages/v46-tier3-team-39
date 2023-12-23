@@ -36,7 +36,7 @@ const RecentSubmissionsContainer = async ({
       </RecentQuestionSubmissionsContainerWrapper>
     );
   } catch (err: any) {
-    // console.error(err);
+    console.error(err);
     return <></>;
   }
 };

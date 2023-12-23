@@ -7,6 +7,7 @@ import { createSchema } from "@/gql/createSchema";
 import validateAuthRequirementInQuery, {
   getSession,
 } from "./validateAuthRequirementInQuery";
+/*** Note: this server has parsing errors when using next js turbo pack, so the app must be compiled using next.js webpack. This is due to improper bundling of the require module */
 const server = new ApolloServer({
   schema: await createSchema(),
 });
