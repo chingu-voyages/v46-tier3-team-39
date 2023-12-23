@@ -3,7 +3,7 @@ import { loadErrorMessages, loadDevMessages } from "@apollo/client/dev";
 import {
   createGraphQLClient,
   generateURL,
-} from "../../api/graphql/apolloClientClient";
+} from "../../../gql/clients/apolloClientClient";
 import { ApolloProvider } from "@apollo/client";
 const env = process.env.NODE_ENV;
 export const ClientSideApolloClient = createGraphQLClient(generateURL());

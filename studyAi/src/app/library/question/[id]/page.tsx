@@ -6,7 +6,7 @@ import { Metadata, ResolvingMetadata } from "next";
 import { QuestionIdProvider } from "../context/QuestionIdContext";
 import { GetFullQuestion } from "@/gql/queries/questionQueries";
 import determineOriginUrl from "@/app/util/parsers/determineOriginUrl";
-import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
+import ServerGraphQLClient from "@/gql/clients/apolloServerClient";
 import QuestionPageContainer from "../components/page/client/questionPageContainer";
 import {
   QuestionSubmissionStoreSubmissionType,

@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth";
 import { RecentQuestionSubmissionsContainerWrapper } from "@/app/stores/recentSubmissionsStore";
 import { options } from "@/authComponents/nextAuth/options";
-import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
+import ServerGraphQLClient from "@/gql/clients/apolloServerClient";
 import { QueryFullQuestionSubmissions } from "@/gql/queries/questionSubmissionQueries";
 import { QuestionSubmission } from "@prisma/client";
 import { SortOrder } from "@/gql/generated/graphql";
@@ -36,7 +36,7 @@ const RecentSubmissionsContainer = async ({
       </RecentQuestionSubmissionsContainerWrapper>
     );
   } catch (err: any) {
-    console.error(err);
+    // console.error(err);
     return <></>;
   }
 };

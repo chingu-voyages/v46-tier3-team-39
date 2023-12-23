@@ -10,7 +10,3 @@ export async function createSchema() {
   });
   return schema;
 }
-if (require.main === module) {
-  createSchema();
-}
-

@@ -1,6 +1,5 @@
-import "reflect-metadata";
 import { ApolloServer } from "@apollo/server";
-import { startServerAndCreateNextHandler } from "./lib/startServerAndCreateNextHandler";
+import { startServerAndCreateNextHandler } from "./integrationLib/startServerAndCreateNextHandler";
 import { prismaDb } from "@/app/util/prisma/connection";
 import { Session } from "next-auth";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -28,7 +27,6 @@ const main = startServerAndCreateNextHandler(server, {
       prisma: prismaDb,
       session,
     };
-
     return contextData;
   },
 });

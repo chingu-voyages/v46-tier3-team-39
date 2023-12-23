@@ -7,9 +7,7 @@ import {
 import { IncomingHttpHeaders } from "http";
 import { Session } from "next-auth";
 import { cookies } from "next/headers";
-import {
-  generateURL
-} from "./apolloClientClient";
+import { generateURL } from "./apolloClientClient";
 const cache = new InMemoryCache();
 const serverLink = (url: string, cookie?: string) =>
   createHttpLink({

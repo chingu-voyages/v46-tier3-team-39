@@ -2,7 +2,7 @@ import React from "react";
 import { protectRouteSSR } from "../api/utils/sessionFuncs";
 import NavigationWrapper from "../util/components/navigation/navigationWrapper";
 import { DashboardProvider } from "./context/DashboardContext";
-import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
+import ServerGraphQLClient from "@/gql/clients/apolloServerClient";
 import { GetQuestionCountByCreatorId } from "@/gql/queries/questionQueries";
 import { GetQuestionSubmissionCountByCreatorId } from "@/gql/queries/questionSubmissionQueries";
 import DashboardContainer from "./server/dashboardContainer";

@@ -1,7 +1,7 @@
 import NavigationWrapper from "@/app/util/components/navigation/navigationWrapper";
 import styles from "../../../util/components/questionList/server/styles";
 import QuestionsLibraryContainer from "../../questionLibrary/questionLibraryContainer";
-import ServerGraphQLClient from "@/app/api/graphql/apolloServerClient";
+import ServerGraphQLClient from "@/gql/clients/apolloServerClient";
 import type { Question } from "@prisma/client";
 import { QuestionsContainer } from "@/app/stores/questionStore";
 import { protectRouteSSR } from "@/app/api/utils/sessionFuncs";

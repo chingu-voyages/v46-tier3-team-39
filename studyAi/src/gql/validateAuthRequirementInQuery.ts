@@ -1,6 +1,5 @@
-import { getServerSession } from "next-auth";
-import { options } from "../../../authComponents/nextAuth/options";
-import { Session } from "next-auth";
+import { getServerSession, Session } from "next-auth";
+import { options } from "../authComponents/nextAuth/options";
 import { GraphQLError, parse } from "graphql";
 
 const getParsedQuery = (queryString: string) => {
@@ -63,6 +62,7 @@ export const getSession = async (req: any, res: any) => {
     const session = await getServerSession(req, res, options);
     return session;
   } catch (e) {
+    console.error(e);
     return null;
   }
 };
@@ -79,7 +79,11 @@ const validateAuthRequirementInQuery = ({
     public: boolean;
     take: number | null;
   } = {
-    actualId: body.variables.creatorId || body.variables.userId || body.variables.id || null,
+    actualId:
+      body.variables.creatorId ||
+      body.variables.userId ||
+      body.variables.id ||
+      null,
     public: !body.variables.private,
     take: body.variables.take || null,
   };
@@ -90,7 +94,11 @@ const validateAuthRequirementInQuery = ({
     parsedQuery?.definitions[0].selectionSet.selections[0].name.value.toLowerCase();
   for (const model of accessibleModels) {
     if (resolverRequested.includes(model)) {
-      resolverRequested = (resolverRequested.includes("submission") || resolverRequested.includes("like")) ? resolverRequested : model
+      resolverRequested =
+        resolverRequested.includes("submission") ||
+        resolverRequested.includes("like")
+          ? resolverRequested
+          : model;
     }
   }
   const isQuery =
