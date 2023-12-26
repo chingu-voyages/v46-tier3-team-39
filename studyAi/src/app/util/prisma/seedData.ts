@@ -10,7 +10,7 @@ const createOptions = <T>(e: T[]) => {
   }));
 };
 
-const questions: Omit<Question, "id" | "creatorId" | "dateCreated">[] = [
+export const questions: Omit<Question, "id" | "creatorId" | "dateCreated">[] = [
   {
     questionType: "Short Answer",
     tags: ["Science", "Chemistry"],

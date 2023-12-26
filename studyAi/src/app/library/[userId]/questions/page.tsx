@@ -7,23 +7,26 @@ import { QuestionsContainer } from "@/app/stores/questionStore";
 import { protectRouteSSR } from "@/app/api/utils/sessionFuncs";
 import { GetQuestionsInfo } from "@/gql/queries/questionQueries";
 import { SortOrder } from "@/gql/generated/graphql";
-
+import { questions } from "@/app/util/prisma/seedData";
 export default async function QuestionLibrary() {
   const sessionData = await protectRouteSSR("/auth/login");
   const session = sessionData.props.session;
   const client = ServerGraphQLClient(session);
   try {
     const userId = session?.user.id || "";
-    const query = {
-      query: GetQuestionsInfo,
-      variables: {
-        creatorId: { equals: userId },
-        orderBy: {
-          dateCreated: "desc" as SortOrder,
-        },
-      },
+    // const query = {
+    //   query: GetQuestionsInfo,
+    //   variables: {
+    //     creatorId: { equals: userId },
+    //     orderBy: {
+    //       dateCreated: "desc" as SortOrder,
+    //     },
+    //   },
+    // };
+    // const { data: result } = await client.query(query);
+    const result = {
+      questions,
     };
-    const { data: result } = await client.query(query);
     const data = result.questions as (Partial<Question> & { id: string })[];
     return (
       <NavigationWrapper

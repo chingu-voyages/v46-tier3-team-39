@@ -1629,7 +1629,6 @@ type QuestionSubmission {
   id: String!
   questionId: String!
   questionName: String!
-  questionType: String!
   score: Score
   time: TimeOptions
   userId: String!
@@ -1641,7 +1640,6 @@ type QuestionSubmissionCountAggregate {
   id: Int!
   questionId: Int!
   questionName: Int!
-  questionType: Int!
   userId: Int!
 }
 
@@ -1650,7 +1648,6 @@ input QuestionSubmissionCountOrderByAggregateInput {
   id: SortOrder
   questionId: SortOrder
   questionName: SortOrder
-  questionType: SortOrder
   userId: SortOrder
 }
 
@@ -1660,7 +1657,6 @@ input QuestionSubmissionCreateInput {
   id: String
   questionId: String!
   questionName: String!
-  questionType: String!
   score: ScoreNullableCreateEnvelopeInput
   time: TimeOptionsNullableCreateEnvelopeInput
   userId: String!
@@ -1672,7 +1668,6 @@ input QuestionSubmissionCreateManyInput {
   id: String
   questionId: String!
   questionName: String!
-  questionType: String!
   score: ScoreNullableCreateEnvelopeInput
   time: TimeOptionsNullableCreateEnvelopeInput
   userId: String!
@@ -1686,7 +1681,6 @@ type QuestionSubmissionGroupBy {
   id: String!
   questionId: String!
   questionName: String!
-  questionType: String!
   userId: String!
 }
 
@@ -1695,7 +1689,6 @@ type QuestionSubmissionMaxAggregate {
   id: String
   questionId: String
   questionName: String
-  questionType: String
   userId: String
 }
 
@@ -1704,7 +1697,6 @@ input QuestionSubmissionMaxOrderByAggregateInput {
   id: SortOrder
   questionId: SortOrder
   questionName: SortOrder
-  questionType: SortOrder
   userId: SortOrder
 }
 
@@ -1713,7 +1705,6 @@ type QuestionSubmissionMinAggregate {
   id: String
   questionId: String
   questionName: String
-  questionType: String
   userId: String
 }
 
@@ -1722,7 +1713,6 @@ input QuestionSubmissionMinOrderByAggregateInput {
   id: SortOrder
   questionId: SortOrder
   questionName: SortOrder
-  questionType: SortOrder
   userId: SortOrder
 }
 
@@ -1734,7 +1724,6 @@ input QuestionSubmissionOrderByWithAggregationInput {
   id: SortOrder
   questionId: SortOrder
   questionName: SortOrder
-  questionType: SortOrder
   userId: SortOrder
 }
 
@@ -1744,7 +1733,6 @@ input QuestionSubmissionOrderByWithRelationInput {
   id: SortOrder
   questionId: SortOrder
   questionName: SortOrder
-  questionType: SortOrder
   score: ScoreOrderByInput
   time: TimeOptionsOrderByInput
   userId: SortOrder
@@ -1755,7 +1743,6 @@ enum QuestionSubmissionScalarFieldEnum {
   id
   questionId
   questionName
-  questionType
   userId
 }
 
@@ -1767,7 +1754,6 @@ input QuestionSubmissionScalarWhereWithAggregatesInput {
   id: StringWithAggregatesFilter
   questionId: StringWithAggregatesFilter
   questionName: StringWithAggregatesFilter
-  questionType: StringWithAggregatesFilter
   userId: StringWithAggregatesFilter
 }
 
@@ -1776,7 +1762,6 @@ input QuestionSubmissionUpdateInput {
   dateCreated: DateTimeFieldUpdateOperationsInput
   questionId: StringFieldUpdateOperationsInput
   questionName: StringFieldUpdateOperationsInput
-  questionType: StringFieldUpdateOperationsInput
   score: ScoreNullableUpdateEnvelopeInput
   time: TimeOptionsNullableUpdateEnvelopeInput
   userId: StringFieldUpdateOperationsInput
@@ -1787,7 +1772,6 @@ input QuestionSubmissionUpdateManyMutationInput {
   dateCreated: DateTimeFieldUpdateOperationsInput
   questionId: StringFieldUpdateOperationsInput
   questionName: StringFieldUpdateOperationsInput
-  questionType: StringFieldUpdateOperationsInput
   score: ScoreNullableUpdateEnvelopeInput
   time: TimeOptionsNullableUpdateEnvelopeInput
   userId: StringFieldUpdateOperationsInput
@@ -1802,7 +1786,6 @@ input QuestionSubmissionWhereInput {
   id: StringFilter
   questionId: StringFilter
   questionName: StringFilter
-  questionType: StringFilter
   score: ScoreNullableCompositeFilter
   time: TimeOptionsNullableCompositeFilter
   userId: StringFilter
@@ -1817,7 +1800,6 @@ input QuestionSubmissionWhereUniqueInput {
   id: String
   questionId: StringFilter
   questionName: StringFilter
-  questionType: StringFilter
   score: ScoreNullableCompositeFilter
   time: TimeOptionsNullableCompositeFilter
   userId: StringFilter
@@ -2197,7 +2179,6 @@ type QuizSubmission {
   id: String!
   quizId: String!
   quizName: String!
-  quizType: String
   score: Score!
   time: TimeOptions
   userId: String!
@@ -2209,7 +2190,6 @@ type QuizSubmissionCountAggregate {
   id: Int!
   quizId: Int!
   quizName: Int!
-  quizType: Int!
   userId: Int!
 }
 
@@ -2218,7 +2198,6 @@ input QuizSubmissionCountOrderByAggregateInput {
   id: SortOrder
   quizId: SortOrder
   quizName: SortOrder
-  quizType: SortOrder
   userId: SortOrder
 }
 
@@ -2227,7 +2206,6 @@ input QuizSubmissionCreateInput {
   id: String
   quizId: String!
   quizName: String!
-  quizType: String
   score: ScoreCreateEnvelopeInput!
   time: TimeOptionsNullableCreateEnvelopeInput
   userId: String!
@@ -2238,7 +2216,6 @@ input QuizSubmissionCreateManyInput {
   id: String
   quizId: String!
   quizName: String!
-  quizType: String
   score: ScoreCreateEnvelopeInput!
   time: TimeOptionsNullableCreateEnvelopeInput
   userId: String!
@@ -2252,7 +2229,6 @@ type QuizSubmissionGroupBy {
   id: String!
   quizId: String!
   quizName: String!
-  quizType: String
   userId: String!
 }
 
@@ -2261,7 +2237,6 @@ type QuizSubmissionMaxAggregate {
   id: String
   quizId: String
   quizName: String
-  quizType: String
   userId: String
 }
 
@@ -2270,7 +2245,6 @@ input QuizSubmissionMaxOrderByAggregateInput {
   id: SortOrder
   quizId: SortOrder
   quizName: SortOrder
-  quizType: SortOrder
   userId: SortOrder
 }
 
@@ -2279,7 +2253,6 @@ type QuizSubmissionMinAggregate {
   id: String
   quizId: String
   quizName: String
-  quizType: String
   userId: String
 }
 
@@ -2288,7 +2261,6 @@ input QuizSubmissionMinOrderByAggregateInput {
   id: SortOrder
   quizId: SortOrder
   quizName: SortOrder
-  quizType: SortOrder
   userId: SortOrder
 }
 
@@ -2300,7 +2272,6 @@ input QuizSubmissionOrderByWithAggregationInput {
   id: SortOrder
   quizId: SortOrder
   quizName: SortOrder
-  quizType: SortOrder
   userId: SortOrder
 }
 
@@ -2309,7 +2280,6 @@ input QuizSubmissionOrderByWithRelationInput {
   id: SortOrder
   quizId: SortOrder
   quizName: SortOrder
-  quizType: SortOrder
   score: ScoreOrderByInput
   time: TimeOptionsOrderByInput
   userId: SortOrder
@@ -2320,7 +2290,6 @@ enum QuizSubmissionScalarFieldEnum {
   id
   quizId
   quizName
-  quizType
   userId
 }
 
@@ -2332,7 +2301,6 @@ input QuizSubmissionScalarWhereWithAggregatesInput {
   id: StringWithAggregatesFilter
   quizId: StringWithAggregatesFilter
   quizName: StringWithAggregatesFilter
-  quizType: StringNullableWithAggregatesFilter
   userId: StringWithAggregatesFilter
 }
 
@@ -2340,7 +2308,6 @@ input QuizSubmissionUpdateInput {
   dateCreated: DateTimeFieldUpdateOperationsInput
   quizId: StringFieldUpdateOperationsInput
   quizName: StringFieldUpdateOperationsInput
-  quizType: NullableStringFieldUpdateOperationsInput
   score: ScoreUpdateEnvelopeInput
   time: TimeOptionsNullableUpdateEnvelopeInput
   userId: StringFieldUpdateOperationsInput
@@ -2350,7 +2317,6 @@ input QuizSubmissionUpdateManyMutationInput {
   dateCreated: DateTimeFieldUpdateOperationsInput
   quizId: StringFieldUpdateOperationsInput
   quizName: StringFieldUpdateOperationsInput
-  quizType: NullableStringFieldUpdateOperationsInput
   score: ScoreUpdateEnvelopeInput
   time: TimeOptionsNullableUpdateEnvelopeInput
   userId: StringFieldUpdateOperationsInput
@@ -2364,7 +2330,6 @@ input QuizSubmissionWhereInput {
   id: StringFilter
   quizId: StringFilter
   quizName: StringFilter
-  quizType: StringNullableFilter
   score: ScoreCompositeFilter
   time: TimeOptionsNullableCompositeFilter
   userId: StringFilter
@@ -2378,7 +2343,6 @@ input QuizSubmissionWhereUniqueInput {
   id: String
   quizId: StringFilter
   quizName: StringFilter
-  quizType: StringNullableFilter
   score: ScoreCompositeFilter
   time: TimeOptionsNullableCompositeFilter
   userId: StringFilter
