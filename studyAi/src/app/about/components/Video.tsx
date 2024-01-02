@@ -6,7 +6,7 @@ export default function Video() {
           Empowering students to succeed through innovative AI-driven exam
           preparation.
         </h1>
-        <p className="mt-2 pl-2 pr-2 text-center sm:text-1xl">
+        <p className="mt-2 pl-2 pr-2 text-center sm:text-1xl" data-testid="description">
           At our company, we are driven by a mission to provide students with
           the most effective and comprehensive exam preparation tools. Our
           vision is to revolutionize the way students study and achieve their
@@ -14,7 +14,7 @@ export default function Video() {
           innovation, and student success.
         </p>
       </div>
-      <video className="w-9/12 mt-10 mx-auto" autoPlay={true} loop muted>
+      <video className="w-9/12 mt-10 mx-auto" autoPlay={true} loop muted data-testid="video">
         <source src="/AI-Video.mp4" type="video/mp4" />
       </video>
     </div>

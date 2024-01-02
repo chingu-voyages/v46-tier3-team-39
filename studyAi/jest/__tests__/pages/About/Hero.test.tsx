@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { mockGetServerSession, mockSession } from "../mock/test-utils";
+import { mockGetServerSession, mockSession } from "../../../mock/test-utils";
 import Hero from "@/app/about/components/Hero"
 import { Session } from "@prisma/client";
 
