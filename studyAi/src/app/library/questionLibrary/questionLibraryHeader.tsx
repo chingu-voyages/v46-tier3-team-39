@@ -8,12 +8,12 @@ import AddIcon from "@mui/icons-material/Add";
 import BtnLabelDropdown from "@/app/util/components/btnLabelDropdown/btnLabelDropdown";
 import IconButton from "@mui/material/IconButton";
 import { useSession } from "next-auth/react";
-import { styles } from "./styles";
 import { useQuestionLibraryData } from "./context/questionLibraryContext";
 import { determineSortQuery } from "./helpers/determineSortQuery";
 import { determinePrivateQuery } from "./helpers/determinePrivateQuery";
 import { determineCreatorIdQuery } from "./helpers/determineCreatorIdQuery";
 import ObjectID from "bson-objectid";
+const tabValues = ["All", "Private", "Public"] as const;
 export const QuestionsLibraryHeader = () => {
   const session = useSession();
   const libraryData = useQuestionLibraryData();
@@ -78,16 +78,29 @@ export const QuestionsLibraryHeader = () => {
     }
   };
   return (
-    <Box className={styles.controlsLayout + ` justify-${(pageType === "user") ? "between" : "end"}`}>
+    <Box
+      className={`flex flex-row justify-${
+        pageType === "user" ? "between" : "end"
+      }`}
+    >
       {pageType === "user" && (
         <Tabs
           value={tabValue}
           onChange={handleChange}
           aria-label="question-access"
+          scrollButtons = {'auto'}
+          variant="scrollable"
         >
-          <Tab value={"All"} label="All" />
-          <Tab value={"Private"} label="Private" />
-          <Tab value={"Public"} label="Public" />
+          {tabValues.map((tab) => (
+            <Tab
+              key={tab}
+              value={tab}
+              label={tab}
+              sx={{
+                textTransform: "unset",
+              }}
+            />
+          ))}
         </Tabs>
       )}
 

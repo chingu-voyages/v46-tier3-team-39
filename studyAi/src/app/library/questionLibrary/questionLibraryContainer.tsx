@@ -1,6 +1,5 @@
 "use client";
 import Box from "@mui/material/Box";
-import { styles } from "./styles";
 import { QuestionsLibraryHeader } from "./questionLibraryHeader";
 import { QuestionLibraryProvider } from "./context/questionLibraryContext";
 import { QuestionLibraryList } from "./questionLibraryList";
@@ -10,7 +9,7 @@ export default function QuestionsLibraryContainer({
   pageType: "user" | "public";
 }) {
   return (
-    <Box className={styles.layout}>
+    <Box className={"flex flex-col w-full border"}>
       <QuestionLibraryProvider pageType={pageType}>
         <QuestionsLibraryHeader />
         <QuestionLibraryList />

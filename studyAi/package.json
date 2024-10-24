@@ -3,17 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "secrets": "npx ts-node ./scripts/generateEnv.ts",
+    "secrets": "npx ts-node ./generateEnv.ts",
     "dev": "next dev",
     "build": "npm run prisma && next build",
     "start": "next start",
     "lint": "next lint",
-    "prisma": "npx prisma generate && npm run createSchema && npm run compileGql",
+    "prisma": "dotenv -e .env.local -- npx prisma generate && npm run createSchema && npm run compileGql",
     "createSchema": "npx ts-node ./src/gql/createSchema.ts",
     "seed": "npx ts-node ./src/app/util/prisma/seed.ts",
     "compileGql": "graphql-codegen",
     "watchGql": "graphql-codegen -w",
-    "analyze": "npx cross-env ANALYZE=true next build"
+    "analyze": "npx cross-env ANALYZE=true next build",
+    "prisma:push": "dotenv -e .env.local -- npx prisma db push"
   },
   "dependencies": {
     "@apollo/client": "3.8.6",
@@ -35,6 +36,7 @@
     "bson-objectid": "2.0.4",
     "class-validator": "0.14.0",
     "date-fns": "2.30.0",
+    "dotenv-cli": "^7.4.2",
     "graphql": "16.8.1",
     "graphql-fields": "2.0.3",
     "graphql-scalars": "1.22.4",
