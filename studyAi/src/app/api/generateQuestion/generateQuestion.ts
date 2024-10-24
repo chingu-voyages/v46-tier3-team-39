@@ -1,4 +1,4 @@
-import generatePrompts from "../../util/openAI/openAI";
+import generatePrompts from "@/utils/openAI/openAI";
 import { NextResponse } from "next/server";
 import * as z from "zod";
 //schema for validating user inputs

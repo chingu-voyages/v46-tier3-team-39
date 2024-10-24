@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import { buildSchema } from "type-graphql";
-import { resolvers } from "../../prisma/generated/type-graphql";
+import { resolvers } from "@/prisma/generated/type-graphql";
 export async function createSchema() {
   const schema = await buildSchema({
     resolvers,

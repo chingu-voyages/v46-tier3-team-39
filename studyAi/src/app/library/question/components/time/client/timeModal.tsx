@@ -9,7 +9,7 @@ import Typography from "@mui/material/Typography";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons/faPlus";
 import { faTrash } from "@fortawesome/free-solid-svg-icons/faTrash";
-import { TimeOptions } from "../../../../../../../prisma/generated/type-graphql";
+import { TimeOptions } from "@/prisma/generated/type-graphql";
 import TimeForm from "./timeForm";
 import { unstable_batchedUpdates } from "react-dom";
 import { getLocalStorageObj } from "@/app/util/parsers/localStorageWrappers";

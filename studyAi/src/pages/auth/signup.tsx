@@ -1,5 +1,5 @@
-import AuthPage from "../../authComponents/providers/authPageWrapper";
-import MetadataHead from "@/authComponents/metadata/MetadataHead";
+import AuthPage from "@/auth/providers/authPageWrapper";
+import MetadataHead from "@/auth/metadata/MetadataHead";
 const metadata = {
   title: "Join us - Study AI",
   description: "Create your account, and start your educational journey today",

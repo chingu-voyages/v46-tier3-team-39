@@ -1,5 +1,5 @@
 "use client";
-import { TextFieldInput } from "@/authComponents/server/formInputs";
+import { TextFieldInput } from "@/auth/server/formInputs";
 import Alert from "@mui/material/Alert";
 import Button from "@mui/material/Button";
 import { signIn } from "next-auth/react";

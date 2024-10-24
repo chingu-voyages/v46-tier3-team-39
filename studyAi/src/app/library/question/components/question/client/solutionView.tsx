@@ -1,6 +1,6 @@
 "use client";
 import { useQuery } from "@apollo/client";
-import { Question } from "../../../../../../../prisma/generated/type-graphql";
+import { Question } from "@/prisma/generated/type-graphql";
 import { useQuestions } from "@/app/stores/questionStore";
 import { Container } from "../../page/server/containerBar";
 import { useQuestionId } from "../../../context/QuestionIdContext";

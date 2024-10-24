@@ -1,12 +1,11 @@
 import { AnswerOption, QuestionSubmission } from "@prisma/client";
-import { AnswerOption, QuestionSubmission } from "@prisma/client";
 import { Session } from "next-auth";
 import { QuestionSubmissionCreateInput } from "@/gql/generated/graphql";
 import { TimeInputsProps } from "../server/actions";
 import ObjectId from "bson-objectid";
 import { GetQuestionAnswerById } from "@/gql/queries/questionQueries";
 import ServerGraphQLClient from "@/gql/clients/apolloServerClient";
-import { AnswerData } from "../../../../../../../prisma/generated/type-graphql";
+import { AnswerData } from "@/prisma/generated/type-graphql";
 const getScore = (
   answerProvided: AnswerOption[] | null,
   correctAnswer: AnswerData | null

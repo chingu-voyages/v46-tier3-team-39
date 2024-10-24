@@ -1,7 +1,7 @@
-import { Question } from "../../../../../prisma/generated/type-graphql";
+import { Question } from "@/prisma/generated/type-graphql";
 import { QuestionsContainer } from "@/app/stores/questionStore";
 import { getServerSession } from "next-auth";
-import { options } from "@/authComponents/nextAuth/options";
+import { options } from "@/auth/nextAuth/options";
 import { Metadata, ResolvingMetadata } from "next";
 import { QuestionIdProvider } from "../context/QuestionIdContext";
 import { GetFullQuestion } from "@/gql/queries/questionQueries";

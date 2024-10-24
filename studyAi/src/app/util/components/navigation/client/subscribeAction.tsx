@@ -4,7 +4,7 @@ import { useMutation } from "@apollo/client";
 import Button from "@mui/material/Button";
 import { AddSubscriber } from "@/gql/mutations/subscriberMutation";
 import { useState } from "react";
-import { TextFieldInput } from "@/authComponents/server/formInputs";
+import { TextFieldInput } from "@/auth/server/formInputs";
 export const SubscribeAction = () => {
   const {
     elementRef: inputRef,

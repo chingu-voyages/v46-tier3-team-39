@@ -1,7 +1,7 @@
 import * as React from "react";
 import { MultipleChoice, SelectAll, ShortAnswer } from "./answerTypes";
 import modalStyles from "../../ModalStyles";
-import type { AnswerOption } from "../../../../../../../prisma/generated/type-graphql";
+import type { AnswerOption } from "@/prisma/generated/type-graphql";
 import { useQuestionModal } from "../../context/questionModalProvider";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";

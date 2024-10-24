@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { Question } from "../../../../prisma/generated/type-graphql";
+import { Question } from "@/prisma/generated/type-graphql";
 import { ObjectId } from "bson";
 export const prismaDb = new PrismaClient();
 

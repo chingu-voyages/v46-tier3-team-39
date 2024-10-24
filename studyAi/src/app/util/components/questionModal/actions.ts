@@ -1,6 +1,6 @@
 "use server";
 import ServerGraphQLClient from "@/gql/clients/apolloServerClient";
-import { options } from "@/authComponents/nextAuth/options";
+import { options } from "@/auth/nextAuth/options";
 import { getServerSession } from "next-auth";
 import { Question } from "@prisma/client";
 import ObjectId from "bson-objectid";

@@ -2,7 +2,7 @@
 import {
   AnswerOption,
   Question,
-} from "../../../../../../prisma/generated/type-graphql";
+} from "@/prisma/generated/type-graphql";
 import axios from "axios";
 import { SetStateAction } from "react";
 import Switch from "@mui/material/Switch";

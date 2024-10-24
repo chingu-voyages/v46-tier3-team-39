@@ -22,7 +22,12 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/api/*": ["./src/app/api/*"],
+      "@/auth/*": ["./src/authComponents/*"],
+      "@/prisma/*": ["./prisma/*"],
+      "@/gql/*": ["./src/gql/*"],
+      "@/utils/*": ["./src/app/util/*"],
+      "@/app/*": ["./src/app/*"]
     }
   },
   "ts-node": {

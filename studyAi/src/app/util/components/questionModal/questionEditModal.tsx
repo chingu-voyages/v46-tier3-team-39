@@ -8,7 +8,7 @@ import styles, {
   determineMainContentLayoutStyle,
   determineModalStyle,
 } from "./ModalStyles";
-import { Question } from "../../../../../prisma/generated/type-graphql";
+import { Question } from "@/prisma/generated/type-graphql";
 import { SetStateAction, useTransition } from "react";
 import { useQuestionModal } from "./context/questionModalProvider";
 import Button from "@mui/material/Button";

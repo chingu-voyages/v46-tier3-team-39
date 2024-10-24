@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
 import CubeIcon from "./client/cubeIcon";
-import { options } from "@/authComponents/nextAuth/options";
+import { options } from "@/auth/nextAuth/options";
 
 const Process = async () => {
   const session = await getServerSession(options);

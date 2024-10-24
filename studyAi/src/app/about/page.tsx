@@ -1,4 +1,4 @@
-import NavigationWrapper from "../util/components/navigation/navigationWrapper";
+import NavigationWrapper from "@/utils/components/navigation/navigationWrapper";
 import Hero from "./components/Hero";
 import Video from "./components/Video";
 import Team from "./components/Team";

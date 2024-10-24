@@ -1,5 +1,5 @@
 import { getServerSession, Session } from "next-auth";
-import { options } from "../authComponents/nextAuth/options";
+import { options } from "@/auth/nextAuth/options";
 import { GraphQLError, parse } from "graphql";
 
 const getParsedQuery = (queryString: string) => {

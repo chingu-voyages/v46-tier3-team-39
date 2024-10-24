@@ -4,7 +4,7 @@ import type {
   NextApiResponse,
 } from "next";
 import { getServerSession } from "next-auth/next";
-import { options } from "../../../authComponents/nextAuth/options";
+import { options } from "@/auth/nextAuth/options";
 import { redirect } from "next/navigation";
 
 // Use it in server contexts

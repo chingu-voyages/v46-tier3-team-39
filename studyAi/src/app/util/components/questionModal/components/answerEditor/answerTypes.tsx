@@ -1,7 +1,7 @@
 import React from "react";
 import modalStyles from "../../ModalStyles";
 import { QuestionProps } from "../../questionEditModal";
-import type { AnswerOption } from "../../../../../../../prisma/generated/type-graphql";
+import type { AnswerOption } from "@/prisma/generated/type-graphql";
 import ObjectId from "bson-objectid";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";

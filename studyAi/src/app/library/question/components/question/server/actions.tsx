@@ -1,7 +1,7 @@
 "use server";
 import ServerGraphQLClient from "@/gql/clients/apolloServerClient";
 import { getServerSession } from "next-auth";
-import { options } from "@/authComponents/nextAuth/options";
+import { options } from "@/auth/nextAuth/options";
 import { GetQuestionLikeDoc } from "@/gql/queries/questionLikeQueries";
 import {
   CreateQuestionLikeDoc,

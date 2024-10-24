@@ -145,17 +145,18 @@ const QuestionSubmissionsListItem = (props: Partial<QuestionSubmission>) => {
           case "questionType":
             classNames.push(...classesGeneral);
             if (containerWidth > 600) classNames.push("text-xs");
-            innerChild =
-              (
-                <Chip
-                  label={value?.toString()}
-                  size="small"
-                  className="text-xs h-auto py-0.5"
-                  sx={{
-                    minHeight: "unset",
-                  }}
-                />
-              ) || "N/A";
+            innerChild = value ? (
+              <Chip
+                label={value?.toString()}
+                size="small"
+                className="text-xs h-auto py-0.5"
+                sx={{
+                  minHeight: "unset",
+                }}
+              />
+            ) : (
+              "N/A"
+            );
             break;
           case "time":
             classNames.push(...classesGeneral);

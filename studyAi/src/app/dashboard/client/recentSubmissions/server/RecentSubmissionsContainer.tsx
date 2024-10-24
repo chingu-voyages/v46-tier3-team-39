@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
 import { RecentQuestionSubmissionsContainerWrapper } from "@/app/stores/recentSubmissionsStore";
-import { options } from "@/authComponents/nextAuth/options";
+import { options } from "@/auth/nextAuth/options";
 import ServerGraphQLClient from "@/gql/clients/apolloServerClient";
 import { QueryFullQuestionSubmissions } from "@/gql/queries/questionSubmissionQueries";
 import { QuestionSubmission } from "@prisma/client";
