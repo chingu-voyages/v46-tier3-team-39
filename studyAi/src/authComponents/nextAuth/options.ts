@@ -6,15 +6,8 @@ import { findUniqueByEmail, findUniqueById } from "@/app/util/prisma/helpers";
 import { connectToDb, prismaDb } from "@/app/util/prisma/connection";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { addCredDoc } from "./funcs";
-
 export const options: NextAuthOptions = {
   adapter: PrismaAdapter(prismaDb),
-  session: {
-    strategy: "jwt",
-  },
-  jwt: {
-    secret: process.env.NEXTAUTH_SECRET as string,
-  },
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
@@ -66,8 +59,12 @@ export const options: NextAuthOptions = {
       },
     }),
   ],
-  pages: {
-    signIn: "/auth/login",
+  session: {
+    strategy: "jwt",
+    maxAge: 7 * 24 * 60 * 60, // 7 days
+  },
+  jwt: {
+    secret: process.env.NEXTAUTH_SECRET as string,
   },
   callbacks: {
     async session({ session }) {
