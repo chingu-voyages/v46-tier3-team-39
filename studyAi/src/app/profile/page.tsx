@@ -1,5 +1,5 @@
 import React from "react";
-import NavigationWrapper from "../util/components/navigation/navigationWrapper";
+import NavigationWrapper from "../../../frontend/utils/components/navigation/navigationWrapper";
 
 export default async function Terms() {
   return (
@@ -9,9 +9,7 @@ export default async function Terms() {
           navbar: true,
           footer: true,
         }}
-      >
-      </NavigationWrapper>
+      ></NavigationWrapper>
     </>
   );
 }
-

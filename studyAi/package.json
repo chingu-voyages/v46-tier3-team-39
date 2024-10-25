@@ -8,13 +8,13 @@
     "build": "npm run prisma && next build",
     "start": "next start",
     "lint": "next lint",
-    "prisma": "dotenv -e .env.local -- npx prisma generate && npm run createSchema && npm run compileGql",
+    "prisma": "dotenv -e .env.local -- npx prisma generate --schema=./backend/prisma/schema.prisma && npm run createSchema && npm run compileGql",
     "createSchema": "npx ts-node ./src/gql/createSchema.ts",
     "seed": "npx ts-node ./src/app/util/prisma/seed.ts",
     "compileGql": "graphql-codegen",
     "watchGql": "graphql-codegen -w",
     "analyze": "npx cross-env ANALYZE=true next build",
-    "prisma:push": "dotenv -e .env.local -- npx prisma db push"
+    "prisma:push": "dotenv -e .env.local -- npx prisma db push --schema=./backend/prisma/schema.prisma"
   },
   "dependencies": {
     "@apollo/client": "3.8.8",

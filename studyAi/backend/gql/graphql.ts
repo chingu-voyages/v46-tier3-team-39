@@ -1,0 +1,35 @@
+import { ApolloServer } from "@apollo/server";
+import { startServerAndCreateNextHandler } from "./integrationLib/startServerAndCreateNextHandler";
+import prisma from "@/prisma/connection";
+import { Session } from "next-auth";
+import { NextApiRequest, NextApiResponse } from "next";
+import { createSchema } from "./createSchema";
+import validateAuthRequirementInQuery, {
+  getSession,
+} from "./validateAuthRequirementInQuery";
+/*** Note: this server has parsing errors when using next js turbo pack, so the app must be compiled using next.js webpack. This is due to improper bundling of the require module */
+const server = new ApolloServer({
+  schema: await createSchema(),
+});
+
+const main = startServerAndCreateNextHandler(server, {
+  context: async (
+    req: NextApiRequest & { graphQLBody: any },
+    res: NextApiResponse
+  ) => {
+    const body = await req.graphQLBody;
+    const session: Session | null = await getSession(req, res);
+    // throw error if query requires authentication and user is not authenticated
+    // or does not have the proper read/write access rights
+    // validateAuthRequirementInQuery({ session, body });
+    const contextData = {
+      req,
+      res,
+      prisma,
+      session,
+    };
+    return contextData;
+  },
+});
+
+export default main;

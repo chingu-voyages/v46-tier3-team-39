@@ -1,7 +1,7 @@
-import NavigationWrapper from "@/app/util/components/navigation/navigationWrapper";
-import QuestionCreatePage from "./questionCreatePage";
-import { protectRouteSSR } from "@/app/api/utils/sessionFuncs";
-import { generateMetadataProps } from "@/app/util/metadata/generateMetadataProps";
+import NavigationWrapper from "../../../../../frontend/utils/components/navigation/navigationWrapper";
+import QuestionCreatePage from "../../../../../frontend/questions/singleQuestion/questionCreatePage";
+import { protectRouteSSR } from "@/backend/auth/helpers/sessionFuncs";
+import { generateMetadataProps } from "../../../../../frontend/metadata/generateMetadataProps";
 const createPageContainerClasses = [
   "flex",
   "items-center",

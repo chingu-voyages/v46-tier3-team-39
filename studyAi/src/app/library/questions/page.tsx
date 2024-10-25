@@ -1,12 +1,12 @@
-import NavigationWrapper from "@/app/util/components/navigation/navigationWrapper";
-import styles from "../../util/components/questionList/server/styles";
-import ServerGraphQLClient from "@/gql/clients/apolloServerClient";
+import NavigationWrapper from "../../../../frontend/utils/components/navigation/navigationWrapper";
+import styles from "../../../../frontend/questions/questionList/styles";
+import ServerGraphQLClient from "../../../../backend/apollo/ApolloServer";
 import type { Question } from "@prisma/client";
-import { QuestionsContainer } from "@/app/stores/questionStore";
-import { protectRouteSSR } from "@/app/api/utils/sessionFuncs";
-import { GetQuestionsInfo } from "@/gql/queries/questionQueries";
-import { SortOrder } from "@/gql/generated/graphql";
-import QuestionsLibraryContainer from "../questionLibrary/questionLibraryContainer";
+import { QuestionsContainer } from "../../../../frontend/stores/questionStore";
+import { protectRouteSSR } from "@/backend/auth/helpers/sessionFuncs";
+import { GetQuestionsInfo } from "../../../../frontend/gql/queries/questionQueries";
+import { SortOrder } from "../../../../backend/gql/generated/graphql";
+import QuestionsLibraryContainer from "../../../../frontend/questions/questionLibrary/questionLibraryContainer";
 export default async function QuestionLibrary() {
   const sessionData = await protectRouteSSR("/auth/login");
   const session = sessionData.props.session;

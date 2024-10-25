@@ -1,19 +1,19 @@
-import { Question } from "@/prisma/generated/type-graphql";
-import { QuestionsContainer } from "@/app/stores/questionStore";
+import { Question } from "@/backend/prisma/generated/type-graphql";
+import { QuestionsContainer } from "@/frontend/stores/questionStore";
 import { getServerSession } from "next-auth";
-import { options } from "@/auth/nextAuth/options";
+import { options } from "@/backend/auth/options";
 import { Metadata, ResolvingMetadata } from "next";
-import { QuestionIdProvider } from "../context/QuestionIdContext";
-import { GetFullQuestion } from "@/gql/queries/questionQueries";
-import determineOriginUrl from "@/app/util/parsers/determineOriginUrl";
-import ServerGraphQLClient from "@/gql/clients/apolloServerClient";
-import QuestionPageContainer from "../components/page/client/questionPageContainer";
+import { QuestionIdProvider } from "@/frontend/questions/singleQuestion/context/QuestionIdContext";
+import { GetFullQuestion } from "@/frontend/gql/queries/questionQueries";
+import determineOriginUrl from "@/frontend/parsers/determineOriginUrl";
+import ServerGraphQLClient from "@/backend/apollo/ApolloServer";
+import QuestionPageContainer from "../../../../../frontend/questions/singleQuestion/questionPageContainer";
 import {
   QuestionSubmissionStoreSubmissionType,
   QuestionSubmissionsContainerWrapper,
-} from "@/app/stores/questionSubmissionsStore";
-import { QueryFullQuestionSubmissions } from "@/gql/queries/questionSubmissionQueries";
-import { SortOrder } from "@/gql/generated/graphql";
+} from "@/frontend/stores/questionSubmissionsStore";
+import { QueryFullQuestionSubmissions } from "@/frontend/gql/queries/questionSubmissionQueries";
+import { SortOrder } from "@/backend/gql/generated/graphql";
 export default async function QuestionPage({
   params,
 }: {

@@ -1,7 +1,7 @@
 import React from "react";
-import { questions } from "./questions";
-import SingleQuestion from "./SingleQuestion";
-import NavigationWrapper from "@/app/util/components/navigation/navigationWrapper";
+import { questions } from "../../../frontend/faqs/questions";
+import SingleQuestion from "../../../frontend/faqs/SingleQuestion";
+import NavigationWrapper from "../../../frontend/utils/components/navigation/navigationWrapper";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import "./index.css";

@@ -1,0 +1,43 @@
+import { getServerSession } from "next-auth";
+import { RecentQuestionSubmissionsContainerWrapper } from "../../stores/recentSubmissionsStore";
+import { options } from "@/auth/nextAuth/options";
+import ServerGraphQLClient from "../../../backend/apollo/ApolloServer";
+import { QueryFullQuestionSubmissions } from "../../gql/queries/questionSubmissionQueries";
+import { QuestionSubmission } from "@prisma/client";
+import { SortOrder } from "../../../backend/gql/generated/graphql";
+const RecentSubmissionsContainer = async ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  try {
+    const session = await getServerSession(options);
+    if (!session) return <></>;
+    const client = ServerGraphQLClient(session);
+    const query = {
+      query: QueryFullQuestionSubmissions,
+      variables: {
+        userId: { equals: session.user.id },
+        orderBy: {
+          dateCreated: SortOrder.Desc,
+        },
+      },
+    };
+    const { data } = await client.query(query);
+    const questionSubmissions =
+      data.questionSubmissions as (Partial<QuestionSubmission> & {
+        id: string;
+      })[];
+    return (
+      <RecentQuestionSubmissionsContainerWrapper
+        initialItems={questionSubmissions}
+      >
+        {children}
+      </RecentQuestionSubmissionsContainerWrapper>
+    );
+  } catch (err: any) {
+    console.error(err);
+    return <></>;
+  }
+};
+export default RecentSubmissionsContainer;

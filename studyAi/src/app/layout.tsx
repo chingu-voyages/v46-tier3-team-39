@@ -1,11 +1,11 @@
 import "../globals.css";
 import type { Metadata } from "next";
-import AuthProvider from "./util/providers/AuthContext";
-import GraphQLProvider from "./util/providers/apolloProvider";
-import { IsClientCtxProvider } from "./util/providers/isClientProvider";
+import AuthProvider from "../../frontend/auth/providers/AuthContext";
+import GraphQLProvider from "../../frontend/gql/providers/ApolloProvider";
+import { IsClientCtxProvider } from "../../frontend/utils/providers/IsClientProvider";
 import * as React from "react";
 import { StyledEngineProvider } from "@mui/material/styles";
-import { OriginProvider } from "./util/providers/originProvider";
+import { OriginProvider } from "../../frontend/utils/providers/OriginProvider";
 export const metadata: Metadata = {
   title: "StudyAI",
   description:

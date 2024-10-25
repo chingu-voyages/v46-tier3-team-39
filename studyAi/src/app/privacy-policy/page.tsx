@@ -1,5 +1,5 @@
 import React from "react";
-import NavigationWrapper from "@/app/util/components/navigation/navigationWrapper";
+import NavigationWrapper from "../../../frontend/utils/components/navigation/navigationWrapper";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 export default function PrivacyPolicyPage() {

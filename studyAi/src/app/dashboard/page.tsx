@@ -1,11 +1,11 @@
 import React from "react";
-import { protectRouteSSR } from "@/api/utils/sessionFuncs";
-import NavigationWrapper from "@/utils/components/navigation/navigationWrapper";
-import { DashboardProvider } from "./context/DashboardContext";
-import ServerGraphQLClient from "@/gql/clients/apolloServerClient";
-import { GetQuestionCountByCreatorId } from "@/gql/queries/questionQueries";
-import { GetQuestionSubmissionCountByCreatorId } from "@/gql/queries/questionSubmissionQueries";
-import DashboardContainer from "./server/dashboardContainer";
+import { protectRouteSSR } from "@/backend/auth/helpers/sessionFuncs";
+import NavigationWrapper from "../../../frontend/utils/components/navigation/navigationWrapper";
+import { DashboardProvider } from "../../../frontend/dashboard/context/DashboardContext";
+import ServerGraphQLClient from "../../../backend/apollo/ApolloServer";
+import { GetQuestionCountByCreatorId } from "../../../frontend/gql/queries/questionQueries";
+import { GetQuestionSubmissionCountByCreatorId } from "../../../frontend/gql/queries/questionSubmissionQueries";
+import DashboardContainer from "../../../frontend/dashboard/dashboardContainer";
 import { Session } from "next-auth";
 import { subWeeks } from "date-fns";
 

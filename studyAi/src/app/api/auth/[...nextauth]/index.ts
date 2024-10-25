@@ -1,4 +1,4 @@
 import NextAuth from "next-auth";
-import { options } from "@/auth/nextAuth/options"
+import { options } from "@/backend/auth/options";
 const handler = NextAuth(options);
-export { handler as GET, handler as POST }
+export { handler as GET, handler as POST };

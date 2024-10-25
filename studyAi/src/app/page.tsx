@@ -1,9 +1,9 @@
-import NavigationWrapper from "@/app/util/components/navigation/navigationWrapper";
-import Hero from "@/app/about/components/Hero";
-import Video from "@/app/about/components/Video";
-import Team from "@/app/about/components/Team";
-import Process from "@/app/about/components/Process";
-import ExamPrep from "@/app/about/components/ExamPrep";
+import NavigationWrapper from "../../frontend/utils/components/navigation/navigationWrapper";
+import Hero from "@/frontend/about/Hero";
+import Video from "@/frontend/about/Video";
+import Team from "@/frontend/about/Team";
+import Process from "@/frontend/about/Process";
+import ExamPrep from "@/frontend/about/ExamPrep";
 
 export default function AboutPage() {
   return (
